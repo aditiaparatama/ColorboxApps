@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "679715405770",
+    "project_id": "colorboxapps",
+    "storage_bucket": "colorboxapps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679715405770:android:92f19f0b40e339615e1933",
+        "android_client_info": {
+          "package_name": "com.colorbox.google_sign_in"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "679715405770-5hluceos1sa60vnjbmdig281ganvp9n5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVmTBdvR4orY1p3fOfB24q1K71tKkc9wc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "679715405770-5hluceos1sa60vnjbmdig281ganvp9n5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
