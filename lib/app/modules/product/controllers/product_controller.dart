@@ -5,6 +5,8 @@ class ProductController extends GetxController {
   Product product = Product.isEmpty();
 
   Variants? variant;
+  String ukuran = "";
+  String desk = "";
   String textCart = "Add Cart";
 
   void getSelectedValue(String size, String color) {
@@ -12,8 +14,30 @@ class ProductController extends GetxController {
       if (product.variants[i].options.length > 1) {
         if (product.variants[i].options[0].value == size &&
             product.variants[i].options[1].value == color) {
-          variant = product.variants[i];
-          break;
+          if (product.variants[i].options[0].value == 'XS') {
+            ukuran = "Extra Small";
+          } else if (product.variants[i].options[0].value == 'S') {
+            ukuran = "Small";
+            break;
+          } else if (product.variants[i].options[0].value == 'M') {
+            ukuran = "Medium";
+            break;
+          } else if (product.variants[i].options[0].value == 'L') {
+            ukuran = "Large";
+            break;
+          } else if (product.variants[i].options[0].value == 'XL') {
+            ukuran = "Extra Large";
+            break;
+          } else if (product.variants[i].options[0].value == 'XXL') {
+            ukuran = "Double Extra Large";
+            break;
+          } else {
+            ukuran = product.variants[i].options[0].value!;
+            break;
+          }
+
+          // variant = product.variants[i];
+          // break;
         }
       } else {
         if (product.variants[i].options[0].value == size) {

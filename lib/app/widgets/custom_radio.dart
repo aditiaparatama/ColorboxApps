@@ -70,48 +70,37 @@ class RadioItem extends StatelessWidget {
       child: Stack(
         children: <Widget>[
           Container(
-            margin: const EdgeInsets.only(top: 3),
-            padding: const EdgeInsets.symmetric(horizontal: 3),
-            height: 45.0,
-            width: 45.0,
+            margin: const EdgeInsets.only(top: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            height: 30.0,
+            width: 50.0,
             child: Center(
               child: Text(_item.buttonText,
                   style: TextStyle(
                       color: _item.stock == 0
-                          ? Colors.black
+                          ? const Color.fromRGBO(155, 155, 155, 1)
                           : _item.isSelected
                               ? Colors.white
                               : Colors.black,
                       fontWeight: _item.isSelected
-                          ? FontWeight.bold
+                          ? FontWeight.w400
                           : FontWeight.normal,
-                      fontSize: 16.0)),
+                      fontSize: 14.0)),
             ),
             decoration: BoxDecoration(
               color: _item.stock == 0
-                  ? const Color(0xFFf2f2f2)
+                  ? const Color.fromRGBO(229, 232, 235, 1)
                   : _item.isSelected
                       ? Colors.black
                       : Colors.transparent,
               border: Border.all(
                   width: 1.0,
-                  color: _item.isSelected ? Colors.black : Colors.grey),
-              borderRadius: const BorderRadius.all(Radius.circular(2.0)),
+                  color: _item.isSelected
+                      ? Colors.black
+                      : const Color.fromRGBO(155, 155, 155, 0.3)),
+              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
             ),
           ),
-          _item.stock == 0
-              ? RotationTransition(
-                  turns: const AlwaysStoppedAnimation(-45 / 360),
-                  child: Center(
-                    child: Container(
-                      alignment: Alignment.center,
-                      color: const Color(0xFFe6e6e6),
-                      height: 1,
-                      width: 45,
-                    ),
-                  ),
-                )
-              : const SizedBox(),
         ],
       ),
     );

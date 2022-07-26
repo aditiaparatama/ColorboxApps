@@ -13,7 +13,7 @@ void main() {
       getPages: AppPages.routes,
       theme: ThemeData(
         primarySwatch: primaryWhite,
-        fontFamily: "Gordita",
+        fontFamily: "Inter",
         backgroundColor: Colors.grey.shade200,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         inputDecorationTheme: MyInputTheme().theme(),

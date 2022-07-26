@@ -68,7 +68,8 @@ class CartView extends GetView<CartController> {
               fixedSize: Size(Get.width * .4, 50),
               primary: Colors.black,
             ),
-            child: const CustomText(
+            // ignore: prefer_const_constructors
+            child: CustomText(
               text: "Check Out",
               fontSize: 18,
               fontWeight: FontWeight.bold,

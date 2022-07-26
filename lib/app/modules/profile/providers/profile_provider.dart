@@ -34,8 +34,8 @@ class ProfileProvider extends GetConnect {
     return result.data!['customerAccessTokenCreate'];
   }
 
-  Future<String> register(String email, String password, String firstName,
-      String lastName, String phone) async {
+  Future<String> register(
+      String email, String password, String firstN, String lastN) async {
     final GraphQLClient _client = getShopifyGraphQLClient();
 
     final QueryOptions options = QueryOptions(
@@ -59,10 +59,9 @@ class ProfileProvider extends GetConnect {
         "input": {
           "acceptsMarketing": false,
           "email": email.toLowerCase(),
-          "firstName": firstName,
-          "lastName": lastName,
-          "password": password,
-          "phone": phone
+          "firstName": firstN,
+          "lastName": lastN,
+          "password": password
         }
       },
     );
@@ -70,6 +69,7 @@ class ProfileProvider extends GetConnect {
     final QueryResult result = await _client.query(options);
 
     if (result.data!['customerCreate']['customerUserErrors'].length > 0) {
+      // ignore: avoid_print
       Get.snackbar("Warning",
           result.data!['customerCreate']['customerUserErrors'][0]["message"]);
       return "";
@@ -77,6 +77,73 @@ class ProfileProvider extends GetConnect {
 
     return "success";
   }
+
+  Future<String> forgotpassword(String email) async {
+    final GraphQLClient _client = getShopifyGraphQLClient();
+
+    final QueryOptions options = QueryOptions(
+      document: gql(
+        r'''
+        mutation customerRecover($email: String!) {
+          customerRecover(email: $email) {
+            customerUserErrors {
+              # CustomerUserError fields
+            }
+          }
+        }
+      ''',
+      ),
+      variables: {"email": email.toLowerCase()},
+    );
+
+    final QueryResult result = await _client.query(options);
+
+    print(result.data!['customerRecover']['customerUserErrors'].length);
+
+    if (result.data!['customerRecover']['customerUserErrors'].length > 0) {
+      Get.snackbar("Warning",
+          result.data!['customerRecover']['customerUserErrors'][0]["message"]);
+      return "1";
+    } else {
+      return "success";
+    }
+  }
+
+  // Future<dynamic> addbirhday(String email, String password, String firstN,
+  //     String lastN, String tglLahir) async {
+  //   final GraphQLClient _client = getShopifyGraphQLClient();
+
+  //   final QueryOptions options = QueryOptions(
+  //     document: gql(
+  //       r'''
+  //       mutation customerUpdate($input: CustomerInput!) {
+  //         customerUpdate(input: $input) {
+  //           customer {
+  //             # Customer fields
+  //             id
+  //           }
+  //           userErrors {
+  //             field
+  //             message
+  //           }
+  //         }
+  //       }
+  //     ''',
+  //     ),
+  //     variables: {
+  //       "input": {
+  //         "acceptsMarketing": false,
+  //         "email": email.toLowerCase(),
+  //         "firstName": firstN,
+  //         "lastName": lastN,
+  //         "password": password,
+  //         "note": tglLahir
+  //       }
+  //     },
+  //   );
+
+  //   final QueryResult result = await _client.query(options);
+  // }
 
   Future<dynamic> getUser(String token) async {
     final GraphQLClient _client = getShopifyGraphQLClient();

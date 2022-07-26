@@ -61,14 +61,17 @@ class RadioItem extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Container(
-            height: 30.0,
-            width: 30.0,
+            height: 25.0,
+            width: 25.0,
+            margin: const EdgeInsets.only(left: 1),
             child: const Center(),
             decoration: BoxDecoration(
               color: customColor(_item.buttonText),
               border: Border.all(
-                  width: _item.isSelected ? 2.0 : 1.0,
-                  color: _item.isSelected ? Colors.black : Colors.grey),
+                  width: _item.isSelected ? 1.0 : 1.0,
+                  color: _item.isSelected
+                      ? customColor(_item.buttonText)
+                      : Colors.grey),
               borderRadius: const BorderRadius.all(Radius.circular(50.0)),
             ),
           ),

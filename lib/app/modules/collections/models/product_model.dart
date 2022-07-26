@@ -118,6 +118,7 @@ class Variants {
 
   Variants.fromJson(var json) {
     id = json["id"];
+    title = json["title"];
     price = json['price'];
     compareAtPrice = json['compareAtPrice'];
     compareAtPrice ??= "0";

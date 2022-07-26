@@ -4,6 +4,8 @@ part of 'app_pages.dart';
 abstract class Routes {
   Routes._();
   // ignore: constant_identifier_names
+  static const ONBOARD = _Paths.ONBOARD;
+  // ignore: constant_identifier_names
   static const HOME = _Paths.HOME;
   // ignore: constant_identifier_names
   static const CONTROL = _Paths.CONTROL;
@@ -20,6 +22,12 @@ abstract class Routes {
   // ignore: constant_identifier_names
   static const REGISTER = _Paths.REGISTER;
   // ignore: constant_identifier_names
+  static const FORGOTPASSWORD = _Paths.FORGOTPASSWORD;
+  // ignore: constant_identifier_names
+  static const CHANGEPASSWORD = _Paths.CHANGEPASSWORD;
+  // ignore: constant_identifier_names
+  static const MESSAGEFORGOTPASSWORD = _Paths.MESSAGEFORGOTPASSWORD;
+  // ignore: constant_identifier_names
   static const SETTINGS = _Paths.SETTINGS;
   // ignore: constant_identifier_names
   static const SEARCH = _Paths.SEARCH;
@@ -27,6 +35,8 @@ abstract class Routes {
 
 abstract class _Paths {
   _Paths._();
+  // ignore: constant_identifier_names
+  static const ONBOARD = '/onboard';
   // ignore: constant_identifier_names
   static const HOME = '/home';
   // ignore: constant_identifier_names
@@ -43,6 +53,12 @@ abstract class _Paths {
   static const PROFILE = '/profile';
   // ignore: constant_identifier_names
   static const REGISTER = '/register';
+  // ignore: constant_identifier_names
+  static const FORGOTPASSWORD = '/forgotpassword';
+  // ignore: constant_identifier_names
+  static const CHANGEPASSWORD = '/changepassword';
+  // ignore: constant_identifier_names
+  static const MESSAGEFORGOTPASSWORD = '/messageforgotpassword';
   // ignore: constant_identifier_names
   static const SETTINGS = '/settings';
   // ignore: constant_identifier_names

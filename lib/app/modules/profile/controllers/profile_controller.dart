@@ -11,7 +11,13 @@ class ProfileController extends GetxController {
   ValueNotifier loading = ValueNotifier(false);
   UserModel _userModel = UserModel.isEmpty();
   UserModel get userModel => _userModel;
-  String? email, password, firstName, lastName, phone;
+  bool? _showPassword = true;
+  bool? get showPassword => _showPassword;
+
+  DateTime? _showDateBirth = DateTime.now();
+  DateTime? get showDateBirth => _showDateBirth;
+
+  String? email, password, firstName, firstN, lastN, tglLahir;
 
   Future<String> login() async {
     loading.value = true;
@@ -41,17 +47,41 @@ class ProfileController extends GetxController {
   }
 
   Future<String> register() async {
-    loading.value = true;
-    update();
+    var inputname = firstName.toString();
+    var inputname2 = inputname.split(" ");
 
-    (phone!.substring(0, 1) == "0")
-        ? phone = "+62${phone!.substring(1, phone!.length)}"
-        : phone = "+62${phone!}";
-    var result = await ProfileProvider()
-        .register(email!, password!, firstName!, lastName!, phone!);
+    firstN = inputname2[0].toString();
+    lastN = inputname2.length > 1 ? inputname2[1].toString() : '';
+
+    // loading.value = true;
+    // update();
+    // print(tglLahir!);
+
+    // (phone!.substring(0, 1) == "0")
+    //     ? phone = "+62${phone!.substring(1, phone!.length)}"
+    //     : phone = "+62${phone!}";
+    var result =
+        await ProfileProvider().register(email!, password!, firstN!, lastN!);
+
+    // var result2 = await ProfileProvider()
+    //     .addbirhday(email!, password!, firstN!, lastN!, tglLahir!);
     loading.value = false;
     update();
     return result;
+  }
+
+  Future<String> forgotpassword() async {
+    if (email != "") {
+      var result = await ProfileProvider().forgotpassword(email!);
+      loading.value = false;
+      update();
+      return result;
+    } else {
+      loading.value = false;
+      update();
+
+      return "";
+    }
   }
 
   void setUser(UserModel userModel) async {
@@ -60,5 +90,10 @@ class ProfileController extends GetxController {
 
   void setToken(String token) async {
     await localStorageData.setTokenUser(token);
+  }
+
+  void togglevisibility() {
+    _showPassword = !_showPassword!;
+    update();
   }
 }

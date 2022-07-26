@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/onboard/bindings/onboard_binding.dart';
+import '../modules/onboard/views/onboard_view.dart';
 import '../modules/Control/bindings/control_binding.dart';
 import '../modules/Control/views/control_view.dart';
 import '../modules/cart/bindings/cart_binding.dart';
@@ -13,8 +15,11 @@ import '../modules/home/views/home_view.dart';
 import '../modules/product/bindings/product_binding.dart';
 import '../modules/product/views/product_view2.dart';
 import '../modules/profile/bindings/profile_binding.dart';
+import '../modules/profile/views/changepassword_view.dart';
+import '../modules/profile/views/messageforgotpassword_view.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/profile/views/register_view.dart';
+import '../modules/profile/views/forgotpassword_view.dart';
 import '../modules/search/bindings/search_binding.dart';
 import '../modules/search/views/search_view.dart';
 import '../modules/settings/bindings/settings_binding.dart';
@@ -26,9 +31,14 @@ class AppPages {
   AppPages._();
 
   // ignore: constant_identifier_names
-  static const INITIAL = Routes.CONTROLV2;
+  static const INITIAL = Routes.ONBOARD;
 
   static final routes = [
+    GetPage(
+      name: _Paths.ONBOARD,
+      page: () => OnBoardView(),
+      binding: OnBoardBinding(),
+    ),
     GetPage(
       name: _Paths.HOME,
       page: () => HomeView(),
@@ -67,6 +77,21 @@ class AppPages {
     GetPage(
       name: _Paths.REGISTER,
       page: () => RegisterView(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.FORGOTPASSWORD,
+      page: () => ForgotPasswordView(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHANGEPASSWORD,
+      page: () => ChangePasswordView(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.MESSAGEFORGOTPASSWORD,
+      page: () => MessageForgotPasswordView(),
       binding: ProfileBinding(),
     ),
     GetPage(

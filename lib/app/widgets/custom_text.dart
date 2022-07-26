@@ -17,7 +17,8 @@ class CustomText extends StatelessWidget {
       this.color = Colors.black,
       this.decoration = TextDecoration.none,
       this.textOverflow = TextOverflow.ellipsis,
-      this.textAlign = TextAlign.left})
+      this.textAlign = TextAlign.left,
+      FontStyle? fontStyle})
       : super(key: key);
 
   @override
