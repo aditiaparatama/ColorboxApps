@@ -90,20 +90,42 @@ class RadioModel {
 
 Color customColor(String color) {
   switch (color.toLowerCase()) {
-    case "white":
-      return Colors.white;
-    case "red":
-      return Colors.red;
+    case "amber":
+      return Colors.amber;
+    case "amber accent":
+      return Colors.amberAccent;
+    case "brown":
+      return Colors.brown;
+    case "cyan":
+      return Colors.cyan;
+    case "green":
+      return Colors.green;
     case "grey":
       return Colors.grey;
-    case "blue":
-      return Colors.blue;
-    case "black":
-      return Colors.black;
-    case "olive":
-      return const Color(0xFFB2B266);
+    case "indigo":
+      return Colors.indigo;
+    case "lime":
+      return Colors.lime;
+    case "orange":
+      return Colors.orange;
+    case "pink":
+      return Colors.pink;
     case "purple":
       return Colors.purple;
+    case "red":
+      return Colors.red;
+    case "teal":
+      return Colors.teal;
+    case "yellow":
+      return Colors.yellow;
+    case "white":
+      return Colors.white;
+    case "black":
+      return Colors.black;
+    case "transparent":
+      return Colors.transparent;
+    case "olive":
+      return const Color(0xFFB2B266);
     case "maroon":
       return const Color(0xFF800000);
     case "navy":

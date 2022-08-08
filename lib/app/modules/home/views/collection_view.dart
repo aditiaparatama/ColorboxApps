@@ -36,8 +36,10 @@ class CollectionsHomeView extends GetView<CollectionsController> {
                     ),
                     itemBuilder: (_, i) {
                       return GestureDetector(
-                        onTap: () => Get.toNamed(Routes.PRODUCT,
-                            arguments: controller.collection.products[i]),
+                        onTap: () => Get.toNamed(Routes.PRODUCT, arguments: {
+                          "product": controller.collection.products[i],
+                          "idCollection": controller.collection.id
+                        }),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

@@ -6,15 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 
-import '../../../../globalvar.dart';
-
 // ignore: must_be_immutable, use_key_in_widget_constructors
 class CollectionsProductView extends GetView<CollectionsController> {
   var formatter = NumberFormat('###,000');
+  final String? id;
+
+  CollectionsProductView(this.id, {Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var control = Get.put(CollectionsController());
-    control.fetchCollectionProduct(NewArrival);
+
+    control.fetchCollectionProduct(int.parse(id!));
     return GetBuilder<CollectionsController>(
         init: Get.put(CollectionsController()),
         builder: (controller) {
@@ -35,9 +38,22 @@ class CollectionsProductView extends GetView<CollectionsController> {
                       childAspectRatio: 2.0,
                     ),
                     itemBuilder: (_, i) {
+                      var calcu1 = int.parse(controller
+                              .collection.products[i].variants[0].price!
+                              .replaceAll(".00", "")) /
+                          int.parse(controller.collection.products[i]
+                              .variants[0].compareAtPrice!
+                              .replaceAll(".00", ""));
+                      int calcu2 = (100 - calcu1 * 100).ceil();
+
                       return GestureDetector(
-                        onTap: () => Get.toNamed(Routes.PRODUCT,
-                            arguments: controller.collection.products),
+                        onTap: () {
+                          Get.back();
+                          Get.toNamed(Routes.PRODUCT, arguments: {
+                            "product": controller.collection.products[i],
+                            "idCollection": controller.collection.id
+                          });
+                        },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -76,65 +92,78 @@ class CollectionsProductView extends GetView<CollectionsController> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                   )
-                                : Row(
+                                : Column(
                                     children: [
-                                      CustomText(
-                                        text: "Rp " +
-                                            formatter.format(int.parse(
-                                                controller
-                                                    .collection
-                                                    .products[i]
-                                                    .variants[0]
-                                                    .compareAtPrice!
-                                                    .replaceAll(".00", ""))) +
-                                            "  ",
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                        color: const Color.fromRGBO(
-                                            155, 155, 155, 1),
-                                        decoration: TextDecoration.lineThrough,
-                                      ),
-                                      Container(
-                                        width: 30.0,
-                                        height: 20.0,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          color: const Color.fromRGBO(
-                                              187, 9, 21, 1),
-                                        ),
-                                        child: const Center(
-                                          child: Text(
-                                            '20%',
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white,
-                                              height: 1,
-                                            ),
-                                            textAlign: TextAlign.center,
+                                      Row(
+                                        children: [
+                                          CustomText(
+                                            text: "Rp " +
+                                                formatter.format(int.parse(
+                                                    controller
+                                                        .collection
+                                                        .products[i]
+                                                        .variants[0]
+                                                        .compareAtPrice!
+                                                        .replaceAll(
+                                                            ".00", ""))) +
+                                                "  ",
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
+                                            color: const Color.fromRGBO(
+                                                155, 155, 155, 1),
+                                            decoration:
+                                                TextDecoration.lineThrough,
                                           ),
-                                        ),
+                                          Container(
+                                            width: 33.0,
+                                            height: 20.0,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              color: const Color.fromRGBO(
+                                                  187, 9, 21, 1),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                calcu2.toString() + '%',
+                                                style: const TextStyle(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.white,
+                                                  height: 1,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 5),
+                                      Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              CustomText(
+                                                text: "Rp " +
+                                                    formatter.format(int.parse(
+                                                        controller
+                                                            .collection
+                                                            .products[i]
+                                                            .variants[0]
+                                                            .price!
+                                                            .replaceAll(
+                                                                ".00", ""))),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w700,
+                                                color: const Color.fromARGB(
+                                                    255, 229, 57, 53),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                            const SizedBox(height: 5),
-                            Column(
-                              children: [
-                                CustomText(
-                                  text: "Rp " +
-                                      formatter.format(int.parse(controller
-                                          .collection
-                                          .products[i]
-                                          .variants[0]
-                                          .price!
-                                          .replaceAll(".00", ""))),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: const Color.fromARGB(255, 229, 57, 53),
-                                ),
-                              ],
-                            ),
                           ],
                         ),
                       );

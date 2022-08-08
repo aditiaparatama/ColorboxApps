@@ -28,6 +28,8 @@ class CollectionProvider extends GetConnect {
                   id
                   title
                   description
+                  descriptionHtml
+                  productType
                   options {
                       name
                       values
@@ -92,6 +94,8 @@ class CollectionProvider extends GetConnect {
                   id
                   title
                   description
+                  descriptionHtml
+                  productType
                   options {
                       name
                       values
@@ -100,6 +104,13 @@ class CollectionProvider extends GetConnect {
                       edges {
                           node {
                               src
+                          }
+                      }
+                  }
+                  collections(first: 5){
+                      edges {
+                          node {
+                              id
                           }
                       }
                   }

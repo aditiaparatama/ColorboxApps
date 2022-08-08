@@ -1,20 +1,23 @@
 class Product {
   String? id;
   String? title;
+  String? type;
   String? description;
-  List<String> image = List<String>.empty();
   List<Options> options = List<Options>.empty();
+  List<String> image = List<String>.empty();
   List<Variants> variants = List<Variants>.empty();
   bool? hasNextPage;
   String? cursor;
 
-  Product(this.id, this.title, this.description, this.image, this.options,
-      this.variants, this.hasNextPage, this.cursor);
+  Product(this.id, this.title, this.type, this.description, this.image,
+      this.options, this.variants, this.hasNextPage, this.cursor);
 
   Product.fromJson(var json) {
     id = json['id'];
     title = json['title'];
-    description = json['description'];
+    type = json['productType'];
+    description = json['descriptionHtml'];
+
     image = [];
     for (var i = 0; i < json['images']['edges'].length; i++) {
       image.add(json['images']['edges'][i]['node']['src']);
@@ -27,7 +30,6 @@ class Product {
     for (var i = 0; i < json['variants']['edges'].length; i++) {
       variants.add(Variants.fromJson(json['variants']['edges'][i]['node']));
     }
-
     if (json.containsKey('pageInfo')) {
       hasNextPage = json['pageInfo']['hasNextPage'];
       var index = json['edges'].length - 1;

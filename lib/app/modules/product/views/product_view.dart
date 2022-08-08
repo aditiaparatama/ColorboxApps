@@ -240,9 +240,9 @@ class ProductView extends GetView<ProductController> {
                     onPressed: controller.variant!.inventoryQuantity == 0
                         ? null
                         : () {
-                            Get.find<CartController>()
-                                .addCart(controller.variant!.id!);
-                            Get.offNamed(Routes.CART);
+                            // Get.find<CartController>()
+                            //     .addCart(controller.variant!.id!);
+                            // Get.offNamed(Routes.CART);
                           },
                     child: controller.variant!.inventoryQuantity == 0
                         ? const CustomText(

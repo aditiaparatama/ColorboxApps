@@ -2,6 +2,7 @@ import 'package:colorbox/app/modules/cart/models/cart_model.dart';
 import 'package:colorbox/app/modules/cart/providers/cart_provider.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class CartController extends GetxController {
@@ -76,15 +77,35 @@ class CartController extends GetxController {
     await localStorageData.setCart(id);
   }
 
-  void addCart(String variantId) async {
-    var result = await CartProvider().cartAdd(_idCart!, variantId);
-    if (result["cartLinesAdd"]["userErrors"].length == 0) {
-      Get.snackbar("Info", "Data has been added",
-          snackPosition: SnackPosition.TOP);
+  void addCart(String variantId, dynamic context, String ukuran) async {
+    if (ukuran == '') {
+      Get.snackbar(
+        "Peringatan",
+        "Silahkan pilih ukuran!",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.black,
+        colorText: Colors.white,
+      );
     } else {
-      Get.snackbar("Error", "Error",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.white);
+      var result = await CartProvider().cartAdd(_idCart!, variantId);
+      if (result["cartLinesAdd"]["userErrors"].length == 0) {
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            content: SvgPicture.asset("assets/icon/bx-addproduct.svg"),
+          ),
+        );
+      } else {
+        Get.snackbar(
+          "Peringatan",
+          "Silahkan pilih warna produk!",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.black,
+          colorText: Colors.white,
+        );
+      }
     }
+
     await getCart();
   }
 
