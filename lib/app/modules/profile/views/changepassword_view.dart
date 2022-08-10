@@ -12,7 +12,7 @@ import '../controllers/profile_controller.dart';
 // ignore: use_key_in_widget_constructors, must_be_immutable
 class ChangePasswordView extends GetView<ProfileController> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController birthday = new TextEditingController();
+  TextEditingController birthday = TextEditingController();
 
   static const str = 'date: 2019:04:01';
   final valuestest = str.split(': ');
@@ -57,10 +57,12 @@ class ChangePasswordView extends GetView<ProfileController> {
                                         controller.email = value;
                                       },
                                       validator: (value) {
-                                        if (value == null) {
-                                          // ignore: avoid_print
-                                          print("ERROR");
+                                        if (RegExp(
+                                                r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                                            .hasMatch(value!)) {
+                                          return null;
                                         }
+                                        return "Format email salah";
                                       },
                                     ),
                                     const SizedBox(
@@ -86,10 +88,10 @@ class ChangePasswordView extends GetView<ProfileController> {
                                         controller.password = value;
                                       },
                                       validator: (value) {
-                                        if (value == null) {
-                                          // ignore: avoid_print
-                                          print("ERROR");
+                                        if (value == null || value == "") {
+                                          return "Password tidak boleh kosong";
                                         }
+                                        return null;
                                       },
                                     ),
                                     const SizedBox(
@@ -103,10 +105,10 @@ class ChangePasswordView extends GetView<ProfileController> {
                                         controller.firstName = value;
                                       },
                                       validator: (value) {
-                                        if (value == null) {
-                                          // ignore: avoid_print
-                                          print("ERROR");
+                                        if (value == null || value == "") {
+                                          return "Nama tidak boleh kosong";
                                         }
+                                        return "";
                                       },
                                     ),
                                     const SizedBox(
@@ -141,10 +143,10 @@ class ChangePasswordView extends GetView<ProfileController> {
                                       },
                                       // obscureText: test,
                                       validator: (value) {
-                                        if (value!.isEmpty) {
-                                          // ignore: avoid_print
-                                          print("ERROR");
+                                        if (value == null || value == "") {
+                                          return "Tgl. Lahir tidak boleh kosong";
                                         }
+                                        return "";
                                       },
                                     ),
                                     const SizedBox(
@@ -245,7 +247,7 @@ class ChangePasswordView extends GetView<ProfileController> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: <Widget>[
-                                            CustomText(
+                                            const CustomText(
                                               text: 'Sudah punya akun?',
                                               fontSize: 13,
                                               color: Colors.black,

@@ -10,7 +10,7 @@ import '../controllers/profile_controller.dart';
 // ignore: use_key_in_widget_constructors, must_be_immutable
 class ForgotPasswordView extends GetView<ProfileController> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController birthday = new TextEditingController();
+  TextEditingController birthday = TextEditingController();
 
   static const str = 'date: 2019:04:01';
   final valuestest = str.split(': ');
@@ -20,11 +20,14 @@ class ForgotPasswordView extends GetView<ProfileController> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: CustomText(
-            text: 'Reset Password',
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
+          title: const CustomText(
+            text: "Reset Password",
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
           ),
+          centerTitle: false,
+          elevation: 3,
+          shadowColor: Colors.grey.withOpacity(0.3),
         ),
         body: GetBuilder<ProfileController>(builder: (controller) {
           return Stack(
@@ -72,11 +75,12 @@ class ForgotPasswordView extends GetView<ProfileController> {
                                         controller.email = value;
                                       },
                                       validator: (value) {
-                                        if (value == null || value == '') {
-                                          return "Email tidak boleh kosong";
-                                          // ignore: avoid_print
-                                          // print("ERROR");
+                                        if (RegExp(
+                                                r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                                            .hasMatch(value!)) {
+                                          return null;
                                         }
+                                        return "Format email salah";
                                       },
                                     ),
                                     const SizedBox(

@@ -1,7 +1,7 @@
-import 'package:colorbox/app/modules/profile/models/user_model.dart';
-import 'package:colorbox/app/services/shopify_graphql.dart';
 import 'package:get/get.dart';
 import 'package:graphql/client.dart';
+import 'package:colorbox/app/modules/profile/models/user_model.dart';
+import 'package:colorbox/app/services/shopify_graphql.dart';
 
 class CartProvider extends GetConnect {
   Future<String> createCart() async {
@@ -92,6 +92,7 @@ class CartProvider extends GetConnect {
                     ... on ProductVariant {
                       id
                       product {
+                          id
                           title
                       }
                       title

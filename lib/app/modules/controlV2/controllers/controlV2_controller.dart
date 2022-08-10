@@ -7,6 +7,7 @@ import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/profile/views/profile_view.dart';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
 import 'package:colorbox/app/modules/settings/views/settings_view.dart';
+import 'package:colorbox/app/modules/wishlist/views/wishlist_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -42,7 +43,7 @@ class ControlV2Controller extends GetxController {
     super.onInit();
   }
 
-  void changeSelectedValue(int selectedValue) {
+  void changeSelectedValue(int selectedValue, globalKey) {
     _navigatorValue = selectedValue;
 
     switch (selectedValue) {
@@ -58,7 +59,10 @@ class ControlV2Controller extends GetxController {
         }
       case 2:
         {
-          _currentScreen = CartView();
+          _currentScreen =
+              (Get.find<SettingsController>().userModel.displayName != null)
+                  ? const WishlistView()
+                  : ProfileView(globalKey);
           break;
         }
       case 3:
@@ -68,7 +72,7 @@ class ControlV2Controller extends GetxController {
         }
       case 4:
         {
-          _currentScreen = ProfileView();
+          _currentScreen = ProfileView(globalKey);
           break;
         }
       default:

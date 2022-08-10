@@ -1,3 +1,4 @@
+import 'package:colorbox/app/modules/controlV2/controllers/controlV2_controller.dart';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,9 @@ class ProfileBinding extends Bindings {
     );
     Get.lazyPut<LocalStorageData>(
       () => LocalStorageData(),
+    );
+    Get.lazyPut<ControlV2Controller>(
+      () => ControlV2Controller(),
     );
   }
 }

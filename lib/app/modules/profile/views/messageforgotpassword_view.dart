@@ -1,8 +1,5 @@
-import 'package:colorbox/app/routes/app_pages.dart';
-import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 // import 'package:colorbox/app/widgets/custom_text_form_field.dart';
-import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/profile_controller.dart';
@@ -19,11 +16,14 @@ class MessageForgotPasswordView extends GetView<ProfileController> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: CustomText(
-            text: 'Reset Password',
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
+          title: const CustomText(
+            text: "Reset Password",
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
           ),
+          centerTitle: false,
+          elevation: 3,
+          shadowColor: Colors.grey.withOpacity(0.3),
         ),
         body: GetBuilder<ProfileController>(builder: (controller) {
           return Stack(

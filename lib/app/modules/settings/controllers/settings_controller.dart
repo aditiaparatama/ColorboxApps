@@ -1,4 +1,5 @@
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
+import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:get/get.dart';
 
@@ -25,6 +26,13 @@ class SettingsController extends GetxController {
   void logout() {
     localStorageData.deleteUser();
     _userModel = UserModel.isEmpty();
+    update();
+  }
+
+  Future<void> fetchingUser() async {
+    _token = await localStorageData.getTokenUser;
+    var result = await ProfileProvider().getUser(_token!);
+    _userModel = UserModel.fromJson(result);
     update();
   }
 }

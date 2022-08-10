@@ -6,6 +6,7 @@ class Product {
   List<Options> options = List<Options>.empty();
   List<String> image = List<String>.empty();
   List<Variants> variants = List<Variants>.empty();
+  Variants? variantSelected;
   bool? hasNextPage;
   String? cursor;
 
@@ -64,6 +65,30 @@ class Product {
       hasNextPage = json['pageInfo']['hasNextPage'];
       var index = json['edges'].length - 1;
       if (hasNextPage!) cursor = json['edges'][index]['cursor'];
+    }
+  }
+
+  Product.fromWishlist(var json, String variantId) {
+    id = json['id'];
+    title = json['title'];
+    description = json['description'];
+    image = [];
+    for (var i = 0; i < json['images']['edges'].length; i++) {
+      image.add(json['images']['edges'][i]['node']['src']);
+    }
+    options = [];
+    for (var i = 0; i < json['options'].length; i++) {
+      options.add(Options.fromJson(json['options'][i]));
+    }
+    variants = [];
+    for (var i = 0; i < json['variants']['edges'].length; i++) {
+      if (json['variants']['edges'][i]['node']['id']
+              .replaceAll("gid://shopify/ProductVariant/", "") ==
+          variantId) {
+        variantSelected =
+            Variants.fromWishlist(json['variants']['edges'][i]['node']);
+      }
+      variants.add(Variants.fromWishlist(json['variants']['edges'][i]['node']));
     }
   }
 
@@ -145,5 +170,18 @@ class Variants {
       options.add(Options.fromVariant(json['selectedOptions'][i]));
     }
     image = json["image"]["src"];
+  }
+
+  Variants.fromWishlist(var json) {
+    id = json["id"].replaceAll("gid://shopify/ProductVariant/", "");
+    price = json['price'];
+    compareAtPrice = json['compareAtPrice'];
+    compareAtPrice ??= "0.00";
+    inventoryQuantity = json['quantityAvailable'];
+    sku = json['sku'];
+    options = [];
+    for (int i = 0; i < json['selectedOptions'].length; i++) {
+      options.add(Options.fromVariant(json['selectedOptions'][i]));
+    }
   }
 }

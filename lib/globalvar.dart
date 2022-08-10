@@ -10,3 +10,12 @@ const String url_widget =
     "https://widget.delamibrands.com/colorbox/mobile/menus.json";
 // ignore: constant_identifier_names
 const int NewArrival = 214404235414;
+
+const String urlCity =
+    "https://widget.delamibrands.com/executive/executive_reg_shipping_test/front/api_province?province=";
+const String urlShipping =
+    "https://widget.delamibrands.com/executive/executive_reg_shipping/front/insert_tes";
+
+const String urlWishlist =
+    "https://color-box-indo.myshopify.com/a/wishlist?type=api";
+const String pathWishlist = "&version=1&customerid=";

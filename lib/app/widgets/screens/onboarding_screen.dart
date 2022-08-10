@@ -80,7 +80,7 @@ class OnBoardingScreen extends StatelessWidget {
               const SizedBox(
                 height: 30,
               ),
-              Container(
+              SizedBox(
                 child: SizedBox(
                   child: MaterialButton(
                     child: Row(

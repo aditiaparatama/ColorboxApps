@@ -1,6 +1,6 @@
-import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/modules/controlV2/controllers/controlV2_controller.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -8,13 +8,19 @@ import 'package:get/get.dart';
 
 // ignore: use_key_in_widget_constructors
 class ControlV2View extends GetView<ControlV2Controller> {
+  GlobalKey globalKey = GlobalKey(debugLabel: 'btm_app_bar');
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ControlV2Controller>(
         init: Get.put(ControlV2Controller()),
         builder: (context) {
           return Scaffold(
-            body: controller.currentScreen,
+            body: DoubleBackToCloseApp(
+                snackBar: const SnackBar(
+                  content: Text('Tap back again to leave'),
+                ),
+                child: controller.currentScreen),
             bottomNavigationBar: bottomNavigationBar(),
           );
         });
@@ -23,21 +29,24 @@ class ControlV2View extends GetView<ControlV2Controller> {
   Widget bottomNavigationBar() => GetBuilder<ControlV2Controller>(
         init: Get.put(ControlV2Controller()),
         builder: (controller) => BottomNavigationBar(
+          key: globalKey,
           showSelectedLabels: false,
           showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,
           items: [
-            bottomNavigationBarItem("assets/icon/cb.png", controller,
-                menu: "home"),
-            bottomNavigationBarItem("assets/icon/bx-search.svg", controller),
-            bottomNavigationBarItem(
-                "assets/icon/bx-shopping-bag.svg", controller,
-                menu: "cart"),
-            bottomNavigationBarItem("assets/icon/bx-user.svg", controller)
+            bottomNavigationBarItem("assets/icon/cb.png", menu: "home"),
+            bottomNavigationBarItem("assets/icon/Icon-Search.svg",
+                menu: "Kategori"),
+            bottomNavigationBarItem("assets/icon/icon_line-Heart.svg",
+                menu: "Wishlist",
+                assetActive: "assets/icon/icon_filled-Heart.svg"),
+            bottomNavigationBarItem("assets/icon/icon_line-user_1.svg",
+                menu: "Akun Saya",
+                assetActive: "assets/icon/icon_filled-user_1.svg")
           ],
           currentIndex: controller.navigatorValue,
           onTap: (index) {
-            controller.changeSelectedValue(index);
+            controller.changeSelectedValue(index, globalKey);
           },
           // elevation: 8,
           selectedItemColor: Colors.black,
@@ -45,96 +54,84 @@ class ControlV2View extends GetView<ControlV2Controller> {
         ),
       );
 
-  BottomNavigationBarItem bottomNavigationBarItem(String assets, var c,
-      {String menu = "etc", double size = 25}) {
+  BottomNavigationBarItem bottomNavigationBarItem(String assets,
+      {String menu = "etc", double size = 25, String? assetActive}) {
     return BottomNavigationBarItem(
       backgroundColor: Colors.white,
       activeIcon: Stack(
         children: [
-          (menu == "home")
-              ? Center(
-                  child: Image.asset(
+          (menu.toLowerCase() == "home")
+              ? Column(children: [
+                  Image.asset(
                     assets,
                     height: size + 5,
                     width: size + 5,
                   ),
-                )
-              : Center(
-                  child: SvgPicture.asset(
-                    assets,
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  CustomText(
+                    text: menu,
+                    fontSize: 12,
+                  )
+                ])
+              : Column(children: [
+                  SvgPicture.asset(
+                    assetActive ?? assets,
                     height: size,
                     width: size,
                     color: Colors.black,
                   ),
-                ),
-          Get.find<CartController>().cart.lines!.isNotEmpty && menu == "cart"
-              ? Container(
-                  alignment: Alignment.topRight,
-                  padding: const EdgeInsets.only(right: 25),
-                  child: Container(
-                    width: 15,
-                    height: 15,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.red),
-                    child: CustomText(
-                      text: Get.find<CartController>()
-                          .cart
-                          .lines!
-                          .length
-                          .toString(),
-                      fontSize: 10,
-                      color: Colors.white,
-                    ),
+                  const SizedBox(
+                    height: 4,
                   ),
-                )
-              : const SizedBox()
+                  CustomText(
+                    text: menu,
+                    fontSize: 12,
+                  )
+                ]),
         ],
       ),
       label: "",
       icon: Stack(
         children: [
-          (menu == "home")
-              ? Center(
-                  child: Image.asset(
-                    assets,
-                    height: size + 5,
-                    width: size + 5,
-                    color: const Color.fromRGBO(0, 0, 0, 0.5),
-                  ),
-                )
-              : Center(
-                  child: SvgPicture.asset(
-                    assets,
-                    height: size,
-                    width: size,
-                    color: const Color.fromRGBO(0, 0, 0, 0.5),
-                  ),
-                ),
-          Get.find<CartController>().cart.lines!.isNotEmpty && menu == "cart"
-              ? Container(
-                  alignment: Alignment.topRight,
-                  padding: const EdgeInsets.only(right: 25),
-                  child: Container(
-                    width: 15,
-                    height: 15,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.red),
-                    child: CustomText(
-                      text: Get.find<CartController>()
-                          .cart
-                          .lines!
-                          .length
-                          .toString(),
-                      fontSize: 10,
-                      color: Colors.white,
+          (menu.toLowerCase() == "home")
+              ? Column(
+                  children: [
+                    Image.asset(
+                      assets,
+                      height: size + 5,
+                      width: size + 5,
+                      color: const Color(0xFF9B9B9B),
                     ),
-                  ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    CustomText(
+                      text: menu,
+                      fontSize: 12,
+                      color: const Color(0xFF9B9B9B),
+                    ),
+                  ],
                 )
-              : const SizedBox()
+              : Column(
+                  children: [
+                    SvgPicture.asset(
+                      assets,
+                      height: size,
+                      width: size,
+                      color: const Color(0xFF9B9B9B),
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    CustomText(
+                      text: menu,
+                      fontSize: 12,
+                      color: const Color(0xFF9B9B9B),
+                    ),
+                  ],
+                ),
         ],
       ),
     );

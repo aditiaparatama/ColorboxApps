@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 const int _blackPrimaryValue = 0xFF000000;
 const int _whitePrimaryValue = 0xFFFFFFFF;
-
 const double sfontTitle = 20;
 const double sfontPrice = 18;
 const double sfontPromo = 16;
 const double sfontDefault = 14;
-const double defaultPadding = 16.0;
-const double defaultBorderRadius = 12.0;
-
 const Color colorPrimary = Colors.black;
 const Color secondColor = Colors.white;
-
+const Color colorDiver = Color(0xFFE5E8EB);
 // ignore: constant_identifier_names
 const CACHED_CART_DATA = 'CACHED_CART_DATA';
 // ignore: constant_identifier_names
 const CACHED_USER_DATA = 'CACHED_USER_DATA';
 // ignore: constant_identifier_names
 const CACHED_USER_TOKEN = 'CACHED_USER_TOKEN';
+
+const Color primaryColor = Color(0xFFFFFFFF);
+const Color grayColor = Color(0xFF8D8D8E);
+const Color baseColorSkeleton = Colors.black;
+const Color highlightColorSkeleton = Colors.white30;
+
+var formatter = NumberFormat('###,000', "id");
+
+const double defaultPadding = 8.0;
 
 const MaterialColor primaryBlack = MaterialColor(
   _blackPrimaryValue,

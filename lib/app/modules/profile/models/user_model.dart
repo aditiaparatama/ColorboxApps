@@ -1,3 +1,5 @@
+import 'package:colorbox/app/data/models/mailing_address.dart';
+
 class UserModel {
   String? id;
   String? displayName;
@@ -6,7 +8,7 @@ class UserModel {
   String? email;
   String? phone;
   Address? defaultAddress;
-  List<Address>? addresses;
+  List<MailingAddress>? addresses;
   String? expiresAt;
 
   UserModel(
@@ -31,7 +33,8 @@ class UserModel {
     addresses = [];
 
     for (int i = 0; i < json['addresses']['edges'].length; i++) {
-      addresses!.add(Address.fromJson(json['addresses']['edges'][i]['node']));
+      addresses!
+          .add(MailingAddress.fromJson(json['addresses']['edges'][i]['node']));
     }
   }
 

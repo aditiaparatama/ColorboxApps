@@ -1,3 +1,9 @@
+import 'package:colorbox/app/modules/checkout/bindings/checkout_binding.dart';
+import 'package:colorbox/app/modules/checkout/views/checkout_view.dart';
+import 'package:colorbox/app/modules/discount/bindings/discount_binding.dart';
+import 'package:colorbox/app/modules/discount/views/discount_view.dart';
+import 'package:colorbox/app/modules/wishlist/bindings/wishlist_binding.dart';
+import 'package:colorbox/app/modules/wishlist/views/wishlist_view.dart';
 import 'package:get/get.dart';
 
 import '../modules/onboard/bindings/onboard_binding.dart';
@@ -71,7 +77,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.PROFILE,
-      page: () => ProfileView(),
+      page: () => ProfileView(null),
       binding: ProfileBinding(),
     ),
     GetPage(
@@ -103,6 +109,21 @@ class AppPages {
       name: _Paths.SEARCH,
       page: () => SearchView(),
       binding: SearchBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHECKOUT,
+      page: () => CheckoutView(),
+      binding: CheckoutBinding(),
+    ),
+    GetPage(
+      name: _Paths.DISCOUNT,
+      page: () => DiscountView(),
+      binding: DiscountBinding(),
+    ),
+    GetPage(
+      name: _Paths.WISHLIST,
+      page: () => const WishlistView(),
+      binding: WishlistBinding(),
     ),
   ];
 }

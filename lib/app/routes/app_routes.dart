@@ -31,6 +31,14 @@ abstract class Routes {
   static const SETTINGS = _Paths.SETTINGS;
   // ignore: constant_identifier_names
   static const SEARCH = _Paths.SEARCH;
+  // ignore: constant_identifier_names
+  static const CHECKOUT = _Paths.CHECKOUT;
+  // ignore: constant_identifier_names
+  static const DISCOUNT = _Paths.DISCOUNT;
+  // ignore: constant_identifier_names
+  static const SHIPPING = _Paths.SHIPPING;
+  // ignore: constant_identifier_names
+  static const WISHLIST = _Paths.WISHLIST;
 }
 
 abstract class _Paths {
@@ -63,4 +71,12 @@ abstract class _Paths {
   static const SETTINGS = '/settings';
   // ignore: constant_identifier_names
   static const SEARCH = '/search';
+  // ignore: constant_identifier_names
+  static const CHECKOUT = '/checkout';
+  // ignore: constant_identifier_names
+  static const DISCOUNT = '/discount';
+  // ignore: constant_identifier_names
+  static const SHIPPING = '/shipping';
+  // ignore: constant_identifier_names
+  static const WISHLIST = '/wishlist';
 }

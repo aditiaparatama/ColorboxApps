@@ -12,7 +12,7 @@ import '../controllers/profile_controller.dart';
 // ignore: use_key_in_widget_constructors, must_be_immutable
 class RegisterView extends GetView<ProfileController> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController birthday = new TextEditingController();
+  TextEditingController birthday = TextEditingController();
 
   static const str = 'date: 2019:04:01';
   final valuestest = str.split(': ');
@@ -22,11 +22,14 @@ class RegisterView extends GetView<ProfileController> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: CustomText(
-            text: 'Daftar Akun',
-            fontSize: 20,
-            fontWeight: FontWeight.w700,
+          title: const CustomText(
+            text: "Daftar Akun",
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
           ),
+          centerTitle: false,
+          elevation: 3,
+          shadowColor: Colors.grey.withOpacity(0.3),
         ),
         body: GetBuilder<ProfileController>(builder: (controller) {
           return Stack(
@@ -50,6 +53,7 @@ class RegisterView extends GetView<ProfileController> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     TextFormField(
+                                      cursorColor: Colors.black,
                                       decoration: const InputDecoration(
                                         labelText: "Email",
                                       ),
@@ -57,16 +61,19 @@ class RegisterView extends GetView<ProfileController> {
                                         controller.email = value;
                                       },
                                       validator: (value) {
-                                        if (value == null) {
-                                          // ignore: avoid_print
-                                          print("ERROR");
+                                        if (RegExp(
+                                                r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                                            .hasMatch(value!)) {
+                                          return null;
                                         }
+                                        return "Format email salah";
                                       },
                                     ),
                                     const SizedBox(
                                       height: 20,
                                     ),
                                     TextFormField(
+                                      cursorColor: Colors.black,
                                       decoration: InputDecoration(
                                         labelText: "Password",
                                         suffixIcon: GestureDetector(
@@ -74,7 +81,7 @@ class RegisterView extends GetView<ProfileController> {
                                             controller.togglevisibility();
                                           },
                                           child: Icon(
-                                            controller.showPassword!
+                                            !controller.showPassword!
                                                 ? Icons.visibility
                                                 : Icons.visibility_off,
                                             color: Colors.black,
@@ -86,16 +93,17 @@ class RegisterView extends GetView<ProfileController> {
                                         controller.password = value;
                                       },
                                       validator: (value) {
-                                        if (value == null) {
-                                          // ignore: avoid_print
-                                          print("ERROR");
+                                        if (value == "" || value == null) {
+                                          return "Password tidak boleh kosong";
                                         }
+                                        return null;
                                       },
                                     ),
                                     const SizedBox(
                                       height: 20,
                                     ),
                                     TextFormField(
+                                      cursorColor: Colors.black,
                                       decoration: const InputDecoration(
                                         labelText: "Nama",
                                       ),
@@ -103,49 +111,81 @@ class RegisterView extends GetView<ProfileController> {
                                         controller.firstName = value;
                                       },
                                       validator: (value) {
-                                        if (value == null) {
-                                          // ignore: avoid_print
-                                          print("ERROR");
+                                        if (value == "" || value == null) {
+                                          return "Nama tidak boleh kosong";
                                         }
+                                        return null;
                                       },
                                     ),
                                     const SizedBox(
                                       height: 20,
                                     ),
-                                    TextFormField(
-                                      controller: birthday,
-                                      decoration: InputDecoration(
-                                        labelText: "Tanggal Lahir",
-                                        suffixIcon: GestureDetector(
-                                          onTap: () {
-                                            showDatePicker(
-                                              context: context,
-                                              initialDate:
-                                                  controller.showDateBirth!,
-                                              firstDate: DateTime(2000),
-                                              lastDate: DateTime(2025),
-                                            ).then((value) {
-                                              return birthday.text =
-                                                  DateFormat('dd/MM/yyyy')
-                                                      .format(value!);
-                                            });
-                                          },
-                                          child: const Icon(
-                                            Icons.calendar_today,
-                                            color: Colors.black,
+                                    InkWell(
+                                      onTap: () => showDatePicker(
+                                        helpText: "Pilih Tanggal",
+                                        confirmText: "Pilih",
+                                        cancelText: "Batal",
+                                        context: context,
+                                        initialDate: controller.showDateBirth!,
+                                        firstDate: DateTime(1900),
+                                        lastDate: DateTime(2025),
+                                        builder: (context, child) {
+                                          return Theme(
+                                            data: Theme.of(context).copyWith(
+                                              colorScheme:
+                                                  const ColorScheme.light(
+                                                primary: Colors
+                                                    .black, // <-- SEE HERE
+                                                onPrimary: Colors
+                                                    .white, // <-- SEE HERE
+                                                onSurface: Colors
+                                                    .black, // <-- SEE HERE
+                                              ),
+                                              textButtonTheme:
+                                                  TextButtonThemeData(
+                                                style: TextButton.styleFrom(
+                                                    primary: Colors
+                                                        .white, // button text color
+                                                    side: const BorderSide(
+                                                        color: Colors.black,
+                                                        width: 1),
+                                                    backgroundColor:
+                                                        Colors.black),
+                                              ),
+                                            ),
+                                            child: child!,
+                                          );
+                                        },
+                                      ).then((value) {
+                                        return birthday.text =
+                                            DateFormat('dd/MM/yyyy')
+                                                .format(value!);
+                                      }),
+                                      child: TextFormField(
+                                        cursorColor: Colors.black,
+                                        enabled: false,
+                                        controller: birthday,
+                                        decoration: InputDecoration(
+                                          labelText: "Tanggal Lahir",
+                                          suffixIcon: GestureDetector(
+                                            onTap: () {},
+                                            child: const Icon(
+                                              Icons.calendar_today,
+                                              color: Colors.black,
+                                            ),
                                           ),
                                         ),
+                                        onSaved: (value) {
+                                          controller.tglLahir = value;
+                                        },
+                                        // obscureText: test,
+                                        validator: (value) {
+                                          if (value == "" || value == null) {
+                                            return "Tgl. Lahir tidak boleh kosong";
+                                          }
+                                          return null;
+                                        },
                                       ),
-                                      onSaved: (value) {
-                                        controller.tglLahir = value;
-                                      },
-                                      // obscureText: test,
-                                      validator: (value) {
-                                        if (value!.isEmpty) {
-                                          // ignore: avoid_print
-                                          print("ERROR");
-                                        }
-                                      },
                                     ),
                                     const SizedBox(
                                       height: 40,
@@ -219,10 +259,10 @@ class RegisterView extends GetView<ProfileController> {
                                                     right: 10,
                                                     left: 30),
                                                 child: CircleAvatar(
-                                                  child: SvgPicture.asset(
-                                                    "assets/icon/bx-gnew.svg",
-                                                    height: 40.0,
-                                                    width: 40.0,
+                                                  child: Image.asset(
+                                                    "assets/icon/google-icon.png",
+                                                    height: 28,
+                                                    width: 28,
                                                   ),
                                                 ),
                                               ),
