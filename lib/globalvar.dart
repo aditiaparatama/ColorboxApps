@@ -12,9 +12,9 @@ const String url_widget =
 const int NewArrival = 214404235414;
 
 const String urlCity =
-    "https://widget.delamibrands.com/executive/executive_reg_shipping_test/front/api_province?province=";
+    "https://widget.delamibrands.com/colorbox/colorbox_reg_shipping_test/front/api_province?province=";
 const String urlShipping =
-    "https://widget.delamibrands.com/executive/executive_reg_shipping/front/insert_tes";
+    "https://widget.delamibrands.com/colorbox/colorbox_reg_shipping/front/insert_tes";
 
 const String urlWishlist =
     "https://color-box-indo.myshopify.com/a/wishlist?type=api";

@@ -4,7 +4,6 @@ import 'package:colorbox/app/widgets/custom_text.dart';
 // import 'package:colorbox/app/widgets/custom_text_form_field.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../controllers/profile_controller.dart';
