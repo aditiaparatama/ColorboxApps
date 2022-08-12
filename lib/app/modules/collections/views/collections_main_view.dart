@@ -26,10 +26,12 @@ class CollectionsMainView extends GetView<CollectionsController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.setTabBar(Get.arguments);
+    var indexMenu = Get.arguments["indexMenu"];
+    controller.setTabBar(Get.arguments["menu"]);
     controller.fetchCollectionProduct(controller.menu[0].subjectID!);
     controller.subjectID = controller.menu[0].subjectID!;
     _sControl.addListener(onScroll);
+    controller.onChangeList(indexMenu);
 
     return GetBuilder<CollectionsController>(
         init: Get.put(CollectionsController()),
@@ -43,6 +45,7 @@ class CollectionsMainView extends GetView<CollectionsController> {
                   child: Builder(builder: (context) {
                     final TabController tabController =
                         DefaultTabController.of(context)!;
+                    tabController.index = indexMenu;
                     return Scaffold(
                         appBar: AppBar(
                           title: Text(
