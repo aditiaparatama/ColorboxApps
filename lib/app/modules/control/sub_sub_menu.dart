@@ -1,6 +1,7 @@
 class SubSubMenu {
   int? id;
   String? title;
+  String? image;
   String? subject;
   int? subjectID;
 
@@ -9,6 +10,7 @@ class SubSubMenu {
   SubSubMenu.fromJson(var json) {
     id = json['id'];
     title = json['title'];
+    image = json['images'];
     subject = json['subject'];
     subjectID = json['subject_id'];
   }
@@ -17,6 +19,7 @@ class SubSubMenu {
     final data = <String, dynamic>{};
     data['id'] = id;
     data['title'] = title;
+    data['images'] = image;
     data['subject'] = subject;
     data['subject_id'] = subjectID;
     return data;

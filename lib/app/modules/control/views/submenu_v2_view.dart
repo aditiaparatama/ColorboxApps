@@ -85,8 +85,7 @@ class SubmenuV2View extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(50.0),
                               child: CachedNetworkImage(
-                                imageUrl:
-                                    "https://cdn.shopify.com/s/files/1/0423/9120/8086/products/I-SIDKEY122G058_MED_BLUE_4_T_1280x@2x.progressive.jpg?v=1657769394",
+                                imageUrl: c[curIndex].subMenu[index].image!,
                                 fit: BoxFit.cover,
                                 height: 50.0,
                                 width: 50.0,
