@@ -27,12 +27,18 @@ class CollectionsMainView extends GetView<CollectionsController> {
   @override
   Widget build(BuildContext context) {
     var indexMenu = Get.arguments["indexMenu"];
-    controller.setTabBar(Get.arguments["menu"]);
-    controller.fetchCollectionProduct(controller.menu[0].subjectID!);
-    controller.subjectID = controller.menu[0].subjectID!;
+    controller.setTabBar(Get.arguments["menu"],
+        parent: (Get.arguments["indexMenu"] == null) ? true : false);
+    controller.fetchCollectionProduct((Get.arguments["indexMenu"] == null)
+        ? controller.menu.subjectID!
+        : controller.menu[Get.arguments["indexMenu"]].subjectID!);
+    controller.subjectID = (Get.arguments["indexMenu"] == null)
+        ? controller.menu.subjectID!
+        : controller.menu[Get.arguments["indexMenu"]].subjectID!;
     _sControl.addListener(onScroll);
-    controller.onChangeList(indexMenu);
-
+    if (Get.arguments["indexMenu"] != null) {
+      controller.onChangeList(indexMenu);
+    }
     return GetBuilder<CollectionsController>(
         init: Get.put(CollectionsController()),
         builder: (control) {
@@ -45,7 +51,9 @@ class CollectionsMainView extends GetView<CollectionsController> {
                   child: Builder(builder: (context) {
                     final TabController tabController =
                         DefaultTabController.of(context)!;
-                    tabController.index = indexMenu;
+                    if (Get.arguments["indexMenu"] != null) {
+                      tabController.index = controller.selectedIndex;
+                    }
                     return Scaffold(
                         appBar: AppBar(
                           title: Text(
@@ -93,6 +101,7 @@ class CollectionsMainView extends GetView<CollectionsController> {
                             controller: _pControl,
                             itemCount: control.listTabs.length,
                             onPageChanged: (index) {
+                              controller.selectedIndex = index;
                               controller.onChangeList(index);
                               tabController.index = index;
                             },

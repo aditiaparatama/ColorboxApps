@@ -27,5 +27,8 @@ class Controlv2Binding extends Bindings {
     Get.lazyPut<ProfileController>(
       () => ProfileController(),
     );
+    Get.lazyPut<ProfileController>(
+      () => ProfileController(),
+    );
   }
 }

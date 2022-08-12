@@ -19,6 +19,8 @@ class CollectionsController extends GetxController {
   final List<Widget> _listTabs = [];
   List<Widget> get listTabs => _listTabs;
   var menu;
+  bool? _parentList;
+  int pageIndex = 0;
 
   final int _limit = 10;
   int selectedIndex = 0;
@@ -63,25 +65,37 @@ class CollectionsController extends GetxController {
     update();
   }
 
-  Future<void> setTabBar(var argMenu) async {
+  Future<void> setTabBar(var argMenu, {bool parent = false}) async {
     menu = argMenu;
+    _parentList = parent;
     listTabs.clear();
-    for (int i = 0; i < argMenu.length; i++) {
+    if (parent) {
       listTabs.add(Tab(
-          child: Text(argMenu[i]
-              .title!
-              .toUpperCase()
-              .replaceAll("- NEW ARRIVAL", "")
-              .replaceAll("WOMEN - ", "")
-              .replaceAll("MEN - ", ""))));
+        child: Text(menu.title),
+      ));
+    } else {
+      for (int i = 0; i < argMenu.length; i++) {
+        listTabs.add(Tab(
+            child: Text(argMenu[i]
+                .title!
+                .toUpperCase()
+                .replaceAll("- NEW ARRIVAL", "")
+                .replaceAll("WOMEN - ", "")
+                .replaceAll("MEN - ", ""))));
+      }
     }
     update();
   }
 
   void onChangeList(int index) {
     selectedIndex = index;
-    subjectID = menu[index].subjectID!;
-    fetchCollectionProduct(menu[index].subjectID!);
+    if (_parentList!) {
+      subjectID = menu.subjectID!;
+      fetchCollectionProduct(menu.subjectID!);
+    } else {
+      subjectID = menu[index].subjectID!;
+      fetchCollectionProduct(menu[index].subjectID!);
+    }
     update();
   }
 }
