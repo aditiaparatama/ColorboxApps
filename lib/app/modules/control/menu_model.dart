@@ -3,6 +3,7 @@ import 'package:colorbox/app/modules/control/sub_menu_model.dart';
 class Menu {
   int? id;
   String? title;
+  String? image;
   String? subject;
   int? subjectID;
   List<SubMenu> subMenu = List<SubMenu>.empty();
@@ -10,6 +11,7 @@ class Menu {
   Menu(
       {this.id,
       this.title,
+      this.image,
       this.subject,
       this.subjectID,
       required this.subMenu});
@@ -17,6 +19,7 @@ class Menu {
   Menu.fromJson(var json) {
     id = json['id'];
     title = json['title'];
+    image = json['images'];
     subject = json['subject'];
     subjectID = json['subject_id'];
     // subMenu = json['items'];
@@ -31,6 +34,7 @@ class Menu {
     final data = <String, dynamic>{};
     data['id'] = id;
     data['title'] = title;
+    data['images'] = image;
     data['subject'] = subject;
     data['subject_id'] = subjectID;
     return data;
