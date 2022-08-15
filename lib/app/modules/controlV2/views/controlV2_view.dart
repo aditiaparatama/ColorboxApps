@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 
-// ignore: use_key_in_widget_constructors
+// ignore: use_key_in_widget_constructors, must_be_immutable
 class ControlV2View extends GetView<ControlV2Controller> {
   GlobalKey globalKey = GlobalKey(debugLabel: 'btm_app_bar');
 

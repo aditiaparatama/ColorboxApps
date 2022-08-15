@@ -1,6 +1,5 @@
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/modules/cart/models/cart_model.dart';
-import 'package:colorbox/app/modules/cart/views/cart_view.dart';
 import 'package:colorbox/app/modules/collections/views/collections_list.dart';
 import 'package:colorbox/app/modules/home/views/home_view.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';

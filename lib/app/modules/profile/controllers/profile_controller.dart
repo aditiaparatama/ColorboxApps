@@ -40,6 +40,13 @@ class ProfileController extends GetxController {
   dynamic _kodePosTemp = [];
   dynamic get kodePos => _kodePos;
 
+  @override
+  void onInit() async {
+    await fetchingUser();
+
+    super.onInit();
+  }
+
   Future<String> login() async {
     _loading.value = true;
     update();
@@ -118,7 +125,7 @@ class ProfileController extends GetxController {
     update();
   }
 
-  fetchingUser() async {
+  Future<void> fetchingUser() async {
     _token = await localStorageData.getTokenUser;
     if (_token != null) {
       var result = await ProfileProvider().getUser(_token!);
