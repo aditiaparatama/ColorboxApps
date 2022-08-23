@@ -1,9 +1,10 @@
-import 'package:colorbox/app/modules/cart/providers/cart_provider.dart';
-import 'package:colorbox/app/modules/cart/models/cart_model.dart';
-import 'package:colorbox/helper/local_storage_data.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:colorbox/app/modules/cart/models/cart_model.dart';
+import 'package:colorbox/app/modules/cart/providers/cart_provider.dart';
+import 'package:colorbox/helper/local_storage_data.dart';
 
 class CartController extends GetxController {
   final LocalStorageData localStorageData = Get.find();

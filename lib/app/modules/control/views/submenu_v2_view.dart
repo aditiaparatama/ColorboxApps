@@ -18,7 +18,7 @@ class SubmenuV2View extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: SearchCollection(),
+        title: const SearchCollection(),
       ),
       resizeToAvoidBottomInset: false,
       body: ListView.builder(

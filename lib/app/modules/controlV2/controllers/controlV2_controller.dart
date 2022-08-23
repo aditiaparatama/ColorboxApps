@@ -1,15 +1,15 @@
-import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
-import 'package:colorbox/app/modules/collections/views/collections_list.dart';
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
-import 'package:colorbox/app/modules/wishlist/views/wishlist_view.dart';
-import 'package:colorbox/app/modules/settings/views/settings_view.dart';
-import 'package:colorbox/app/modules/profile/views/profile_view.dart';
-import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/cart/models/cart_model.dart';
+import 'package:colorbox/app/modules/collections/views/collections_list.dart';
 import 'package:colorbox/app/modules/home/views/home_view.dart';
+import 'package:colorbox/app/modules/profile/models/user_model.dart';
+import 'package:colorbox/app/modules/profile/views/profile_view.dart';
+import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
+import 'package:colorbox/app/modules/settings/views/settings_view.dart';
+import 'package:colorbox/app/modules/wishlist/views/wishlist_view.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class ControlV2Controller extends GetxController {
   int _navigatorValue = 0;
@@ -27,6 +27,9 @@ class ControlV2Controller extends GetxController {
   @override
   void onInit() async {
     _cart = await Get.find<CartController>().getCart2();
+    // while (cart.id == null) {
+    //   cart = await Get.find<CartController>().getCart2();
+    // }
 
     _user = Get.find<SettingsController>().userModel;
     if (_user.displayName != null) {

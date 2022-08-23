@@ -22,7 +22,7 @@ class CollectionList extends StatelessWidget {
                 return Scaffold(
                   appBar: AppBar(
                     elevation: 0,
-                    title: SearchCollection(),
+                    title: const SearchCollection(),
                   ),
                   body: ListView.builder(
                       padding: const EdgeInsets.all(10),

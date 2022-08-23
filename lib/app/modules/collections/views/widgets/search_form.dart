@@ -20,16 +20,16 @@ class SearchCollection extends StatelessWidget {
           width: MediaQuery.of(context).size.width - 140,
           child: TextFormField(
             cursorColor: const Color.fromRGBO(155, 155, 155, 1),
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: InputBorder.none,
-              contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 5),
+              contentPadding: EdgeInsets.fromLTRB(5, 2, 5, 5),
               focusedBorder: InputBorder.none,
               enabledBorder: InputBorder.none,
               errorBorder: InputBorder.none,
               disabledBorder: InputBorder.none,
               hintText: "Cari produk disini",
               filled: true,
-              fillColor: const Color.fromRGBO(250, 250, 250, 1),
+              fillColor: Color.fromRGBO(250, 250, 250, 1),
               // suffixIcon: Padding(
               //   padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
               //   child: GestureDetector(
