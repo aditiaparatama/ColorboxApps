@@ -45,7 +45,7 @@ class _WebViewPageState extends State<WebViewPage> {
             onWebViewCreated: (WebViewController webViewController) {
               Map<String, String> headers = {
                 "X-Shopify-Customer-Access-Token":
-                    Get.find<SettingsController>().token ?? ""
+                    Get.find<SettingsController>().token!.accessToken ?? ""
               };
               webViewController.loadUrl(widget.url!, headers: headers);
               // _controller.complete(webViewController);

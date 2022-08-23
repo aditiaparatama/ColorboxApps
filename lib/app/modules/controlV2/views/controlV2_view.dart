@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 
-// ignore: use_key_in_widget_constructors
+// ignore: use_key_in_widget_constructors, must_be_immutable
 class ControlV2View extends GetView<ControlV2Controller> {
   GlobalKey globalKey = GlobalKey(debugLabel: 'btm_app_bar');
 
@@ -34,7 +34,7 @@ class ControlV2View extends GetView<ControlV2Controller> {
           showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,
           items: [
-            bottomNavigationBarItem("assets/icon/cb.png", menu: "home"),
+            bottomNavigationBarItem("assets/icon/cb.png", menu: "Home"),
             bottomNavigationBarItem("assets/icon/Icon-Search.svg",
                 menu: "Kategori"),
             bottomNavigationBarItem("assets/icon/icon_line-Heart.svg",

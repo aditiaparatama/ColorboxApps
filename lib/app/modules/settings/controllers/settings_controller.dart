@@ -7,14 +7,14 @@ class SettingsController extends GetxController {
   final LocalStorageData localStorageData = Get.find();
   UserModel _userModel = UserModel.isEmpty();
   UserModel get userModel => _userModel;
-  String? _token;
-  String? get token => _token;
+  CustomerToken? _token = CustomerToken.isEmpty();
+  CustomerToken? get token => _token;
 
   SettingsController() {
     getUser();
   }
 
-  getUser() async {
+  Future<void> getUser() async {
     await localStorageData.getUser.then((value) {
       _userModel = value;
     });
@@ -31,7 +31,7 @@ class SettingsController extends GetxController {
 
   Future<void> fetchingUser() async {
     _token = await localStorageData.getTokenUser;
-    var result = await ProfileProvider().getUser(_token!);
+    var result = await ProfileProvider().getUser(_token!.accessToken!);
     _userModel = UserModel.fromJson(result);
     update();
   }

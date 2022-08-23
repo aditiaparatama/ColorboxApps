@@ -65,26 +65,6 @@ class CheckoutProvider extends GetConnect {
                     }
                 }
               }
-              discountApplications(first: 5){
-                edges{
-                    node{
-                        __typename 
-                        ... on DiscountCodeApplication{
-                            code
-                            value{
-                                 __typename 
-                                ... on MoneyV2{
-                                    amount
-                                }
-                                __typename
-                                ... on PricingPercentageValue{
-                                    percentage
-                                }
-                            }
-                        }
-                    }
-                }
-            }
               email
               lineItemsSubtotalPrice{
                   amount

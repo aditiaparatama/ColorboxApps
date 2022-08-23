@@ -13,7 +13,7 @@ class CheckoutController extends GetxController {
   final LocalStorageData localStorageData = Get.find();
   ValueNotifier get loading => _loading;
   final ValueNotifier<bool> _loading = ValueNotifier(false);
-  String? _token;
+  CustomerToken? _token = CustomerToken.isEmpty();
   String? _idCheckout;
   String? get idCheckout => _idCheckout;
   String? _etd;
@@ -42,7 +42,7 @@ class CheckoutController extends GetxController {
     _loading.value = true;
     update();
     _token = await localStorageData.getTokenUser;
-    var result = await ProfileProvider().getUser(_token!);
+    var result = await ProfileProvider().getUser(_token!.accessToken!);
     _user = UserModel.fromJson(result);
     _loading.value = false;
     update();
@@ -51,6 +51,7 @@ class CheckoutController extends GetxController {
   createCheckout() async {
     List<CheckoutItems>? items = await getItems();
 
+    //buat varibles input checkout
     dynamic variable = {
       "input": {
         "allowPartialAddresses": true,
@@ -76,6 +77,7 @@ class CheckoutController extends GetxController {
       },
     };
 
+    //create checkout
     var result = await CheckoutProvider().checkoutCreate(items, variable);
     if (result != null) {
       _idCheckout = result['checkoutCreate']['checkout']['id'];
@@ -83,6 +85,7 @@ class CheckoutController extends GetxController {
       var result2 = await CheckoutProvider()
           .checkoutGetData(result['checkoutCreate']['checkout']['id']);
 
+      //check kalo shipping rates nya masih null akan looping
       while (result2['node']['availableShippingRates']['ready'] == false) {
         result2 = await Future.delayed(
             const Duration(milliseconds: 1000),
@@ -90,6 +93,7 @@ class CheckoutController extends GetxController {
                 .checkoutGetData(result['checkoutCreate']['checkout']['id']));
       }
 
+      //update shipping rates
       var resultShipping = await updateShippingRates(
           result['checkoutCreate']['checkout']['id'],
           result2['node']['availableShippingRates']['shippingRates'][0]
@@ -98,6 +102,12 @@ class CheckoutController extends GetxController {
       if (result2 != null) {
         _checkout = CheckoutModel.fromJson(
             resultShipping['checkoutShippingLineUpdate']['checkout']);
+      }
+
+      //update voucher dicheckout kalo sudah digunakan di cart
+      if (_cart.discountCodes!.isNotEmpty &&
+          _cart.discountCodes![0].code != "") {
+        await applyVoucher(_cart.discountCodes![0].code!);
       }
     }
     update();

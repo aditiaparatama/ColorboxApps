@@ -6,7 +6,7 @@ GraphQLClient getShopifyGraphQLClient({bool admin = false}) {
       ? {'X-Shopify-Access-Token': token}
       : {'X-Shopify-Storefront-Access-Token': tokenFront};
   final Link _link = HttpLink(
-    admin ? url_shopify : urlStoreFront + 'graphql.json',
+    admin ? "${url_shopify}graphql.json" : urlStoreFront + 'graphql.json',
     defaultHeaders: headers,
   );
 

@@ -31,7 +31,9 @@ class ControlV2Controller extends GetxController {
     _user = Get.find<SettingsController>().userModel;
     if (_user.displayName != null) {
       var now = DateTime.now();
-      var expired = DateTime.parse(_user.expiresAt!);
+      var expired =
+          DateTime.parse(Get.find<SettingsController>().token!.expiresAt!);
+      // String formattedDate = formatter.format(expired);
       if (now.isAfter(expired)) Get.find<SettingsController>().logout();
     }
     update();

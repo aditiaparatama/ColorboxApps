@@ -1,7 +1,12 @@
+import 'package:colorbox/app/modules/profile/views/address/address_view.dart';
+import 'package:colorbox/app/modules/profile/views/infoaccount_view.dart';
+import 'package:colorbox/app/modules/settings/views/web_view.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
-import 'package:colorbox/app/widgets/custom_card.dart';
+import 'package:colorbox/app/widgets/custom_button.dart';
+import 'package:colorbox/app/widgets/custom_card_v2.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../controllers/settings_controller.dart';
 
@@ -12,94 +17,203 @@ class SettingsView extends GetView<SettingsController> {
     controller.getUser();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SETTINGS'),
-        centerTitle: true,
+        title: const CustomText(
+          text: "Akun Saya",
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          // color: Colors.white,
+        ),
+        centerTitle: false,
+        elevation: 3,
+        shadowColor: Colors.grey.withOpacity(0.3),
+        // backgroundColor: Colors.white,
       ),
       body: GetBuilder<SettingsController>(
           init: Get.put(SettingsController()),
           builder: (c) {
             return SingleChildScrollView(
-                child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Card(
-                      child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const CustomText(
-                          text: "Profile",
-                          color: Colors.grey,
-                        ),
-                        const Divider(),
-                        ListTile(
-                          leading: const Icon(Icons.person),
-                          title: (c.userModel.displayName == null)
-                              ? const CustomText(text: "Sign In / Sign Up")
-                              : CustomText(
-                                  text: c.userModel.displayName,
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                (c.userModel.displayName == null)
+                    ? containerLogin(c)
+                    : Container(
+                        color: Colors.white,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 16, right: 16, top: 24),
+                              child: Card(
+                                elevation: 3,
+                                shadowColor:
+                                    const Color(0xFFE5E8EB).withOpacity(0.34),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: const Color(0xFFE5E8EB),
+                                          width: 1),
+                                      borderRadius: BorderRadius.circular(4)),
+                                  padding: const EdgeInsets.all(16),
+                                  child: Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                          "assets/icon/circle-person-black.svg"),
+                                      const SizedBox(width: 16),
+                                      SizedBox(
+                                        width: Get.width - 150,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            CustomText(
+                                              text: c.userModel.displayName,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            const SizedBox(height: 4),
+                                            CustomText(
+                                              text: c.userModel.email,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                          onTap: () {
-                            (c.userModel.displayName == null)
-                                ? Get.toNamed(Routes.PROFILE,
-                                    arguments: [c, "settings"])
-                                : null;
-                          },
+                              ),
+                            ),
+                            CustomCardV2(
+                              textHeader: "Pengaturan Akun",
+                              items: [
+                                Items(
+                                    "Informasi Akun",
+                                    () => Get.to(InformationAccount()),
+                                    SvgPicture.asset(
+                                        "assets/icon/user-circle.svg")),
+                                Items(
+                                    "Daftar Alamat",
+                                    () => Get.to(
+                                        const AddressView(fromDetail: true)),
+                                    SvgPicture.asset(
+                                        "assets/icon/map-marker-alt.svg")),
+                              ],
+                            ),
+                            CustomCardV2(
+                              textHeader: "Aktivitas",
+                              items: [
+                                Items("Pesanan Saya", null,
+                                    SvgPicture.asset("assets/icon/box.svg")),
+                                Items(
+                                    "Riwayat Pesanan",
+                                    null,
+                                    SvgPicture.asset(
+                                        "assets/icon/clipboard-list.svg")),
+                              ],
+                            )
+                          ],
                         ),
-                        (c.userModel.displayName == null)
-                            ? const SizedBox()
-                            : ListTile(
-                                leading: const Icon(Icons.logout),
-                                title: const CustomText(text: "Log Out"),
-                                onTap: () {
-                                  c.logout();
-                                },
-                              )
-                      ],
-                    ),
-                  )),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  CustomCard(
-                    textHeader: "Info",
-                    items: [
-                      Items("About COLORBOX",
-                          "https://colorbox.co.id/pages/about-us"),
-                      Items(
-                          "Contact", "https://colorbox.co.id/pages/contact-us"),
-                      Items("Size Guide",
-                          "https://colorbox.co.id/pages/size-chart"),
-                      Items("Terms of Service",
-                          "https://colorbox.co.id/policies/terms-of-service"),
-                      Items("Refund Policy",
-                          "https://colorbox.co.id/policies/refund-policy"),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  CustomCard(
-                    textHeader: "Help",
-                    items: [
-                      Items("FAQ", "https://colorbox.co.id/pages/faqs"),
-                      Items("How to Order",
-                          "https://colorbox.co.id/pages/pemesanan"),
-                      Items(
-                          "Payment", "https://colorbox.co.id/pages/pembayaran"),
-                      Items("Delivery",
-                          "https://colorbox.co.id/pages/pengiriman"),
-                      Items("Retur Product",
-                          "https://colorbox.co.id/pages/retur"),
-                    ],
-                  ),
-                ],
-              ),
+                      ),
+                const SizedBox(
+                  height: 8,
+                ),
+                CustomCardV2(
+                  textHeader: "Informasi",
+                  items: [
+                    Items(
+                        "Tentang Colorbox",
+                        () => Get.to(WebViewPage(
+                            title: "Tentang Colorbox",
+                            url: "https://colorbox.co.id/pages/about-us")),
+                        SvgPicture.asset("assets/icon/info-circle.svg")),
+                    Items(
+                        "Kontak",
+                        () => Get.to(WebViewPage(
+                            title: "Kontak",
+                            url: "https://colorbox.co.id/pages/contact-us")),
+                        SvgPicture.asset("assets/icon/phone-alt.svg")),
+                    Items(
+                        "Panduan Ukuran",
+                        () => Get.to(WebViewPage(
+                            title: "Panduan Ukuran",
+                            url: "https://colorbox.co.id/pages/size-chart")),
+                        SvgPicture.asset("assets/icon/ruler-combined.svg")),
+                    Items(
+                        "Ketentuan Layanan",
+                        () => Get.to(WebViewPage(
+                            title: "Ketentuan Layanan",
+                            url:
+                                "https://colorbox.co.id/policies/terms-of-service")),
+                        SvgPicture.asset("assets/icon/question-circle.svg")),
+                    Items(
+                        "Kebijakan Pengembalian Uang",
+                        () => Get.to(WebViewPage(
+                            title: "Kebijakan Pengembalian Uang",
+                            url:
+                                "https://colorbox.co.id/policies/refund-policy")),
+                        SvgPicture.asset("assets/icon/sync-alt.svg")),
+                  ],
+                ),
+                CustomCardV2(
+                  textHeader: "Bantuan",
+                  items: [
+                    Items(
+                        "FAQ",
+                        () => Get.to(WebViewPage(
+                            title: "FAQ",
+                            url: "https://colorbox.co.id/pages/faqs")),
+                        SvgPicture.asset("assets/icon/comment-alt.svg")),
+                    (c.userModel.displayName == null)
+                        ? null
+                        : Items("Keluar Akun", () => c.logout(),
+                            SvgPicture.asset("assets/icon/sign-out.svg")),
+                  ],
+                ),
+              ],
             ));
           }),
     );
+  }
+
+  Container containerLogin(SettingsController c) {
+    return Container(
+        color: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SvgPicture.asset("assets/icon/circle-person-filled.svg"),
+            const SizedBox(height: 12),
+            const CustomText(
+              text:
+                  "Anda belum masuk akun. Silahkan masuk untuk dapat berbelanja",
+              fontSize: 12,
+              color: Color(0xFF777777),
+              textOverflow: TextOverflow.visible,
+              textAlign: TextAlign.center,
+              lineHeight: 1.5,
+            ),
+            const SizedBox(height: 12),
+            CustomButton(
+              onPressed: () {
+                (c.userModel.displayName == null)
+                    ? Get.toNamed(Routes.PROFILE, arguments: [c, "settings"])
+                    : null;
+              },
+              text: "Masuk Akun",
+              color: Colors.white,
+              backgroundColor: Colors.black,
+            ),
+            (c.userModel.displayName == null)
+                ? const SizedBox()
+                : ListTile(
+                    leading: const Icon(Icons.logout),
+                    title: const CustomText(text: "Log Out"),
+                    onTap: () {
+                      c.logout();
+                    },
+                  )
+          ],
+        ));
   }
 }

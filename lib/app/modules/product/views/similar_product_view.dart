@@ -76,7 +76,7 @@ class CollectionsProductView extends GetView<CollectionsController> {
                                 fontWeight: FontWeight.w400,
                                 text: controller.collection.products[i].title,
                                 // text: controller.collection.products[i].title,
-                                textOverflow: TextOverflow.fade,
+                                textOverflow: TextOverflow.ellipsis,
                               ),
                             ),
                             (controller.collection.products[i].variants[0]

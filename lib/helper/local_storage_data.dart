@@ -69,11 +69,10 @@ class LocalStorageData extends GetxController {
     await prefs.remove(CACHED_USER_DATA);
   }
 
-  Future<String?> get getTokenUser async {
+  Future<CustomerToken?> get getTokenUser async {
     try {
-      String? id = await _getTokenUser();
-      if (id == null) return null;
-      return id;
+      CustomerToken data = await _getTokenUser();
+      return data;
     } catch (e) {
       Get.snackbar(
         "Error",
@@ -87,13 +86,15 @@ class LocalStorageData extends GetxController {
   _getTokenUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var value = prefs.getString(CACHED_USER_TOKEN);
-
-    return value;
+    if (value == null) {
+      return CustomerToken.isEmpty();
+    }
+    return CustomerToken.json(jsonDecode(value));
   }
 
-  setTokenUser(String token) async {
+  setTokenUser(CustomerToken data) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
-    await pref.setString(CACHED_USER_TOKEN, token);
+    await pref.setString(CACHED_USER_TOKEN, jsonEncode(data.toJson()));
   }
 }

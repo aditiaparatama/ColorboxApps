@@ -8,6 +8,7 @@ class CustomText extends StatelessWidget {
   final TextDecoration? decoration;
   final TextOverflow? textOverflow;
   final TextAlign? textAlign;
+  final double? lineHeight;
 
   const CustomText(
       {Key? key,
@@ -17,7 +18,8 @@ class CustomText extends StatelessWidget {
       this.color = Colors.black,
       this.decoration = TextDecoration.none,
       this.textOverflow = TextOverflow.ellipsis,
-      this.textAlign = TextAlign.left})
+      this.textAlign = TextAlign.left,
+      this.lineHeight})
       : super(key: key);
 
   @override
@@ -29,7 +31,8 @@ class CustomText extends StatelessWidget {
           fontSize: fontSize,
           color: color,
           decoration: decoration,
-          fontWeight: fontWeight),
+          fontWeight: fontWeight,
+          height: lineHeight),
       textAlign: textAlign,
     );
   }
