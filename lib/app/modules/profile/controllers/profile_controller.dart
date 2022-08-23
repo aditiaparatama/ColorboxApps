@@ -7,6 +7,7 @@ import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class ProfileController extends GetxController {
   final LocalStorageData localStorageData = Get.find();
@@ -14,6 +15,8 @@ class ProfileController extends GetxController {
   ValueNotifier get loading => _loading;
   UserModel _userModel = UserModel.isEmpty();
   UserModel get userModel => _userModel;
+  UserModel _userFromAdmin = UserModel.isEmpty();
+  UserModel get userFromAdmin => _userFromAdmin;
   bool? _showPassword = true;
   bool? get showPassword => _showPassword;
 
@@ -25,7 +28,7 @@ class ProfileController extends GetxController {
   //Update Address
   final MailingAddress? _address = MailingAddress.isEmpty();
   MailingAddress? get address => _address;
-  String? _token;
+  CustomerToken? _token = CustomerToken.isEmpty();
   Countries? _countries;
   Countries? get countries => _countries;
   List<Province>? _province;
@@ -43,7 +46,7 @@ class ProfileController extends GetxController {
   @override
   void onInit() async {
     await fetchingUser();
-
+    await fetchingProvince();
     super.onInit();
   }
 
@@ -51,16 +54,19 @@ class ProfileController extends GetxController {
     _loading.value = true;
     update();
     var result = await ProfileProvider().login(email!, password!);
+    CustomerToken token = CustomerToken.json(result["customerAccessToken"]);
+
     if (result['customerUserErrors'].length > 0) {
       _loading.value = false;
       update();
       return "Email/ Password tidak valid";
     } else {
-      setToken(result["customerAccessToken"]['accessToken']);
+      setToken(token);
       var user = await ProfileProvider()
           .getUser(result["customerAccessToken"]['accessToken']);
       _userModel = UserModel.fromJson(user);
       _userModel.expiresAt = result["customerAccessToken"]['expiresAt'];
+      await getUserAdmin(user["id"]);
 
       setUser(userModel);
 
@@ -72,6 +78,14 @@ class ProfileController extends GetxController {
     }
 
     return "1";
+  }
+
+  Future<void> getUserAdmin(String id) async {
+    var user = await ProfileProvider().getUserFromAdmin(id);
+    _userFromAdmin = UserModel.fromAdmin(user);
+    _userModel.note =
+        _userFromAdmin.note!.toLowerCase().trim().replaceAll("birthday:", "");
+    update();
   }
 
   Future<String> register() async {
@@ -116,7 +130,7 @@ class ProfileController extends GetxController {
     await localStorageData.setUser(userModel);
   }
 
-  void setToken(String token) async {
+  void setToken(CustomerToken token) async {
     await localStorageData.setTokenUser(token);
   }
 
@@ -127,9 +141,10 @@ class ProfileController extends GetxController {
 
   Future<void> fetchingUser() async {
     _token = await localStorageData.getTokenUser;
-    if (_token != null) {
-      var result = await ProfileProvider().getUser(_token!);
+    if (_token!.accessToken != null) {
+      var result = await ProfileProvider().getUser(_token!.accessToken!);
       _userModel = UserModel.fromJson(result);
+      await getUserAdmin(_userModel.id!);
       update();
     }
   }
@@ -139,8 +154,8 @@ class ProfileController extends GetxController {
     update();
     _token = await localStorageData.getTokenUser;
     if (_token != null) {
-      var result =
-          await ProfileProvider().customerDefaultAddressUpdate(_token!, id);
+      var result = await ProfileProvider()
+          .customerDefaultAddressUpdate(_token!.accessToken!, id);
 
       if (result['customerDefaultAddressUpdate']['customerUserErrors'].length ==
           0) {
@@ -176,11 +191,12 @@ class ProfileController extends GetxController {
     }
 
     _token = await localStorageData.getTokenUser;
-    if (_token != null) {
+    if (_token!.accessToken != null) {
       var result = (id == null)
-          ? await ProfileProvider().customerAddressCreate(_token!, _address!)
+          ? await ProfileProvider()
+              .customerAddressCreate(_token!.accessToken!, _address!)
           : await ProfileProvider()
-              .customerAddressUpdate(_token!, _address!, id);
+              .customerAddressUpdate(_token!.accessToken!, _address!, id);
       if (result['customerUserErrors'].length == 0) {
         flg = 1;
       }
@@ -195,8 +211,9 @@ class ProfileController extends GetxController {
     _loading.value = true;
     update();
     _token = await localStorageData.getTokenUser;
-    if (_token != null) {
-      var result = await ProfileProvider().customerAddressDelete(_token!, id);
+    if (_token!.accessToken != null) {
+      var result = await ProfileProvider()
+          .customerAddressDelete(_token!.accessToken!, id);
 
       if (result['customerAddressDelete']['customerUserErrors'].length == 0) {
         _userModel.addresses!.removeWhere((e) => e.id == id);
@@ -238,7 +255,7 @@ class ProfileController extends GetxController {
     _loading.value = true;
     update();
     _token = await localStorageData.getTokenUser;
-    var result = await ProfileProvider().getUser(_token!);
+    var result = await ProfileProvider().getUser(_token!.accessToken!);
     _userModel = UserModel.fromJson(result);
     _loading.value = false;
     update();
@@ -318,6 +335,59 @@ class ProfileController extends GetxController {
     _kodePos = _kecamatan['kecamatan'].firstWhere((e) => e['nama'] == kec);
     _kodePos = Set.of(_kodePos['kode_pos']).toList();
     _kodePosTemp = _kodePos;
+    update();
+  }
+
+  Future<void> customerUpdate() async {
+    loading.value = true;
+    update();
+    try {
+      var x = firstName!.split(" ");
+
+      if (x.length > 2) {
+        firstN = x[0] + " " + x[1];
+        lastN = x[2];
+      }
+
+      if (x.length > 1) {
+        firstN = x[0];
+        lastN = x[1];
+      }
+      tglLahir = DateFormat('yyyy-MM-dd')
+          .format(DateFormat('dd/MM/yyyy').parse(tglLahir!.trim()));
+      var variables = {
+        "input": {
+          "email": email,
+          "firstName": firstN,
+          "id": userModel.id,
+          "lastName": lastN,
+          "note": "Birthday: $tglLahir",
+        }
+      };
+
+      var result = await ProfileProvider().customerUpdate(variables);
+
+      if (result['customerUpdate']['userErrors'].length >= 1) {
+        Get.snackbar(
+            "Error", result['customerUpdate']['userErrors'][0]["message"],
+            backgroundColor: Colors.black,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM);
+      } else {
+        await fetchingUser();
+        setUser(_userModel);
+        Get.snackbar("Informasi", "Data berhasil diupdate",
+            backgroundColor: Colors.black,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM);
+      }
+    } catch (e) {
+      Get.snackbar("Error", e.toString(),
+          backgroundColor: Colors.black,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM);
+    }
+    loading.value = false;
     update();
   }
 }

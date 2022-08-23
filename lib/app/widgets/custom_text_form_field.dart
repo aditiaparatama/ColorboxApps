@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  final String? text;
-  final String? hint;
-  final bool? obscureText, readOnly;
+  final String? text, hint;
+  final bool? obscureText, readOnly, enabled;
   final Widget? suffixIcon;
   final String? prefixText;
   final TextInputType? textInputType;
@@ -12,9 +11,8 @@ class CustomTextFormField extends StatelessWidget {
   final TextAlign? textAlign;
   final FocusNode? focusNode;
   // ignore: prefer_typing_uninitialized_variables
-  final onSave;
+  final onSave, onChange, validator;
   // ignore: prefer_typing_uninitialized_variables
-  final validator;
 
   const CustomTextFormField(
       {Key? key,
@@ -24,12 +22,14 @@ class CustomTextFormField extends StatelessWidget {
       @required this.validator,
       this.obscureText = false,
       this.readOnly = false,
+      this.enabled = true,
       this.suffixIcon,
       this.prefixText,
       this.textInputType,
       this.textEditingController,
       this.textAlign = TextAlign.left,
-      this.focusNode})
+      this.focusNode,
+      this.onChange})
       : super(key: key);
 
   @override
@@ -50,11 +50,13 @@ class CustomTextFormField extends StatelessWidget {
         focusNode: focusNode,
         cursorColor: Colors.black,
         controller: textEditingController,
+        onChanged: onChange,
         onSaved: onSave,
         validator: validator,
         obscureText: obscureText!,
         keyboardType: textInputType,
         readOnly: readOnly!,
+        enabled: enabled,
         textAlign: textAlign!,
         decoration: InputDecoration(
             labelText: hint!, suffixIcon: suffixIcon, prefixText: prefixText),

@@ -20,12 +20,12 @@ class WishlistController extends GetxController {
   int get selected => _selected;
 
   @override
-  void onInit() {
-    fetchingData();
+  void onInit() async {
+    await fetchingData();
     super.onInit();
   }
 
-  fetchingData() async {
+  Future<void> fetchingData() async {
     _loading.value = true;
     update();
     UserModel? _user = await localStorageData.getUser;
@@ -36,9 +36,13 @@ class WishlistController extends GetxController {
 
       if (_wishlist.items.length > 0) {
         _product = [];
+        var ids = [];
+        var variantIds = [];
         for (final x in _wishlist.items) {
-          await fetchingProduct(x['id'], x['variant_id']);
+          ids.add('"gid://shopify/Product/${x['id']}"');
+          variantIds.add(x['variant_id']);
         }
+        await fetchingProduct({"ids": ids, "variantIds": variantIds});
       }
     }
     _loading.value = false;
@@ -46,9 +50,12 @@ class WishlistController extends GetxController {
     update();
   }
 
-  Future<void> fetchingProduct(String id, String variantId) async {
-    var result = await ProductProvider().getProduct(id);
-    _product.add(Product.fromWishlist(result['product'], variantId));
+  Future<void> fetchingProduct(dynamic params) async {
+    var result = await ProductProvider().getProduct(params["ids"]);
+    for (int i = 0; i < result['nodes'].length; i++) {
+      _product.add(Product.fromWishlist(
+          result['nodes'][i], params["variantIds"][i].toString()));
+    }
     update();
   }
 

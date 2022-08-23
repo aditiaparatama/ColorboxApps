@@ -18,7 +18,7 @@ class CardAddressWidget extends GetView<ProfileController> {
         ),
         Container(
           padding:
-              const EdgeInsets.only(left: 16, top: 0, right: 8, bottom: 16),
+              const EdgeInsets.only(left: 16, top: 0, right: 0, bottom: 16),
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           width: Get.width,
           decoration: BoxDecoration(

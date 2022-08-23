@@ -109,42 +109,6 @@ class ProfileProvider extends GetConnect {
     }
   }
 
-  // Future<dynamic> addbirhday(String email, String password, String firstN,
-  //     String lastN, String tglLahir) async {
-  //   final GraphQLClient _client = getShopifyGraphQLClient();
-
-  //   final QueryOptions options = QueryOptions(
-  //     document: gql(
-  //       r'''
-  //       mutation customerUpdate($input: CustomerInput!) {
-  //         customerUpdate(input: $input) {
-  //           customer {
-  //             # Customer fields
-  //             id
-  //           }
-  //           userErrors {
-  //             field
-  //             message
-  //           }
-  //         }
-  //       }
-  //     ''',
-  //     ),
-  //     variables: {
-  //       "input": {
-  //         "acceptsMarketing": false,
-  //         "email": email.toLowerCase(),
-  //         "firstName": firstN,
-  //         "lastName": lastN,
-  //         "password": password,
-  //         "note": tglLahir
-  //       }
-  //     },
-  //   );
-
-  //   final QueryResult result = await _client.query(options);
-  // }
-
   Future<dynamic> getUser(String token) async {
     final GraphQLClient _client = getShopifyGraphQLClient();
 
@@ -219,25 +183,7 @@ class ProfileProvider extends GetConnect {
             lastName
             email
             phone
-            addresses(first:10){
-                edges{
-                    node {
-                        id
-                        firstName
-                        lastName
-                        address1
-                        address2
-                        company
-                        city
-                        country
-                        countryCodeV2
-                        phone
-                        province
-                        provinceCode
-                        zip
-                    }
-                }
-            }
+            note
             defaultAddress{
                 id
                 firstName
@@ -253,7 +199,7 @@ class ProfileProvider extends GetConnect {
                 provinceCode
                 zip
             }
-            orders(first:5){
+            orders(first:10){
                 edges{
                     node {
                         id
@@ -280,6 +226,34 @@ class ProfileProvider extends GetConnect {
     final QueryResult result = await _client.query(options);
 
     return result.data!['customer'];
+  }
+
+  Future<dynamic> customerUpdate(dynamic variables) async {
+    final GraphQLClient _client = getShopifyGraphQLClient(admin: true);
+
+    final QueryOptions options = QueryOptions(
+      document: gql(
+        r'''
+          mutation customerUpdate($input: CustomerInput!) {
+            customerUpdate(input: $input) {
+              customer {
+                # Customer fields
+                id
+              }
+              userErrors {
+                field
+                message
+              }
+            }
+          }
+      ''',
+      ),
+      variables: variables,
+    );
+
+    final QueryResult result = await _client.query(options);
+
+    return result.data!;
   }
 
   Future<dynamic> customerDefaultAddressUpdate(String token, String id) async {

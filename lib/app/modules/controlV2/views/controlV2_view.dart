@@ -34,7 +34,7 @@ class ControlV2View extends GetView<ControlV2Controller> {
           showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,
           items: [
-            bottomNavigationBarItem("assets/icon/cb.png", menu: "home"),
+            bottomNavigationBarItem("assets/icon/cb.png", menu: "Home"),
             bottomNavigationBarItem("assets/icon/Icon-Search.svg",
                 menu: "Kategori"),
             bottomNavigationBarItem("assets/icon/icon_line-Heart.svg",

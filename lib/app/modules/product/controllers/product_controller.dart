@@ -8,8 +8,8 @@ class ProductController extends GetxController {
   Product product = Product.isEmpty();
   UserModel _userModel = UserModel.isEmpty();
   UserModel get userModel => _userModel;
-  String? _token;
-  String? get token => _token;
+  CustomerToken? _token = CustomerToken.isEmpty();
+  CustomerToken? get token => _token;
 
   Variants? variant;
   String ukuran = "";

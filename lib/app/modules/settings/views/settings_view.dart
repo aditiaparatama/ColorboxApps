@@ -1,4 +1,5 @@
 import 'package:colorbox/app/modules/profile/views/address/address_view.dart';
+import 'package:colorbox/app/modules/profile/views/infoaccount_view.dart';
 import 'package:colorbox/app/modules/settings/views/web_view.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
@@ -87,7 +88,7 @@ class SettingsView extends GetView<SettingsController> {
                               items: [
                                 Items(
                                     "Informasi Akun",
-                                    null,
+                                    () => Get.to(InformationAccount()),
                                     SvgPicture.asset(
                                         "assets/icon/user-circle.svg")),
                                 Items(
@@ -162,6 +163,10 @@ class SettingsView extends GetView<SettingsController> {
                             title: "FAQ",
                             url: "https://colorbox.co.id/pages/faqs")),
                         SvgPicture.asset("assets/icon/comment-alt.svg")),
+                    (c.userModel.displayName == null)
+                        ? null
+                        : Items("Keluar Akun", () => c.logout(),
+                            SvgPicture.asset("assets/icon/sign-out.svg")),
                   ],
                 ),
               ],

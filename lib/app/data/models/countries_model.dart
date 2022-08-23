@@ -41,7 +41,7 @@ class Province {
     code = json['code'];
     taxName = json['tax_name'];
     taxType = json['tax_type'];
-    shippingZoneId = json['shipping_zone_id'];
+    shippingZoneId = json['shipping_zone_id'].toString();
     tax = json['tax'];
     taxPercentage = json['tax_percentage'];
   }

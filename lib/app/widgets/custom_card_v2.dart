@@ -7,7 +7,7 @@ import 'package:colorbox/app/widgets/custom_text.dart';
 
 class CustomCardV2 extends GetView<SettingsController> {
   final String? textHeader;
-  final List<Items>? items;
+  final List<Items?>? items;
 
   const CustomCardV2({
     Key? key,
@@ -31,35 +31,37 @@ class CustomCardV2 extends GetView<SettingsController> {
           ),
           const SizedBox(height: 12),
           for (final item in items!) ...[
-            TextButton(
-              style: TextButton.styleFrom(
-                fixedSize: Size(Get.width, 0),
-                alignment: Alignment.centerLeft,
+            if (item != null)
+              TextButton(
+                style: TextButton.styleFrom(
+                  fixedSize: Size(Get.width, 0),
+                  alignment: Alignment.centerLeft,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        item.icon!,
+                        const SizedBox(width: 12),
+                        CustomText(text: item.title, fontSize: 14),
+                      ],
+                    ),
+                    const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16,
+                      color: Colors.black,
+                    ),
+                  ],
+                ),
+                onPressed: item.onTap,
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      item.icon!,
-                      const SizedBox(width: 12),
-                      CustomText(text: item.title, fontSize: 14),
-                    ],
-                  ),
-                  const Icon(
-                    Icons.arrow_forward_ios,
-                    size: 16,
-                    color: Colors.black,
-                  ),
-                ],
-              ),
-              onPressed: item.onTap,
-            ),
             // customDivider(),
-            const Divider(
-              color: colorDiver,
-              thickness: 1,
-            ),
+            if (item != null)
+              const Divider(
+                color: colorDiver,
+                thickness: 1,
+              ),
           ],
         ],
       ),

@@ -4,6 +4,7 @@ class Cart {
   String? id;
   DateTime? createdAt;
   List<DiscountCodes>? discountCodes;
+  List<DiscountAllocations>? discountAllocations;
   EstimatedCost? estimatedCost;
   String? note;
   List<Line>? lines;
@@ -19,6 +20,11 @@ class Cart {
     discountCodes = [];
     for (int i = 0; i < json["discountCodes"].length; i++) {
       discountCodes!.add(DiscountCodes.fromJson(json["discountCodes"][i]));
+    }
+    discountAllocations = [];
+    for (int i = 0; i < json["discountAllocations"].length; i++) {
+      discountAllocations!
+          .add(DiscountAllocations.fromCart(json["discountAllocations"][i]));
     }
     estimatedCost = EstimatedCost.fromJson(json["estimatedCost"]);
     note = json["note"];
@@ -90,6 +96,10 @@ class DiscountAllocations {
 
   DiscountAllocations.fromJson(var json) {
     title = json['title'];
+    amount = json["discountedAmount"]["amount"].toString();
+  }
+
+  DiscountAllocations.fromCart(var json) {
     amount = json["discountedAmount"]["amount"].toString();
   }
 
