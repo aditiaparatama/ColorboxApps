@@ -196,7 +196,6 @@ class RegisterView extends GetView<ProfileController> {
                                         color: secondColor,
                                         onPressed: () async {
                                           _formKey.currentState!.save();
-
                                           if (_formKey.currentState!
                                               .validate()) {
                                             var result =

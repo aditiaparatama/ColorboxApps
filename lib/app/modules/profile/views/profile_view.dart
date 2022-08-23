@@ -1,13 +1,12 @@
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
-import 'package:colorbox/app/routes/app_pages.dart';
+import 'package:colorbox/app/modules/profile/controllers/profile_controller.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
-// import 'package:colorbox/app/widgets/custom_text_form_field.dart';
+import 'package:colorbox/app/routes/app_pages.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import '../controllers/profile_controller.dart';
 
 // ignore: use_key_in_widget_constructors, must_be_immutable
 class ProfileView extends GetView<ProfileController> {
@@ -132,8 +131,8 @@ class ProfileView extends GetView<ProfileController> {
 
                                               if (_formKey.currentState!
                                                   .validate()) {
-                                                var result =
-                                                    await controller.login();
+                                                var result = await controller
+                                                    .login(context);
                                                 if (result == "1") {
                                                   await Get.find<
                                                           SettingsController>()
@@ -157,7 +156,7 @@ class ProfileView extends GetView<ProfileController> {
                                             text: "Masuk",
                                           ),
                                         ),
-                                        const SizedBox(height: 10),
+                                        const SizedBox(height: 25),
                                         Column(children: <Widget>[
                                           Row(
                                               mainAxisAlignment:
@@ -179,15 +178,15 @@ class ProfileView extends GetView<ProfileController> {
                                                           : Get.toNamed(
                                                               Routes.REGISTER),
                                                   child: const CustomText(
-                                                    text: "Daftar sekarang",
-                                                    fontSize: 12,
+                                                    text: " Daftar sekarang",
+                                                    fontSize: 13,
                                                     color: Color(0xFF115AC8),
                                                     fontWeight: FontWeight.w600,
                                                   ),
                                                 )
                                               ]),
                                         ]),
-                                        const SizedBox(height: 20),
+                                        const SizedBox(height: 35),
                                         Column(children: <Widget>[
                                           Row(children: <Widget>[
                                             Expanded(
@@ -196,7 +195,7 @@ class ProfileView extends GetView<ProfileController> {
                                                       left: 10.0, right: 20.0),
                                                   child: const Divider(
                                                     color: Colors.grey,
-                                                    height: 36,
+                                                    height: 35,
                                                   )),
                                             ),
                                             const Text("Atau"),

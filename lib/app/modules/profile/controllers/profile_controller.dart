@@ -1,9 +1,9 @@
-import 'package:colorbox/app/data/models/countries_model.dart';
-import 'package:colorbox/app/data/models/mailing_address.dart';
+import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/modules/cart/providers/cart_provider.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
-import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
+import 'package:colorbox/app/data/models/countries_model.dart';
+import 'package:colorbox/app/data/models/mailing_address.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -40,14 +40,31 @@ class ProfileController extends GetxController {
   dynamic _kodePosTemp = [];
   dynamic get kodePos => _kodePos;
 
-  Future<String> login() async {
+  Future<String> login(dynamic context) async {
     _loading.value = true;
     update();
     var result = await ProfileProvider().login(email!, password!);
     if (result['customerUserErrors'].length > 0) {
-      _loading.value = false;
-      update();
-      return "Email/ Password tidak valid";
+      // _loading.value = false;
+      // update();
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          content: const Text('Do you want to exit ?'),
+          actions: [
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Yes'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('No'),
+            ),
+          ],
+        ),
+      );
+
+      // return "Email/ Password tidak valid";
     } else {
       setToken(result["customerAccessToken"]['accessToken']);
       var user = await ProfileProvider()

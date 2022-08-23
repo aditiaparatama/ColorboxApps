@@ -17,6 +17,11 @@ void main() {
         backgroundColor: Colors.grey.shade200,
         visualDensity: VisualDensity.adaptivePlatformDensity,
         inputDecorationTheme: MyInputTheme().theme(),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Colors.black,
+          selectionColor: Colors.blue,
+          selectionHandleColor: Colors.black,
+        ),
       ),
     ),
   );

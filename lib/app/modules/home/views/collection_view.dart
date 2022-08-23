@@ -14,7 +14,7 @@ class CollectionsHomeView extends GetView<CollectionsController> {
   @override
   Widget build(BuildContext context) {
     var control = Get.put(CollectionsController());
-    control.fetchCollectionProduct(NewArrival);
+    control.fetchCollectionProduct(NewArrival, defaultSortBy);
     return GetBuilder<CollectionsController>(
         init: Get.put(CollectionsController()),
         builder: (controller) {

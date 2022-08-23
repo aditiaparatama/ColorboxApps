@@ -100,7 +100,7 @@ class ProfileProvider extends GetConnect {
 
     final QueryResult result = await _client.query(options);
 
-    print(result.data!['customerRecover']['customerUserErrors'].length);
+    // print(result.data!['customerRecover']['customerUserErrors'].length);
 
     if (result.data!['customerRecover']['customerUserErrors'].length > 0) {
       Get.snackbar("Warning",

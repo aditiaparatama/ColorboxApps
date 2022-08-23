@@ -1,5 +1,6 @@
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/item_card.dart';
+import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -26,7 +27,7 @@ class CollectionsView extends GetView<CollectionsController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.fetchCollectionProduct(c[0].subjectID!);
+    controller.fetchCollectionProduct(c[0].subjectID!, defaultSortBy);
     controller.subjectID = c[0].subjectID!;
     _sControl.addListener(onScroll);
 
@@ -79,7 +80,8 @@ class CollectionsView extends GetView<CollectionsController> {
                       onPageChanged: (index) {
                         controller.selectedIndex = index;
                         controller.subjectID = c[index].subjectID!;
-                        controller.fetchCollectionProduct(c[index].subjectID!);
+                        controller.fetchCollectionProduct(
+                            c[index].subjectID!, defaultSortBy);
                         controller.update();
                       },
                       itemBuilder: (context, index) {

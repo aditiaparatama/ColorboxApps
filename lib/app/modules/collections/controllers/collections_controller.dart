@@ -1,5 +1,6 @@
 import 'package:colorbox/app/modules/collections/providers/collection_provider.dart';
 import 'package:colorbox/app/modules/collections/models/collection_model.dart';
+import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,13 +27,32 @@ class CollectionsController extends GetxController {
   int selectedIndex = 0;
   int subjectID = 0;
 
-  void fetchCollectionProduct(int id) async {
+  void fetchCollectionProduct(int id, int sortBy) async {
+    // ignore: unused_local_variable
+    String? sortKey, reverse;
+    if (sortBy == 1) {
+      sortKey = "BEST_SELLING";
+      reverse = "false";
+    } else if (sortBy == 2) {
+      sortKey = "CREATED";
+      reverse = "true";
+    } else if (sortBy == 3) {
+      sortKey = "PRICE";
+      reverse = "true";
+    } else if (sortBy == 4) {
+      sortKey = "PRICE";
+      reverse = "false";
+    }
+
     _loading.value = true;
-    var data = await CollectionProvider().postCollection(id, _limit);
+    var data = await CollectionProvider()
+        .postCollection(id, _limit, sortKey!, reverse!);
     if (data == null) {
       while (data == null) {
-        data = await Future.delayed(const Duration(milliseconds: 1000),
-            () => CollectionProvider().postCollection(id, _limit));
+        data = await Future.delayed(
+            const Duration(milliseconds: 1000),
+            () => CollectionProvider()
+                .postCollection(id, _limit, sortKey!, reverse!));
       }
     }
     _collection = Collection("", "", 0, [], false, "");
@@ -40,6 +60,40 @@ class CollectionsController extends GetxController {
     _loading.value = false;
     update();
   }
+
+  // void fetchCollectionProduct2(int id, int sortBy) async {
+  //   // ignore: unused_local_variable
+  //   String? sortKey, reverse;
+  //   if (sortBy == 1) {
+  //     sortKey = "BEST_SELLING";
+  //     reverse = "false";
+  //   } else if (sortBy == 2) {
+  //     sortKey = "CREATED";
+  //     reverse = "true";
+  //   } else if (sortBy == 3) {
+  //     sortKey = "PRICE";
+  //     reverse = "true";
+  //   } else if (sortBy == 4) {
+  //     sortKey = "PRICE";
+  //     reverse = "false";
+  //   }
+
+  //   _loading.value = true;
+  //   var data = await CollectionProvider()
+  //       .postCollection(id, _limit, sortKey!, reverse!);
+  //   if (data == null) {
+  //     while (data == null) {
+  //       data = await Future.delayed(
+  //           const Duration(milliseconds: 1000),
+  //           () => CollectionProvider()
+  //               .postCollection(id, _limit, sortKey!, reverse!));
+  //     }
+  //   }
+  //   _collection = Collection("", "", 0, [], false, "");
+  //   _collection = Collection.fromJson(data);
+  //   _loading.value = false;
+  //   update();
+  // }
 
   void fetchAddCollectionProduct(int id) async {
     _nextLoad.value = true;
@@ -78,7 +132,6 @@ class CollectionsController extends GetxController {
         listTabs.add(Tab(
             child: Text(argMenu[i]
                 .title!
-                .toUpperCase()
                 .replaceAll("- NEW ARRIVAL", "")
                 .replaceAll("WOMEN - ", "")
                 .replaceAll("MEN - ", ""))));
@@ -91,10 +144,10 @@ class CollectionsController extends GetxController {
     selectedIndex = index;
     if (_parentList!) {
       subjectID = menu.subjectID!;
-      fetchCollectionProduct(menu.subjectID!);
+      fetchCollectionProduct(menu.subjectID!, defaultSortBy);
     } else {
       subjectID = menu[index].subjectID!;
-      fetchCollectionProduct(menu[index].subjectID!);
+      fetchCollectionProduct(menu[index].subjectID!, defaultSortBy);
     }
     update();
   }

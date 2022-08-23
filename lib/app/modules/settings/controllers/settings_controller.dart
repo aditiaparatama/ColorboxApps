@@ -1,5 +1,5 @@
-import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
+import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:get/get.dart';
 
