@@ -34,7 +34,8 @@ class ControlV2View extends GetView<ControlV2Controller> {
           showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,
           items: [
-            bottomNavigationBarItem("assets/icon/cb.png", menu: "Home"),
+            bottomNavigationBarItem("assets/icon/home_inactive.svg",
+                menu: "Home", assetActive: "assets/icon/home_active.svg"),
             bottomNavigationBarItem("assets/icon/Icon-Search.svg",
                 menu: "Kategori"),
             bottomNavigationBarItem("assets/icon/icon_line-Heart.svg",
@@ -60,78 +61,40 @@ class ControlV2View extends GetView<ControlV2Controller> {
       backgroundColor: Colors.white,
       activeIcon: Stack(
         children: [
-          (menu.toLowerCase() == "home")
-              ? Column(children: [
-                  Image.asset(
-                    assets,
-                    height: size + 5,
-                    width: size + 5,
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  CustomText(
-                    text: menu,
-                    fontSize: 12,
-                  )
-                ])
-              : Column(children: [
-                  SvgPicture.asset(
-                    assetActive ?? assets,
-                    height: size,
-                    width: size,
-                    color: Colors.black,
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  CustomText(
-                    text: menu,
-                    fontSize: 12,
-                  )
-                ]),
+          Column(children: [
+            SvgPicture.asset(
+              assetActive ?? assets,
+              height: size,
+              width: size,
+              color: Colors.black,
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            CustomText(
+              text: menu,
+              fontSize: 12,
+            )
+          ]),
         ],
       ),
       label: "",
-      icon: Stack(
+      icon: Column(
         children: [
-          (menu.toLowerCase() == "home")
-              ? Column(
-                  children: [
-                    Image.asset(
-                      assets,
-                      height: size + 5,
-                      width: size + 5,
-                      color: const Color(0xFF9B9B9B),
-                    ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    CustomText(
-                      text: menu,
-                      fontSize: 12,
-                      color: const Color(0xFF9B9B9B),
-                    ),
-                  ],
-                )
-              : Column(
-                  children: [
-                    SvgPicture.asset(
-                      assets,
-                      height: size,
-                      width: size,
-                      color: const Color(0xFF9B9B9B),
-                    ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    CustomText(
-                      text: menu,
-                      fontSize: 12,
-                      color: const Color(0xFF9B9B9B),
-                    ),
-                  ],
-                ),
+          SvgPicture.asset(
+            assets,
+            height: size,
+            width: size,
+            color: const Color(0xFF9B9B9B),
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          CustomText(
+            text: menu,
+            fontSize: 12,
+            color: const Color(0xFF9B9B9B),
+          ),
         ],
       ),
     );

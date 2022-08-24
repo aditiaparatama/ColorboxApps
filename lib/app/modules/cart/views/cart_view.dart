@@ -180,7 +180,7 @@ class CartView extends GetView<CartController> {
                         primary: Colors.black,
                         padding: const EdgeInsets.all(14)),
                     child: const CustomText(
-                      text: "Check Out",
+                      text: "Checkout",
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,

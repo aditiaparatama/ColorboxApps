@@ -1,4 +1,4 @@
-import 'package:colorbox/app/modules/profile/models/user_model.dart';
+import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -140,19 +140,75 @@ class CartController extends GetxController {
     };
     var result = await CartProvider().cartDiscountCodesUpdate(variables);
     if (result['cartDiscountCodesUpdate']['userErrors'].length >= 1) {
-      Get.snackbar("Alert",
-          result['cartDiscountCodesUpdate']['userErrors'][0]['message'],
+      Get.snackbar(
+          "", result['cartDiscountCodesUpdate']['userErrors'][0]['message'],
+          titleText: Row(
+            children: [
+              SvgPicture.asset(
+                "assets/icon/Exclamation-Circle.svg",
+                color: Colors.white,
+              ),
+              const SizedBox(width: 4),
+              const CustomText(
+                text: "Gagal",
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ],
+          ),
           backgroundColor: Colors.black,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM);
-      return;
+    }
+    if (code != "" &&
+        result['cartDiscountCodesUpdate']['cart']['discountCodes'][0]
+                ['applicable'] ==
+            false) {
+      Get.snackbar("", "Kode Voucher tidak dapat digunakan",
+          titleText: Row(
+            children: [
+              SvgPicture.asset(
+                "assets/icon/Exclamation-Circle.svg",
+                color: Colors.white,
+              ),
+              const SizedBox(width: 4),
+              const CustomText(
+                text: "Gagal",
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ],
+          ),
+          backgroundColor: Colors.black,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM);
     }
     await getCart();
     _loading.value = false;
     update();
-    if (code != "") {
+    if (code != "" &&
+        result['cartDiscountCodesUpdate']['cart']['discountCodes'][0]
+                ['applicable'] ==
+            true) {
       Get.back();
-      Get.snackbar("Info", "Voucher berhasil digunakan",
+      Get.snackbar("", "Voucher berhasil digunakan",
+          titleText: Row(
+            children: [
+              SvgPicture.asset(
+                "assets/icon/Check-Circle.svg",
+                color: Colors.white,
+              ),
+              const SizedBox(width: 4),
+              const CustomText(
+                text: "Berhasil",
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ],
+          ),
           backgroundColor: Colors.black,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM);

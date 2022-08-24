@@ -30,10 +30,10 @@ class CheckoutController extends GetxController {
   @override
   void onInit() async {
     await getAddress();
-    await createCheckout();
-    // _idCheckout =
-    //     "gid://shopify/Checkout/0d6d5be5b2a9b4a96cfb2b9c3a2790db?key=7d50dddf1ea930111f729698e50c9473";
-    // await getCheckout();
+    // await createCheckout();
+    _idCheckout =
+        "gid://shopify/Checkout/75887dad2980edf3cd942d0eb6418bbb?key=69a8decee72afb8b9f950b7a69a12d73";
+    await getCheckout();
     await getETDShipping();
     super.onInit();
   }
@@ -107,7 +107,7 @@ class CheckoutController extends GetxController {
       //update voucher dicheckout kalo sudah digunakan di cart
       if (_cart.discountCodes!.isNotEmpty &&
           _cart.discountCodes![0].code != "") {
-        await applyVoucher(_cart.discountCodes![0].code!);
+        await applyVoucher(_cart.discountCodes![0].code!, back: false);
       }
     }
     update();
@@ -223,7 +223,7 @@ class CheckoutController extends GetxController {
     }
   }
 
-  Future<void> applyVoucher(String discountCode) async {
+  Future<void> applyVoucher(String discountCode, {bool back = true}) async {
     var result = await CheckoutProvider().checkoutDiscountCodeApplyV2(
         id: _idCheckout!, discountCode: discountCode);
     if (result['checkoutDiscountCodeApplyV2']['checkoutUserErrors'].length >
@@ -240,7 +240,7 @@ class CheckoutController extends GetxController {
     _checkout = CheckoutModel.fromJson(
         result['checkoutDiscountCodeApplyV2']['checkout']);
     update();
-    Get.back();
+    if (back) Get.back();
     Get.snackbar("Info", "Voucher berhasil digunakan",
         backgroundColor: Colors.black,
         colorText: Colors.white,

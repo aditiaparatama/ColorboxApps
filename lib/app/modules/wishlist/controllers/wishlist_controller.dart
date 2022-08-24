@@ -30,7 +30,8 @@ class WishlistController extends GetxController {
     update();
     UserModel? _user = await localStorageData.getUser;
     if (_user.id != null) {
-      var result = await WhistlistProvider().getAllData(_user.id!);
+      var result = await WhistlistProvider()
+          .getAllData(_user.id!.replaceAll("gid://shopify/Customer/", ""));
 
       _wishlist = Wishlist.fromJson(result);
 

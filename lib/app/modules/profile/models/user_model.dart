@@ -47,7 +47,7 @@ class UserModel {
     lastName = json['lastName'];
     email = json['email'];
     phone = json['phone'];
-    note = json['note'];
+    note = json['note'] ?? "";
     defaultAddress = Address.fromJson(json['defaultAddress']);
   }
 

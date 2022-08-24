@@ -31,6 +31,7 @@ class CustomButton extends StatelessWidget {
         onPressed: onPressed,
         style: TextButton.styleFrom(
             padding: const EdgeInsets.symmetric(vertical: 14),
+            elevation: 0.0,
             fixedSize: Size(width ?? Get.width, height ?? 50),
             backgroundColor: backgroundColor,
             side: const BorderSide(width: 1.0, color: Colors.black),

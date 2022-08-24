@@ -287,6 +287,15 @@ class CartProvider extends GetConnect {
               cart {
                 # Cart fields
                 id
+                discountCodes{
+                applicable
+                code
+                }
+                discountAllocations{
+                    discountedAmount{
+                        amount
+                    }
+                }
               }
               userErrors {
                 field

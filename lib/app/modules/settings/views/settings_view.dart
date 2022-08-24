@@ -102,7 +102,9 @@ class SettingsView extends GetView<SettingsController> {
                             CustomCardV2(
                               textHeader: "Aktivitas",
                               items: [
-                                Items("Pesanan Saya", null,
+                                Items(
+                                    "Pesanan Saya",
+                                    () => Get.toNamed(Routes.ORDERS),
                                     SvgPicture.asset("assets/icon/box.svg")),
                                 Items(
                                     "Riwayat Pesanan",

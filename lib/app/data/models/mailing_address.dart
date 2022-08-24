@@ -60,6 +60,23 @@ class MailingAddress {
     zip = json['zip'];
   }
 
+  MailingAddress.fromOrder(var json) {
+    if (json == null) return;
+    address1 = json['address1'];
+    address2 = json['address2'];
+    city = json['city'];
+    company = json['company'];
+    country = json['country'];
+    countryCodeV2 = json['countryCodeV2'];
+    firstName = json['firstName'];
+    id = json['id'];
+    lastName = json['lastName'];
+    phone = json['phone'];
+    province = json['province'];
+    provinceCode = json['provinceCode'];
+    zip = json['zip'];
+  }
+
   MailingAddress.isEmpty() {
     country = "Indonesia";
   }
