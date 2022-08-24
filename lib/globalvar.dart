@@ -10,6 +10,7 @@ const String url_widget =
     "https://widget.delamibrands.com/colorbox/mobile/menus.json";
 // ignore: constant_identifier_names
 const int NewArrival = 214404235414;
+const int defaultSortBy = 2;
 
 const String urlCity =
     "https://widget.delamibrands.com/executive/executive_reg_shipping_test/front/api_province?province=";

@@ -1,9 +1,8 @@
+import 'package:colorbox/app/modules/search/controllers/search_controller.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/item_card.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import '../controllers/search_controller.dart';
 
 // ignore: must_be_immutable, use_key_in_widget_constructors
 class SearchView extends GetView<SearchController> {

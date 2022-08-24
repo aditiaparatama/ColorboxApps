@@ -2,6 +2,7 @@ import 'package:colorbox/app/modules/collections/controllers/collections_control
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
+import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
@@ -17,7 +18,7 @@ class CollectionsProductView extends GetView<CollectionsController> {
   Widget build(BuildContext context) {
     var control = Get.put(CollectionsController());
 
-    control.fetchCollectionProduct(int.parse(id!));
+    control.fetchCollectionProduct(int.parse(id!), defaultSortBy);
     return GetBuilder<CollectionsController>(
         init: Get.put(CollectionsController()),
         builder: (controller) {
