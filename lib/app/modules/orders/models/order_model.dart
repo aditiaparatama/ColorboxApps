@@ -3,7 +3,7 @@ import 'package:colorbox/app/data/models/mailing_address.dart';
 class Order {
   String? id;
   String? name;
-  String? createAt;
+  String? createdAt;
   List<String>? events;
   List<String>? tags;
   String? cancelReason;
@@ -17,7 +17,7 @@ class Order {
   Order(
       this.id,
       this.name,
-      this.createAt,
+      this.createdAt,
       this.events,
       this.tags,
       this.cancelReason,
@@ -31,6 +31,7 @@ class Order {
   Order.fromJson(var json) {
     id = json['id'];
     name = json['name'];
+    createdAt = json['createdAt'];
     events = [];
     for (final x in json['events']['edges']) {
       events!.add(x['node']['message']);
@@ -44,6 +45,10 @@ class Order {
 
     if (json['displayFinancialStatus'] == "PENDING") {
       status = "Menunggu Pembayaran";
+    }
+
+    if (json['displayFinancialStatus'] == "EXPIRED") {
+      status = "Dibatalkan";
     }
 
     if (json['displayFinancialStatus'] == "PAID") {

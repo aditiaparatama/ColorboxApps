@@ -7,9 +7,8 @@ import 'package:colorbox/app/widgets/skeleton.dart';
 import 'package:colorbox/app/widgets/widget.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../controllers/wishlist_controller.dart';
@@ -36,9 +35,8 @@ class WishlistView extends GetView<WishlistController> {
                   ? loadingCircular()
                   : (controller.product.isEmpty)
                       ? EmptyPage(
-                          image: SvgPicture.asset(
-                            "assets/icon/EmptyStateWishlist.svg",
-                          ),
+                          image: Lottie.network(
+                              "https://assets1.lottiefiles.com/packages/lf20_NS97uB/06_heart.json"),
                           textHeader: "Belum Ada Wishlist",
                           textContent:
                               "Kamu belum menambahkan produk ke dalam wishlist",
