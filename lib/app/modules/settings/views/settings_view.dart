@@ -1,3 +1,4 @@
+import 'package:colorbox/app/modules/orders/views/orders_view.dart';
 import 'package:colorbox/app/modules/profile/views/address/address_view.dart';
 import 'package:colorbox/app/modules/profile/views/infoaccount_view.dart';
 import 'package:colorbox/app/modules/settings/views/web_view.dart';
@@ -31,6 +32,7 @@ class SettingsView extends GetView<SettingsController> {
       body: GetBuilder<SettingsController>(
           init: Get.put(SettingsController()),
           builder: (c) {
+            int jmlPesanan = controller.ordersController.countPesanan;
             return SingleChildScrollView(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,6 +86,7 @@ class SettingsView extends GetView<SettingsController> {
                               ),
                             ),
                             CustomCardV2(
+                              height: 24,
                               textHeader: "Pengaturan Akun",
                               items: [
                                 Items(
@@ -105,10 +108,11 @@ class SettingsView extends GetView<SettingsController> {
                                 Items(
                                     "Pesanan Saya",
                                     () => Get.toNamed(Routes.ORDERS),
-                                    SvgPicture.asset("assets/icon/box.svg")),
+                                    SvgPicture.asset("assets/icon/box.svg"),
+                                    notif: jmlPesanan),
                                 Items(
                                     "Riwayat Pesanan",
-                                    null,
+                                    () => Get.to(OrdersView(filter: "riwayat")),
                                     SvgPicture.asset(
                                         "assets/icon/clipboard-list.svg")),
                               ],
@@ -120,6 +124,7 @@ class SettingsView extends GetView<SettingsController> {
                   height: 8,
                 ),
                 CustomCardV2(
+                  height: 24,
                   textHeader: "Informasi",
                   items: [
                     Items(

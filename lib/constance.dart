@@ -22,7 +22,7 @@ const Color grayColor = Color(0xFF8D8D8E);
 const Color baseColorSkeleton = Colors.black;
 const Color highlightColorSkeleton = Colors.white30;
 
-var formatter = NumberFormat('###,000', "id");
+var formatter = NumberFormat.decimalPattern("id");
 
 const double defaultPadding = 8.0;
 

@@ -34,7 +34,7 @@ void bottomSheetKecamatan(_address2, _zip) {
                           )),
                       const SizedBox(width: 8),
                       const CustomText(
-                        text: "Pilih Provinsi",
+                        text: "Pilih Kecamatan",
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -56,6 +56,7 @@ void bottomSheetKecamatan(_address2, _zip) {
                       return null;
                     },
                   ),
+                  const SizedBox(height: 16),
                   (controller.kecamatan['kecamatan'].length == 0)
                       ? const SizedBox(
                           child: Center(
@@ -65,41 +66,46 @@ void bottomSheetKecamatan(_address2, _zip) {
                       : SizedBox(
                           height: Get.height * .5,
                           width: Get.width,
-                          child: ListView.separated(
-                              separatorBuilder: (context, index) =>
-                                  const Divider(),
-                              itemCount:
-                                  controller.kecamatan['kecamatan'].length,
-                              itemBuilder: (_, i) {
-                                var x = controller.kecamatan['kecamatan'][i];
-                                return TextButton(
-                                    style: TextButton.styleFrom(
-                                      fixedSize: Size(Get.width, 20),
-                                      alignment: Alignment.centerLeft,
-                                    ),
-                                    onPressed: () {
-                                      _address2.text = x['nama']!;
-                                      _zip.text = "";
-                                      Get.back();
-                                      controller.update();
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        CustomText(
-                                          text: x['nama'],
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                for (final x
+                                    in controller.kecamatan['kecamatan']) ...[
+                                  InkWell(
+                                      onTap: () {
+                                        _address2.text = x['nama']!;
+                                        _zip.text = "";
+                                        Get.back();
+                                        controller.update();
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            CustomText(
+                                              text: x['nama'],
+                                              fontSize: 14,
+                                              fontWeight:
+                                                  (_address2.text == x['nama'])
+                                                      ? FontWeight.bold
+                                                      : FontWeight.normal,
+                                            ),
+                                            (_address2.text == x['nama'])
+                                                ? const Icon(
+                                                    Icons.check,
+                                                    color: Colors.black,
+                                                  )
+                                                : const SizedBox()
+                                          ],
                                         ),
-                                        (_address2.text == x['nama'])
-                                            ? const Icon(
-                                                Icons.check,
-                                                color: Colors.black,
-                                              )
-                                            : const SizedBox()
-                                      ],
-                                    ));
-                              }),
-                        ),
+                                      )),
+                                  const Divider(),
+                                ]
+                              ],
+                            ),
+                          )),
                 ]);
           }),
     ),

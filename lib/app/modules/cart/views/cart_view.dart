@@ -3,7 +3,7 @@ import 'package:colorbox/app/modules/profile/views/address/address_form.dart';
 import 'package:colorbox/app/widgets/empty_page.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:get/get.dart';
 import 'package:colorbox/app/modules/cart/views/widget/item_cart_widget.dart';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
@@ -40,12 +40,11 @@ class CartView extends GetView<CartController> {
                 ),
               ),
               bottomSheet: bottomCart(),
-              body: SizedBox(
+              body: SafeArea(
                 child: (c.cart.lines!.isEmpty)
                     ? EmptyPage(
-                        image: SvgPicture.asset(
-                          "assets/icon/State_Cart_No_Result.svg",
-                        ),
+                        image: Lottie.network(
+                            "https://assets2.lottiefiles.com/private_files/lf30_x2lzmtdl.json"),
                         textHeader: "Keranjang Kamu Kosong",
                         textContent:
                             "Ayo segera tambahkan produk kedalam keranjang",

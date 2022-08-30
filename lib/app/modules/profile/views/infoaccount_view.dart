@@ -45,6 +45,7 @@ class InformationAccount extends StatelessWidget {
         centerTitle: false,
         elevation: 3,
         shadowColor: Colors.grey.withOpacity(0.3),
+        leadingWidth: 36,
       ),
       bottomSheet: Container(
         padding: const EdgeInsets.all(16.0),
@@ -109,7 +110,7 @@ class InformationAccount extends StatelessWidget {
                                     ))
                                 : const SizedBox(),
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 24),
                           CustomTextFormField(
                             textEditingController: emailTextController,
                             hint: "Email",
@@ -136,7 +137,7 @@ class InformationAccount extends StatelessWidget {
                                     ))
                                 : const SizedBox(),
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 24),
                           InkWell(
                             onTap: () => showDatePicker(
                               helpText: "Pilih Tanggal",
@@ -174,6 +175,7 @@ class InformationAccount extends StatelessWidget {
                               cursorColor: Colors.black,
                               enabled: false,
                               controller: birthdayTextController,
+                              onChanged: (_) => controller.update(),
                               decoration: InputDecoration(
                                 labelText: "Tanggal Lahir",
                                 suffixIcon: GestureDetector(
@@ -181,8 +183,29 @@ class InformationAccount extends StatelessWidget {
                                   child: const Icon(
                                     Icons.calendar_today,
                                     color: Colors.black,
+                                    size: 18,
                                   ),
                                 ),
+                                border: OutlineInputBorder(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(6)),
+                                    borderSide: BorderSide(
+                                      color: (birthdayTextController
+                                              .text.isNotEmpty)
+                                          ? Colors.black
+                                          : const Color(0xFFE5E8EB),
+                                      width: 1.0,
+                                    )),
+                                disabledBorder: OutlineInputBorder(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(6)),
+                                    borderSide: BorderSide(
+                                      color: (birthdayTextController
+                                              .text.isNotEmpty)
+                                          ? Colors.black
+                                          : const Color(0xFFE5E8EB),
+                                      width: 1.0,
+                                    )),
                               ),
                               onSaved: (value) {
                                 controller.tglLahir = value;

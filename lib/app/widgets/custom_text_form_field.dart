@@ -6,6 +6,7 @@ class CustomTextFormField extends StatelessWidget {
   final bool? obscureText, readOnly, enabled;
   final Widget? suffixIcon;
   final String? prefixText;
+  final Widget? prefix;
   final TextInputType? textInputType;
   final TextEditingController? textEditingController;
   final TextAlign? textAlign;
@@ -25,6 +26,7 @@ class CustomTextFormField extends StatelessWidget {
       this.enabled = true,
       this.suffixIcon,
       this.prefixText,
+      this.prefix,
       this.textInputType,
       this.textEditingController,
       this.textAlign = TextAlign.left,
@@ -58,8 +60,31 @@ class CustomTextFormField extends StatelessWidget {
         readOnly: readOnly!,
         enabled: enabled,
         textAlign: textAlign!,
+        style: const TextStyle(fontSize: 14),
         decoration: InputDecoration(
-            labelText: hint!, suffixIcon: suffixIcon, prefixText: prefixText),
+          labelText: hint!,
+          labelStyle: const TextStyle(fontSize: 14),
+          hintStyle: const TextStyle(fontSize: 14),
+          suffixIcon: suffixIcon,
+          prefixText: prefixText,
+          prefix: prefix,
+          border: OutlineInputBorder(
+              borderRadius: const BorderRadius.all(Radius.circular(6)),
+              borderSide: BorderSide(
+                color: (textEditingController!.text.isNotEmpty)
+                    ? Colors.black
+                    : const Color(0xFFE5E8EB),
+                width: 1.0,
+              )),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: const BorderRadius.all(Radius.circular(6)),
+              borderSide: BorderSide(
+                color: (textEditingController!.text.isNotEmpty)
+                    ? Colors.black
+                    : const Color(0xFFE5E8EB),
+                width: 1.0,
+              )),
+        ),
       )
     ]);
   }

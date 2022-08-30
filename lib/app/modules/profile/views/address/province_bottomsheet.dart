@@ -58,6 +58,7 @@ void bottomSheetProvince(_province, _city) {
                       return null;
                     },
                   ),
+                  const SizedBox(height: 16),
                   (controller.province == null)
                       ? SizedBox(child: loadingCircular())
                       : SizedBox(
@@ -67,31 +68,36 @@ void bottomSheetProvince(_province, _city) {
                             child: Column(
                               children: [
                                 for (final x in controller.province!) ...[
-                                  TextButton(
-                                      style: TextButton.styleFrom(
-                                        fixedSize: Size(Get.width, 20),
-                                        alignment: Alignment.centerLeft,
-                                      ),
-                                      onPressed: () {
+                                  InkWell(
+                                      onTap: () {
                                         _province.text = x.name!;
                                         _city.text = "";
                                         Get.back();
                                         controller.update();
                                       },
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          CustomText(
-                                            text: x.name!,
-                                          ),
-                                          (_province.text == x.name)
-                                              ? const Icon(
-                                                  Icons.check,
-                                                  color: Colors.black,
-                                                )
-                                              : const SizedBox()
-                                        ],
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            CustomText(
+                                              text: x.name!,
+                                              fontSize: 14,
+                                              fontWeight:
+                                                  (_province.text == x.name)
+                                                      ? FontWeight.bold
+                                                      : FontWeight.normal,
+                                            ),
+                                            (_province.text == x.name)
+                                                ? const Icon(
+                                                    Icons.check,
+                                                    color: Colors.black,
+                                                  )
+                                                : const SizedBox()
+                                          ],
+                                        ),
                                       )),
                                   const Divider(),
                                 ],

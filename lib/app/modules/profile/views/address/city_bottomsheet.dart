@@ -10,7 +10,7 @@ void bottomSheetCity(_city, _address2) {
   Get.bottomSheet(
     Container(
       height: Get.height * .75,
-      padding: const EdgeInsets.only(top: 27, right: 24, bottom: 0, left: 24),
+      padding: const EdgeInsets.only(top: 24, right: 24, bottom: 0, left: 24),
       decoration: const BoxDecoration(
         color: primaryColor,
         borderRadius: BorderRadius.only(
@@ -56,6 +56,7 @@ void bottomSheetCity(_city, _address2) {
                       return null;
                     },
                   ),
+                  const SizedBox(height: 16),
                   (controller.wilayah.length == 0)
                       ? const SizedBox(
                           child: Center(
@@ -65,40 +66,46 @@ void bottomSheetCity(_city, _address2) {
                       : SizedBox(
                           height: Get.height * .5,
                           width: Get.width,
-                          child: ListView.separated(
-                              separatorBuilder: (context, index) =>
-                                  const Divider(),
-                              itemCount: controller.wilayah.length,
-                              itemBuilder: (_, i) {
-                                var x = controller.wilayah[i];
-                                return TextButton(
-                                    style: TextButton.styleFrom(
-                                      fixedSize: Size(Get.width, 20),
-                                      alignment: Alignment.centerLeft,
-                                    ),
-                                    onPressed: () {
-                                      _city.text = x['kota']!;
-                                      _address2.text = "";
-                                      Get.back();
-                                      controller.update();
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        CustomText(
-                                          text: x['kota'],
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                for (final x in controller.wilayah) ...[
+                                  InkWell(
+                                      onTap: () {
+                                        _city.text = x['kota']!;
+                                        _address2.text = "";
+                                        Get.back();
+                                        controller.update();
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            CustomText(
+                                              text: x['kota'],
+                                              fontSize: 14,
+                                              fontWeight:
+                                                  (_city.text == x['kota'])
+                                                      ? FontWeight.bold
+                                                      : FontWeight.normal,
+                                            ),
+                                            (_city.text == x['kota'])
+                                                ? const Icon(
+                                                    Icons.check,
+                                                    color: Colors.black,
+                                                  )
+                                                : const SizedBox()
+                                          ],
                                         ),
-                                        (_city.text == x['kota'])
-                                            ? const Icon(
-                                                Icons.check,
-                                                color: Colors.black,
-                                              )
-                                            : const SizedBox()
-                                      ],
-                                    ));
-                              }),
-                        ),
+                                      )),
+                                  const Divider(),
+                                ]
+                              ],
+                            ),
+                          )),
                 ]);
           }),
     ),
