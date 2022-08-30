@@ -1,3 +1,4 @@
+import 'package:colorbox/app/modules/orders/controllers/orders_controller.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
@@ -9,9 +10,12 @@ class SettingsController extends GetxController {
   UserModel get userModel => _userModel;
   CustomerToken? _token = CustomerToken.isEmpty();
   CustomerToken? get token => _token;
+  OrdersController get ordersController => Get.put(OrdersController());
 
-  SettingsController() {
+  @override
+  void onInit() async {
     getUser();
+    super.onInit();
   }
 
   Future<void> getUser() async {
@@ -20,6 +24,7 @@ class SettingsController extends GetxController {
     });
 
     await localStorageData.getTokenUser.then((value) => _token = value);
+
     update();
   }
 

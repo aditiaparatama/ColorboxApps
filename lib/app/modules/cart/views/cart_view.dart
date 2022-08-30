@@ -40,7 +40,7 @@ class CartView extends GetView<CartController> {
                 ),
               ),
               bottomSheet: bottomCart(),
-              body: SizedBox(
+              body: SafeArea(
                 child: (c.cart.lines!.isEmpty)
                     ? EmptyPage(
                         image: Lottie.network(

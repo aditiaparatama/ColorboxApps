@@ -20,9 +20,9 @@ class CustomSearchTextForm extends StatelessWidget {
     this.validator,
     this.textHint,
     this.radius = 6,
-    this.borderColor = Colors.transparent,
-    this.borderColorFocused = Colors.grey,
-    this.backgroundColor = const Color(0xFFF5F6F8),
+    this.borderColor = const Color(0xFFE5E8EB),
+    this.borderColorFocused = const Color(0xFFE5E8EB),
+    this.backgroundColor = const Color(0xFFFAFAFA),
     this.textInputType,
   }) : super(key: key);
 
@@ -34,9 +34,13 @@ class CustomSearchTextForm extends StatelessWidget {
       onSaved: onSaved,
       onChanged: onChanged,
       validator: validator,
+      style: const TextStyle(fontSize: 14),
       decoration: InputDecoration(
           hintText: textHint!,
-          suffixIcon: const Icon(Icons.search),
+          suffixIcon: const Icon(
+            Icons.search,
+            color: Color(0xFF9B9B9B),
+          ),
           filled: true,
           fillColor: backgroundColor,
           focusedBorder: OutlineInputBorder(

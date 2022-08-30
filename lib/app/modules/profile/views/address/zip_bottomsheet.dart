@@ -10,7 +10,7 @@ void bottomSheetZip(_zip) {
   ProfileController controller = Get.put(ProfileController());
   Get.bottomSheet(
     Container(
-      height: Get.height * .6,
+      height: Get.height * .55,
       padding: const EdgeInsets.only(top: 27, right: 24, bottom: 16, left: 24),
       decoration: const BoxDecoration(
         color: primaryColor,
@@ -58,46 +58,50 @@ void bottomSheetZip(_zip) {
                       return null;
                     },
                   ),
+                  const SizedBox(height: 16),
                   (controller.kodePos.length == 0)
                       ? SizedBox(
                           child: loadingCircular(),
                         )
                       : SizedBox(
-                          height: Get.height * .4,
+                          height: Get.height * .35,
                           width: Get.width,
-                          child: ListView.separated(
-                              separatorBuilder: (context, index) =>
-                                  const Divider(),
-                              itemCount: controller.kodePos.length,
-                              itemBuilder: (_, i) {
-                                var x = controller.kodePos[i];
-                                return TextButton(
-                                    style: TextButton.styleFrom(
-                                      fixedSize: Size(Get.width, 20),
-                                      alignment: Alignment.centerLeft,
-                                    ),
-                                    onPressed: () {
-                                      _zip.text = x!;
-                                      Get.back();
-                                      controller.update();
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        CustomText(
-                                          text: x,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                for (final x in controller.kodePos) ...[
+                                  InkWell(
+                                      onTap: () {
+                                        _zip.text = x!;
+                                        Get.back();
+                                        controller.update();
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            CustomText(
+                                              text: x,
+                                              fontWeight: (_zip.text == x)
+                                                  ? FontWeight.bold
+                                                  : FontWeight.normal,
+                                            ),
+                                            (_zip.text == x)
+                                                ? const Icon(
+                                                    Icons.check,
+                                                    color: Colors.black,
+                                                  )
+                                                : const SizedBox()
+                                          ],
                                         ),
-                                        (_zip.text == x)
-                                            ? const Icon(
-                                                Icons.check,
-                                                color: Colors.black,
-                                              )
-                                            : const SizedBox()
-                                      ],
-                                    ));
-                              }),
-                        ),
+                                      )),
+                                  const Divider(),
+                                ]
+                              ],
+                            ),
+                          )),
                 ]);
           }),
     ),
