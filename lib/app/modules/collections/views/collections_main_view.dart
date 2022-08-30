@@ -1,8 +1,8 @@
 import 'package:colorbox/app/modules/collections/controllers/collections_controller.dart';
 import 'package:colorbox/app/modules/collections/views/widgets/collection_body.dart';
-import 'package:colorbox/app/modules/collections/views/widgets/search_form.dart';
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
@@ -64,9 +64,16 @@ class CollectionsMainView extends GetView<CollectionsController> {
                       tabController.index = controller.selectedIndex;
                     }
                     return Scaffold(
-                        appBar: AppBar(
-                          elevation: 1,
-                          title: const SearchCollection(),
+                        resizeToAvoidBottomInset: false,
+                        appBar: PreferredSize(
+                          preferredSize: const Size.fromHeight(56),
+                          child: AppBar(
+                            title: const SearchCollection(),
+                            centerTitle: false,
+                            elevation: 3,
+                            shadowColor: Colors.grey.withOpacity(0.3),
+                            leadingWidth: 36,
+                          ),
                         ),
                         body: PageView.builder(
                             controller: _pControl,
@@ -102,7 +109,7 @@ class CollectionsMainView extends GetView<CollectionsController> {
                                                     Padding(
                                                       padding: const EdgeInsets
                                                               .fromLTRB(
-                                                          16, 26, 0, 0),
+                                                          16, 24, 0, 16),
                                                       child: CustomText(
                                                         text:
                                                             "${control.collection.handle!.toUpperCase().replaceAll("-NEW-ARRIVAL", "").replaceAll("WOMEN-", "").replaceAll("MEN-", "")} "
@@ -118,7 +125,7 @@ class CollectionsMainView extends GetView<CollectionsController> {
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.fromLTRB(
-                                                          0, 28, 16, 0),
+                                                          0, 24, 16, 0),
                                                   child: Row(
                                                     children: [
                                                       SizedBox(
@@ -156,12 +163,15 @@ class CollectionsMainView extends GetView<CollectionsController> {
                                             Padding(
                                               padding:
                                                   const EdgeInsets.fromLTRB(
-                                                      16, 5, 16, 5),
+                                                      16, 0, 16, 16),
                                               child: TabBar(
-                                                controller: tabController,
                                                 isScrollable: true,
                                                 tabs: control.listTabs,
+                                                controller: tabController,
                                                 labelColor: Colors.white,
+                                                labelPadding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        8, 0, 8, 0),
                                                 labelStyle: textStyle.copyWith(
                                                     fontSize: 14.0,
                                                     color: Colors.black,
@@ -196,6 +206,15 @@ class CollectionsMainView extends GetView<CollectionsController> {
         });
   }
 
+  Widget checklistWidget(int sortBy) {
+    return (sortBy == controller.orderBy)
+        ? CircleAvatar(
+            radius: 16.0,
+            child: SvgPicture.asset("assets/icon/bx-check.svg"),
+          )
+        : const SizedBox();
+  }
+
   Container bagWidget() {
     return Container(
       alignment: Alignment.centerRight,
@@ -227,161 +246,223 @@ class CollectionsMainView extends GetView<CollectionsController> {
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20)),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                IconButton(
-                    onPressed: () => Get.back(),
-                    icon: const Icon(
-                      Icons.close,
-                      size: 16,
-                    )),
-                const CustomText(
-                  text: "Urut Berdasarkan :",
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-              ],
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                  fixedSize: Size(Get.width, 20),
-                  alignment: Alignment.centerLeft),
-              onPressed: () {
-                controller.fetchCollectionProduct(sortByContext, 1);
-                Get.back();
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  CustomText(
-                    text: 'Popularitas',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  // SizedBox(
-                  //   child: InkWell(
-                  //     onTap: () {},
-                  //     child: CircleAvatar(
-                  //       radius: 16.0,
-                  //       child:
-                  //           SvgPicture.asset("assets/icon/bx-sort-amount.svg"),
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
-            ),
-            const Divider(
-              color: colorDiver,
-              thickness: 1,
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                  fixedSize: Size(Get.width, 10),
-                  alignment: Alignment.centerLeft),
-              onPressed: () {
-                controller.fetchCollectionProduct(sortByContext, 2);
-                Get.back();
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: GetBuilder<CollectionsController>(builder: (_) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  IconButton(
+                      onPressed: () => Get.back(),
+                      icon: const Icon(
+                        Icons.close,
+                        size: 16,
+                      )),
                   const CustomText(
-                    text: 'Produk Terbaru',
+                    text: "Urut Berdasarkan :",
                     fontSize: 14,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w700,
                   ),
-                  SizedBox(
-                    child: InkWell(
-                      onTap: () {},
-                      child: CircleAvatar(
-                        radius: 16.0,
-                        child: SvgPicture.asset("assets/icon/bx-check.svg"),
-                      ),
+                ],
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                    fixedSize: Size(Get.width, 10),
+                    alignment: Alignment.centerLeft),
+                onPressed: () {
+                  controller.fetchCollectionProduct(sortByContext, 2);
+                  Get.back();
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const CustomText(
+                      text: 'Produk Terbaru',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
                     ),
-                  ),
-                ],
+                    checklistWidget(2),
+                  ],
+                ),
               ),
-            ),
-            const Divider(
-              color: colorDiver,
-              thickness: 1,
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                  fixedSize: Size(Get.width, 10),
-                  alignment: Alignment.centerLeft),
-              onPressed: () {
-                controller.fetchCollectionProduct(sortByContext, 3);
-                Get.back();
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  CustomText(
-                    text: 'Harga Tinggi ke Rendah',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  // SizedBox(
-                  //   child: InkWell(
-                  //     onTap: () {},
-                  //     child: CircleAvatar(
-                  //       radius: 16.0,
-                  //       child:
-                  //           SvgPicture.asset("assets/icon/bx-sort-amount.svg"),
-                  //     ),
-                  //   ),
-                  // ),
-                ],
+              const Divider(
+                color: colorDiver,
+                thickness: 1,
               ),
-            ),
-            const Divider(
-              color: colorDiver,
-              thickness: 1,
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                  fixedSize: Size(Get.width, 10),
-                  alignment: Alignment.centerLeft),
-              onPressed: () {
-                controller.fetchCollectionProduct(sortByContext, 4);
-                Get.back();
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  CustomText(
-                    text: 'Harga Rendah ke Tinggi',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  // SizedBox(
-                  //   child: InkWell(
-                  //     onTap: () {},
-                  //     child: CircleAvatar(
-                  //       radius: 16.0,
-                  //       child:
-                  //           SvgPicture.asset("assets/icon/bx-sort-amount.svg"),
-                  //     ),
-                  //   ),
-                  // ),
-                ],
+              TextButton(
+                style: TextButton.styleFrom(
+                    fixedSize: Size(Get.width, 20),
+                    alignment: Alignment.centerLeft),
+                onPressed: () {
+                  controller.fetchCollectionProduct(sortByContext, 1);
+                  Get.back();
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const CustomText(
+                      text: 'Popularitas',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    checklistWidget(1),
+                  ],
+                ),
               ),
-            ),
-            const Divider(
-              color: colorDiver,
-              thickness: 1,
-            ),
-          ],
-        ),
+              const Divider(
+                color: colorDiver,
+                thickness: 1,
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                    fixedSize: Size(Get.width, 10),
+                    alignment: Alignment.centerLeft),
+                onPressed: () {
+                  controller.fetchCollectionProduct(sortByContext, 3);
+                  Get.back();
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const CustomText(
+                      text: 'Harga Tinggi ke Rendah',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    checklistWidget(3),
+                  ],
+                ),
+              ),
+              const Divider(
+                color: colorDiver,
+                thickness: 1,
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                    fixedSize: Size(Get.width, 10),
+                    alignment: Alignment.centerLeft),
+                onPressed: () {
+                  controller.fetchCollectionProduct(sortByContext, 4);
+                  Get.back();
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const CustomText(
+                      text: 'Harga Rendah ke Tinggi',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    checklistWidget(4),
+                  ],
+                ),
+              ),
+              const Divider(
+                color: colorDiver,
+                thickness: 1,
+              ),
+            ],
+          );
+        }),
       ),
       isDismissible: true,
       enableDrag: false,
+    );
+  }
+}
+
+class SearchCollection extends StatelessWidget {
+  const SearchCollection({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(
+          height: 36,
+          width: MediaQuery.of(context).size.width - 118,
+          child: TextFormField(
+            onTap: () => Get.toNamed(Routes.SEARCH),
+            cursorColor: const Color.fromRGBO(155, 155, 155, 1),
+            decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                borderSide: const BorderSide(
+                  color: Color.fromRGBO(250, 250, 250, 1),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                borderSide: const BorderSide(
+                  color: Color.fromRGBO(250, 250, 250, 1),
+                  width: 1.0,
+                ),
+              ),
+              contentPadding: const EdgeInsets.fromLTRB(16, 10, 0, 0),
+              disabledBorder: InputBorder.none,
+              labelStyle: const TextStyle(
+                  fontSize: 12, color: Color.fromARGB(155, 155, 155, 1)),
+              hintText: "Cari produk disini",
+              filled: true,
+              fillColor: const Color.fromRGBO(250, 250, 250, 1),
+              suffixIcon: Padding(
+                padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                child: GestureDetector(
+                  onTap: () => Get.toNamed(Routes.SEARCH),
+                  child: SvgPicture.asset("assets/icon/bx-search1.svg"),
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 36,
+          width: 50,
+          child: InkWell(
+            onTap: () => Get.toNamed(Routes.CART, arguments: "collection"),
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 0),
+                  child: Center(
+                    child: CircleAvatar(
+                      radius: 16.0,
+                      child: SvgPicture.asset("assets/icon/bx-handbag.svg"),
+                    ),
+                  ),
+                ),
+                Get.find<CartController>().cart.lines!.isNotEmpty
+                    ? Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(left: 15, bottom: 5),
+                        child: Container(
+                          width: 15,
+                          height: 15,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: Colors.red),
+                          child: CustomText(
+                            text: Get.find<CartController>()
+                                .cart
+                                .lines!
+                                .length
+                                .toString(),
+                            fontSize: 10,
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                    : const SizedBox()
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

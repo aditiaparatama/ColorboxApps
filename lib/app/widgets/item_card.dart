@@ -42,7 +42,7 @@ class ItemCard extends StatelessWidget {
             CachedNetworkImage(
               imageUrl: image!,
               imageBuilder: (context, imageProvider) => Container(
-                height: 265,
+                height: 250,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: imageProvider,
@@ -61,7 +61,7 @@ class ItemCard extends StatelessWidget {
               errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+              padding: const EdgeInsets.fromLTRB(5, 12, 5, 9),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -70,6 +70,8 @@ class ItemCard extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: CustomText(
                       text: title!,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                   (compareAtPrice == "0")
@@ -84,6 +86,7 @@ class ItemCard extends StatelessWidget {
                                   formatter.format(int.parse(compareAtPrice!)),
                               style: const TextStyle(
                                   fontSize: 10,
+                                  fontWeight: FontWeight.w400,
                                   color: Color.fromRGBO(155, 155, 155, 1),
                                   decoration: TextDecoration.lineThrough),
                             ),
@@ -91,9 +94,9 @@ class ItemCard extends StatelessWidget {
                               padding: const EdgeInsets.only(left: 7),
                               child: Container(
                                 width: 30.0,
-                                height: 20.0,
+                                height: 15.0,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
+                                  borderRadius: BorderRadius.circular(2),
                                   color: const Color.fromRGBO(187, 9, 21, 1),
                                 ),
                                 child: Center(
@@ -113,11 +116,15 @@ class ItemCard extends StatelessWidget {
                         ),
                   Row(
                     children: [
-                      Text(
-                        "Rp " + formatter.format(int.parse(price!)),
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 229, 57, 53)),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
+                        child: Text(
+                          "Rp " + formatter.format(int.parse(price!)),
+                          style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: Color.fromARGB(255, 229, 57, 53)),
+                        ),
                       ),
                     ],
                   ),

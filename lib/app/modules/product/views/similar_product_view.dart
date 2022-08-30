@@ -23,20 +23,22 @@ class CollectionsProductView extends GetView<CollectionsController> {
         init: Get.put(CollectionsController()),
         builder: (controller) {
           return SizedBox(
-            height: Get.height * .43,
+            height: Get.height * 2.2,
             child: (controller.collection.products.isEmpty)
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: controller.collection.products.length,
-                    scrollDirection: Axis.horizontal,
+                    // scrollDirection: Axis.horizontal,
                     gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                      mainAxisExtent: 320,
+                      maxCrossAxisExtent: 200,
+                      childAspectRatio: 2 / 8,
+                      crossAxisSpacing: 20,
                       mainAxisSpacing: 20,
-                      crossAxisSpacing: 5,
-                      childAspectRatio: 2.0,
                     ),
                     itemBuilder: (_, i) {
                       var calcu1 = int.parse(controller

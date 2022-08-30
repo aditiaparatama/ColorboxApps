@@ -33,24 +33,24 @@ class ProductView2 extends GetView<ProductController> {
     return GetBuilder<ProductController>(
         init: Get.put(ProductController()),
         builder: (control) {
-          // print(controller.product.type);
-
-          // print(control.userModel.id);
-          // print(controller.product.id);
-          // print(controller.product.variants[0].id);
-
           return Scaffold(
             backgroundColor: Colors.white,
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(56),
+              child: AppBar(
+                title: const SearchCollection(),
+                centerTitle: false,
+                elevation: 3,
+                leadingWidth: 36,
+              ),
+            ),
             body: Column(
               children: [
-                const SizedBox(height: 40),
-
                 Stack(
                   children: [
                     Container(
-                      height: Get.height * .87,
-                      padding: const EdgeInsets.only(
-                          right: 20, left: 20, bottom: 10),
+                      height: Get.height * .81,
+                      padding: const EdgeInsets.only(right: 20, left: 20),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
@@ -107,7 +107,7 @@ class ProductView2 extends GetView<ProductController> {
                               ],
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 15),
+                              padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
                               child: CustomText(
                                 text: controller.product.title,
                                 fontSize: 14,
@@ -115,7 +115,6 @@ class ProductView2 extends GetView<ProductController> {
                                 color: const Color.fromRGBO(33, 33, 33, 1),
                               ),
                             ),
-                            const SizedBox(height: 10),
                             (controller.product.variants[0].compareAtPrice ==
                                     "0")
                                 ? CustomText(
@@ -138,7 +137,7 @@ class ProductView2 extends GetView<ProductController> {
                                                         .replaceAll(
                                                             ".00", ""))) +
                                                 "  ",
-                                            fontSize: 14,
+                                            fontSize: 12,
                                             fontWeight: FontWeight.w400,
                                             color: const Color.fromRGBO(
                                                 155, 155, 155, 1),
@@ -146,11 +145,11 @@ class ProductView2 extends GetView<ProductController> {
                                                 TextDecoration.lineThrough,
                                           ),
                                           Container(
-                                            width: 44.0,
-                                            height: 28.0,
+                                            width: 35.0,
+                                            height: 18.0,
                                             decoration: BoxDecoration(
                                               borderRadius:
-                                                  BorderRadius.circular(5),
+                                                  BorderRadius.circular(2),
                                               color: const Color.fromRGBO(
                                                   187, 9, 21, 1),
                                             ),
@@ -158,7 +157,7 @@ class ProductView2 extends GetView<ProductController> {
                                               child: Text(
                                                 calcu2.toString() + '%',
                                                 style: const TextStyle(
-                                                  fontSize: 14,
+                                                  fontSize: 12,
                                                   fontWeight: FontWeight.w600,
                                                   color: Colors.white,
                                                   height: 1,
@@ -170,35 +169,31 @@ class ProductView2 extends GetView<ProductController> {
                                         ],
                                       ),
                                       const SizedBox(height: 5),
-                                      Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              CustomText(
-                                                text: "Rp " +
-                                                    formatter.format(int.parse(
-                                                        controller
-                                                            .variant!.price!
-                                                            .replaceAll(
-                                                                ".00", ""))),
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w700,
-                                                color: const Color.fromARGB(
-                                                    255, 229, 57, 53),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 4),
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                CustomText(
+                                                  text: "Rp " +
+                                                      formatter.format(
+                                                          int.parse(controller
+                                                              .variant!.price!
+                                                              .replaceAll(
+                                                                  ".00", ""))),
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: const Color.fromRGBO(
+                                                      187, 9, 21, 1),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
-                            // Padding(
-                            //   padding: const EdgeInsets.only(top: 10),
-                            //   child: CustomText(
-                            //     text: "SKU: " + controller.variant!.sku!,
-                            //     fontSize: 14,
-                            //   ),
-                            // ),
                             const Divider(
                               height: 30,
                               thickness: 10,
@@ -226,8 +221,8 @@ class ProductView2 extends GetView<ProductController> {
                                       ),
                                       const SizedBox(height: 5),
                                       Container(
-                                        height: 32.0,
-                                        width: 32.0,
+                                        height: 24.0,
+                                        width: 24.0,
                                         decoration: BoxDecoration(
                                           border: Border.all(
                                             color: Colors.black,
@@ -278,6 +273,41 @@ class ProductView2 extends GetView<ProductController> {
                               height: 30,
                               thickness: 10,
                               color: Color.fromRGBO(249, 248, 248, 1),
+                            ),
+                            const SizedBox(height: 5),
+                            // ignore: avoid_unnecessary_containers
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                    width: 1.0,
+                                    color:
+                                        const Color.fromRGBO(299, 232, 235, 1)),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(6)),
+                              ),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(10, 16, 10, 16),
+                                child: Row(
+                                  children: <Widget>[
+                                    CircleAvatar(
+                                      radius: 16.0,
+                                      child: SvgPicture.asset(
+                                          "assets/icon/bx-driver.svg"),
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: CustomText(
+                                        text:
+                                            'Dapatkan potongan ongkir Rp 30.000 tanpa \n minimum pembelian untuk JABODETABEK',
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                             const SizedBox(height: 5),
                             GFAccordion(
@@ -348,7 +378,6 @@ class ProductView2 extends GetView<ProductController> {
                         ),
                       ),
                     ),
-                    headerProduct(context),
                   ],
                 ),
 
@@ -388,111 +417,130 @@ class ProductView2 extends GetView<ProductController> {
           );
         });
   }
+}
 
-  Widget headerProduct(context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  InkWell(
-                    onTap: () => Get.back(),
+class SearchCollection extends StatelessWidget {
+  const SearchCollection({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        SizedBox(
+          height: 36,
+          width: 250,
+          child: TextFormField(
+            onTap: () => Get.toNamed(Routes.SEARCH),
+            cursorColor: const Color.fromRGBO(155, 155, 155, 1),
+            decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                borderSide: const BorderSide(
+                  color: Color.fromRGBO(250, 250, 250, 1),
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(5.0),
+                borderSide: const BorderSide(
+                  color: Color.fromRGBO(250, 250, 250, 1),
+                  width: 1.0,
+                ),
+              ),
+              contentPadding: const EdgeInsets.fromLTRB(16, 10, 0, 0),
+              disabledBorder: InputBorder.none,
+              labelStyle: const TextStyle(
+                  fontSize: 12, color: Color.fromARGB(155, 155, 155, 1)),
+              hintText: "Cari produk disini",
+              filled: true,
+              fillColor: const Color.fromRGBO(250, 250, 250, 1),
+              suffixIcon: Padding(
+                padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                child: GestureDetector(
+                  onTap: () => Get.toNamed(Routes.SEARCH),
+                  child: SvgPicture.asset("assets/icon/bx-search1.svg"),
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          child: InkWell(
+            onTap: () => showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text('AlertDialog Title'),
+                content: const Text("ini saya"),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'Cancel'),
+                    child: const Text('Cancel'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+            ),
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 6),
+                  child: CircleAvatar(
+                    radius: 16.0,
+                    backgroundColor: Colors.white.withOpacity(0.5),
+                    child: SvgPicture.asset("assets/icon/bx-share-alt.svg"),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          child: InkWell(
+            onTap: () => Get.toNamed(Routes.CART, arguments: "collection"),
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 0),
+                  child: Center(
                     child: CircleAvatar(
                       radius: 16.0,
-                      child: SvgPicture.asset("assets/icon/bx-arrow-left.svg"),
+                      child: SvgPicture.asset("assets/icon/bx-handbag.svg"),
                     ),
                   ),
-                ],
-              ),
-              Row(
-                children: [
-                  InkWell(
-                    onTap: () =>
-                        Get.toNamed(Routes.CART, arguments: "collection"),
-                    child: Stack(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 6),
-                          child: CircleAvatar(
-                            radius: 16.0,
-                            backgroundColor: Colors.white.withOpacity(0.5),
-                            child: SvgPicture.asset(
-                                "assets/icon/bx-share-alt.svg"),
+                ),
+                Get.find<CartController>().cart.lines!.isNotEmpty
+                    ? Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(left: 15, bottom: 5),
+                        child: Container(
+                          width: 15,
+                          height: 15,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: Colors.red),
+                          child: CustomText(
+                            text: Get.find<CartController>()
+                                .cart
+                                .lines!
+                                .length
+                                .toString(),
+                            fontSize: 10,
+                            color: Colors.white,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () =>
-                        Get.toNamed(Routes.CART, arguments: "collection"),
-                    // onTap: () => showDialog<String>(
-                    //   context: context,
-                    //   builder: (BuildContext context) => AlertDialog(
-                    //     title: const Text('AlertDialog Title'),
-                    //     content: Text("ini saya"),
-                    //     actions: <Widget>[
-                    //       TextButton(
-                    //         onPressed: () => Navigator.pop(context, 'Cancel'),
-                    //         child: const Text('Cancel'),
-                    //       ),
-                    //       TextButton(
-                    //         onPressed: () => Navigator.pop(context, 'OK'),
-                    //         child: const Text('OK'),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    child: Stack(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 0),
-                          child: Center(
-                            child: CircleAvatar(
-                              radius: 16.0,
-                              child: SvgPicture.asset(
-                                  "assets/icon/bx-handbag.svg"),
-                            ),
-                          ),
-                        ),
-                        Get.find<CartController>().cart.lines!.isNotEmpty
-                            ? Container(
-                                alignment: Alignment.centerRight,
-                                padding:
-                                    const EdgeInsets.only(left: 15, bottom: 5),
-                                child: Container(
-                                  width: 15,
-                                  height: 15,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50),
-                                      color: Colors.red),
-                                  child: CustomText(
-                                    text: Get.find<CartController>()
-                                        .cart
-                                        .lines!
-                                        .length
-                                        .toString(),
-                                    fontSize: 10,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              )
-                            : const SizedBox()
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                      )
+                    : const SizedBox()
+              ],
+            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

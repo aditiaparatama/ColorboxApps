@@ -11,7 +11,7 @@ class SearchProvider extends GetConnect {
 
   Future<dynamic> postSearch(String value, int limit) async {
     String body = """query {
-      products(first: $limit, query: "(title:$value) OR (sku:$value) OR (article:$value)") {
+      products(first: $limit, sortKey: CREATED_AT, reverse: true, query: "(title:$value) OR (sku:$value) OR (article:$value)") {
         pageInfo {
           hasNextPage
           hasPreviousPage
@@ -66,7 +66,7 @@ class SearchProvider extends GetConnect {
 
   Future<dynamic> postSearchNext(String value, int limit, String cursor) async {
     String body = """query {
-      products(first: $limit, query: "(title:$value) OR (sku:$value) OR (article:$value)", after: "$cursor") {
+      products(first: $limit, sortKey: CREATED_AT, reverse: true, query: "(title:$value) OR (sku:$value) OR (article:$value)", after: "$cursor") {
         pageInfo {
           hasNextPage
           hasPreviousPage

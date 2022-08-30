@@ -1,5 +1,3 @@
-import 'package:get/get.dart';
-
 import '../modules/Control/bindings/control_binding.dart';
 import '../modules/Control/views/control_view.dart';
 import '../modules/cart/bindings/cart_binding.dart';
@@ -32,7 +30,7 @@ import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/settings_view.dart';
 import '../modules/wishlist/bindings/wishlist_binding.dart';
 import '../modules/wishlist/views/wishlist_view.dart';
-
+import 'package:get/get.dart';
 part 'app_routes.dart';
 
 class AppPages {
