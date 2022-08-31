@@ -29,6 +29,8 @@ class ProductView2 extends GetView<ProductController> {
     var calcu1 = int.parse(controller.variant!.price!.replaceAll(".00", "")) /
         int.parse(controller.variant!.compareAtPrice!.replaceAll(".00", ""));
     int calcu2 = (100 - calcu1 * 100).ceil();
+    // ignore: avoid_print
+    print(controller.variant!.inventoryQuantity.toString());
 
     return GetBuilder<ProductController>(
         init: Get.put(ProductController()),
@@ -130,62 +132,85 @@ class ProductView2 extends GetView<ProductController> {
                                       Row(
                                         children: [
                                           CustomText(
-                                            text: "Rp " +
-                                                formatter.format(int.parse(
-                                                    controller.variant!
-                                                        .compareAtPrice!
-                                                        .replaceAll(
-                                                            ".00", ""))) +
-                                                "  ",
+                                            text: "SKU : " +
+                                                controller.variant!.sku!,
                                             fontSize: 12,
                                             fontWeight: FontWeight.w400,
                                             color: const Color.fromRGBO(
                                                 155, 155, 155, 1),
-                                            decoration:
-                                                TextDecoration.lineThrough,
-                                          ),
-                                          Container(
-                                            width: 35.0,
-                                            height: 18.0,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              color: const Color.fromRGBO(
-                                                  187, 9, 21, 1),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                calcu2.toString() + '%',
-                                                style: const TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.white,
-                                                  height: 1,
-                                                ),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
                                           ),
                                         ],
                                       ),
-                                      const SizedBox(height: 5),
                                       Padding(
-                                        padding: const EdgeInsets.only(top: 4),
+                                        padding: const EdgeInsets.only(top: 8),
                                         child: Column(
                                           children: [
                                             Row(
                                               children: [
-                                                CustomText(
-                                                  text: "Rp " +
-                                                      formatter.format(
-                                                          int.parse(controller
-                                                              .variant!.price!
-                                                              .replaceAll(
-                                                                  ".00", ""))),
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: const Color.fromRGBO(
-                                                      187, 9, 21, 1),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 8),
+                                                  child: CustomText(
+                                                    text: "Rp " +
+                                                        formatter.format(
+                                                            int.parse(controller
+                                                                .variant!.price!
+                                                                .replaceAll(
+                                                                    ".00",
+                                                                    ""))),
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w700,
+                                                    color: const Color.fromRGBO(
+                                                        187, 9, 21, 1),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 4),
+                                                  child: CustomText(
+                                                    text: "Rp " +
+                                                        formatter.format(
+                                                            int.parse(controller
+                                                                .variant!
+                                                                .compareAtPrice!
+                                                                .replaceAll(
+                                                                    ".00",
+                                                                    ""))) +
+                                                        "  ",
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: const Color.fromRGBO(
+                                                        155, 155, 155, 1),
+                                                    decoration: TextDecoration
+                                                        .lineThrough,
+                                                  ),
+                                                ),
+                                                Container(
+                                                  width: 35.0,
+                                                  height: 18.0,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            2),
+                                                    color: const Color.fromRGBO(
+                                                        187, 9, 21, 1),
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      calcu2.toString() + '%',
+                                                      style: const TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: Colors.white,
+                                                        height: 1,
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -260,6 +285,22 @@ class ProductView2 extends GetView<ProductController> {
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                             ),
+
+                            if (controller.variant!.inventoryQuantity! <= 5)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 16, bottom: 8),
+                                child: CustomText(
+                                  text: 'Tersisa ' +
+                                      controller.variant!.inventoryQuantity
+                                          .toString() +
+                                      ' produk lagi !',
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color.fromRGBO(187, 9, 21, 1),
+                                ),
+                              ),
+
                             const SizedBox(height: 5),
                             SizedBox(
                               width: Get.width,
@@ -357,8 +398,13 @@ class ProductView2 extends GetView<ProductController> {
                               collapsedTitleBackgroundColor: Colors.white,
                               expandedTitleBackgroundColor: Colors.white,
                             ),
-                            const Divider(thickness: 1),
-                            const Divider(),
+                            const Divider(
+                              height: 30,
+                              thickness: 10,
+                              color: Color.fromRGBO(249, 248, 248, 1),
+                            ),
+                            const SizedBox(),
+                            const SizedBox(height: 5),
                             const CustomText(
                               text: 'Produk Serupa \n',
                               fontSize: 14,
