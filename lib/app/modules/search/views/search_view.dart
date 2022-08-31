@@ -59,7 +59,7 @@ class SearchView extends GetView<SearchController> {
                                         crossAxisCount: 2,
                                         mainAxisSpacing: 10,
                                         crossAxisSpacing: 10,
-                                        childAspectRatio: 0.53,
+                                        childAspectRatio: 0.55,
                                       ),
                                       itemBuilder: (_, i) {
                                         return GestureDetector(
