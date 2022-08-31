@@ -71,7 +71,8 @@ class CustomTextFormField extends StatelessWidget {
           border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(6)),
               borderSide: BorderSide(
-                color: (textEditingController!.text.isNotEmpty)
+                color: (textEditingController != null &&
+                        textEditingController!.text.isNotEmpty)
                     ? Colors.black
                     : const Color(0xFFE5E8EB),
                 width: 1.0,
@@ -79,7 +80,8 @@ class CustomTextFormField extends StatelessWidget {
           enabledBorder: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(6)),
               borderSide: BorderSide(
-                color: (textEditingController!.text.isNotEmpty)
+                color: (textEditingController != null &&
+                        textEditingController!.text.isNotEmpty)
                     ? Colors.black
                     : const Color(0xFFE5E8EB),
                 width: 1.0,

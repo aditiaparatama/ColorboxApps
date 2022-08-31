@@ -109,7 +109,9 @@ class SettingsView extends GetView<SettingsController> {
                                     "Pesanan Saya",
                                     () => Get.toNamed(Routes.ORDERS),
                                     SvgPicture.asset("assets/icon/box.svg"),
-                                    notif: jmlPesanan),
+                                    notif: (controller.pesananCount == 0)
+                                        ? null
+                                        : jmlPesanan),
                                 Items(
                                     "Riwayat Pesanan",
                                     () => Get.to(OrdersView(filter: "riwayat")),

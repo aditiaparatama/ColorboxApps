@@ -11,10 +11,15 @@ class SettingsController extends GetxController {
   CustomerToken? _token = CustomerToken.isEmpty();
   CustomerToken? get token => _token;
   OrdersController get ordersController => Get.put(OrdersController());
+  int pesananCount = 0;
 
   @override
   void onInit() async {
-    getUser();
+    await getUser();
+    if (_userModel.displayName != null) {
+      pesananCount = await ordersController.countOrderActive();
+      update();
+    }
     super.onInit();
   }
 

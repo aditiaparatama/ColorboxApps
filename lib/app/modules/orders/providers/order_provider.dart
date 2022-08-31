@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:graphql/client.dart';
 
 class OrderProvider extends GetConnect {
-  Future<dynamic> getOrders(String id) async {
+  Future<dynamic> getOrders(String id, {String query = ""}) async {
     final GraphQLClient _client = getShopifyGraphQLClient(admin: true);
 
     final QueryOptions options = QueryOptions(
@@ -12,7 +12,7 @@ class OrderProvider extends GetConnect {
         {
           customer(id:"$id") {
             id
-            orders(first:5, reverse: true){
+            orders(first:5, reverse: true $query){
                 pageInfo{
                     hasNextPage
                     endCursor
@@ -190,7 +190,8 @@ class OrderProvider extends GetConnect {
     return result.data!['customer'];
   }
 
-  Future<dynamic> getOrdersNext(String id, String cursor) async {
+  Future<dynamic> getOrdersNext(String id, String cursor,
+      {String query = ""}) async {
     final GraphQLClient _client = getShopifyGraphQLClient(admin: true);
 
     final QueryOptions options = QueryOptions(
@@ -199,7 +200,7 @@ class OrderProvider extends GetConnect {
         {
           customer(id:"$id") {
             id
-            orders(first:5, reverse: true, after: "$cursor"){
+            orders(first:5, reverse: true, after: "$cursor" $query){
                 pageInfo{
                     hasNextPage
                     endCursor
@@ -412,7 +413,7 @@ class OrderProvider extends GetConnect {
         {
           customer(id:"$id") {
             id
-            orders(first:20, query:"NOT financial_status:expired"){
+            orders(first:20, query:"(NOT financial_status:expired) AND NOT status:cancelled"){
                 pageInfo{
                     hasNextPage
                     endCursor

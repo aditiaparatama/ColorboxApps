@@ -95,7 +95,11 @@ class WishlistView extends GetView<WishlistController> {
                                         .product[i].variantSelected!.price;
                                     return GestureDetector(
                                       onTap: () => Get.toNamed(Routes.PRODUCT,
-                                          arguments: controller.product[i]),
+                                          arguments: {
+                                            "product": controller.product[i],
+                                            "idCollection": controller
+                                                .product[i].idCollection
+                                          }),
                                       child: SizedBox(
                                         child: Column(
                                           crossAxisAlignment:

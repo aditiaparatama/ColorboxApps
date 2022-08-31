@@ -11,7 +11,7 @@ class OrdersController extends GetxController {
   List<Order> get order => _orders;
   List<Order> _ordersFilter = [];
   List<Order> get ordersFilter => _ordersFilter;
-  final ValueNotifier _loading = ValueNotifier(false);
+  final ValueNotifier _loading = ValueNotifier(true);
   ValueNotifier get loading => _loading;
   final ValueNotifier _loadingMore = ValueNotifier(false);
   ValueNotifier get loadingMore => _loadingMore;
@@ -21,20 +21,21 @@ class OrdersController extends GetxController {
 
   bool show = false;
 
-  @override
-  void onInit() async {
-    fetchingDataOrders();
-    await countOrderActive();
-    super.onInit();
-  }
+  // @override
+  // void onInit() async {
+  //   fetchingDataOrders();
+  //   super.onInit();
+  // }
 
-  fetchingDataOrders() async {
+  filterFetchingData(String? filter) async {
     _loading.value = true;
-    update();
-    // var result =
-    //     await OrderProvider().getOrders(settingController.userModel.id!);
-    var result =
-        await OrderProvider().getOrders("gid://shopify/Customer/4510208950422");
+    String query = (filter == "riwayat")
+        ? ", query:\"financial_status:expired OR status:cancelled\""
+        : ", query:\"(NOT financial_status:expired) AND NOT status:cancelled\"";
+    _ordersFilter = [];
+    var result = await OrderProvider()
+        .getOrders("gid://shopify/Customer/4510208950422", query: query);
+
     _pageInfo = PageInfo.fromJson(result['orders']['pageInfo']);
     _orders = [];
     for (final x in result['orders']['edges']) {
@@ -60,11 +61,15 @@ class OrdersController extends GetxController {
     update();
   }
 
-  loadMore() async {
+  loadMore(String? filter) async {
     _loadingMore.value = true;
+    String query = (filter == "riwayat")
+        ? ", query:\"financial_status:expired OR status:cancelled\""
+        : ", query:\"(NOT financial_status:expired) AND NOT status:cancelled\"";
     update();
     var result = await OrderProvider().getOrdersNext(
-        "gid://shopify/Customer/3998459723926", pageInfo.endCursor!);
+        "gid://shopify/Customer/4510208950422", pageInfo.endCursor!,
+        query: query);
     _pageInfo = PageInfo.fromJson(result['orders']['pageInfo']);
     for (final x in result['orders']['edges']) {
       _orders.add(Order.fromJson(x['node'], result['orders']['pageInfo']));
@@ -73,7 +78,7 @@ class OrdersController extends GetxController {
     update();
   }
 
-  Future<void> countOrderActive() async {
+  Future<int> countOrderActive() async {
     var now = DateTime.now();
     var dateMin = now.add(const Duration(days: -90));
     var temp = [];
@@ -93,5 +98,6 @@ class OrdersController extends GetxController {
 
     countPesanan = temp.reduce((a, b) => a + b);
     update();
+    return countPesanan;
   }
 }

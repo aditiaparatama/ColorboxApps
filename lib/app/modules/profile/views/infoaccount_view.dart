@@ -176,6 +176,7 @@ class InformationAccount extends StatelessWidget {
                               enabled: false,
                               controller: birthdayTextController,
                               onChanged: (_) => controller.update(),
+                              style: const TextStyle(fontSize: 14),
                               decoration: InputDecoration(
                                 labelText: "Tanggal Lahir",
                                 suffixIcon: GestureDetector(

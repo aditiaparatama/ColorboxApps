@@ -72,6 +72,14 @@ class Order {
       }
     }
 
+    if (json['cancelReason'] == "DECLINED") {
+      status = "Dibatalkan";
+    }
+
+    if (json['cancelReason'] == "DECLINED" && tags!.contains("order_cod")) {
+      status = "Dibatalkan";
+    }
+
     subtotalLineItemsQuantity = json['subtotalLineItemsQuantity'];
     subtotalPriceSet = TotalPriceSet.fromJson(json['subtotalPriceSet']);
     totalPriceSet = TotalPriceSet.fromJson(json['totalPriceSet']);
@@ -168,7 +176,9 @@ class Item {
     quantity = json['quantity'];
     originalUnitPriceSet = TotalPriceSet.fromJson(json['originalUnitPriceSet']);
     originalTotalSet = TotalPriceSet.fromJson(json['originalTotalSet']);
-    image = json['image']['url'];
+    image = (json['image'] == null)
+        ? "https://cdn.shopify.com/s/files/1/0423/9120/8086/files/Image.jpg?v=1661922597"
+        : json['image']['url'];
 
     discountAllocations = [];
     for (final x in json['discountAllocations']) {
