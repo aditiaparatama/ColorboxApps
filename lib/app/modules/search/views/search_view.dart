@@ -44,62 +44,62 @@ class SearchView extends GetView<SearchController> {
                   ? const Center(child: CircularProgressIndicator())
                   : (control.product.isEmpty)
                       ? Column()
-                      : Padding(
-                          padding: const EdgeInsets.fromLTRB(7, 24, 7, 0),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                  height: MediaQuery.of(context).size.height *
-                                      (controller.nextLoad.value ? .8 : .84),
-                                  child: GridView.builder(
-                                      itemCount: control.product.length,
-                                      controller: _sControl,
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        mainAxisSpacing: 10,
-                                        crossAxisSpacing: 10,
-                                        childAspectRatio: 0.55,
-                                      ),
-                                      itemBuilder: (_, i) {
-                                        return GestureDetector(
-                                          onTap: () => Get.toNamed(
-                                              Routes.PRODUCT,
-                                              arguments: {
-                                                "product": control.product[i],
-                                                "idCollection": NewArrivalString
-                                              }),
-                                          child: ItemCard(
-                                            title: control.product[i].title!,
-                                            image: control.product[i].image[0],
-                                            price: control
-                                                .product[i].variants[0].price!
-                                                .replaceAll(".00", ""),
-                                            compareAtPrice: (control
-                                                        .product[i]
-                                                        .variants[0]
-                                                        .compareAtPrice ==
-                                                    null)
-                                                ? "0"
-                                                : control.product[i].variants[0]
-                                                    .compareAtPrice!
-                                                    .replaceAll(".00", ""),
-                                            onPress: () {},
-                                          ),
-                                        );
-                                      })),
-                              controller.nextLoad.value
-                                  ? const Center(
-                                      child: SizedBox(
-                                        child: CircularProgressIndicator(
-                                          color: Colors.blue,
+                      : Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(7,0,7,24),
+                            child: SizedBox(
+                                height: MediaQuery.of(context).size.height *
+                                    (controller.nextLoad.value ? .8 : .84),
+                                child: GridView.builder(
+                                    itemCount: control.product.length,
+                                    controller: _sControl,
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      mainAxisSpacing: 10,
+                                      crossAxisSpacing: 10,
+                                      childAspectRatio: 0.52,
+                                    ),
+                                    itemBuilder: (_, i) {
+                                      return GestureDetector(
+                                        onTap: () => Get.toNamed(
+                                            Routes.PRODUCT,
+                                            arguments: {
+                                              "product": control.product[i],
+                                              "idCollection": NewArrivalString
+                                            }),
+                                        child: ItemCard(
+                                          title: control.product[i].title!,
+                                          image: control.product[i].image[0],
+                                          price: control
+                                              .product[i].variants[0].price!
+                                              .replaceAll(".00", ""),
+                                          compareAtPrice: (control
+                                                      .product[i]
+                                                      .variants[0]
+                                                      .compareAtPrice ==
+                                                  null)
+                                              ? "0"
+                                              : control.product[i].variants[0]
+                                                  .compareAtPrice!
+                                                  .replaceAll(".00", ""),
+                                          onPress: () {},
                                         ),
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                            ],
+                                      );
+                                    })),
                           ),
-                        );
+                          controller.nextLoad.value
+                              ? const Center(
+                                  child: SizedBox(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox(),
+                        ],
+                      );
             }));
   }
 

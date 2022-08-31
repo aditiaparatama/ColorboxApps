@@ -29,7 +29,7 @@ class CollectionBody extends StatelessWidget {
                 crossAxisCount: 2,
                 mainAxisSpacing: 0,
                 crossAxisSpacing: 0,
-                childAspectRatio: 0.55,
+                childAspectRatio: 0.53,
               ),
               itemBuilder: (_, i) {
                 return GestureDetector(
