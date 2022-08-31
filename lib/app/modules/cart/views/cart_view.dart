@@ -50,6 +50,7 @@ class CartView extends GetView<CartController> {
                             "Ayo segera tambahkan produk kedalam keranjang",
                       )
                     : ListView.separated(
+                      shrinkWrap: true,
                         separatorBuilder: (context, index) => const Divider(
                               color: colorDiver,
                               thickness: 1,
@@ -67,8 +68,8 @@ class CartView extends GetView<CartController> {
   Widget bottomCart() {
     return GetBuilder<CartController>(builder: (c) {
       return Container(
-        height: (controller.show.value) ? 218 : 160,
-        padding: const EdgeInsets.all(16),
+        height: (controller.show.value) ? 218 : 180,
+        padding: const EdgeInsets.fromLTRB(16,16,16,32),
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [

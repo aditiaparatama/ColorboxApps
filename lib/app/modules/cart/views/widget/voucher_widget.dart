@@ -35,7 +35,7 @@ class VoucherWidget extends GetView<CartController> {
                                   : const Color(0xFFE0E0E0)),
                           borderRadius: BorderRadius.circular(6),
                         ),
-                        child: (controller.cart.discountCodes![0].code == "" ||
+                        child: ( controller.cart.discountCodes!.isEmpty || controller.cart.discountCodes![0].code == "" ||
                                 controller.cart.discountCodes![0].applicable ==
                                     false)
                             ? pilihVoucher()

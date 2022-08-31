@@ -74,10 +74,11 @@ class WishlistView extends GetView<WishlistController> {
                               ),
                             ),
                             Container(
-                              height: Get.height * .69,
+                              height: Get.height * .65,
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
                               child: GridView.builder(
+                                shrinkWrap: true,
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
