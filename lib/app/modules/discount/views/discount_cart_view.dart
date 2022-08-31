@@ -38,7 +38,14 @@ class DiscountCartView extends GetView<DiscountController> {
           init: Get.put(DiscountController()),
           builder: (context) {
             return (controller.loading.value)
-                ? loadingCircular()
+                ? loadingCircular() : (voucher!.isEmpty) ? EmptyPage(
+                          image: SvgPicture.asset(
+                            "assets/icon/EmptyStateVoucher.svg",
+                          ),
+                          textHeader: "Belum Ada Voucher",
+                          textContent:
+                              "Saat ini belum ada voucher yang dapat digunakan",
+                        )
                 : (controller.discount.isEmpty)
                     ? EmptyPage(
                         image: SvgPicture.asset(

@@ -39,9 +39,14 @@ class CartView extends GetView<CartController> {
                       icon: const Icon(Icons.close)),
                 ),
               ),
-              bottomSheet: bottomCart(),
+              // bottomSheet: bottomCart(),
               body: SafeArea(
-                child: (c.cart.lines!.isEmpty)
+                child: 
+                
+                Column(children: [
+                  SizedBox(
+                    height: Get.height * .636,
+                    child: (c.cart.lines!.isEmpty)
                     ? EmptyPage(
                         image: Lottie.network(
                             "https://assets2.lottiefiles.com/private_files/lf30_x2lzmtdl.json"),
@@ -61,6 +66,11 @@ class CartView extends GetView<CartController> {
                               controller: controller,
                               index: index,
                             )),
+                  ),
+                  
+                            bottomCart(),
+                ])
+                
               ));
         });
   }
@@ -68,16 +78,16 @@ class CartView extends GetView<CartController> {
   Widget bottomCart() {
     return GetBuilder<CartController>(builder: (c) {
       return Container(
-        height: (controller.show.value) ? 218 : 180,
-        padding: const EdgeInsets.fromLTRB(16,16,16,32),
+        height: (controller.show.value) ? 218 : 160,
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.8),
-              spreadRadius: 3,
-              blurRadius: 7,
-              offset: const Offset(0, 7), // changes position of shadow
+              color: Colors.grey.withOpacity(0.05),
+              spreadRadius: 1,
+              blurRadius: 6,
+              offset: const Offset(0, -5), // changes position of shadow
             ),
           ],
         ),

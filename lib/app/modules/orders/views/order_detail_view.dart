@@ -30,6 +30,10 @@ class OrderDetailView extends GetView<OrdersController> {
         elevation: 3,
         shadowColor: Colors.grey.withOpacity(0.3),
         leadingWidth: 36,
+        leading: IconButton(
+                      padding: const EdgeInsets.all(16),
+                      onPressed: () => Get.back(),
+                      icon: const Icon(Icons.arrow_back)),
         actions: [
           InkWell(
             onTap: () async {
