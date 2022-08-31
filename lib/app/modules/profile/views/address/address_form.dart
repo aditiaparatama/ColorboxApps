@@ -8,6 +8,7 @@ import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 // ignore: must_be_immutable
@@ -49,8 +50,11 @@ class AddressForm extends GetView<ProfileController> {
         centerTitle: false,
         elevation: 3,
         shadowColor: Colors.grey.withOpacity(0.3),
+        leadingWidth: 36,
         leading: IconButton(
-            onPressed: () => Get.back(), icon: const Icon(Icons.close)),
+            padding: const EdgeInsets.all(16),
+            onPressed: () => Get.back(),
+            icon: const Icon(Icons.close)),
       ),
       backgroundColor: Colors.white,
       bottomSheet: Container(
@@ -81,21 +85,46 @@ class AddressForm extends GetView<ProfileController> {
                 } else {
                   Get.back();
                 }
-                Get.snackbar(
-                  "Info",
-                  "Alamat berhasil " + ((id == null) ? "disimpan" : "diubah"),
-                  backgroundColor: Colors.black87,
-                  colorText: Colors.white,
-                  snackPosition: SnackPosition.BOTTOM,
-                );
+                Get.snackbar("",
+                    "Alamat berhasil " + ((id == null) ? "disimpan" : "diubah"),
+                    titleText: Row(
+                      children: [
+                        SvgPicture.asset(
+                          "assets/icon/Check-Circle.svg",
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 4),
+                        const CustomText(
+                          text: "Berhasil",
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ],
+                    ),
+                    backgroundColor: Colors.black,
+                    colorText: Colors.white,
+                    snackPosition: SnackPosition.BOTTOM);
               } else {
-                Get.snackbar(
-                  "Info",
-                  "Mohon Coba Lagi",
-                  backgroundColor: Colors.black87,
-                  colorText: Colors.white,
-                  snackPosition: SnackPosition.BOTTOM,
-                );
+                Get.snackbar("", "Mohon Coba Lagi",
+                    titleText: Row(
+                      children: [
+                        SvgPicture.asset(
+                          "assets/icon/Exclamation-Circle.svg",
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 4),
+                        const CustomText(
+                          text: "Gagal",
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ],
+                    ),
+                    backgroundColor: Colors.black,
+                    colorText: Colors.white,
+                    snackPosition: SnackPosition.BOTTOM);
               }
             }
           },
@@ -130,18 +159,31 @@ class AddressForm extends GetView<ProfileController> {
                             height: 16,
                           ),
                           CustomTextFormField(
-                              textEditingController: _namaLengkap,
-                              onSave: (value) {
-                                controller.address!.firstName = value;
-                              },
-                              onChange: (_) => controller.update(),
-                              validator: (value) {
-                                if (value == null || value == "") {
-                                  return "tidak boleh kosong";
-                                }
-                                return null;
-                              },
-                              hint: "Nama Penerima"),
+                            textEditingController: _namaLengkap,
+                            onSave: (value) {
+                              controller.address!.firstName = value;
+                            },
+                            onChange: (_) => controller.update(),
+                            validator: (value) {
+                              if (value == null || value == "") {
+                                return "tidak boleh kosong";
+                              }
+                              return null;
+                            },
+                            hint: "Nama Penerima",
+                            suffixIcon: (_namaLengkap.text.isNotEmpty)
+                                ? IconButton(
+                                    onPressed: () {
+                                      _namaLengkap.text = "";
+                                      controller.update();
+                                    },
+                                    icon: const Icon(
+                                      Icons.cancel_sharp,
+                                      color: Colors.black,
+                                      size: 18,
+                                    ))
+                                : const SizedBox(),
+                          ),
                           const SizedBox(
                             height: 16,
                           ),
@@ -163,6 +205,18 @@ class AddressForm extends GetView<ProfileController> {
                               text: "+62",
                               fontSize: 16,
                             ),
+                            suffixIcon: (_telpon.text.isNotEmpty)
+                                ? IconButton(
+                                    onPressed: () {
+                                      _telpon.text = "";
+                                      controller.update();
+                                    },
+                                    icon: const Icon(
+                                      Icons.cancel_sharp,
+                                      color: Colors.black,
+                                      size: 18,
+                                    ))
+                                : const SizedBox(),
                           ),
                         ],
                       ),
@@ -199,6 +253,18 @@ class AddressForm extends GetView<ProfileController> {
                               return null;
                             },
                             hint: "Alamat",
+                            suffixIcon: (_address1.text.isNotEmpty)
+                                ? IconButton(
+                                    onPressed: () {
+                                      _address1.text = "";
+                                      controller.update();
+                                    },
+                                    icon: const Icon(
+                                      Icons.cancel_sharp,
+                                      color: Colors.black,
+                                      size: 18,
+                                    ))
+                                : const SizedBox(),
                           ),
                           const SizedBox(
                             height: 16,

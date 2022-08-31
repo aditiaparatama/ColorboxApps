@@ -2,6 +2,7 @@ import 'package:colorbox/app/modules/settings/controllers/settings_controller.da
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:colorbox/app/widgets/custom_text_form_field.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,6 +13,8 @@ class ProfileView extends GetView<ProfileController> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   // ignore: prefer_typing_uninitialized_variables
   final globalKey;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   FocusNode emailFocus = FocusNode();
   ProfileView(this.globalKey, {Key? key}) : super(key: key);
   @override
@@ -52,14 +55,14 @@ class ProfileView extends GetView<ProfileController> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        TextFormField(
-                                          cursorColor: Colors.black,
-                                          decoration: const InputDecoration(
-                                            labelText: "Email",
-                                          ),
-                                          onSaved: (value) {
+                                        CustomTextFormField(
+                                          textEditingController:
+                                              emailController,
+                                          hint: "Email",
+                                          onSave: (value) {
                                             controller.email = value;
                                           },
+                                          onChange: (_) => controller.update(),
                                           validator: (value) {
                                             if (RegExp(
                                                     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
@@ -74,24 +77,24 @@ class ProfileView extends GetView<ProfileController> {
                                         const SizedBox(
                                           height: 20,
                                         ),
-                                        TextFormField(
-                                          cursorColor: Colors.black,
-                                          decoration: InputDecoration(
-                                            labelText: "Password",
-                                            suffixIcon: GestureDetector(
-                                              onTap: () {
-                                                controller.togglevisibility();
-                                              },
-                                              child: Icon(
-                                                !controller.showPassword!
-                                                    ? Icons.visibility
-                                                    : Icons.visibility_off,
-                                                color: Colors.black,
-                                              ),
+                                        CustomTextFormField(
+                                          suffixIcon: GestureDetector(
+                                            onTap: () {
+                                              controller.togglevisibility();
+                                            },
+                                            child: Icon(
+                                              !controller.showPassword!
+                                                  ? Icons.visibility
+                                                  : Icons.visibility_off,
+                                              color: Colors.black,
                                             ),
                                           ),
+                                          hint: "Password",
+                                          textEditingController:
+                                              passwordController,
                                           obscureText: controller.showPassword!,
-                                          onSaved: (value) {
+                                          onChange: (_) => controller.update(),
+                                          onSave: (value) {
                                             controller.password = value;
                                           },
                                           validator: (value) {

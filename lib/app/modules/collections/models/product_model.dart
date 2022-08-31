@@ -1,5 +1,6 @@
 class Product {
   String? id;
+  String? idCollection;
   String? title;
   String? type;
   String? description;
@@ -10,8 +11,8 @@ class Product {
   bool? hasNextPage;
   String? cursor;
 
-  Product(this.id, this.title, this.type, this.description, this.image,
-      this.options, this.variants, this.hasNextPage, this.cursor);
+  Product(this.id, this.idCollection, this.title, this.type, this.description,
+      this.image, this.options, this.variants, this.hasNextPage, this.cursor);
 
   Product.fromJson(var json) {
     id = json['id'];
@@ -70,6 +71,7 @@ class Product {
 
   Product.fromWishlist(var json, String variantId) {
     id = json['id'];
+    idCollection = json['collections']['edges'][0]['node']['id'];
     title = json['title'];
     description = json['description'];
     image = [];

@@ -6,7 +6,9 @@ import 'package:get/get.dart';
 
 class TimelineStatus extends StatelessWidget {
   final Order order;
-  const TimelineStatus({Key? key, required this.order}) : super(key: key);
+  final String? filter;
+  const TimelineStatus({Key? key, required this.order, this.filter})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,57 +18,58 @@ class TimelineStatus extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Stack(
-            children: [
-              Positioned(
-                top: 20,
-                left: 75,
-                child: Container(
-                  color: (order.status == "Diproses")
-                      ? Colors.black
-                      : (order.status == "Dikirim")
-                          ? Colors.black
-                          : const Color(0xFFE5E8EB),
-                  height: 2,
-                  width: 70,
+          if (filter == null)
+            Stack(
+              children: [
+                Positioned(
+                  top: 20,
+                  left: 75,
+                  child: Container(
+                    color: (order.status == "Diproses")
+                        ? Colors.black
+                        : (order.status == "Dikirim")
+                            ? Colors.black
+                            : const Color(0xFFE5E8EB),
+                    height: 2,
+                    width: 70,
+                  ),
                 ),
-              ),
-              Positioned(
-                top: 20,
-                right: 75,
-                child: Container(
-                  color: (order.status == "Dikirim")
-                      ? Colors.black
-                      : const Color(0xFFE5E8EB),
-                  height: 2,
-                  width: 70,
+                Positioned(
+                  top: 20,
+                  right: 75,
+                  child: Container(
+                    color: (order.status == "Dikirim")
+                        ? Colors.black
+                        : const Color(0xFFE5E8EB),
+                    height: 2,
+                    width: 70,
+                  ),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  timelineWidget(
-                      icon: "assets/icon/orders/wallet-solid.svg",
-                      status: "Menunggu Pembayaran",
-                      checked: true),
-                  timelineWidget(
-                      icon: "assets/icon/orders/box-solid.svg",
-                      status: "Diproses",
-                      checked: (order.status == "Diproses")
-                          ? true
-                          : (order.status == "Dikirim")
-                              ? true
-                              : false),
-                  timelineWidget(
-                      icon: "assets/icon/orders/Dikirim.svg",
-                      status: "Dikirim",
-                      checked: (order.status == "Dikirim") ? true : false),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 28),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    timelineWidget(
+                        icon: "assets/icon/orders/wallet-solid.svg",
+                        status: "Menunggu Pembayaran",
+                        checked: true),
+                    timelineWidget(
+                        icon: "assets/icon/orders/box-solid.svg",
+                        status: "Diproses",
+                        checked: (order.status == "Diproses")
+                            ? true
+                            : (order.status == "Dikirim")
+                                ? true
+                                : false),
+                    timelineWidget(
+                        icon: "assets/icon/orders/Dikirim.svg",
+                        status: "Dikirim",
+                        checked: (order.status == "Dikirim") ? true : false),
+                  ],
+                ),
+              ],
+            ),
+          if (filter == null) const SizedBox(height: 28),
           const CustomText(
             text: "Detail Pengiriman",
             fontSize: 14,

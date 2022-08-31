@@ -12,8 +12,9 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 class OrderDetailView extends GetView<OrdersController> {
   final int id;
+  final String? filter;
   // ignore: prefer_const_constructors_in_immutables
-  OrderDetailView(this.id, {Key? key}) : super(key: key);
+  OrderDetailView(this.id, {Key? key, this.filter}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +95,10 @@ class OrderDetailView extends GetView<OrdersController> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    TimelineStatus(order: _order),
+                    TimelineStatus(
+                      order: _order,
+                      filter: filter,
+                    ),
                     const SizedBox(height: 8),
                     DetailProductOrder(
                       order: _order,

@@ -15,24 +15,32 @@ class AddressView extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const CustomText(
-          text: 'Ubah Alamat',
+        title: CustomText(
+          text: (fromDetail) ? 'Daftar Alamat' : 'Ubah Alamat',
           fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
         actions: [
-          TextButton(
-              onPressed: () => Get.to(AddressForm(null, false)),
-              child: const CustomText(
-                text: "Tambah Alamat",
-                color: Color(0xFF115AC8),
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-              ))
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: TextButton(
+                onPressed: () => Get.to(AddressForm(null, false)),
+                child: const CustomText(
+                  text: "Tambah Alamat",
+                  color: Color(0xFF115AC8),
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                )),
+          )
         ],
         centerTitle: false,
         elevation: 3,
         shadowColor: Colors.grey.withOpacity(0.3),
+        leadingWidth: 36,
+        leading: IconButton(
+            padding: const EdgeInsets.all(16),
+            onPressed: () => Get.back(),
+            icon: const Icon(Icons.arrow_back)),
       ),
       body: SafeArea(
           child: GetBuilder(

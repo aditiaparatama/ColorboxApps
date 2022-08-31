@@ -4,8 +4,10 @@ import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/modules/cart/providers/cart_provider.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
+import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -161,13 +163,26 @@ class ProfileController extends GetxController {
           0) {
         _userModel = UserModel.fromJson(
             result['customerDefaultAddressUpdate']['customer']);
-        Get.snackbar(
-          "Info",
-          "Alamat utama berhasil diubah",
-          backgroundColor: Colors.black87,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-        );
+
+        Get.snackbar("", "Alamat utama berhasil diubah",
+            titleText: Row(
+              children: [
+                SvgPicture.asset(
+                  "assets/icon/Check-Circle.svg",
+                  color: Colors.white,
+                ),
+                const SizedBox(width: 4),
+                const CustomText(
+                  text: "Berhasil",
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ],
+            ),
+            backgroundColor: Colors.black,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM);
       }
       _loading.value = false;
       update();
@@ -217,13 +232,26 @@ class ProfileController extends GetxController {
 
       if (result['customerAddressDelete']['customerUserErrors'].length == 0) {
         _userModel.addresses!.removeWhere((e) => e.id == id);
-        Get.snackbar(
-          "Info",
-          "Alamat utama berhasil dihapus",
-          backgroundColor: Colors.black87,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-        );
+
+        Get.snackbar("", "Alamat berhasil dihapus",
+            titleText: Row(
+              children: [
+                SvgPicture.asset(
+                  "assets/icon/Check-Circle.svg",
+                  color: Colors.white,
+                ),
+                const SizedBox(width: 4),
+                const CustomText(
+                  text: "Berhasil",
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ],
+            ),
+            backgroundColor: Colors.black,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM);
       }
       _loading.value = false;
       update();
@@ -376,7 +404,23 @@ class ProfileController extends GetxController {
       } else {
         await fetchingUser();
         setUser(_userModel);
-        Get.snackbar("Informasi", "Data berhasil diupdate",
+
+        Get.snackbar("", "Data berhasil diupdate",
+            titleText: Row(
+              children: [
+                SvgPicture.asset(
+                  "assets/icon/Check-Circle.svg",
+                  color: Colors.white,
+                ),
+                const SizedBox(width: 4),
+                const CustomText(
+                  text: "Berhasil",
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ],
+            ),
             backgroundColor: Colors.black,
             colorText: Colors.white,
             snackPosition: SnackPosition.BOTTOM);

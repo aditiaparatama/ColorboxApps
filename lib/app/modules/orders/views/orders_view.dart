@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/modules/orders/views/order_detail_view.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
-import 'package:colorbox/app/widgets/widget.dart';
+import 'package:colorbox/app/widgets/skeleton.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../controllers/orders_controller.dart';
 
@@ -21,7 +22,7 @@ class OrdersView extends GetView<OrdersController> {
 
     if (currentScroll == maxScroll && controller.pageInfo.hasNextPage!) {
       if (!controller.loadingMore.value) {
-        controller.loadMore();
+        controller.loadMore(filter);
         controller.update();
       }
     }
@@ -30,6 +31,8 @@ class OrdersView extends GetView<OrdersController> {
   @override
   Widget build(BuildContext context) {
     _sControl.addListener(onScroll);
+    controller.filterFetchingData(filter);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -49,11 +52,18 @@ class OrdersView extends GetView<OrdersController> {
       body: GetBuilder(
           init: Get.put(OrdersController()),
           builder: (_) {
-            controller.filterDataOrders(filter);
-
             return SafeArea(
                 child: (controller.loading.value)
-                    ? loadingCircular()
+                    ? ListView.builder(
+                        itemCount: 2,
+                        itemBuilder: (_, index) {
+                          return Column(
+                            children: [
+                              if (index == 0) const SizedBox(height: 24),
+                              skeletonLoading(),
+                            ],
+                          );
+                        })
                     : Padding(
                         padding: const EdgeInsets.only(left: 16, right: 16),
                         child: Stack(
@@ -90,8 +100,9 @@ class OrdersView extends GetView<OrdersController> {
                                         height: (index == 0) ? 24 : 0,
                                       ),
                                       GestureDetector(
-                                        onTap: () =>
-                                            Get.to(OrderDetailView(index)),
+                                        onTap: () => Get.to(OrderDetailView(
+                                            index,
+                                            filter: filter)),
                                         child: Container(
                                           padding: const EdgeInsets.all(16.0),
                                           decoration: BoxDecoration(
@@ -294,5 +305,56 @@ class OrdersView extends GetView<OrdersController> {
                       ));
           }),
     );
+  }
+
+  Container skeletonLoading() {
+    return Container(
+        height: 200,
+        margin: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: const Color(0xFFE5E8EB)),
+          borderRadius: const BorderRadius.all(Radius.circular(6)),
+        ),
+        child: Shimmer.fromColors(
+          baseColor: Colors.black,
+          highlightColor: Colors.grey,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Skeleton(
+                    height: 10,
+                    width: 100,
+                  ),
+                  Skeleton(
+                    height: 10,
+                    width: 50,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Skeleton(
+                    height: 10,
+                    width: 80,
+                  ),
+                  Skeleton(
+                    height: 10,
+                    width: 30,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              const Skeleton(
+                height: 120,
+              ),
+            ],
+          ),
+        ));
   }
 }

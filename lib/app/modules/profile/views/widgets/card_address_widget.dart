@@ -17,8 +17,7 @@ class CardAddressWidget extends GetView<ProfileController> {
           height: (index == 0) ? 16 : 0,
         ),
         Container(
-          padding:
-              const EdgeInsets.only(left: 16, top: 0, right: 0, bottom: 16),
+          padding: const EdgeInsets.all(16),
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           width: Get.width,
           decoration: BoxDecoration(
@@ -61,14 +60,15 @@ class CardAddressWidget extends GetView<ProfileController> {
                           : const SizedBox(),
                     ],
                   ),
-                  IconButton(
-                      onPressed: () => bottomSheet(index),
-                      icon: const Icon(
+                  InkWell(
+                      onTap: () => bottomSheet(index),
+                      child: const Icon(
                         Icons.more_vert,
                         size: 24,
                       ))
                 ],
               ),
+              const SizedBox(height: 8),
               CustomText(
                 text: controller.userModel.addresses![index].phone ?? "",
                 fontSize: 12,
