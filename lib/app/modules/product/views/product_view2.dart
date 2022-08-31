@@ -51,8 +51,7 @@ class ProductView2 extends GetView<ProductController> {
                 Stack(
                   children: [
                     Container(
-                      height: Get.height * .81,
-                      padding: const EdgeInsets.only(right: 20, left: 20),
+                      height: Get.height * .78,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
@@ -66,8 +65,10 @@ class ProductView2 extends GetView<ProductController> {
                                 CarouselSlider.builder(
                                   itemCount: controller.product.image.length,
                                   options: CarouselOptions(
+                                    height: 550,
                                     autoPlay: false,
-                                    aspectRatio: 0.75,
+                                    viewportFraction: 1,
+                                    aspectRatio: 1 / 1,
                                     enlargeCenterPage: true,
                                   ),
                                   itemBuilder: (context, index, realIdx) {
@@ -109,7 +110,7 @@ class ProductView2 extends GetView<ProductController> {
                               ],
                             ),
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
+                              padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
                               child: CustomText(
                                 text: controller.product.title,
                                 fontSize: 14,
@@ -127,97 +128,108 @@ class ProductView2 extends GetView<ProductController> {
                                     fontSize: 18,
                                     fontWeight: FontWeight.w700,
                                   )
-                                : Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          CustomText(
-                                            text: "SKU : " +
-                                                controller.variant!.sku!,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                            color: const Color.fromRGBO(
-                                                155, 155, 155, 1),
-                                          ),
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 8),
-                                        child: Column(
+                                : Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 20, right: 20),
+                                    child: Column(
+                                      children: [
+                                        Row(
                                           children: [
-                                            Row(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 8),
-                                                  child: CustomText(
-                                                    text: "Rp " +
-                                                        formatter.format(
-                                                            int.parse(controller
-                                                                .variant!.price!
-                                                                .replaceAll(
-                                                                    ".00",
-                                                                    ""))),
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.w700,
-                                                    color: const Color.fromRGBO(
-                                                        187, 9, 21, 1),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 4),
-                                                  child: CustomText(
-                                                    text: "Rp " +
-                                                        formatter.format(
-                                                            int.parse(controller
-                                                                .variant!
-                                                                .compareAtPrice!
-                                                                .replaceAll(
-                                                                    ".00",
-                                                                    ""))) +
-                                                        "  ",
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: const Color.fromRGBO(
-                                                        155, 155, 155, 1),
-                                                    decoration: TextDecoration
-                                                        .lineThrough,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  width: 35.0,
-                                                  height: 18.0,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            2),
-                                                    color: const Color.fromRGBO(
-                                                        187, 9, 21, 1),
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      calcu2.toString() + '%',
-                                                      style: const TextStyle(
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: Colors.white,
-                                                        height: 1,
-                                                      ),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
+                                            CustomText(
+                                              text: "SKU : " +
+                                                  controller.variant!.sku!,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                              color: const Color.fromRGBO(
+                                                  155, 155, 155, 1),
                                             ),
                                           ],
                                         ),
-                                      ),
-                                    ],
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 8),
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 8),
+                                                    child: CustomText(
+                                                      text: "Rp " +
+                                                          formatter.format(int
+                                                              .parse(controller
+                                                                  .variant!
+                                                                  .price!
+                                                                  .replaceAll(
+                                                                      ".00",
+                                                                      ""))),
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      color:
+                                                          const Color.fromRGBO(
+                                                              187, 9, 21, 1),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 4),
+                                                    child: CustomText(
+                                                      text: "Rp " +
+                                                          formatter.format(int
+                                                              .parse(controller
+                                                                  .variant!
+                                                                  .compareAtPrice!
+                                                                  .replaceAll(
+                                                                      ".00",
+                                                                      ""))) +
+                                                          "  ",
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color:
+                                                          const Color.fromRGBO(
+                                                              155, 155, 155, 1),
+                                                      decoration: TextDecoration
+                                                          .lineThrough,
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: 35.0,
+                                                    height: 18.0,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              2),
+                                                      color:
+                                                          const Color.fromRGBO(
+                                                              187, 9, 21, 1),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        calcu2.toString() + '%',
+                                                        style: const TextStyle(
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: Colors.white,
+                                                          height: 1,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                             const Divider(
                               height: 30,
@@ -227,47 +239,52 @@ class ProductView2 extends GetView<ProductController> {
                             const SizedBox(),
                             const SizedBox(height: 5),
                             (controller.product.options.length > 1)
-                                ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      CustomText(
-                                        text:
-                                            'controller.product.options[1].name'
-                                                .replaceAll(
-                                          'controller.product.options[1].name',
-                                          "Pilih Warna : " +
-                                              controller
-                                                  .product.options[1].values[0],
-                                        ),
-                                        fontSize: 14,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      const SizedBox(height: 5),
-                                      Container(
-                                        height: 24.0,
-                                        width: 24.0,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: Colors.black,
-                                            width: 2.0,
+                                ? Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 20, right: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        CustomText(
+                                          text:
+                                              'controller.product.options[1].name'
+                                                  .replaceAll(
+                                            'controller.product.options[1].name',
+                                            "Pilih Warna : " +
+                                                controller.product.options[1]
+                                                    .values[0],
                                           ),
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(50),
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        const SizedBox(height: 5),
+                                        Container(
+                                          height: 24.0,
+                                          width: 24.0,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Colors.black,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(50),
+                                            ),
+                                          ),
+                                          child: SizedBox(
+                                            width: Get.width,
+                                            height: 50,
+                                            child: CustomRadioColor(
+                                              listData: controller
+                                                  .product.options[1].values
+                                                  .toList(),
+                                            ),
                                           ),
                                         ),
-                                        child: SizedBox(
-                                          width: Get.width,
-                                          height: 50,
-                                          child: CustomRadioColor(
-                                            listData: controller
-                                                .product.options[1].values
-                                                .toList(),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   )
                                 : const SizedBox(),
                             const Divider(
@@ -277,19 +294,23 @@ class ProductView2 extends GetView<ProductController> {
                             ),
                             const SizedBox(),
                             const SizedBox(height: 5),
-                            CustomText(
-                              text: 'controller.product.options[0].name'
-                                  .replaceAll(
-                                      'controller.product.options[0].name',
-                                      "Pilih Ukuran : " + controller.ukuran),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 20),
+                              child: CustomText(
+                                text: 'controller.product.options[0].name'
+                                    .replaceAll(
+                                        'controller.product.options[0].name',
+                                        "Pilih Ukuran : " + controller.ukuran),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
 
                             if (controller.variant!.inventoryQuantity! <= 5)
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 16, bottom: 8),
+                                padding: const EdgeInsets.only(
+                                    top: 16, bottom: 8, left: 20),
                                 child: CustomText(
                                   text: 'Tersisa ' +
                                       controller.variant!.inventoryQuantity
@@ -302,12 +323,16 @@ class ProductView2 extends GetView<ProductController> {
                               ),
 
                             const SizedBox(height: 5),
-                            SizedBox(
-                              width: Get.width,
-                              height: 40,
-                              child: CustomRadio(
-                                listData: controller.product.options[0].values
-                                    .toList(),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 20),
+                              child: SizedBox(
+                                width: Get.width,
+                                height: 40,
+                                child: CustomRadio(
+                                  listData: controller.product.options[0].values
+                                      .toList(),
+                                ),
                               ),
                             ),
                             const Divider(
@@ -317,86 +342,98 @@ class ProductView2 extends GetView<ProductController> {
                             ),
                             const SizedBox(height: 5),
                             // ignore: avoid_unnecessary_containers
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                    width: 1.0,
-                                    color:
-                                        const Color.fromRGBO(299, 232, 235, 1)),
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(6)),
-                              ),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(10, 16, 10, 16),
-                                child: Row(
-                                  children: <Widget>[
-                                    CircleAvatar(
-                                      radius: 16.0,
-                                      child: SvgPicture.asset(
-                                          "assets/icon/bx-driver.svg"),
-                                    ),
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: CustomText(
-                                        text:
-                                            'Dapatkan potongan ongkir Rp 30.000 tanpa \n minimum pembelian untuk JABODETABEK',
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 20),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                      width: 1.0,
+                                      color: const Color.fromRGBO(
+                                          299, 232, 235, 1)),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(6)),
+                                ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 16, 10, 16),
+                                  child: Row(
+                                    children: <Widget>[
+                                      CircleAvatar(
+                                        radius: 16.0,
+                                        child: SvgPicture.asset(
+                                            "assets/icon/bx-driver.svg"),
                                       ),
-                                    ),
-                                  ],
+                                      const Padding(
+                                        padding: EdgeInsets.only(left: 10),
+                                        child: CustomText(
+                                          text:
+                                              'Dapatkan potongan ongkir Rp 30.000 tanpa \n minimum pembelian untuk JABODETABEK',
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                             const SizedBox(height: 5),
-                            GFAccordion(
-                              title: 'Panduan Ukuran',
-                              textStyle: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600),
-                              margin: const EdgeInsets.only(left: 0),
-                              titlePadding: const EdgeInsets.only(
-                                left: 0,
-                                top: 10,
-                                bottom: 10,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 20),
+                              child: GFAccordion(
+                                title: 'Panduan Ukuran',
+                                textStyle: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600),
+                                margin: const EdgeInsets.only(left: 0),
+                                titlePadding: const EdgeInsets.only(
+                                  left: 0,
+                                  top: 10,
+                                  bottom: 10,
+                                ),
+                                contentChild: Column(
+                                  children: [
+                                    CachedNetworkImage(
+                                      imageUrl: controller.customUkuran(
+                                          controller.product.type.toString()),
+                                      fit: BoxFit.fitWidth,
+                                      width: Get.width,
+                                    ),
+                                  ],
+                                ),
+                                collapsedIcon: const Icon(Icons.add),
+                                expandedIcon: const Icon(Icons.minimize),
+                                collapsedTitleBackgroundColor: Colors.white,
+                                expandedTitleBackgroundColor: Colors.white,
                               ),
-                              contentChild: Column(
-                                children: [
-                                  CachedNetworkImage(
-                                    imageUrl: controller.customUkuran(
-                                        controller.product.type.toString()),
-                                    fit: BoxFit.fitWidth,
-                                    width: Get.width,
-                                  ),
-                                ],
-                              ),
-                              collapsedIcon: const Icon(Icons.add),
-                              expandedIcon: const Icon(Icons.minimize),
-                              collapsedTitleBackgroundColor: Colors.white,
-                              expandedTitleBackgroundColor: Colors.white,
                             ),
                             const Divider(thickness: 1),
-                            GFAccordion(
-                              title: 'Detail Produk',
-                              textStyle: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600),
-                              margin: const EdgeInsets.only(left: 0),
-                              titlePadding: const EdgeInsets.only(
-                                left: 0,
-                                top: 10,
-                                bottom: 10,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 20),
+                              child: GFAccordion(
+                                title: 'Detail Produk',
+                                textStyle: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600),
+                                margin: const EdgeInsets.only(left: 0),
+                                titlePadding: const EdgeInsets.only(
+                                  left: 0,
+                                  top: 10,
+                                  bottom: 10,
+                                ),
+                                contentChild:
+                                    Html(data: controller.product.description),
+                                collapsedIcon: const Icon(Icons.add),
+                                expandedIcon: const Icon(Icons.minimize),
+                                collapsedTitleBackgroundColor: Colors.white,
+                                expandedTitleBackgroundColor: Colors.white,
                               ),
-                              contentChild:
-                                  Html(data: controller.product.description),
-                              collapsedIcon: const Icon(Icons.add),
-                              expandedIcon: const Icon(Icons.minimize),
-                              collapsedTitleBackgroundColor: Colors.white,
-                              expandedTitleBackgroundColor: Colors.white,
                             ),
                             const Divider(
                               height: 30,
@@ -405,19 +442,26 @@ class ProductView2 extends GetView<ProductController> {
                             ),
                             const SizedBox(),
                             const SizedBox(height: 5),
-                            const CustomText(
-                              text: 'Produk Serupa \n',
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
+                            const Padding(
+                              padding: EdgeInsets.only(left: 20, right: 20),
+                              child: CustomText(
+                                text: 'Produk Serupa \n',
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                            Container(
-                              decoration:
-                                  const BoxDecoration(color: Colors.white),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  CollectionsProductView(collection),
-                                ],
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 20),
+                              child: Container(
+                                decoration:
+                                    const BoxDecoration(color: Colors.white),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    CollectionsProductView(collection),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
@@ -429,33 +473,35 @@ class ProductView2 extends GetView<ProductController> {
 
                 // ignore: avoid_unnecessary_containers
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      fixedSize: Size(Get.width, 50),
-                      primary: const Color.fromRGBO(33, 33, 33, 1),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: Size(Get.width, 50),
+                        primary: const Color.fromRGBO(33, 33, 33, 1),
+                      ),
+                      onPressed: controller.variant!.inventoryQuantity == 0
+                          ? null
+                          : () {
+                              Get.find<CartController>().addCart(
+                                  controller.variant!.id!,
+                                  context,
+                                  controller.ukuran);
+                            },
+                      child: controller.variant!.inventoryQuantity == 0
+                          ? const CustomText(
+                              text: "Produk Habis",
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            )
+                          : const CustomText(
+                              text: "Tambahkan ke keranjang",
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
                     ),
-                    onPressed: controller.variant!.inventoryQuantity == 0
-                        ? null
-                        : () {
-                            Get.find<CartController>().addCart(
-                                controller.variant!.id!,
-                                context,
-                                controller.ukuran);
-                          },
-                    child: controller.variant!.inventoryQuantity == 0
-                        ? const CustomText(
-                            text: "Produk Habis",
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          )
-                        : const CustomText(
-                            text: "Tambahkan ke keranjang",
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
                   ),
                 )
               ],
@@ -473,11 +519,11 @@ class SearchCollection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         SizedBox(
           height: 36,
-          width: 250,
+          width: 220,
           child: TextFormField(
             onTap: () => Get.toNamed(Routes.SEARCH),
             cursorColor: const Color.fromRGBO(155, 155, 155, 1),
@@ -533,13 +579,10 @@ class SearchCollection extends StatelessWidget {
             ),
             child: Stack(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 6),
-                  child: CircleAvatar(
-                    radius: 16.0,
-                    backgroundColor: Colors.white.withOpacity(0.5),
-                    child: SvgPicture.asset("assets/icon/bx-share-alt.svg"),
-                  ),
+                CircleAvatar(
+                  radius: 16.0,
+                  backgroundColor: Colors.white.withOpacity(0.5),
+                  child: SvgPicture.asset("assets/icon/bx-share-alt.svg"),
                 ),
               ],
             ),
