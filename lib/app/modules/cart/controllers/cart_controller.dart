@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import 'package:colorbox/app/modules/cart/models/cart_model.dart';
 import 'package:colorbox/app/modules/cart/providers/cart_provider.dart';
+import 'package:colorbox/app/modules/cart/models/cart_model.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
+import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'dart:async';
 
 class CartController extends GetxController {
   final LocalStorageData localStorageData = Get.find();
@@ -11,6 +13,7 @@ class CartController extends GetxController {
   final ValueNotifier<bool> _loading = ValueNotifier(false);
   Cart _cart = Cart.empty();
   Cart get cart => _cart;
+  ValueNotifier<bool> show = ValueNotifier(false);
 
   String? _idCart;
   String get idCart => _idCart!;
@@ -94,6 +97,9 @@ class CartController extends GetxController {
             content: SvgPicture.asset("assets/icon/bx-addproduct.svg"),
           ),
         );
+        Future.delayed(const Duration(seconds: 2), () {
+          Get.back();
+        });
       } else {
         Get.snackbar(
           "Peringatan",
@@ -128,4 +134,93 @@ class CartController extends GetxController {
     }
     update();
   }
+
+  Future<void> updateDiscountCode(String code) async {
+    _loading.value = true;
+    update();
+    var variables = {
+      "cartId": idCart,
+      "discountCodes": [code]
+    };
+    var result = await CartProvider().cartDiscountCodesUpdate(variables);
+    if (result['cartDiscountCodesUpdate']['userErrors'].length >= 1) {
+      Get.snackbar(
+          "", result['cartDiscountCodesUpdate']['userErrors'][0]['message'],
+          titleText: Row(
+            children: [
+              SvgPicture.asset(
+                "assets/icon/Exclamation-Circle.svg",
+                color: Colors.white,
+              ),
+              const SizedBox(width: 4),
+              const CustomText(
+                text: "Gagal",
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ],
+          ),
+          backgroundColor: Colors.black,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM);
+    }
+    if (code != "" &&
+        result['cartDiscountCodesUpdate']['cart']['discountCodes'][0]
+                ['applicable'] ==
+            false) {
+      Get.snackbar("", "Kode Voucher tidak dapat digunakan",
+          titleText: Row(
+            children: [
+              SvgPicture.asset(
+                "assets/icon/Exclamation-Circle.svg",
+                color: Colors.white,
+              ),
+              const SizedBox(width: 4),
+              const CustomText(
+                text: "Gagal",
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ],
+          ),
+          backgroundColor: Colors.black,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM);
+    }
+    await getCart();
+    _loading.value = false;
+    update();
+    if (code != "" &&
+        result['cartDiscountCodesUpdate']['cart']['discountCodes'][0]
+                ['applicable'] ==
+            true) {
+      Get.back();
+      Get.snackbar("", "Voucher berhasil digunakan",
+          titleText: Row(
+            children: [
+              SvgPicture.asset(
+                "assets/icon/Check-Circle.svg",
+                color: Colors.white,
+              ),
+              const SizedBox(width: 4),
+              const CustomText(
+                text: "Berhasil",
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ],
+          ),
+          backgroundColor: Colors.black,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM);
+    }
+  }
+
+  // cartUpdateIdentityCustomer(String token, UserModel user) async {
+  //   var result =
+  //       await CartProvider().cartBuyerIdentityupdate(_idCart!, token, user);
+  // }
 }

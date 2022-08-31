@@ -1,5 +1,6 @@
-import 'package:colorbox/app/modules/profile/models/user_model.dart';
+import 'package:colorbox/app/modules/orders/controllers/orders_controller.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
+import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:get/get.dart';
 
@@ -7,19 +8,23 @@ class SettingsController extends GetxController {
   final LocalStorageData localStorageData = Get.find();
   UserModel _userModel = UserModel.isEmpty();
   UserModel get userModel => _userModel;
-  String? _token;
-  String? get token => _token;
+  CustomerToken? _token = CustomerToken.isEmpty();
+  CustomerToken? get token => _token;
+  OrdersController get ordersController => Get.put(OrdersController());
 
-  SettingsController() {
+  @override
+  void onInit() async {
     getUser();
+    super.onInit();
   }
 
-  getUser() async {
+  Future<void> getUser() async {
     await localStorageData.getUser.then((value) {
       _userModel = value;
     });
 
     await localStorageData.getTokenUser.then((value) => _token = value);
+
     update();
   }
 
@@ -31,7 +36,7 @@ class SettingsController extends GetxController {
 
   Future<void> fetchingUser() async {
     _token = await localStorageData.getTokenUser;
-    var result = await ProfileProvider().getUser(_token!);
+    var result = await ProfileProvider().getUser(_token!.accessToken!);
     _userModel = UserModel.fromJson(result);
     update();
   }

@@ -1,3 +1,4 @@
+import 'package:colorbox/app/modules/checkout/controllers/checkout_controller.dart';
 import 'package:colorbox/app/modules/profile/controllers/profile_controller.dart';
 import 'package:colorbox/app/modules/profile/views/address/address_form.dart';
 import 'package:colorbox/app/modules/profile/views/widgets/card_address_widget.dart';
@@ -7,7 +8,8 @@ import 'package:get/get.dart';
 
 // ignore: must_be_immutable
 class AddressView extends GetView<ProfileController> {
-  const AddressView({Key? key}) : super(key: key);
+  final bool fromDetail;
+  const AddressView({Key? key, this.fromDetail = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +47,16 @@ class AddressView extends GetView<ProfileController> {
                     ListView.builder(
                         itemCount: controller.userModel.addresses!.length,
                         itemBuilder: (_, index) {
-                          return CardAddressWidget(index);
+                          return InkWell(
+                              onTap: (fromDetail)
+                                  ? null
+                                  : () {
+                                      Get.find<CheckoutController>()
+                                          .updateShippingAddress(controller
+                                              .userModel.addresses![index]);
+                                      Get.back();
+                                    },
+                              child: CardAddressWidget(index));
                         }),
                     (controller.loading.value)
                         ? const Center(

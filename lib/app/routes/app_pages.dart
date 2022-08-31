@@ -1,36 +1,36 @@
-import 'package:colorbox/app/modules/checkout/bindings/checkout_binding.dart';
-import 'package:colorbox/app/modules/checkout/views/checkout_view.dart';
-import 'package:colorbox/app/modules/discount/bindings/discount_binding.dart';
-import 'package:colorbox/app/modules/discount/views/discount_view.dart';
-import 'package:colorbox/app/modules/wishlist/bindings/wishlist_binding.dart';
-import 'package:colorbox/app/modules/wishlist/views/wishlist_view.dart';
-import 'package:get/get.dart';
-
-import '../modules/onboard/bindings/onboard_binding.dart';
-import '../modules/onboard/views/onboard_view.dart';
 import '../modules/Control/bindings/control_binding.dart';
 import '../modules/Control/views/control_view.dart';
 import '../modules/cart/bindings/cart_binding.dart';
 import '../modules/cart/views/cart_view.dart';
+import '../modules/checkout/bindings/checkout_binding.dart';
+import '../modules/checkout/views/checkout_view.dart';
 import '../modules/collections/bindings/collections_binding.dart';
 import '../modules/collections/views/collections_main_view.dart';
 import '../modules/controlv2/bindings/controlv2_binding.dart';
 import '../modules/controlv2/views/controlv2_view.dart';
+import '../modules/discount/bindings/discount_binding.dart';
+import '../modules/discount/views/discount_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/onboard/bindings/onboard_binding.dart';
+import '../modules/onboard/views/onboard_view.dart';
+import '../modules/orders/bindings/orders_binding.dart';
+import '../modules/orders/views/orders_view.dart';
 import '../modules/product/bindings/product_binding.dart';
 import '../modules/product/views/product_view2.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/changepassword_view.dart';
+import '../modules/profile/views/forgotpassword_view.dart';
 import '../modules/profile/views/messageforgotpassword_view.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/profile/views/register_view.dart';
-import '../modules/profile/views/forgotpassword_view.dart';
 import '../modules/search/bindings/search_binding.dart';
 import '../modules/search/views/search_view.dart';
 import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/settings_view.dart';
-
+import '../modules/wishlist/bindings/wishlist_binding.dart';
+import '../modules/wishlist/views/wishlist_view.dart';
+import 'package:get/get.dart';
 part 'app_routes.dart';
 
 class AppPages {
@@ -124,6 +124,11 @@ class AppPages {
       name: _Paths.WISHLIST,
       page: () => const WishlistView(),
       binding: WishlistBinding(),
+    ),
+    GetPage(
+      name: _Paths.ORDERS,
+      page: () => OrdersView(),
+      binding: OrdersBinding(),
     ),
   ];
 }

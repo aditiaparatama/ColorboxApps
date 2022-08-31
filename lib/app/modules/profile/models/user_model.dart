@@ -7,6 +7,7 @@ class UserModel {
   String? lastName;
   String? email;
   String? phone;
+  String? note;
   Address? defaultAddress;
   List<MailingAddress>? addresses;
   String? expiresAt;
@@ -18,12 +19,13 @@ class UserModel {
       this.lastName,
       this.email,
       this.phone,
+      this.note,
       this.defaultAddress,
       this.addresses,
       this.expiresAt);
 
   UserModel.fromJson(var json) {
-    id = json['id'].replaceAll("gid://shopify/Customer/", "");
+    id = json['id']; //.replaceAll("gid://shopify/Customer/", "");
     displayName = json['displayName'];
     firstName = json['firstName'];
     lastName = json['lastName'];
@@ -38,6 +40,17 @@ class UserModel {
     }
   }
 
+  UserModel.fromAdmin(var json) {
+    id = json['id']; //.replaceAll("gid://shopify/Customer/", "");
+    displayName = json['displayName'];
+    firstName = json['firstName'];
+    lastName = json['lastName'];
+    email = json['email'];
+    phone = json['phone'];
+    note = json['note'] ?? "";
+    defaultAddress = Address.fromJson(json['defaultAddress']);
+  }
+
   UserModel.isEmpty();
 
   UserModel.json(var json) {
@@ -47,6 +60,7 @@ class UserModel {
     lastName = json['lastName'];
     email = json['email'];
     phone = json['phone'];
+    note = json['note'];
     expiresAt = json['expiresAt'];
   }
 
@@ -58,6 +72,7 @@ class UserModel {
       'lastName': lastName,
       'email': email,
       'phone': phone,
+      'note': note,
       'expiresAt': expiresAt,
       // 'defaultAddress': defaultAddress,
       // 'addresses': addresses,
@@ -110,5 +125,26 @@ class Address {
     province = json['province'];
     provinceCode = json['provinceCode'];
     zip = json['zip'];
+  }
+}
+
+class CustomerToken {
+  String? accessToken;
+  String? expiresAt;
+
+  CustomerToken(this.accessToken, this.expiresAt);
+
+  CustomerToken.json(var json) {
+    accessToken = json['accessToken'];
+    expiresAt = json['expiresAt'];
+  }
+
+  CustomerToken.isEmpty();
+
+  toJson() {
+    return {
+      'accessToken': accessToken,
+      'expiresAt': expiresAt,
+    };
   }
 }

@@ -39,6 +39,8 @@ abstract class Routes {
   static const SHIPPING = _Paths.SHIPPING;
   // ignore: constant_identifier_names
   static const WISHLIST = _Paths.WISHLIST;
+  // ignore: constant_identifier_names
+  static const ORDERS = _Paths.ORDERS;
 }
 
 abstract class _Paths {
@@ -79,4 +81,6 @@ abstract class _Paths {
   static const SHIPPING = '/shipping';
   // ignore: constant_identifier_names
   static const WISHLIST = '/wishlist';
+  // ignore: constant_identifier_names
+  static const ORDERS = '/orders';
 }

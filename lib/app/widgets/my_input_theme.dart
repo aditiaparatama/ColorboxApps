@@ -39,7 +39,7 @@ class MyInputTheme {
         // Default value if borders are null
         border: _buildBorder(Colors.black),
         // Enabled and focused
-        disabledBorder: _buildBorder(Colors.grey[400]!),
+        disabledBorder: _buildBorder(const Color(0xFFE5E8EB)),
 
         // TextStyles
         suffixStyle: _builtTextStyle(Colors.black),
@@ -49,8 +49,8 @@ class MyInputTheme {
         // does not grow in heigth when there is an error text
         errorStyle: _builtTextStyle(Colors.red, size: 12.0),
         helperStyle: _builtTextStyle(Colors.black, size: 12.0),
-        hintStyle: _builtTextStyle(Colors.grey),
-        labelStyle: _builtTextStyle(const Color(0xFF9B9B9B)),
+        hintStyle: _builtTextStyle(Colors.grey, size: 14),
+        labelStyle: _builtTextStyle(const Color(0xFF9B9B9B), size: 14),
         prefixStyle: _builtTextStyle(Colors.black),
       );
 }

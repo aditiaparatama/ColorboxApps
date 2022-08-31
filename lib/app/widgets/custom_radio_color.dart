@@ -61,8 +61,8 @@ class RadioItem extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Container(
-            height: 25.0,
-            width: 25.0,
+            height: 18.0,
+            width: 18.0,
             margin: const EdgeInsets.only(left: 1),
             child: const Center(),
             decoration: BoxDecoration(

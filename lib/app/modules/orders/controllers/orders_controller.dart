@@ -1,0 +1,97 @@
+import 'package:colorbox/app/modules/orders/models/order_model.dart';
+import 'package:colorbox/app/modules/orders/providers/order_provider.dart';
+import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+
+class OrdersController extends GetxController {
+  SettingsController settingController = Get.find<SettingsController>();
+  List<Order> _orders = [];
+  List<Order> get order => _orders;
+  List<Order> _ordersFilter = [];
+  List<Order> get ordersFilter => _ordersFilter;
+  final ValueNotifier _loading = ValueNotifier(false);
+  ValueNotifier get loading => _loading;
+  final ValueNotifier _loadingMore = ValueNotifier(false);
+  ValueNotifier get loadingMore => _loadingMore;
+  PageInfo _pageInfo = PageInfo.isEmpty();
+  PageInfo get pageInfo => _pageInfo;
+  int countPesanan = 0;
+
+  bool show = false;
+
+  @override
+  void onInit() async {
+    fetchingDataOrders();
+    await countOrderActive();
+    super.onInit();
+  }
+
+  fetchingDataOrders() async {
+    _loading.value = true;
+    update();
+    // var result =
+    //     await OrderProvider().getOrders(settingController.userModel.id!);
+    var result =
+        await OrderProvider().getOrders("gid://shopify/Customer/4510208950422");
+    _pageInfo = PageInfo.fromJson(result['orders']['pageInfo']);
+    _orders = [];
+    for (final x in result['orders']['edges']) {
+      _orders.add(Order.fromJson(x['node'], result['orders']['pageInfo']));
+    }
+    _ordersFilter = _orders;
+    _loading.value = false;
+    update();
+  }
+
+  filterDataOrders(String? filter) {
+    _ordersFilter = _orders;
+    if (filter == "riwayat") {
+      _ordersFilter.removeWhere((e) =>
+          e.status == "Menunggu Pembayaran" ||
+          e.status == "Diproses" ||
+          e.status == "Dikirim");
+      update();
+      return;
+    }
+    _ordersFilter
+        .removeWhere((e) => e.status == "Dibatalkan" || e.status == "selesai");
+    update();
+  }
+
+  loadMore() async {
+    _loadingMore.value = true;
+    update();
+    var result = await OrderProvider().getOrdersNext(
+        "gid://shopify/Customer/3998459723926", pageInfo.endCursor!);
+    _pageInfo = PageInfo.fromJson(result['orders']['pageInfo']);
+    for (final x in result['orders']['edges']) {
+      _orders.add(Order.fromJson(x['node'], result['orders']['pageInfo']));
+    }
+    _loadingMore.value = false;
+    update();
+  }
+
+  Future<void> countOrderActive() async {
+    var now = DateTime.now();
+    var dateMin = now.add(const Duration(days: -90));
+    var temp = [];
+
+    var result = await OrderProvider().getActiveOrders(
+        "gid://shopify/Customer/4510208950422",
+        DateFormat("yyyy-MM-dd").format(dateMin),
+        null);
+    temp.add(result['orders']['edges'].length);
+    while (result['orders']['pageInfo']['hasNextPage']) {
+      result = await OrderProvider().getActiveOrders(
+          "gid://shopify/Customer/4510208950422",
+          DateFormat("yyyy-MM-dd").format(dateMin),
+          result['orders']['pageInfo']['endCursor']);
+      temp.add(result['orders']['edges'].length);
+    }
+
+    countPesanan = temp.reduce((a, b) => a + b);
+    update();
+  }
+}

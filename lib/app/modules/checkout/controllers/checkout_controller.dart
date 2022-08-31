@@ -13,7 +13,7 @@ class CheckoutController extends GetxController {
   final LocalStorageData localStorageData = Get.find();
   ValueNotifier get loading => _loading;
   final ValueNotifier<bool> _loading = ValueNotifier(false);
-  String? _token;
+  CustomerToken? _token = CustomerToken.isEmpty();
   String? _idCheckout;
   String? get idCheckout => _idCheckout;
   String? _etd;
@@ -30,10 +30,10 @@ class CheckoutController extends GetxController {
   @override
   void onInit() async {
     await getAddress();
-    await createCheckout();
-    // _idCheckout =
-    //     "gid://shopify/Checkout/0d6d5be5b2a9b4a96cfb2b9c3a2790db?key=7d50dddf1ea930111f729698e50c9473";
-    // await getCheckout();
+    // await createCheckout();
+    _idCheckout =
+        "gid://shopify/Checkout/75887dad2980edf3cd942d0eb6418bbb?key=69a8decee72afb8b9f950b7a69a12d73";
+    await getCheckout();
     await getETDShipping();
     super.onInit();
   }
@@ -42,7 +42,7 @@ class CheckoutController extends GetxController {
     _loading.value = true;
     update();
     _token = await localStorageData.getTokenUser;
-    var result = await ProfileProvider().getUser(_token!);
+    var result = await ProfileProvider().getUser(_token!.accessToken!);
     _user = UserModel.fromJson(result);
     _loading.value = false;
     update();
@@ -51,6 +51,7 @@ class CheckoutController extends GetxController {
   createCheckout() async {
     List<CheckoutItems>? items = await getItems();
 
+    //buat varibles input checkout
     dynamic variable = {
       "input": {
         "allowPartialAddresses": true,
@@ -76,6 +77,7 @@ class CheckoutController extends GetxController {
       },
     };
 
+    //create checkout
     var result = await CheckoutProvider().checkoutCreate(items, variable);
     if (result != null) {
       _idCheckout = result['checkoutCreate']['checkout']['id'];
@@ -83,6 +85,7 @@ class CheckoutController extends GetxController {
       var result2 = await CheckoutProvider()
           .checkoutGetData(result['checkoutCreate']['checkout']['id']);
 
+      //check kalo shipping rates nya masih null akan looping
       while (result2['node']['availableShippingRates']['ready'] == false) {
         result2 = await Future.delayed(
             const Duration(milliseconds: 1000),
@@ -90,6 +93,7 @@ class CheckoutController extends GetxController {
                 .checkoutGetData(result['checkoutCreate']['checkout']['id']));
       }
 
+      //update shipping rates
       var resultShipping = await updateShippingRates(
           result['checkoutCreate']['checkout']['id'],
           result2['node']['availableShippingRates']['shippingRates'][0]
@@ -98,6 +102,12 @@ class CheckoutController extends GetxController {
       if (result2 != null) {
         _checkout = CheckoutModel.fromJson(
             resultShipping['checkoutShippingLineUpdate']['checkout']);
+      }
+
+      //update voucher dicheckout kalo sudah digunakan di cart
+      if (_cart.discountCodes!.isNotEmpty &&
+          _cart.discountCodes![0].code != "") {
+        await applyVoucher(_cart.discountCodes![0].code!, back: false);
       }
     }
     update();
@@ -213,7 +223,7 @@ class CheckoutController extends GetxController {
     }
   }
 
-  Future<void> applyVoucher(String discountCode) async {
+  Future<void> applyVoucher(String discountCode, {bool back = true}) async {
     var result = await CheckoutProvider().checkoutDiscountCodeApplyV2(
         id: _idCheckout!, discountCode: discountCode);
     if (result['checkoutDiscountCodeApplyV2']['checkoutUserErrors'].length >
@@ -230,7 +240,7 @@ class CheckoutController extends GetxController {
     _checkout = CheckoutModel.fromJson(
         result['checkoutDiscountCodeApplyV2']['checkout']);
     update();
-    Get.back();
+    if (back) Get.back();
     Get.snackbar("Info", "Voucher berhasil digunakan",
         backgroundColor: Colors.black,
         colorText: Colors.white,

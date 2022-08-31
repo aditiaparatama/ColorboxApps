@@ -2,10 +2,8 @@ import 'package:colorbox/app/modules/settings/controllers/settings_controller.da
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
-// import 'package:colorbox/app/widgets/custom_text_form_field.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import '../controllers/profile_controller.dart';
 
@@ -225,18 +223,18 @@ class ProfileView extends GetView<ProfileController> {
                                           child: SizedBox(
                                             child: MaterialButton(
                                               child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
                                                 children: <Widget>[
                                                   Padding(
                                                     padding:
                                                         const EdgeInsets.only(
-                                                            top: 0,
-                                                            right: 10,
-                                                            left: 30),
+                                                            right: 5),
                                                     child: CircleAvatar(
-                                                      child: SvgPicture.asset(
-                                                        "assets/icon/bx-gnew.svg",
-                                                        height: 40.0,
-                                                        width: 40.0,
+                                                      child: Image.asset(
+                                                        "assets/icon/google-icon.png",
+                                                        height: 28,
+                                                        width: 28,
                                                       ),
                                                     ),
                                                   ),

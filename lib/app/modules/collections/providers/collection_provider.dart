@@ -9,7 +9,8 @@ class CollectionProvider extends GetConnect {
     httpClient.maxAuthRetries = 3;
   }
 
-  Future<dynamic> postCollection(int id, int limit) async {
+  Future<dynamic> postCollection(
+      int id, int limit, String sortKey, String reverse) async {
     String body = """query {
       collections(first: 1, query: "id:$id") {
         edges {
@@ -17,11 +18,11 @@ class CollectionProvider extends GetConnect {
             id
             handle
             productsCount
-            products(first: $limit) {
-                pageInfo {
-                    hasNextPage
-                    hasPreviousPage
-                }
+            products(first: $limit, sortKey: $sortKey, reverse: $reverse) {
+              pageInfo {
+                  hasNextPage
+                  hasPreviousPage
+              }
               edges {
                 cursor
                 node {

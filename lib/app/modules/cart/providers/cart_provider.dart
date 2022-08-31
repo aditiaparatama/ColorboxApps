@@ -48,6 +48,11 @@ class CartProvider extends GetConnect {
                 applicable
                 code
             }
+            discountAllocations{
+                discountedAmount{
+                    amount
+                }
+            }
             estimatedCost{
                 subtotalAmount {
                     amount
@@ -67,48 +72,48 @@ class CartProvider extends GetConnect {
                 }
             }
             checkoutUrl
-            lines(first: 10) {
-              edges {
+            lines(first: 20) {
+                edges {
                 node {
-                  id
-                  quantity
-                  discountAllocations {
+                    id
+                    quantity
+                    discountAllocations {
                     __typename
                     ... on CartAutomaticDiscountAllocation {
-                      discountedAmount {
-                          amount
-                          currencyCode
-                      }
-                      title
+                        discountedAmount {
+                            amount
+                            currencyCode
+                        }
+                        title
                     }
                     ... on CartDiscountAllocation {
-                      discountedAmount {
-                          amount
-                          currencyCode
-                      }
+                        discountedAmount {
+                            amount
+                            currencyCode
+                        }
                     }
-                  }
-                  merchandise {
+                    }
+                    merchandise {
                     ... on ProductVariant {
-                      id
-                      product {
-                          id
-                          title
-                      }
-                      title
-                      price
-                      compareAtPrice
-                      weight
-                      weightUnit
-                      selectedOptions {
-                          name
-                          value
-                      }
-                      image {
-                          src
-                      }
+                        id
+                        product {
+                            id
+                            title
+                        }
+                        title
+                        price
+                        compareAtPrice
+                        weight
+                        weightUnit
+                        selectedOptions {
+                            name
+                            value
+                        }
+                        image {
+                            src
+                        }
                     }
-                  }
+                    }
                 }
               }
             }
@@ -269,5 +274,41 @@ class CartProvider extends GetConnect {
 
     var result = await _client.query(options);
     return result.data!["cart"]["checkoutUrl"];
+  }
+
+  Future<dynamic> cartDiscountCodesUpdate(dynamic variables) async {
+    final GraphQLClient _client = getShopifyGraphQLClient();
+
+    final QueryOptions options = QueryOptions(
+      document: gql(
+        r'''
+          mutation cartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!]) {
+            cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
+              cart {
+                # Cart fields
+                id
+                discountCodes{
+                applicable
+                code
+                }
+                discountAllocations{
+                    discountedAmount{
+                        amount
+                    }
+                }
+              }
+              userErrors {
+                field
+                message
+              }
+            }
+          }
+      ''',
+      ),
+      variables: variables,
+    );
+
+    var result = await _client.query(options);
+    return result.data;
   }
 }

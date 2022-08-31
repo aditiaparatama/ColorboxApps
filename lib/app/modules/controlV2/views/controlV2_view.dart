@@ -1,12 +1,11 @@
 import 'package:colorbox/app/modules/controlV2/controllers/controlV2_controller.dart';
-import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
-import 'package:flutter/material.dart';
+import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-// ignore: use_key_in_widget_constructors
+// ignore: use_key_in_widget_constructors, must_be_immutable
 class ControlV2View extends GetView<ControlV2Controller> {
   GlobalKey globalKey = GlobalKey(debugLabel: 'btm_app_bar');
 
@@ -34,7 +33,8 @@ class ControlV2View extends GetView<ControlV2Controller> {
           showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,
           items: [
-            bottomNavigationBarItem("assets/icon/cb.png", menu: "home"),
+            bottomNavigationBarItem("assets/icon/home_inactive.svg",
+                menu: "Home", assetActive: "assets/icon/home_active.svg"),
             bottomNavigationBarItem("assets/icon/Icon-Search.svg",
                 menu: "Kategori"),
             bottomNavigationBarItem("assets/icon/icon_line-Heart.svg",
@@ -60,78 +60,40 @@ class ControlV2View extends GetView<ControlV2Controller> {
       backgroundColor: Colors.white,
       activeIcon: Stack(
         children: [
-          (menu.toLowerCase() == "home")
-              ? Column(children: [
-                  Image.asset(
-                    assets,
-                    height: size + 5,
-                    width: size + 5,
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  CustomText(
-                    text: menu,
-                    fontSize: 12,
-                  )
-                ])
-              : Column(children: [
-                  SvgPicture.asset(
-                    assetActive ?? assets,
-                    height: size,
-                    width: size,
-                    color: Colors.black,
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  CustomText(
-                    text: menu,
-                    fontSize: 12,
-                  )
-                ]),
+          Column(children: [
+            SvgPicture.asset(
+              assetActive ?? assets,
+              height: size,
+              width: size,
+              color: Colors.black,
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            CustomText(
+              text: menu,
+              fontSize: 12,
+            )
+          ]),
         ],
       ),
       label: "",
-      icon: Stack(
+      icon: Column(
         children: [
-          (menu.toLowerCase() == "home")
-              ? Column(
-                  children: [
-                    Image.asset(
-                      assets,
-                      height: size + 5,
-                      width: size + 5,
-                      color: const Color(0xFF9B9B9B),
-                    ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    CustomText(
-                      text: menu,
-                      fontSize: 12,
-                      color: const Color(0xFF9B9B9B),
-                    ),
-                  ],
-                )
-              : Column(
-                  children: [
-                    SvgPicture.asset(
-                      assets,
-                      height: size,
-                      width: size,
-                      color: const Color(0xFF9B9B9B),
-                    ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    CustomText(
-                      text: menu,
-                      fontSize: 12,
-                      color: const Color(0xFF9B9B9B),
-                    ),
-                  ],
-                ),
+          SvgPicture.asset(
+            assets,
+            height: size,
+            width: size,
+            color: const Color(0xFF9B9B9B),
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          CustomText(
+            text: menu,
+            fontSize: 12,
+            color: const Color(0xFF9B9B9B),
+          ),
         ],
       ),
     );

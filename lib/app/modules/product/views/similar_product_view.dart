@@ -2,6 +2,7 @@ import 'package:colorbox/app/modules/collections/controllers/collections_control
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
+import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
@@ -17,25 +18,27 @@ class CollectionsProductView extends GetView<CollectionsController> {
   Widget build(BuildContext context) {
     var control = Get.put(CollectionsController());
 
-    control.fetchCollectionProduct(int.parse(id!));
+    control.fetchCollectionProduct(int.parse(id!), defaultSortBy);
     return GetBuilder<CollectionsController>(
         init: Get.put(CollectionsController()),
         builder: (controller) {
           return SizedBox(
-            height: Get.height * .43,
+            height: Get.height * 2.2,
             child: (controller.collection.products.isEmpty)
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: controller.collection.products.length,
-                    scrollDirection: Axis.horizontal,
+                    // scrollDirection: Axis.horizontal,
                     gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
+                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                      mainAxisExtent: 320,
+                      maxCrossAxisExtent: 200,
+                      childAspectRatio: 2 / 8,
+                      crossAxisSpacing: 20,
                       mainAxisSpacing: 20,
-                      crossAxisSpacing: 5,
-                      childAspectRatio: 2.0,
                     ),
                     itemBuilder: (_, i) {
                       var calcu1 = int.parse(controller
@@ -75,7 +78,7 @@ class CollectionsProductView extends GetView<CollectionsController> {
                                 fontWeight: FontWeight.w400,
                                 text: controller.collection.products[i].title,
                                 // text: controller.collection.products[i].title,
-                                textOverflow: TextOverflow.fade,
+                                textOverflow: TextOverflow.ellipsis,
                               ),
                             ),
                             (controller.collection.products[i].variants[0]
