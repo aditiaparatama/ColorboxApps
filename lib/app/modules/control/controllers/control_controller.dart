@@ -1,7 +1,7 @@
-import 'package:colorbox/app/modules/control/menu_model.dart';
 import 'package:colorbox/app/modules/control/providers/menu_provider.dart';
-import 'package:get/get.dart';
+import 'package:colorbox/app/modules/control/menu_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ControlController extends GetxController {
   List<Menu> _menu = List<Menu>.empty();

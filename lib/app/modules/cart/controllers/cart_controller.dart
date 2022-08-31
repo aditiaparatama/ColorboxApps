@@ -1,10 +1,11 @@
-import 'package:colorbox/app/widgets/custom_text.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import 'package:colorbox/app/modules/cart/models/cart_model.dart';
 import 'package:colorbox/app/modules/cart/providers/cart_provider.dart';
+import 'package:colorbox/app/modules/cart/models/cart_model.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
+import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'dart:async';
 
 class CartController extends GetxController {
   final LocalStorageData localStorageData = Get.find();
@@ -96,6 +97,9 @@ class CartController extends GetxController {
             content: SvgPicture.asset("assets/icon/bx-addproduct.svg"),
           ),
         );
+        Future.delayed(const Duration(seconds: 2), () {
+          Get.back();
+        });
       } else {
         Get.snackbar(
           "Peringatan",

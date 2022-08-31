@@ -38,10 +38,6 @@ class CustomCard extends GetView<SettingsController> {
                 child: CustomText(text: item.title, fontSize: 16),
                 onPressed: () =>
                     Get.to(WebViewPage(title: item.title, url: item.url)),
-                // onPressed: () async {
-                //   await controller.fetchPage(item.url);
-                //   Get.to(const ShopifyPage());
-                // },
               )
             ],
           ],

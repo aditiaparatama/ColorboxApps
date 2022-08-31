@@ -1,10 +1,10 @@
-import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/item_card.dart';
+import '../controllers/collections_controller.dart';
+import 'package:colorbox/app/routes/app_pages.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import '../controllers/collections_controller.dart';
 
 // ignore: use_key_in_widget_constructors, must_be_immutable
 class CollectionsView extends GetView<CollectionsController> {

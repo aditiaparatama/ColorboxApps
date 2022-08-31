@@ -9,6 +9,8 @@ const String tokenFront = "598ce110bf9791fd63d5e813040128cd";
 const String url_widget =
     "https://widget.delamibrands.com/colorbox/mobile/menus.json";
 // ignore: constant_identifier_names
+const String NewArrivalString = "gid://shopify/Collection/214404235414";
+// ignore: constant_identifier_names
 const int NewArrival = 214404235414;
 const int defaultSortBy = 2;
 
