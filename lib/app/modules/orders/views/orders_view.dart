@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/modules/orders/views/order_detail_view.dart';
+import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/widgets/skeleton.dart';
 import 'package:colorbox/constance.dart';
@@ -35,19 +36,11 @@ class OrdersView extends GetView<OrdersController> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const CustomText(
-          text: "Pesanan Saya",
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-          // color: Colors.white,
-        ),
-        centerTitle: false,
-        elevation: 3,
-        shadowColor: Colors.grey.withOpacity(0.3),
-        leadingWidth: 36,
-        // backgroundColor: Colors.white,
-      ),
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(56),
+          child: AppBarDefault(
+            text: (filter == null) ? "Pesanan Saya" : "Riwayat Pesanan",
+          )),
       backgroundColor: Colors.white,
       body: GetBuilder(
           init: Get.put(OrdersController()),

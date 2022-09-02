@@ -1,7 +1,6 @@
 import 'package:colorbox/app/modules/checkout/controllers/checkout_controller.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
-import 'package:colorbox/app/widgets/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -16,8 +15,9 @@ class VoucherWidget extends GetView<CheckoutController> {
     return GetBuilder(
         init: Get.put(CheckoutController()),
         builder: (c) {
-          return SizedBox(
-            width: Get.width,
+          return Container(
+            color: Colors.white,
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -26,7 +26,7 @@ class VoucherWidget extends GetView<CheckoutController> {
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
-                customDivider(),
+                const SizedBox(height: 12),
                 InkWell(
                   onTap: () => Get.toNamed(Routes.DISCOUNT),
                   child: Container(

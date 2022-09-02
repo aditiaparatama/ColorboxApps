@@ -1,4 +1,5 @@
 import 'package:colorbox/app/modules/checkout/controllers/checkout_controller.dart';
+import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/widgets/widget.dart';
 import 'package:colorbox/constance.dart';
@@ -11,20 +12,14 @@ class ShippingView extends GetView<CheckoutController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: const Icon(Icons.close),
-        ),
-        title: const CustomText(
-          text: 'Metode Pengiriman',
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-        centerTitle: false,
-        elevation: 3,
-        shadowColor: Colors.grey.withOpacity(0.3),
-      ),
+      resizeToAvoidBottomInset: false,
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(56),
+          child: AppBarDefault(
+            text: "Metode Pengiriman",
+            icon: Icon(Icons.close),
+          )),
+      backgroundColor: Colors.white,
       body: SafeArea(
           child: GetBuilder(
               init: Get.put(CheckoutController()),

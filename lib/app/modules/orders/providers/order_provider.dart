@@ -175,6 +175,14 @@ class OrderProvider extends GetConnect {
                                 amount
                             }
                         }
+                        totalDiscountsSet{
+                            presentmentMoney{
+                                amount
+                            }
+                            shopMoney{
+                                amount
+                            }
+                        }
                     }
                 }
             }
@@ -387,6 +395,14 @@ class OrderProvider extends GetConnect {
                                 amount
                             }
                             shopMoney {
+                                amount
+                            }
+                        }
+                        totalDiscountsSet{
+                            presentmentMoney{
+                                amount
+                            }
+                            shopMoney{
                                 amount
                             }
                         }

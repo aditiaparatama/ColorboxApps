@@ -1,7 +1,7 @@
 import 'package:colorbox/app/modules/profile/controllers/profile_controller.dart';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
+import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
-import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/widgets/custom_text_form_field.dart';
 import 'package:colorbox/app/widgets/widget.dart';
 import 'package:flutter/material.dart';
@@ -35,18 +35,12 @@ class InformationAccount extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(56),
+          child: AppBarDefault(
+            text: "Informasi Akun",
+          )),
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const CustomText(
-          text: "Informasi Akun",
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-        centerTitle: false,
-        elevation: 3,
-        shadowColor: Colors.grey.withOpacity(0.3),
-        leadingWidth: 36,
-      ),
       bottomSheet: Container(
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(

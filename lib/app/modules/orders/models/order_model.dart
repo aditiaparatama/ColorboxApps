@@ -17,6 +17,7 @@ class Order {
   ShippingLine? shippingLine;
   LineItems? lineItems;
   List<DiscountApplication>? discountApplications;
+  TotalPriceSet? totalDiscountsSet;
 
   Order(
       this.pageInfo,
@@ -56,6 +57,8 @@ class Order {
 
     if (json['displayFinancialStatus'] == "EXPIRED") {
       status = "Dibatalkan";
+      cancelReason =
+          "Pesanan kamu dibatalkan karena sesi pembayaran telah habis.";
     }
 
     if (json['displayFinancialStatus'] == "PAID") {
@@ -74,15 +77,20 @@ class Order {
 
     if (json['cancelReason'] == "DECLINED") {
       status = "Dibatalkan";
+      cancelReason =
+          "Mohon maaf, pesanan kamu dibatalkan karena ada kesalahan pada sistem. Silahkan menghubungi customer service.";
     }
 
     if (json['cancelReason'] == "DECLINED" && tags!.contains("order_cod")) {
       status = "Dibatalkan";
+      cancelReason =
+          "Mohon maaf, pesanan kamu dibatalkan karena ada kesalahan pada sistem. Silahkan menghubungi customer service.";
     }
 
     subtotalLineItemsQuantity = json['subtotalLineItemsQuantity'];
     subtotalPriceSet = TotalPriceSet.fromJson(json['subtotalPriceSet']);
     totalPriceSet = TotalPriceSet.fromJson(json['totalPriceSet']);
+    totalDiscountsSet = TotalPriceSet.fromJson(json['totalDiscountsSet']);
 
     shippingAddress = MailingAddress.fromOrder(json['shippingAddress']);
     shippingLine = ShippingLine.fromJson(json['shippingLine']);

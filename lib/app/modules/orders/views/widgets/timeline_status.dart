@@ -120,12 +120,14 @@ class TimelineStatus extends StatelessWidget {
                     CustomText(
                       text: order.shippingAddress!.address1,
                       fontSize: 12,
+                      textOverflow: TextOverflow.fade,
                     ),
                     const SizedBox(height: 2),
                     CustomText(
                       text:
                           "${order.shippingAddress!.address2}, ${order.shippingAddress!.city}",
                       fontSize: 12,
+                      textOverflow: TextOverflow.fade,
                     ),
                     const SizedBox(height: 2),
                     CustomText(
