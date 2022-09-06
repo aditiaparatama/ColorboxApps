@@ -32,7 +32,7 @@ class CheckoutController extends GetxController {
     await getAddress();
     // await createCheckout();
     _idCheckout =
-        "gid://shopify/Checkout/75887dad2980edf3cd942d0eb6418bbb?key=69a8decee72afb8b9f950b7a69a12d73";
+        "gid://shopify/Checkout/63841f1aba2db5781bf989ad1b266aaa?key=6516de972e56a147e31f56d37b86b15a";
     await getCheckout();
     await getETDShipping();
     super.onInit();

@@ -3,9 +3,9 @@ import 'package:colorbox/app/modules/checkout/views/widgets/address_widget.dart'
 import 'package:colorbox/app/modules/checkout/views/widgets/item_checkout.dart';
 import 'package:colorbox/app/modules/checkout/views/widgets/shipping_widget.dart';
 import 'package:colorbox/app/modules/checkout/views/widgets/voucher_widget.dart';
+import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
-import 'package:colorbox/app/widgets/widget.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 
@@ -61,13 +61,11 @@ class CheckoutView extends GetView<CheckoutController> {
       onWillPop: showExitPopup,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: const Text('Checkout',
-              style: TextStyle(fontWeight: FontWeight.bold)),
-          centerTitle: false,
-          elevation: 3,
-          shadowColor: Colors.grey.withOpacity(0.3),
-        ),
+        appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(56),
+            child: AppBarDefault(
+              text: "Checkout",
+            )),
         backgroundColor: const Color(0xFFF5F5F5),
         body: GetBuilder(
             init: Get.put(CheckoutController()),
@@ -85,7 +83,26 @@ class CheckoutView extends GetView<CheckoutController> {
                               children: [
                                 Column(
                                   children: [
-                                    const AddressWidget(),
+                                    Container(
+                                      color: Colors.white,
+                                      padding: const EdgeInsets.fromLTRB(
+                                          16, 24, 16, 16),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: const [
+                                          CustomText(
+                                            text: "Pengiriman",
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          SizedBox(height: 12),
+                                          AddressWidget(),
+                                          SizedBox(height: 16),
+                                          ShippingWidget(),
+                                        ],
+                                      ),
+                                    ),
                                     const SizedBox(
                                       height: 8,
                                     ),
@@ -101,31 +118,28 @@ class CheckoutView extends GetView<CheckoutController> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 14,
                                           ),
-                                          customDivider(),
-                                          for (int index = 0;
-                                              index <
-                                                  controller.checkout.lineItems!
-                                                      .length;
-                                              index++) ...[
-                                            ItemCheckoutWidget(
-                                              formatter: formatter,
-                                              controller: controller,
-                                              index: index,
-                                            ),
-                                            const SizedBox(
-                                              height: 16,
-                                            ),
-                                          ],
-                                          const SizedBox(
-                                            height: 16,
-                                          ),
-                                          const ShippingWidget(),
+                                          const SizedBox(height: 12),
+                                          ListView.separated(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              separatorBuilder: (_, index) =>
+                                                  const SizedBox(height: 16),
+                                              itemCount: controller
+                                                  .checkout.lineItems!.length,
+                                              itemBuilder: (_, index) {
+                                                return ItemCheckoutWidget(
+                                                  formatter: formatter,
+                                                  controller: controller,
+                                                  index: index,
+                                                );
+                                              }),
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
+                                    const SizedBox(height: 8),
+                                    const VoucherWidget(),
+                                    const SizedBox(height: 8),
                                     //ringkasan total
                                     Container(
                                       color: Colors.white,
@@ -135,12 +149,6 @@ class CheckoutView extends GetView<CheckoutController> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          const VoucherWidget(),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 4),
-                                            child: customDivider(),
-                                          ),
                                           const CustomText(
                                             text: "Ringkasan Belanja",
                                             fontSize: 14,
@@ -154,13 +162,13 @@ class CheckoutView extends GetView<CheckoutController> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               const CustomText(
-                                                text: "Total Harga",
+                                                text: "Subtotal Produk",
                                                 fontSize: 12,
                                                 color: Colors.black54,
                                               ),
                                               CustomText(
                                                 text:
-                                                    "Rp ${formatter.format(int.parse(controller.checkout.totalPriceV2!.replaceAll(".0", "")))}",
+                                                    "Rp ${formatter.format(int.parse(controller.checkout.lineItemsSubtotalPrice!.replaceAll(".0", "")))}",
                                                 color: Colors.black54,
                                                 fontSize: 12,
                                               ),
@@ -174,7 +182,7 @@ class CheckoutView extends GetView<CheckoutController> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               const CustomText(
-                                                text: "Total Ongkos Kirim",
+                                                text: "Ongkos Kirim",
                                                 fontSize: 12,
                                                 color: Colors.black54,
                                               ),
@@ -207,7 +215,7 @@ class CheckoutView extends GetView<CheckoutController> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               const CustomText(
-                                                text: "Total Diskon Barang",
+                                                text: "Potongan Harga",
                                                 fontSize: 12,
                                                 color: Colors.black54,
                                               ),
@@ -247,7 +255,7 @@ class CheckoutView extends GetView<CheckoutController> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               const CustomText(
-                                                text: "Total",
+                                                text: "Total Harga",
                                                 fontSize: 14,
                                               ),
                                               const SizedBox(

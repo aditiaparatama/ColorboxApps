@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_null_comparison
-
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:dotted_line/dotted_line.dart';
@@ -21,7 +19,7 @@ class DiscountCartView extends GetView<DiscountController> {
 
   @override
   Widget build(BuildContext context) {
-    var voucher = cartController.cart.discountCodes;
+    var voucher = cartController.cart.discountCodes ?? [];
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -41,7 +39,7 @@ class DiscountCartView extends GetView<DiscountController> {
           builder: (context) {
             return (controller.loading.value)
                 ? loadingCircular()
-                : (voucher!.isEmpty)
+                : (voucher.isEmpty)
                     ? EmptyPage(
                         image: SvgPicture.asset(
                           "assets/icon/EmptyStateVoucher.svg",
@@ -173,26 +171,17 @@ class DiscountCartView extends GetView<DiscountController> {
                                               width: Get.width,
                                               height: 185,
                                               decoration: BoxDecoration(
-                                                  color: (voucher != null)
-                                                      ? (_totalPrice <
-                                                              _minPrice)
-                                                          ? const Color(
-                                                                  0xFF212121)
-                                                              .withOpacity(0.05)
-                                                          : Colors.transparent
+                                                  color: (_totalPrice <
+                                                          _minPrice)
+                                                      ? const Color(0xFF212121)
+                                                          .withOpacity(0.05)
                                                       : Colors.transparent,
-                                                  border: (voucher != null)
-                                                      ? (voucher[0].code ==
-                                                              controller
-                                                                  .discount[
-                                                                      index]
-                                                                  .title)
-                                                          ? Border.all(
-                                                              color:
-                                                                  Colors.black)
-                                                          : Border.all(
-                                                              color: const Color(
-                                                                  0xFFE0E0E0))
+                                                  border: (voucher[0].code ==
+                                                          controller
+                                                              .discount[index]
+                                                              .title)
+                                                      ? Border.all(
+                                                          color: Colors.black)
                                                       : Border.all(
                                                           color: const Color(
                                                               0xFFE0E0E0)),
@@ -220,55 +209,52 @@ class DiscountCartView extends GetView<DiscountController> {
                                                       const SizedBox(
                                                         width: 16,
                                                       ),
-                                                      (voucher != null)
-                                                          ? (voucher[0].code ==
-                                                                  controller
-                                                                      .discount[
-                                                                          index]
-                                                                      .title)
-                                                              ? Container(
-                                                                  padding: const EdgeInsets
-                                                                          .symmetric(
-                                                                      horizontal:
-                                                                          12,
-                                                                      vertical:
-                                                                          4),
-                                                                  decoration:
-                                                                      BoxDecoration(
+                                                      (voucher[0].code ==
+                                                              controller
+                                                                  .discount[
+                                                                      index]
+                                                                  .title)
+                                                          ? Container(
+                                                              padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      12,
+                                                                  vertical: 4),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: Colors
+                                                                    .black,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            6),
+                                                              ),
+                                                              child: Row(
+                                                                children: const [
+                                                                  Icon(
+                                                                    Icons
+                                                                        .check_circle,
                                                                     color: Colors
-                                                                        .black,
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(6),
+                                                                        .white,
+                                                                    size: 16,
                                                                   ),
-                                                                  child: Row(
-                                                                    children: const [
-                                                                      Icon(
-                                                                        Icons
-                                                                            .check_circle,
-                                                                        color: Colors
-                                                                            .white,
-                                                                        size:
-                                                                            16,
-                                                                      ),
-                                                                      SizedBox(
-                                                                        width:
-                                                                            8,
-                                                                      ),
-                                                                      CustomText(
-                                                                        text:
-                                                                            "Terpasang",
-                                                                        fontSize:
-                                                                            12,
-                                                                        fontWeight:
-                                                                            FontWeight.bold,
-                                                                        color: Colors
-                                                                            .white,
-                                                                      )
-                                                                    ],
+                                                                  SizedBox(
+                                                                    width: 8,
                                                                   ),
-                                                                )
-                                                              : const SizedBox()
+                                                                  CustomText(
+                                                                    text:
+                                                                        "Terpasang",
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color: Colors
+                                                                        .white,
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            )
                                                           : const SizedBox()
                                                     ],
                                                   ),
@@ -363,15 +349,12 @@ class DiscountCartView extends GetView<DiscountController> {
                                               left: -20,
                                               child: CircleAvatar(
                                                 radius: 16,
-                                                backgroundColor: (voucher !=
-                                                        null)
-                                                    ? (voucher[0].code ==
-                                                            controller
-                                                                .discount[index]
-                                                                .title)
-                                                        ? Colors.black
-                                                        : const Color(
-                                                            0xFFE0E0E0)
+                                                backgroundColor: (voucher[0]
+                                                            .code ==
+                                                        controller
+                                                            .discount[index]
+                                                            .title)
+                                                    ? Colors.black
                                                     : const Color(0xFFE0E0E0),
                                                 child: const CircleAvatar(
                                                   radius: 15,
@@ -382,15 +365,12 @@ class DiscountCartView extends GetView<DiscountController> {
                                               right: -20,
                                               child: CircleAvatar(
                                                 radius: 16,
-                                                backgroundColor: (voucher !=
-                                                        null)
-                                                    ? (voucher[0].code ==
-                                                            controller
-                                                                .discount[index]
-                                                                .title)
-                                                        ? Colors.black
-                                                        : const Color(
-                                                            0xFFE0E0E0)
+                                                backgroundColor: (voucher[0]
+                                                            .code ==
+                                                        controller
+                                                            .discount[index]
+                                                            .title)
+                                                    ? Colors.black
                                                     : const Color(0xFFE0E0E0),
                                                 child: const CircleAvatar(
                                                   radius: 15,

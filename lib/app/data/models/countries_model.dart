@@ -17,6 +17,8 @@ class Countries {
     for (int i = 0; i < json['provinces'].length; i++) {
       provinces!.add(Province.fromJson(json['provinces'][i]));
     }
+
+    provinces!.sort((a, b) => a.name!.compareTo(b.name!));
   }
 }
 
@@ -37,7 +39,19 @@ class Province {
   Province.fromJson(var json) {
     id = json['id'];
     countryId = json['country_id'];
-    name = json['name'];
+    switch (json['name']) {
+      case "North Sumatra":
+        name = 'Sumatera Utara';
+        break;
+      case "West Sumatra":
+        name = 'Sumatera Barat';
+        break;
+      case "South Sumatra":
+        name = 'Sumatera Selatan';
+        break;
+      default:
+        name = json['name'];
+    }
     code = json['code'];
     taxName = json['tax_name'];
     taxType = json['tax_type'];

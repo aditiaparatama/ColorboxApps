@@ -1,7 +1,6 @@
 import 'package:colorbox/app/modules/checkout/controllers/checkout_controller.dart';
 import 'package:colorbox/app/modules/checkout/views/shipping_view.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
-import 'package:colorbox/app/widgets/widget.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,52 +16,24 @@ class ShippingWidget extends GetView<CheckoutController> {
     return GetBuilder(
         init: Get.put(CheckoutController()),
         builder: (c) {
-          return SizedBox(
-            width: Get.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const CustomText(
-                  text: "Pengiriman",
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-                customDivider(),
-                InkWell(
-                  onTap: () async {
-                    if (controller.checkout.availableShippingRates!.ready ==
-                        false) {
-                      await controller.getCheckout();
-                    }
-                    await controller.getETDShipping();
-                    Get.to(const ShippingView());
-                  },
-                  child: (controller.checkout.shippingLine == null)
-                      ? pilihPengiriman()
-                      : pengiriman(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 2),
-                  child: customDivider(),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const CustomText(
-                      text: "Subtotal",
-                      fontSize: 12,
-                    ),
-                    CustomText(
-                      text:
-                          "Rp ${formatter.format(int.parse(controller.checkout.lineItemsSubtotalPrice!.replaceAll(".0", "")))}",
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ],
-                )
-              ],
-            ),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InkWell(
+                onTap: () async {
+                  if (controller.checkout.availableShippingRates!.ready ==
+                      false) {
+                    await controller.getCheckout();
+                  }
+                  await controller.getETDShipping();
+                  Get.to(const ShippingView());
+                },
+                child: (controller.checkout.shippingLine == null)
+                    ? pilihPengiriman()
+                    : pengiriman(),
+              ),
+            ],
           );
         });
   }

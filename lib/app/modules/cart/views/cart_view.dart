@@ -1,5 +1,6 @@
 import 'package:colorbox/app/modules/cart/views/widget/voucher_widget.dart';
 import 'package:colorbox/app/modules/profile/views/address/address_form.dart';
+import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/empty_page.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
@@ -20,58 +21,43 @@ class CartView extends GetView<CartController> {
         builder: (c) {
           return Scaffold(
               resizeToAvoidBottomInset: false,
-              backgroundColor: Colors.white,
-              appBar: PreferredSize(
-                preferredSize: const Size.fromHeight(56),
-                child: AppBar(
-                  title: const CustomText(
+              appBar: const PreferredSize(
+                  preferredSize: Size.fromHeight(56),
+                  child: AppBarDefault(
                     text: "Keranjang",
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  centerTitle: false,
-                  elevation: 3,
-                  shadowColor: Colors.grey.withOpacity(0.3),
-                  leadingWidth: 36,
-                  leading: IconButton(
-                      padding: const EdgeInsets.all(16),
-                      onPressed: () => Get.back(),
-                      icon: const Icon(Icons.close)),
-                ),
-              ),
+                    icon: Icon(Icons.close),
+                  )),
+              backgroundColor: Colors.white,
               // bottomSheet: bottomCart(),
               body: SafeArea(
-                child: 
-                
-                Column(children: [
+                  child: SingleChildScrollView(
+                child: Column(children: [
                   SizedBox(
-                    height: Get.height * .636,
+                    height: Get.height * .67,
                     child: (c.cart.lines!.isEmpty)
-                    ? EmptyPage(
-                        image: Lottie.network(
-                            "https://assets2.lottiefiles.com/private_files/lf30_x2lzmtdl.json"),
-                        textHeader: "Keranjang Kamu Kosong",
-                        textContent:
-                            "Ayo segera tambahkan produk kedalam keranjang",
-                      )
-                    : ListView.separated(
-                      shrinkWrap: true,
-                        separatorBuilder: (context, index) => const Divider(
-                              color: colorDiver,
-                              thickness: 1,
-                            ),
-                        itemCount: c.cart.lines!.length,
-                        itemBuilder: (_, index) => ItemCartWidget(
-                              formatter: formatter,
-                              controller: controller,
-                              index: index,
-                            )),
+                        ? EmptyPage(
+                            image: Lottie.network(
+                                "https://assets2.lottiefiles.com/private_files/lf30_x2lzmtdl.json"),
+                            textHeader: "Keranjang Kamu Kosong",
+                            textContent:
+                                "Ayo segera tambahkan produk kedalam keranjang",
+                          )
+                        : ListView.separated(
+                            shrinkWrap: true,
+                            separatorBuilder: (context, index) => const Divider(
+                                  color: colorDiver,
+                                  thickness: 1,
+                                ),
+                            itemCount: c.cart.lines!.length,
+                            itemBuilder: (_, index) => ItemCartWidget(
+                                  formatter: formatter,
+                                  controller: controller,
+                                  index: index,
+                                )),
                   ),
-                  
-                            bottomCart(),
-                ])
-                
-              ));
+                  bottomCart(),
+                ]),
+              )));
         });
   }
 

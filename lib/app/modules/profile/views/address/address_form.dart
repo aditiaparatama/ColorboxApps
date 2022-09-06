@@ -4,6 +4,7 @@ import 'package:colorbox/app/modules/profile/views/address/kecamatan_bottomsheet
 import 'package:colorbox/app/modules/profile/views/address/province_bottomsheet.dart';
 import 'package:colorbox/app/modules/profile/views/address/zip_bottomsheet.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
+import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/widgets/custom_text_form_field.dart';
@@ -41,21 +42,12 @@ class AddressForm extends GetView<ProfileController> {
     }
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: CustomText(
-          text: (id == null) ? "Tambah Alamat" : "Ubah Alamat",
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-        centerTitle: false,
-        elevation: 3,
-        shadowColor: Colors.grey.withOpacity(0.3),
-        leadingWidth: 36,
-        leading: IconButton(
-            padding: const EdgeInsets.all(16),
-            onPressed: () => Get.back(),
-            icon: const Icon(Icons.close)),
-      ),
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(56),
+          child: AppBarDefault(
+            text: (id == null) ? "Tambah Alamat" : "Ubah Alamat",
+            icon: const Icon(Icons.close),
+          )),
       backgroundColor: Colors.white,
       bottomSheet: Container(
         padding: const EdgeInsets.all(16),

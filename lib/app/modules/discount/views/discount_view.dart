@@ -1,3 +1,4 @@
+import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:colorbox/app/modules/checkout/controllers/checkout_controller.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
@@ -19,16 +20,13 @@ class DiscountView extends GetView<DiscountController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const CustomText(
-          text: 'Voucher',
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-        centerTitle: false,
-        elevation: 3,
-        shadowColor: Colors.grey.withOpacity(0.3),
-      ),
+      resizeToAvoidBottomInset: false,
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(56),
+          child: AppBarDefault(
+            text: "Voucher",
+            icon: Icon(Icons.close),
+          )),
       body: Padding(
         padding: const EdgeInsets.only(top: defaultPadding * 2),
         child: GetBuilder(
@@ -103,13 +101,7 @@ class DiscountView extends GetView<DiscountController> {
                                               ? (_totalPrice < _minPrice)
                                                   ? const Color(0xFF212121)
                                                       .withOpacity(0.05)
-                                                  : (voucher!.code ==
-                                                          controller
-                                                              .discount[index]
-                                                              .title)
-                                                      ? const Color(0xFF212121)
-                                                          .withOpacity(0.03)
-                                                      : Colors.transparent
+                                                  : Colors.transparent
                                               : Colors.transparent,
                                           border: (voucher != null)
                                               ? (voucher!.code ==
@@ -230,7 +222,7 @@ class DiscountView extends GetView<DiscountController> {
                                                             .format(expired)
                                                             .length >
                                                         12)
-                                                    ? 215
+                                                    ? 225
                                                     : 200,
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8, vertical: 4),
