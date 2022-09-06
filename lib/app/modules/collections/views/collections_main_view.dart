@@ -62,6 +62,7 @@ class CollectionsMainView extends GetView<CollectionsController> {
                         DefaultTabController.of(context)!;
                     if (Get.arguments["indexMenu"] != null) {
                       tabController.index = controller.selectedIndex;
+                      controller.tabIndex = controller.selectedIndex;
                     }
                     return Scaffold(
                         resizeToAvoidBottomInset: false,
@@ -81,6 +82,7 @@ class CollectionsMainView extends GetView<CollectionsController> {
                             onPageChanged: (index) {
                               controller.selectedIndex = index;
                               controller.onChangeList(index);
+                              controller.tabIndex = index;
                               tabController.index = index;
                             },
                             itemBuilder: ((context, index) {
@@ -168,25 +170,27 @@ class CollectionsMainView extends GetView<CollectionsController> {
                                                 isScrollable: true,
                                                 tabs: control.listTabs,
                                                 controller: tabController,
-                                                labelColor: Colors.white,
-                                                labelPadding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        8, 0, 8, 0),
+                                                // labelColor: Colors.white,
+                                                // labelPadding:
+                                                //     const EdgeInsets.fromLTRB(
+                                                //         8, 0, 8, 0),
                                                 labelStyle: textStyle.copyWith(
                                                     fontSize: 14.0,
                                                     color: Colors.black,
                                                     fontWeight:
                                                         FontWeight.w600),
-                                                indicator: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            0), // Creates border
-                                                    color: Colors.black),
+                                                // indicator: BoxDecoration(
+                                                //     // Creates border
+                                                //     border: Border.all(
+                                                //         color: Colors.black),
+                                                //     color: Colors.black),
                                                 unselectedLabelColor:
                                                     const Color.fromRGBO(
                                                         155, 155, 155, 1),
                                                 onTap: (index) {
                                                   _pControl.jumpToPage(index);
+                                                  controller.tabIndex = index;
+                                                  controller.update();
                                                 },
                                               ),
                                             ),

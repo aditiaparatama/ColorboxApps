@@ -19,6 +19,7 @@ class CollectionsController extends GetxController {
   //SET LIST TAB COLLECTION
   final List<Widget> _listTabs = [];
   List<Widget> get listTabs => _listTabs;
+  int tabIndex = 0;
   var menu;
   bool? _parentList;
   int pageIndex = 0;
@@ -98,11 +99,20 @@ class CollectionsController extends GetxController {
     } else {
       for (int i = 0; i < argMenu.length; i++) {
         listTabs.add(Tab(
-            child: Text(argMenu[i]
-                .title!
-                .replaceAll("- NEW ARRIVAL", "")
-                .replaceAll("WOMEN - ", "")
-                .replaceAll("MEN - ", ""))));
+            child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+              color: (tabIndex == i) ? Colors.black : Colors.transparent,
+              border: Border.all(color: Colors.grey)),
+          child: Text(
+              argMenu[i]
+                  .title!
+                  .replaceAll("- NEW ARRIVAL", "")
+                  .replaceAll("WOMEN - ", "")
+                  .replaceAll("MEN - ", ""),
+              style: TextStyle(
+                  color: (tabIndex == i) ? Colors.white : Colors.grey)),
+        )));
       }
     }
     update();

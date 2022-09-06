@@ -42,7 +42,7 @@ class OnBoardView extends GetView<OnBoardController> {
                         ),
                       ],
                     ),
-                    onPressed: () => Get.offNamed(Routes.REGISTER),
+                    onPressed: () => Get.toNamed(Routes.REGISTER),
                   ),
                 ),
               ),

@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:dotted_line/dotted_line.dart';
@@ -38,15 +40,8 @@ class DiscountCartView extends GetView<DiscountController> {
           init: Get.put(DiscountController()),
           builder: (context) {
             return (controller.loading.value)
-                ? loadingCircular() : (voucher!.isEmpty) ? EmptyPage(
-                          image: SvgPicture.asset(
-                            "assets/icon/EmptyStateVoucher.svg",
-                          ),
-                          textHeader: "Belum Ada Voucher",
-                          textContent:
-                              "Saat ini belum ada voucher yang dapat digunakan",
-                        )
-                : (controller.discount.isEmpty)
+                ? loadingCircular()
+                : (voucher!.isEmpty)
                     ? EmptyPage(
                         image: SvgPicture.asset(
                           "assets/icon/EmptyStateVoucher.svg",
@@ -55,324 +50,360 @@ class DiscountCartView extends GetView<DiscountController> {
                         textContent:
                             "Saat ini belum ada voucher yang dapat digunakan",
                       )
-                    : Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 16, right: 16, top: 24, bottom: 28),
-                            child: TextFormField(
-                              controller: searchController,
-                              cursorColor: Colors.black,
-                              onChanged: (value) => controller.update(),
-                              decoration: InputDecoration(
-                                  hintText: "Masukkan Kode Voucher",
-                                  hintStyle: const TextStyle(fontSize: 12),
-                                  suffixIcon: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 6),
-                                    child: CustomButton(
-                                      onPressed: (searchController.text == "")
-                                          ? null
-                                          : () async {
-                                              controller.loading.value = true;
-                                              controller.update();
-                                              await cartController
-                                                  .updateDiscountCode(
-                                                      searchController.text);
-                                              controller.loading.value = false;
-                                              controller.update();
-                                            },
-                                      text: "Gunakan",
-                                      color: Colors.white,
-                                      backgroundColor: Colors.black,
-                                      height: 40,
-                                      width: 94,
-                                      fontSize: 12,
-                                      radius: 6,
-                                    ),
-                                  ),
-                                  focusedBorder: const OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(6)),
-                                      borderSide: BorderSide(
-                                          color: Colors.black, width: 1)),
-                                  enabledBorder: const OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(6)),
-                                      borderSide: BorderSide(
-                                          color: Color(0xFFE0E0E0)))),
+                    : (controller.discount.isEmpty)
+                        ? EmptyPage(
+                            image: SvgPicture.asset(
+                              "assets/icon/EmptyStateVoucher.svg",
                             ),
-                          ),
-                          SizedBox(
-                            height: Get.height * .73,
-                            child: ListView.builder(
-                              itemCount: controller.discount.length,
-                              itemBuilder: (_, index) {
-                                int _totalPrice = int.parse(cartController
-                                    .cart.estimatedCost!.totalAmount!
-                                    .replaceAll(".0", ""));
-
-                                int _minPrice = (controller.discount[index]
-                                            .minimumRequirement ==
-                                        null)
-                                    ? 0
-                                    : int.parse(controller
-                                        .discount[index]
-                                        .minimumRequirement[
-                                            'greaterThanOrEqualToSubtotal']
-                                            ['amount']
+                            textHeader: "Belum Ada Voucher",
+                            textContent:
+                                "Saat ini belum ada voucher yang dapat digunakan",
+                          )
+                        : Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 16, right: 16, top: 24, bottom: 28),
+                                child: TextFormField(
+                                  controller: searchController,
+                                  cursorColor: Colors.black,
+                                  onChanged: (value) => controller.update(),
+                                  decoration: InputDecoration(
+                                      hintText: "Masukkan Kode Voucher",
+                                      hintStyle: const TextStyle(fontSize: 12),
+                                      suffixIcon: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 6),
+                                        child: CustomButton(
+                                          onPressed:
+                                              (searchController.text == "")
+                                                  ? null
+                                                  : () async {
+                                                      controller.loading.value =
+                                                          true;
+                                                      controller.update();
+                                                      await cartController
+                                                          .updateDiscountCode(
+                                                              searchController
+                                                                  .text);
+                                                      controller.loading.value =
+                                                          false;
+                                                      controller.update();
+                                                    },
+                                          text: "Gunakan",
+                                          color: Colors.white,
+                                          backgroundColor: Colors.black,
+                                          height: 40,
+                                          width: 94,
+                                          fontSize: 12,
+                                          radius: 6,
+                                        ),
+                                      ),
+                                      focusedBorder: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(6)),
+                                          borderSide: BorderSide(
+                                              color: Colors.black, width: 1)),
+                                      enabledBorder: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(6)),
+                                          borderSide: BorderSide(
+                                              color: Color(0xFFE0E0E0)))),
+                                ),
+                              ),
+                              SizedBox(
+                                height: Get.height * .73,
+                                child: ListView.builder(
+                                  itemCount: controller.discount.length,
+                                  itemBuilder: (_, index) {
+                                    int _totalPrice = int.parse(cartController
+                                        .cart.estimatedCost!.totalAmount!
                                         .replaceAll(".0", ""));
-                                var expired =
-                                    (controller.discount[index].endsAt == null)
+
+                                    int _minPrice = (controller.discount[index]
+                                                .minimumRequirement ==
+                                            null)
+                                        ? 0
+                                        : int.parse(controller
+                                            .discount[index]
+                                            .minimumRequirement[
+                                                'greaterThanOrEqualToSubtotal']
+                                                ['amount']
+                                            .replaceAll(".0", ""));
+                                    var expired = (controller
+                                                .discount[index].endsAt ==
+                                            null)
                                         ? null
                                         : DateTime.parse(
                                             controller.discount[index].endsAt!);
 
-                                Color _colorFont = (_totalPrice < _minPrice)
-                                    ? Colors.grey
-                                    : Colors.black;
+                                    Color _colorFont = (_totalPrice < _minPrice)
+                                        ? Colors.grey
+                                        : Colors.black;
 
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: defaultPadding * 2,
-                                      vertical: defaultPadding),
-                                  child: Stack(
-                                    children: [
-                                      GestureDetector(
-                                        onTap: (_totalPrice < _minPrice)
-                                            ? null
-                                            : () async {
-                                                controller.loading.value = true;
-                                                controller.update();
-                                                await cartController
-                                                    .updateDiscountCode(
-                                                        controller
-                                                            .discount[index]
-                                                            .title!);
-                                                controller.loading.value =
-                                                    false;
-                                                controller.update();
-                                              },
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: defaultPadding * 3,
-                                              vertical: defaultPadding * 2),
-                                          width: Get.width,
-                                          height: 185,
-                                          decoration: BoxDecoration(
-                                              color: (voucher != null)
-                                                  ? (_totalPrice < _minPrice)
-                                                      ? const Color(0xFF212121)
-                                                          .withOpacity(0.05)
-                                                      : Colors.transparent
-                                                  : Colors.transparent,
-                                              border: (voucher != null)
-                                                  ? (voucher[0].code ==
-                                                          controller
-                                                              .discount[index]
-                                                              .title)
-                                                      ? Border.all(
-                                                          color: Colors.black)
-                                                      : Border.all(
-                                                          color: const Color(
-                                                              0xFFE0E0E0))
-                                                  : Border.all(
-                                                      color: const Color(
-                                                          0xFFE0E0E0)),
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(10))),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  CustomText(
-                                                    text: controller
-                                                        .discount[index].title,
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: _colorFont,
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 16,
-                                                  ),
-                                                  (voucher != null)
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: defaultPadding * 2,
+                                          vertical: defaultPadding),
+                                      child: Stack(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: (_totalPrice < _minPrice)
+                                                ? null
+                                                : () async {
+                                                    controller.loading.value =
+                                                        true;
+                                                    controller.update();
+                                                    await cartController
+                                                        .updateDiscountCode(
+                                                            controller
+                                                                .discount[index]
+                                                                .title!);
+                                                    controller.loading.value =
+                                                        false;
+                                                    controller.update();
+                                                  },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal:
+                                                          defaultPadding * 3,
+                                                      vertical:
+                                                          defaultPadding * 2),
+                                              width: Get.width,
+                                              height: 185,
+                                              decoration: BoxDecoration(
+                                                  color: (voucher != null)
+                                                      ? (_totalPrice <
+                                                              _minPrice)
+                                                          ? const Color(
+                                                                  0xFF212121)
+                                                              .withOpacity(0.05)
+                                                          : Colors.transparent
+                                                      : Colors.transparent,
+                                                  border: (voucher != null)
                                                       ? (voucher[0].code ==
                                                               controller
                                                                   .discount[
                                                                       index]
                                                                   .title)
-                                                          ? Container(
-                                                              padding: const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal:
-                                                                      12,
-                                                                  vertical: 4),
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Colors
-                                                                    .black,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            6),
-                                                              ),
-                                                              child: Row(
-                                                                children: const [
-                                                                  Icon(
-                                                                    Icons
-                                                                        .check_circle,
+                                                          ? Border.all(
+                                                              color:
+                                                                  Colors.black)
+                                                          : Border.all(
+                                                              color: const Color(
+                                                                  0xFFE0E0E0))
+                                                      : Border.all(
+                                                          color: const Color(
+                                                              0xFFE0E0E0)),
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(10))),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      CustomText(
+                                                        text: controller
+                                                            .discount[index]
+                                                            .title,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: _colorFont,
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 16,
+                                                      ),
+                                                      (voucher != null)
+                                                          ? (voucher[0].code ==
+                                                                  controller
+                                                                      .discount[
+                                                                          index]
+                                                                      .title)
+                                                              ? Container(
+                                                                  padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                      horizontal:
+                                                                          12,
+                                                                      vertical:
+                                                                          4),
+                                                                  decoration:
+                                                                      BoxDecoration(
                                                                     color: Colors
-                                                                        .white,
-                                                                    size: 16,
+                                                                        .black,
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(6),
                                                                   ),
-                                                                  SizedBox(
-                                                                    width: 8,
+                                                                  child: Row(
+                                                                    children: const [
+                                                                      Icon(
+                                                                        Icons
+                                                                            .check_circle,
+                                                                        color: Colors
+                                                                            .white,
+                                                                        size:
+                                                                            16,
+                                                                      ),
+                                                                      SizedBox(
+                                                                        width:
+                                                                            8,
+                                                                      ),
+                                                                      CustomText(
+                                                                        text:
+                                                                            "Terpasang",
+                                                                        fontSize:
+                                                                            12,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        color: Colors
+                                                                            .white,
+                                                                      )
+                                                                    ],
                                                                   ),
-                                                                  CustomText(
-                                                                    text:
-                                                                        "Terpasang",
-                                                                    fontSize:
-                                                                        12,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    color: Colors
-                                                                        .white,
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            )
+                                                                )
+                                                              : const SizedBox()
                                                           : const SizedBox()
-                                                      : const SizedBox()
-                                                ],
-                                              ),
-                                              const Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 12),
-                                                child: DottedLine(),
-                                              ),
-                                              for (final x in controller
-                                                  .discount[index].summary!
-                                                  .split("•")) ...[
-                                                CustomText(
-                                                  text: "• $x",
-                                                  fontSize: 12,
-                                                  color: _colorFont,
-                                                ),
-                                                const SizedBox(height: 4),
-                                              ],
-                                              (controller.discount[index]
-                                                          .summary!
-                                                          .split("•")
-                                                          .length ==
-                                                      2)
-                                                  ? const SizedBox(
-                                                      height:
-                                                          defaultPadding * 2,
-                                                    )
-                                                  : (controller.discount[index]
+                                                    ],
+                                                  ),
+                                                  const Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 12),
+                                                    child: DottedLine(),
+                                                  ),
+                                                  for (final x in controller
+                                                      .discount[index].summary!
+                                                      .split("•")) ...[
+                                                    CustomText(
+                                                      text: "• $x",
+                                                      fontSize: 12,
+                                                      color: _colorFont,
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                  ],
+                                                  (controller.discount[index]
                                                               .summary!
                                                               .split("•")
-                                                              .length <
-                                                          4)
+                                                              .length ==
+                                                          2)
                                                       ? const SizedBox(
-                                                          height: 4,
+                                                          height:
+                                                              defaultPadding *
+                                                                  2,
                                                         )
-                                                      : const SizedBox(),
-                                              Container(
-                                                width: (expired == null)
-                                                    ? 200
-                                                    : (formatter
-                                                                .format(expired)
-                                                                .length >
-                                                            12)
-                                                        ? 225
-                                                        : 200,
-                                                padding:
-                                                    const EdgeInsets.symmetric(
+                                                      : (controller
+                                                                  .discount[
+                                                                      index]
+                                                                  .summary!
+                                                                  .split("•")
+                                                                  .length <
+                                                              4)
+                                                          ? const SizedBox(
+                                                              height: 4,
+                                                            )
+                                                          : const SizedBox(),
+                                                  Container(
+                                                    width: (expired == null)
+                                                        ? 200
+                                                        : (formatter
+                                                                    .format(
+                                                                        expired)
+                                                                    .length >
+                                                                12)
+                                                            ? 225
+                                                            : 200,
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
                                                         horizontal: 8,
                                                         vertical: 4),
-                                                decoration: BoxDecoration(
-                                                    color:
-                                                        const Color(0xFF212121)
+                                                    decoration: BoxDecoration(
+                                                        color: const Color(
+                                                                0xFF212121)
                                                             .withOpacity(0.05),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            24)),
-                                                child: Row(
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                      "assets/icon/Clock.svg",
-                                                      color: _colorFont,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(24)),
+                                                    child: Row(
+                                                      children: [
+                                                        SvgPicture.asset(
+                                                          "assets/icon/Clock.svg",
+                                                          color: _colorFont,
+                                                        ),
+                                                        CustomText(
+                                                          text: " Berlaku sd ",
+                                                          fontSize: 12,
+                                                          color: _colorFont,
+                                                        ),
+                                                        CustomText(
+                                                          text: (expired ==
+                                                                  null)
+                                                              ? ""
+                                                              : formatter
+                                                                  .format(
+                                                                      expired),
+                                                          fontSize: 12,
+                                                          color: _colorFont,
+                                                        ),
+                                                      ],
                                                     ),
-                                                    CustomText(
-                                                      text: " Berlaku sd ",
-                                                      fontSize: 12,
-                                                      color: _colorFont,
-                                                    ),
-                                                    CustomText(
-                                                      text: (expired == null)
-                                                          ? ""
-                                                          : formatter
-                                                              .format(expired),
-                                                      fontSize: 12,
-                                                      color: _colorFont,
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
+                                                  )
+                                                ],
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                          Positioned(
+                                              top: 145 / 2,
+                                              left: -20,
+                                              child: CircleAvatar(
+                                                radius: 16,
+                                                backgroundColor: (voucher !=
+                                                        null)
+                                                    ? (voucher[0].code ==
+                                                            controller
+                                                                .discount[index]
+                                                                .title)
+                                                        ? Colors.black
+                                                        : const Color(
+                                                            0xFFE0E0E0)
+                                                    : const Color(0xFFE0E0E0),
+                                                child: const CircleAvatar(
+                                                  radius: 15,
+                                                ),
+                                              )),
+                                          Positioned(
+                                              top: 145 / 2,
+                                              right: -20,
+                                              child: CircleAvatar(
+                                                radius: 16,
+                                                backgroundColor: (voucher !=
+                                                        null)
+                                                    ? (voucher[0].code ==
+                                                            controller
+                                                                .discount[index]
+                                                                .title)
+                                                        ? Colors.black
+                                                        : const Color(
+                                                            0xFFE0E0E0)
+                                                    : const Color(0xFFE0E0E0),
+                                                child: const CircleAvatar(
+                                                  radius: 15,
+                                                ),
+                                              )),
+                                        ],
                                       ),
-                                      Positioned(
-                                          top: 145 / 2,
-                                          left: -20,
-                                          child: CircleAvatar(
-                                            radius: 16,
-                                            backgroundColor: (voucher != null)
-                                                ? (voucher[0].code ==
-                                                        controller
-                                                            .discount[index]
-                                                            .title)
-                                                    ? Colors.black
-                                                    : const Color(0xFFE0E0E0)
-                                                : const Color(0xFFE0E0E0),
-                                            child: const CircleAvatar(
-                                              radius: 15,
-                                            ),
-                                          )),
-                                      Positioned(
-                                          top: 145 / 2,
-                                          right: -20,
-                                          child: CircleAvatar(
-                                            radius: 16,
-                                            backgroundColor: (voucher != null)
-                                                ? (voucher[0].code ==
-                                                        controller
-                                                            .discount[index]
-                                                            .title)
-                                                    ? Colors.black
-                                                    : const Color(0xFFE0E0E0)
-                                                : const Color(0xFFE0E0E0),
-                                            child: const CircleAvatar(
-                                              radius: 15,
-                                            ),
-                                          )),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      );
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
           }),
     );
   }

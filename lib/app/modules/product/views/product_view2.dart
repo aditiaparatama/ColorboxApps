@@ -44,6 +44,10 @@ class ProductView2 extends GetView<ProductController> {
                 centerTitle: false,
                 elevation: 3,
                 leadingWidth: 36,
+                leading: IconButton(
+                    padding: const EdgeInsets.all(16),
+                    onPressed: () => Get.back(),
+                    icon: const Icon(Icons.arrow_back)),
               ),
             ),
             body: Column(
@@ -96,7 +100,7 @@ class ProductView2 extends GetView<ProductController> {
                                 ),
                                 Positioned(
                                   bottom: 16,
-                                  right: 10,
+                                  right: 16,
                                   child: InkWell(
                                     onTap: () => Get.toNamed(Routes.CART,
                                         arguments: "collection"),
@@ -110,7 +114,7 @@ class ProductView2 extends GetView<ProductController> {
                               ],
                             ),
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                              padding: const EdgeInsets.fromLTRB(16, 16, 0, 8),
                               child: CustomText(
                                 text: controller.product.title,
                                 fontSize: 14,
@@ -129,8 +133,7 @@ class ProductView2 extends GetView<ProductController> {
                                     fontWeight: FontWeight.w700,
                                   )
                                 : Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 20, right: 20),
+                                    padding: const EdgeInsets.only(left: 16),
                                     child: Column(
                                       children: [
                                         Row(
@@ -173,29 +176,22 @@ class ProductView2 extends GetView<ProductController> {
                                                               187, 9, 21, 1),
                                                     ),
                                                   ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 4),
-                                                    child: CustomText(
-                                                      text: "Rp " +
-                                                          formatter.format(int
-                                                              .parse(controller
-                                                                  .variant!
-                                                                  .compareAtPrice!
-                                                                  .replaceAll(
-                                                                      ".00",
-                                                                      ""))) +
-                                                          "  ",
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      color:
-                                                          const Color.fromRGBO(
-                                                              155, 155, 155, 1),
-                                                      decoration: TextDecoration
-                                                          .lineThrough,
-                                                    ),
+                                                  CustomText(
+                                                    text: "Rp " +
+                                                        formatter.format(
+                                                            int.parse(controller
+                                                                .variant!
+                                                                .compareAtPrice!
+                                                                .replaceAll(
+                                                                    ".00",
+                                                                    ""))) +
+                                                        "  ",
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: const Color.fromRGBO(
+                                                        155, 155, 155, 1),
+                                                    decoration: TextDecoration
+                                                        .lineThrough,
                                                   ),
                                                   Container(
                                                     width: 35.0,
@@ -231,17 +227,61 @@ class ProductView2 extends GetView<ProductController> {
                                       ],
                                     ),
                                   ),
+                            const Divider(height: 3),
                             const Divider(
                               height: 30,
                               thickness: 10,
                               color: Color.fromRGBO(249, 248, 248, 1),
                             ),
-                            const SizedBox(),
                             const SizedBox(height: 5),
+                            // ignore: avoid_unnecessary_containers
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 16, right: 16),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: const Color.fromRGBO(238, 242, 246, 1),
+                                  border: Border.all(
+                                      width: 1.0,
+                                      color: const Color.fromRGBO(
+                                          238, 242, 246, 1)),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(6)),
+                                ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 16, 10, 16),
+                                  child: Row(
+                                    children: <Widget>[
+                                      CircleAvatar(
+                                        radius: 16.0,
+                                        child: SvgPicture.asset(
+                                            "assets/icon/icon-free-shipping.svg"),
+                                        backgroundColor: Colors.transparent,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(left: 10),
+                                        child: CustomText(
+                                          text:
+                                              'Dapatkan potongan ongkir Rp 30.000 tanpa \n minimum pembelian untuk JABODETABEK',
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const Divider(
+                              height: 30,
+                              thickness: 10,
+                              color: Color.fromRGBO(249, 248, 248, 1),
+                            ),
                             (controller.product.options.length > 1)
                                 ? Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 20, right: 20),
+                                    padding:
+                                        const EdgeInsets.only(left: 16, top: 4),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -259,7 +299,7 @@ class ProductView2 extends GetView<ProductController> {
                                           color: Colors.black,
                                           fontWeight: FontWeight.w600,
                                         ),
-                                        const SizedBox(height: 5),
+                                        const SizedBox(height: 16),
                                         Container(
                                           height: 24.0,
                                           width: 24.0,
@@ -287,16 +327,14 @@ class ProductView2 extends GetView<ProductController> {
                                     ),
                                   )
                                 : const SizedBox(),
+                            const Divider(height: 3),
                             const Divider(
                               height: 30,
                               thickness: 10,
                               color: Color.fromRGBO(249, 248, 248, 1),
                             ),
-                            const SizedBox(),
-                            const SizedBox(height: 5),
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 20, right: 20),
+                              padding: const EdgeInsets.only(left: 16, top: 4),
                               child: CustomText(
                                 text: 'controller.product.options[0].name'
                                     .replaceAll(
@@ -307,10 +345,10 @@ class ProductView2 extends GetView<ProductController> {
                               ),
                             ),
 
+                            const SizedBox(height: 16),
                             if (controller.variant!.inventoryQuantity! <= 5)
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 16, bottom: 8, left: 20),
+                                padding: const EdgeInsets.only(left: 16),
                                 child: CustomText(
                                   text: 'Tersisa ' +
                                       controller.variant!.inventoryQuantity
@@ -322,10 +360,8 @@ class ProductView2 extends GetView<ProductController> {
                                 ),
                               ),
 
-                            const SizedBox(height: 5),
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 20, right: 20),
+                              padding: const EdgeInsets.only(left: 16),
                               child: SizedBox(
                                 width: Get.width,
                                 height: 40,
@@ -335,54 +371,15 @@ class ProductView2 extends GetView<ProductController> {
                                 ),
                               ),
                             ),
+                            const Divider(height: 3),
                             const Divider(
                               height: 30,
                               thickness: 10,
                               color: Color.fromRGBO(249, 248, 248, 1),
                             ),
-                            const SizedBox(height: 5),
-                            // ignore: avoid_unnecessary_containers
                             Padding(
                               padding:
-                                  const EdgeInsets.only(left: 20, right: 20),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                      width: 1.0,
-                                      color: const Color.fromRGBO(
-                                          299, 232, 235, 1)),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(6)),
-                                ),
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 16, 10, 16),
-                                  child: Row(
-                                    children: <Widget>[
-                                      CircleAvatar(
-                                        radius: 16.0,
-                                        child: SvgPicture.asset(
-                                            "assets/icon/bx-driver.svg"),
-                                      ),
-                                      const Padding(
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: CustomText(
-                                          text:
-                                              'Dapatkan potongan ongkir Rp 30.000 tanpa \n minimum pembelian untuk JABODETABEK',
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 20, right: 20),
+                                  const EdgeInsets.only(left: 16, right: 16),
                               child: GFAccordion(
                                 title: 'Panduan Ukuran',
                                 textStyle: const TextStyle(
@@ -414,7 +411,7 @@ class ProductView2 extends GetView<ProductController> {
                             const Divider(thickness: 1),
                             Padding(
                               padding:
-                                  const EdgeInsets.only(left: 20, right: 20),
+                                  const EdgeInsets.only(left: 16, right: 16),
                               child: GFAccordion(
                                 title: 'Detail Produk',
                                 textStyle: const TextStyle(
@@ -435,6 +432,71 @@ class ProductView2 extends GetView<ProductController> {
                                 expandedTitleBackgroundColor: Colors.white,
                               ),
                             ),
+                            const Divider(thickness: 1),
+
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      height: 64,
+                                      width: 180,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: const Color.fromRGBO(
+                                                  229, 232, 235, 1))),
+                                      child: Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              SvgPicture.asset(
+                                                  "assets/icon/bx-hubungi-kami.svg"),
+                                              const SizedBox(height: 10),
+                                              const CustomText(
+                                                text: 'Hubungi Kami',
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 64,
+                                      width: 156,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: const Color.fromRGBO(
+                                                  229, 232, 235, 1))),
+                                      child: Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              SvgPicture.asset(
+                                                  "assets/icon/bx-berbagi.svg"),
+                                              const SizedBox(height: 10),
+                                              const CustomText(
+                                                text: 'Berbagi',
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                            ),
+
                             const Divider(
                               height: 30,
                               thickness: 10,
@@ -519,11 +581,11 @@ class SearchCollection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         SizedBox(
           height: 36,
-          width: 220,
+          width: 250,
           child: TextFormField(
             onTap: () => Get.toNamed(Routes.SEARCH),
             cursorColor: const Color.fromRGBO(155, 155, 155, 1),
