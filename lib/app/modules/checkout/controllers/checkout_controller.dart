@@ -8,6 +8,7 @@ import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class CheckoutController extends GetxController {
   final LocalStorageData localStorageData = Get.find();
@@ -256,5 +257,52 @@ class CheckoutController extends GetxController {
         result['checkoutDiscountCodeRemove']['checkout']);
     _loading.value = false;
     update();
+  }
+
+  Future<String> paymentCheckout() async {
+    String createdDate = DateFormat("yyyyMMddHHmmss")
+        .format(DateTime.parse(_checkout.createdAt!));
+    String phone = _checkout.shippingAddress!.phone!;
+    if (_checkout.shippingAddress!.phone!.substring(0, 2) == "08") {
+      phone = "+62" +
+          _checkout.shippingAddress!.phone!
+              .substring(1, _checkout.shippingAddress!.phone!.length - 1);
+    }
+
+    var inputData = {
+      "external_id":
+          "invoice-$createdDate-${_checkout.shippingAddress!.phone!.replaceAll("+", "")}",
+      "amount": int.parse(_checkout.totalPriceV2!.replaceAll(".0", "")),
+      "payer_email": _checkout.email,
+      "description": "Invoice Customer ${_checkout.shippingAddress!.firstName}",
+      "items": [
+        for (final x in _checkout.lineItems!) ...[
+          {
+            "name": x.title,
+            "quantity": x.quantity,
+            "price": (x.discountAllocations!.isEmpty)
+                ? x.variants!.price
+                : (int.parse(x.variants!.price!.replaceAll(".00", "")) -
+                    int.parse(x.discountAllocations![0].allocatedAmount!
+                        .replaceAll(".0", "")))
+          }
+        ]
+      ],
+      "customer": {
+        "given_names": _checkout.shippingAddress!.firstName,
+        "surname": _checkout.shippingAddress!.lastName,
+        "email": _checkout.email,
+        "mobile_number": phone
+      },
+      'customer_notification_preference': {
+        'invoice_created': ['whatsapp', 'email'],
+        'invoice_reminder': ['whatsapp', 'email'],
+        'invoice_paid': ['whatsapp', 'email']
+      }
+    };
+
+    var result = await CheckoutProvider().createInvoice(inputData);
+
+    return result["invoice_url"];
   }
 }

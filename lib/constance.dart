@@ -20,7 +20,7 @@ const CACHED_USER_TOKEN = 'CACHED_USER_TOKEN';
 const Color primaryColor = Color(0xFFFFFFFF);
 const Color grayColor = Color(0xFF8D8D8E);
 const Color baseColorSkeleton = Colors.black;
-const Color highlightColorSkeleton = Colors.white30;
+const Color highlightColorSkeleton = Colors.grey;
 
 var formatter = NumberFormat.decimalPattern("id");
 

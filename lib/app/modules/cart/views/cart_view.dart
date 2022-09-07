@@ -4,7 +4,6 @@ import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/empty_page.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:get/get.dart';
 import 'package:colorbox/app/modules/cart/views/widget/item_cart_widget.dart';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
@@ -36,11 +35,13 @@ class CartView extends GetView<CartController> {
                     height: Get.height * .67,
                     child: (c.cart.lines!.isEmpty)
                         ? EmptyPage(
-                            image: Lottie.network(
-                                "https://assets2.lottiefiles.com/private_files/lf30_x2lzmtdl.json"),
+                            image: Image.asset(
+                              "assets/icon/BAG.gif",
+                              height: 180,
+                            ),
                             textHeader: "Keranjang Kamu Kosong",
                             textContent:
-                                "Ayo segera tambahkan produk kedalam keranjang",
+                                "Ayo segera belanja dan tambahkan produk kedalam keranjang",
                           )
                         : ListView.separated(
                             shrinkWrap: true,

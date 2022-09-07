@@ -1,11 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
-import 'package:colorbox/app/widgets/skeleton.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:intl/intl.dart';
-import 'package:get/get.dart';
 
 class ItemCard extends StatelessWidget {
   final String? title;
@@ -24,7 +20,6 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var formatter = NumberFormat('###,000');
     var calcu1 = int.parse(price!.replaceAll(".00", "")) /
         int.parse(compareAtPrice!.replaceAll(".00", ""));
     int calcu2 = (100 - calcu1 * 100).ceil();
@@ -51,17 +46,11 @@ class ItemCard extends StatelessWidget {
                 ),
               ),
               progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  Shimmer.fromColors(
-                      child: Skeleton(
-                        height: Get.height * .3,
-                        width: (Get.height * .42) / 2,
-                      ),
-                      baseColor: baseColorSkeleton,
-                      highlightColor: highlightColorSkeleton),
+                  Image.asset("assets/images/Image.jpg"),
               errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(5, 12, 5, 9),
+              padding: const EdgeInsets.fromLTRB(0, 12, 0, 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -74,7 +63,7 @@ class ItemCard extends StatelessWidget {
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                  (compareAtPrice == "0")
+                  (compareAtPrice == "0" || compareAtPrice == price)
                       ? Text(
                           "Rp " + formatter.format(int.parse(price!)),
                           style: const TextStyle(fontWeight: FontWeight.bold),
@@ -114,20 +103,22 @@ class ItemCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
-                        child: Text(
-                          "Rp " + formatter.format(int.parse(price!)),
-                          style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                              color: Color.fromARGB(255, 229, 57, 53)),
+                  (compareAtPrice == "0" || compareAtPrice == price)
+                      ? const SizedBox()
+                      : Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
+                              child: Text(
+                                "Rp " + formatter.format(int.parse(price!)),
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color.fromARGB(255, 229, 57, 53)),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             )

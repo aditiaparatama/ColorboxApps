@@ -22,7 +22,7 @@ class EmptyPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(
-            height: 40,
+            height: 80,
           ),
           image!,
           const SizedBox(

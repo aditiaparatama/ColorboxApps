@@ -195,7 +195,7 @@ class AddressForm extends GetView<ProfileController> {
                             hint: "Nomor Telepon",
                             prefix: const CustomText(
                               text: "+62",
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                             suffixIcon: (_telpon.text.isNotEmpty)
                                 ? IconButton(

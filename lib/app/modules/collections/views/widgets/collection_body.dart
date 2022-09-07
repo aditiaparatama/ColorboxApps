@@ -21,7 +21,7 @@ class CollectionBody extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 5),
-          height: MediaQuery.of(context).size.height * .70,
+          height: MediaQuery.of(context).size.height * .75,
           child: GridView.builder(
               controller: _sControl,
               itemCount: controller.collection.products.length,
@@ -29,7 +29,7 @@ class CollectionBody extends StatelessWidget {
                 crossAxisCount: 2,
                 mainAxisSpacing: 0,
                 crossAxisSpacing: 0,
-                childAspectRatio: 0.53,
+                childAspectRatio: 2 / 3.9,
               ),
               itemBuilder: (_, i) {
                 return GestureDetector(

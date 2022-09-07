@@ -226,6 +226,7 @@ class CheckoutLineItem {
     id = json['id'];
     quantity = json['quantity'];
     title = json['title'];
+    unitPrice = json['unitPrice'];
     variants = Variants.fromCart(json['variant']);
   }
 }

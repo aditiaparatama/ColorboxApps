@@ -1,4 +1,5 @@
 import 'package:colorbox/app/modules/checkout/views/list_address.dart';
+import 'package:colorbox/app/modules/checkout/views/payment_view.dart';
 import 'package:colorbox/app/modules/checkout/views/widgets/address_widget.dart';
 import 'package:colorbox/app/modules/checkout/views/widgets/item_checkout.dart';
 import 'package:colorbox/app/modules/checkout/views/widgets/shipping_widget.dart';
@@ -52,6 +53,68 @@ class CheckoutView extends GetView<CheckoutController> {
                   height: 45,
                 ),
               ],
+            ),
+          ) ??
+          false; //if showDialouge had returned null, then return false
+    }
+
+    Future<bool> showAlert() async {
+      return await showDialog(
+            //show confirm dialogue
+            //the return value will be from "Yes" or "No" options
+            context: context,
+            builder: (context) => AlertDialog(
+              contentPadding: const EdgeInsets.all(0),
+              content: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+                height: 240,
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const CustomText(
+                      text: 'Lakukan pembayaran?',
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    const CustomText(
+                      text: 'Pastikan pesanan kamu sudah sesuai',
+                      fontSize: 14,
+                      textAlign: TextAlign.center,
+                      textOverflow: TextOverflow.fade,
+                    ),
+                    const SizedBox(height: 24),
+                    CustomButton(
+                      backgroundColor: Colors.black87,
+                      color: Colors.white,
+                      onPressed: () async {
+                        String urlString = await controller.paymentCheckout();
+                        Navigator.of(context).pop(true);
+                        Get.off(WebPaymentView(
+                            title: "Pembayaran", url: urlString));
+                      },
+                      //return true when click on "Yes"
+                      text: 'Lanjut Bayar',
+                      fontSize: 14,
+                      width: Get.width,
+                      height: 45,
+                    ),
+                    const SizedBox(height: 12),
+                    CustomButton(
+                      backgroundColor: Colors.white,
+                      onPressed: () => Navigator.of(context).pop(false),
+                      //return false when click on "No"
+                      text: 'Kembali',
+                      fontSize: 14,
+                      width: Get.width,
+                      height: 45,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ) ??
           false; //if showDialouge had returned null, then return false
@@ -270,7 +333,9 @@ class CheckoutView extends GetView<CheckoutController> {
                                             ],
                                           ),
                                           CustomButton(
-                                            onPressed: () {},
+                                            onPressed: () async {
+                                              showAlert();
+                                            },
                                             text: "Lakukan Pembayaran",
                                             color: Colors.white,
                                             backgroundColor: Colors.black87,
