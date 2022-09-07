@@ -22,7 +22,7 @@ class RegisterView extends GetView<ProfileController> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const CustomText(
-            text: "Daftar Akun",
+            text: "Daftar Akun 3",
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),

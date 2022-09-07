@@ -18,7 +18,6 @@ class SearchController extends GetxController {
   final int _limit = 10;
 
   void fetchSearchProduct(String search) async {
-    print(search);
     _loading.value = true;
     var data = await SearchProvider().postSearch(search, _limit);
     if (data == null) {
