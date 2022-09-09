@@ -12,9 +12,13 @@ const String url_widget =
 const String json_home =
     "https://widget.delamibrands.com/colorbox/mobile/home.json";
 // ignore: constant_identifier_names
+const String json_category_home =
+    "https://widget.delamibrands.com/colorbox/mobile/category-home.json";
+// ignore: constant_identifier_names
 const String NewArrivalString = "gid://shopify/Collection/214404235414";
 // ignore: constant_identifier_names
 const int NewArrival = 214404235414;
+const int arrayzero = 0;
 const int defaultSortBy = 2;
 
 const String urlCity =

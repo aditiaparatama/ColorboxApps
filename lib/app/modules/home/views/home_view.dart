@@ -1,14 +1,18 @@
+import 'package:colorbox/app/modules/home/views/sections/collection1_home.dart';
+import 'package:colorbox/app/modules/home/views/sections/collection2_home.dart';
+import 'package:colorbox/app/modules/home/views/sections/collection3_home.dart';
+import 'package:colorbox/app/modules/home/views/sections/collection4_home.dart';
+import 'package:colorbox/app/modules/home/views/sections/category_home.dart';
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
-import 'package:colorbox/app/modules/home/views/collection_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/custom_appbar.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/widget.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/home_controller.dart';
@@ -29,7 +33,8 @@ class HomeView extends GetView<HomeController> {
           init: Get.put(HomeController()),
           builder: (_) {
             return SafeArea(
-              child: (controller.home.isEmpty)
+              child: (controller.sliders.isEmpty &&
+                      controller.collections.isEmpty)
                   ? loadingCircular()
                   : ListView(
                       children: [
@@ -135,7 +140,7 @@ class HomeView extends GetView<HomeController> {
 
                         // ignore: sized_box_for_whitespace
                         CarouselSlider.builder(
-                          itemCount: controller.home.length,
+                          itemCount: controller.sliders.length,
                           options: CarouselOptions(
                             autoPlay: true,
                             autoPlayInterval: const Duration(seconds: 5),
@@ -153,7 +158,7 @@ class HomeView extends GetView<HomeController> {
                                     const BorderRadius.all(Radius.circular(0)),
                                 child: Center(
                                   child: CachedNetworkImage(
-                                    imageUrl: controller.home[index].images!,
+                                    imageUrl: controller.sliders[index].images!,
                                   ),
                                 ),
                               ),
@@ -199,48 +204,13 @@ class HomeView extends GetView<HomeController> {
                             ),
                           ),
                         ),
+
                         const Divider(
                           height: 30,
                           thickness: 10,
                           color: Color.fromRGBO(245, 245, 245, 1),
                         ),
 
-                        Row(
-                          children: [
-                            SizedBox(
-                              child: Center(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                  child: CachedNetworkImage(
-                                    imageUrl:
-                                        "https://cdn.shopify.com/s/files/1/0423/9120/8086/files/banner_02_1280x@2x.progressive.jpg?v=1648085406",
-                                    fit: BoxFit.cover,
-                                    width: Get.width / 2 - 5,
-                                    height: Get.height / 2 - 50,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              child: Center(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                                  child: CachedNetworkImage(
-                                    imageUrl:
-                                        "https://cdn.shopify.com/s/files/1/0423/9120/8086/files/banner_01_1280x@2x.progressive.jpg?v=1648085405",
-                                    fit: BoxFit.cover,
-                                    width: Get.width / 2 - 5,
-                                    height: Get.height / 2 - 50,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        const SizedBox(height: 4),
                         Container(
                           decoration: const BoxDecoration(color: Colors.white),
                           child: Padding(
@@ -252,15 +222,201 @@ class HomeView extends GetView<HomeController> {
                                 const Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 4),
                                   child: CustomText(
-                                    text: "PRODUK TERFAVORIT",
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                                    text: "Kategori Pakaian",
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
-                                CollectionsHomeView(),
+                                const SizedBox(height: 24),
+                                CategoryHomeView(),
                               ],
                             ),
+                          ),
+                        ),
+
+                        const Divider(
+                          thickness: 10,
+                          color: Color.fromRGBO(245, 245, 245, 1),
+                        ),
+
+                        Container(
+                          decoration: const BoxDecoration(color: Colors.white),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 24, bottom: 8),
+                                child: CustomText(
+                                  text: (controller.collections.isEmpty)
+                                      ? ""
+                                      : controller.collections[0].title!,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 24),
+                                child: CustomText(
+                                  text: (controller.collections.isEmpty)
+                                      ? ""
+                                      : controller.collections[0].deskripsi!,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              SizedBox(
+                                child: Center(
+                                  child: CachedNetworkImage(
+                                    imageUrl: (controller.collections.isEmpty)
+                                        ? ""
+                                        : controller.collections[0].images!,
+                                    fit: BoxFit.cover,
+                                    width: Get.width,
+                                    height: 190,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                decoration:
+                                    const BoxDecoration(color: Colors.white),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                                  child: CollectionHome1(
+                                      (controller.collections.isEmpty)
+                                          ? ""
+                                          : controller.collections[0].subjectid!
+                                              .toString()),
+                                ),
+                              ),
+                              const Divider(
+                                thickness: 10,
+                                color: Color.fromRGBO(245, 245, 245, 1),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 24, bottom: 8),
+                                child: CustomText(
+                                  text: (controller.collections.isEmpty)
+                                      ? ""
+                                      : controller.collections[1].title!,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 24),
+                                child: CustomText(
+                                  text: (controller.collections.isEmpty)
+                                      ? ""
+                                      : controller.collections[1].deskripsi!,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              Container(
+                                decoration:
+                                    const BoxDecoration(color: Colors.white),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                                  child: CollectionHome2(
+                                      (controller.collections.isEmpty)
+                                          ? ""
+                                          : controller.collections[1].subjectid!
+                                              .toString()),
+                                ),
+                              ),
+                              const Divider(
+                                thickness: 10,
+                                color: Color.fromRGBO(245, 245, 245, 1),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 24, bottom: 8),
+                                child: CustomText(
+                                  text: (controller.collections.isEmpty)
+                                      ? ""
+                                      : controller.collections[2].title!,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 24),
+                                child: CustomText(
+                                  text: (controller.collections.isEmpty)
+                                      ? ""
+                                      : controller.collections[2].deskripsi!,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              SizedBox(
+                                child: Center(
+                                  child: CachedNetworkImage(
+                                    imageUrl: (controller.collections.isEmpty)
+                                        ? ""
+                                        : controller.collections[2].images!,
+                                    fit: BoxFit.cover,
+                                    width: Get.width,
+                                    height: 190,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                decoration:
+                                    const BoxDecoration(color: Colors.white),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                                  child: CollectionHome3(
+                                      (controller.collections.isEmpty)
+                                          ? ""
+                                          : controller.collections[2].subjectid!
+                                              .toString()),
+                                ),
+                              ),
+                              const Divider(
+                                thickness: 10,
+                                color: Color.fromRGBO(245, 245, 245, 1),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 24, bottom: 8),
+                                child: CustomText(
+                                  text: (controller.collections.isEmpty)
+                                      ? ""
+                                      : controller.collections[3].title!,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 24),
+                                child: CustomText(
+                                  text: (controller.collections.isEmpty)
+                                      ? ""
+                                      : controller.collections[3].deskripsi!,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              Container(
+                                decoration:
+                                    const BoxDecoration(color: Colors.white),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                                  child: CollectionHome4(
+                                      (controller.collections.isEmpty)
+                                          ? ""
+                                          : controller.collections[3].subjectid!
+                                              .toString()),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],

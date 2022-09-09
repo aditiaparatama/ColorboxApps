@@ -27,12 +27,11 @@ class CollectionsProductView extends GetView<CollectionsController> {
                   child: CircularProgressIndicator(),
                 )
               : GridView.builder(
-                shrinkWrap: true,
+                  shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: controller.collection.products.length,
                   // scrollDirection: Axis.horizontal,
-                  gridDelegate:
-                      const SliverGridDelegateWithMaxCrossAxisExtent(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     mainAxisExtent: 320,
                     maxCrossAxisExtent: 200,
                     childAspectRatio: 2 / 8,
@@ -43,8 +42,8 @@ class CollectionsProductView extends GetView<CollectionsController> {
                     var calcu1 = int.parse(controller
                             .collection.products[i].variants[0].price!
                             .replaceAll(".00", "")) /
-                        int.parse(controller.collection.products[i]
-                            .variants[0].compareAtPrice!
+                        int.parse(controller
+                            .collection.products[i].variants[0].compareAtPrice!
                             .replaceAll(".00", ""));
                     int calcu2 = (100 - calcu1 * 100).ceil();
 
@@ -76,7 +75,6 @@ class CollectionsProductView extends GetView<CollectionsController> {
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
                               text: controller.collection.products[i].title,
-                              // text: controller.collection.products[i].title,
                               textOverflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -106,8 +104,7 @@ class CollectionsProductView extends GetView<CollectionsController> {
                                                       .products[i]
                                                       .variants[0]
                                                       .compareAtPrice!
-                                                      .replaceAll(
-                                                          ".00", ""))) +
+                                                      .replaceAll(".00", ""))) +
                                               "  ",
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400,

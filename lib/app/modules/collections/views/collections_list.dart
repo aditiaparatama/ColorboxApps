@@ -135,7 +135,7 @@ class SearchCollection extends StatelessWidget {
               disabledBorder: InputBorder.none,
               labelStyle: const TextStyle(
                   fontSize: 12, color: Color.fromARGB(155, 155, 155, 1)),
-              hintText: "Cari produk disini",
+              hintText: "Cari produk disini ",
               filled: true,
               fillColor: const Color.fromRGBO(250, 250, 250, 1),
               suffixIcon: Padding(

@@ -15,6 +15,7 @@ class SubmenuV2View extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var c = Get.find<ControlController>().menu;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: PreferredSize(
