@@ -19,7 +19,6 @@ class CollectionsController extends GetxController {
   //SET LIST TAB COLLECTION
   final List<Widget> _listTabs = [];
   List<Widget> get listTabs => _listTabs;
-  int tabIndex = 0;
   var menu;
   bool? _parentList;
   int pageIndex = 0;
@@ -88,30 +87,42 @@ class CollectionsController extends GetxController {
     update();
   }
 
-  Future<void> setTabBar(var argMenu, {bool parent = false}) async {
+  Future<void> setTabBar(var argMenu,
+      {bool parent = false, int index = 0}) async {
     menu = argMenu;
     _parentList = parent;
     listTabs.clear();
     if (parent) {
       listTabs.add(Tab(
-        child: Text(menu.title),
+        child: Container(
+            padding: const EdgeInsets.all(8),
+            color: Colors.black,
+            child: Text(
+              menu.title,
+              style: const TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.bold),
+            )),
       ));
     } else {
       for (int i = 0; i < argMenu.length; i++) {
         listTabs.add(Tab(
             child: Container(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
-              color: (tabIndex == i) ? Colors.black : Colors.transparent,
-              border: Border.all(color: Colors.grey)),
+              color: (index == i) ? Colors.black : null,
+              border: Border.all(
+                  color:
+                      (index == i) ? Colors.black : const Color(0xFFE5E8EB))),
           child: Text(
-              argMenu[i]
-                  .title!
-                  .replaceAll("- NEW ARRIVAL", "")
-                  .replaceAll("WOMEN - ", "")
-                  .replaceAll("MEN - ", ""),
-              style: TextStyle(
-                  color: (tabIndex == i) ? Colors.white : Colors.grey)),
+            argMenu[i]
+                .title!
+                .replaceAll("- NEW ARRIVAL", "")
+                .replaceAll("WOMEN - ", "")
+                .replaceAll("MEN - ", ""),
+            style: TextStyle(
+              color: (index == i) ? Colors.white : const Color(0xFF9B9B9B),
+            ),
+          ),
         )));
       }
     }

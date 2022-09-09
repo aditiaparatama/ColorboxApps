@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:colorbox/app/data/models/mailing_address.dart';
 import 'package:colorbox/app/modules/checkout/models/checkout_model.dart';
 import 'package:colorbox/app/services/shopify_graphql.dart';
@@ -18,6 +20,7 @@ class CheckoutProvider extends GetConnect {
             checkout {
               # Checkout fields
               id
+              createdAt
               availableShippingRates {
                 ready
                 shippingRates {
@@ -209,6 +212,7 @@ class CheckoutProvider extends GetConnect {
             ... on Checkout {
               # Checkout fields
               id
+              createdAt
               availableShippingRates {
                 ready
                 shippingRates {
@@ -380,6 +384,7 @@ class CheckoutProvider extends GetConnect {
             checkout {
               # Checkout fields
               id
+              createdAt
               availableShippingRates {
                 ready
                 shippingRates {
@@ -556,6 +561,7 @@ class CheckoutProvider extends GetConnect {
             checkout {
               # Checkout fields
               id
+              createdAt
               availableShippingRates {
                 ready
                 shippingRates {
@@ -746,6 +752,7 @@ class CheckoutProvider extends GetConnect {
             checkout {
               # Checkout fields
               id
+              createdAt
               availableShippingRates {
                 ready
                 shippingRates {
@@ -921,6 +928,7 @@ class CheckoutProvider extends GetConnect {
             checkout {
               # Checkout fields
               id
+              createdAt
               availableShippingRates {
                 ready
                 shippingRates {
@@ -1093,6 +1101,23 @@ class CheckoutProvider extends GetConnect {
       // }
 
       var data = response.body['rates'];
+
+      return data;
+    } catch (e) {
+      return {"message": e.toString()};
+    }
+  }
+
+  Future<dynamic> createInvoice(body) async {
+    try {
+      String basicAuth = 'Basic ' + base64.encode(utf8.encode('$tokenXendit:'));
+      var response =
+          await post(urlXendit, body, headers: {"Authorization": basicAuth});
+      // while (!response.isOk) {
+      //   response = await post(url_shipping, body);
+      // }
+
+      var data = response.body;
 
       return data;
     } catch (e) {

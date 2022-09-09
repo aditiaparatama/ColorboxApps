@@ -7,19 +7,23 @@ import 'package:get/get.dart';
 
 class AppBarCustom extends StatelessWidget {
   final String? text;
+  final Widget? widget;
   const AppBarCustom({
     Key? key,
     this.text,
+    this.widget,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: CustomText(
-        text: text!,
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
+      title: (text == null)
+          ? widget
+          : CustomText(
+              text: text!,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
       centerTitle: false,
       elevation: 3,
       shadowColor: Colors.grey.withOpacity(0.3),

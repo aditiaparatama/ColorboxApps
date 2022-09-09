@@ -1,5 +1,6 @@
-import 'package:colorbox/app/modules/control/controllers/control_controller.dart';
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
+import 'package:colorbox/app/modules/collections/views/widgets/search_collection.dart';
+import 'package:colorbox/app/modules/control/controllers/control_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
@@ -26,6 +27,13 @@ class SubmenuV2View extends StatelessWidget {
           elevation: 3,
           shadowColor: Colors.grey.withOpacity(0.3),
           leadingWidth: 36,
+          leading: IconButton(
+              padding: const EdgeInsets.all(16),
+              onPressed: () => Get.back(),
+              icon: const Icon(Icons.arrow_back)),
+          actions: [
+            bagWidget(),
+          ],
         ),
       ),
       body: ListView.builder(
@@ -74,8 +82,7 @@ class SubmenuV2View extends StatelessWidget {
                                 text: c[curIndex]
                                     .subMenu[index]
                                     .title!
-                                    .replaceAll("- New Arrival", "")
-                                    .toUpperCase(),
+                                    .replaceAll("- New Arrival", ""),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black,
@@ -93,99 +100,47 @@ class SubmenuV2View extends StatelessWidget {
           }),
     );
   }
-}
 
-class SearchCollection extends StatelessWidget {
-  const SearchCollection({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SizedBox(
-          height: 36,
-          width: MediaQuery.of(context).size.width - 120,
-          child: TextFormField(
-            onTap: () => Get.toNamed(Routes.SEARCH),
-            cursorColor: const Color.fromRGBO(155, 155, 155, 1),
-            decoration: InputDecoration(
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: const BorderSide(
-                  color: Color.fromRGBO(250, 250, 250, 1),
-                ),
+  Widget bagWidget() {
+    return Center(
+      child: InkWell(
+        onTap: () => Get.toNamed(Routes.CART),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                right: 16,
               ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: const BorderSide(
-                  color: Color.fromRGBO(250, 250, 250, 1),
-                  width: 1.0,
-                ),
-              ),
-              contentPadding: const EdgeInsets.fromLTRB(16, 10, 0, 0),
-              disabledBorder: InputBorder.none,
-              labelStyle: const TextStyle(
-                  fontSize: 12, color: Color.fromARGB(155, 155, 155, 1)),
-              hintText: "Cari produk disini",
-              filled: true,
-              fillColor: const Color.fromRGBO(250, 250, 250, 1),
-              suffixIcon: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 5, 20, 5),
-                child: GestureDetector(
-                  onTap: () => Get.toNamed(Routes.SEARCH),
-                  child: SvgPicture.asset("assets/icon/bx-search1.svg"),
-                ),
+              child: SvgPicture.asset(
+                "assets/icon/Handbag.svg",
               ),
             ),
-          ),
-        ),
-        SizedBox(
-          height: 36,
-          width: 50,
-          child: InkWell(
-            onTap: () => Get.toNamed(Routes.CART, arguments: "collection"),
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 0),
-                  child: Center(
-                    child: CircleAvatar(
-                      radius: 16.0,
-                      child: SvgPicture.asset("assets/icon/bx-handbag.svg"),
+            Get.find<CartController>().cart.lines!.isNotEmpty
+                ? Positioned(
+                    top: 0,
+                    right: 10,
+                    child: Container(
+                      width: 15,
+                      height: 15,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: Colors.red),
+                      child: CustomText(
+                        text: Get.find<CartController>()
+                            .cart
+                            .lines!
+                            .length
+                            .toString(),
+                        fontSize: 10,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                ),
-                Get.find<CartController>().cart.lines!.isNotEmpty
-                    ? Container(
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.only(left: 15, bottom: 5),
-                        child: Container(
-                          width: 15,
-                          height: 15,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: Colors.red),
-                          child: CustomText(
-                            text: Get.find<CartController>()
-                                .cart
-                                .lines!
-                                .length
-                                .toString(),
-                            fontSize: 10,
-                            color: Colors.white,
-                          ),
-                        ),
-                      )
-                    : const SizedBox()
-              ],
-            ),
-          ),
+                  )
+                : const SizedBox()
+          ],
         ),
-      ],
+      ),
     );
   }
 }

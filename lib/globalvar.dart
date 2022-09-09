@@ -29,3 +29,7 @@ const String urlShipping =
 const String urlWishlist =
     "https://color-box-indo.myshopify.com/a/wishlist?type=api";
 const String pathWishlist = "&version=1&customerid=";
+
+const String urlXendit = "https://api.xendit.co/v2/invoices";
+const String tokenXendit =
+    "xnd_development_Oq33NW1TZcx2MDfvidfqMcs6zzBEEo2yD4ebwFWjziMCJdydHlcl24oy9gJesOn";
