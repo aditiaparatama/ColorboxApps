@@ -97,7 +97,7 @@ class CartView extends GetView<CartController> {
                           ),
                           CustomText(
                             text:
-                                "Rp ${formatter.format(int.parse(controller.cart.estimatedCost!.subtotalAmount!.replaceAll(".0", "")))}",
+                                "Rp ${formatter.format(double.parse(controller.cart.estimatedCost!.subtotalAmount!.replaceAll(".0", "")).ceil())}",
                             fontSize: 12,
                           )
                         ],
@@ -113,7 +113,7 @@ class CartView extends GetView<CartController> {
                           ),
                           CustomText(
                             text:
-                                "-Rp ${formatter.format(int.parse(controller.cart.discountAllocations![0].amount!.replaceAll(".0", "")))}",
+                                "-Rp ${formatter.format(double.parse(controller.cart.discountAllocations![0].amount!.replaceAll(".0", "")).ceil())}",
                             fontSize: 12,
                           )
                         ],

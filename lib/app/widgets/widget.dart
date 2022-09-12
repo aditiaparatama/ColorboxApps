@@ -43,7 +43,7 @@ Shimmer loadingProduct() {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Skeleton(
-          height: Get.height * .35,
+          height: 220,
           width: (Get.height * .45) / 2,
         ),
         const SizedBox(height: 2),

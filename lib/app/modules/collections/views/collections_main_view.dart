@@ -1,13 +1,14 @@
 import 'package:colorbox/app/modules/collections/controllers/collections_controller.dart';
 import 'package:colorbox/app/modules/collections/views/widgets/collection_body.dart';
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
+import 'package:colorbox/app/modules/collections/views/widgets/filter_bottomsheet.dart';
 import 'package:colorbox/app/modules/collections/views/widgets/search_collection.dart';
+import 'package:colorbox/app/modules/collections/views/widgets/sort_bottomsheet.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/empty_page.dart';
 import 'package:colorbox/app/widgets/widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -120,7 +121,10 @@ class CollectionsMainView extends GetView<CollectionsController> {
                             ),
                             const SizedBox(width: 8),
                             InkWell(
-                              onTap: () => bottomSheet(control.collection.id!),
+                              onTap: (controller.loading.value)
+                                  ? null
+                                  : () =>
+                                      sortBottomSheet(control.collection.id!),
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 11, vertical: 8),
@@ -136,20 +140,26 @@ class CollectionsMainView extends GetView<CollectionsController> {
                                     "assets/icon/ArrowsDownUp.svg"),
                               ),
                             ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 11, vertical: 8),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: const Color(0xFFE5E8EB))),
-                              child: SvgPicture.asset(
-                                  "assets/icon/SlidersHorizontal.svg"),
+                            InkWell(
+                              onTap: (controller.loading.value)
+                                  ? null
+                                  : () => filterBottomSheet(),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 11, vertical: 8),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: const Color(0xFFE5E8EB))),
+                                child: SvgPicture.asset(
+                                    "assets/icon/SlidersHorizontal.svg"),
+                              ),
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      SizedBox(
+                      const SizedBox(height: 16),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         height: Get.height * .77,
                         child: PageView.builder(
                             controller: _pControl,
@@ -165,26 +175,21 @@ class CollectionsMainView extends GetView<CollectionsController> {
                                   index: index);
                             },
                             itemBuilder: ((context, index) {
-                              return Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                              return SizedBox(
                                   child: controller.loading.value
-                                      ? Container(
-                                          margin: const EdgeInsets.only(top: 5),
-                                          child: GridView.builder(
-                                              controller: _sControl,
-                                              itemCount: 4,
-                                              gridDelegate:
-                                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                                crossAxisCount: 2,
-                                                mainAxisSpacing: 3,
-                                                crossAxisSpacing: 3,
-                                                childAspectRatio: 0.52,
-                                              ),
-                                              itemBuilder: (_, i) {
-                                                return loadingProduct();
-                                              }),
-                                        )
+                                      ? GridView.builder(
+                                          controller: _sControl,
+                                          itemCount: 4,
+                                          gridDelegate:
+                                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            mainAxisSpacing: 24,
+                                            crossAxisSpacing: 24,
+                                            childAspectRatio: 0.5,
+                                          ),
+                                          itemBuilder: (_, i) {
+                                            return loadingProduct();
+                                          })
                                       : (control.collection.products.isEmpty)
                                           ? SizedBox(
                                               height: Get.height * .5,
@@ -194,9 +199,9 @@ class CollectionsMainView extends GetView<CollectionsController> {
                                                   height: 180,
                                                 ),
                                                 textHeader:
-                                                    "Data Tidak Tersedia",
+                                                    "Produk tidak ditemukan",
                                                 textContent:
-                                                    "Tidak ada data yang ditampilkan",
+                                                    "Produk yang kamu cari tidak tersedia",
                                               ))
                                           : CollectionBody(
                                               controller: controller,
@@ -208,24 +213,6 @@ class CollectionsMainView extends GetView<CollectionsController> {
             }),
           );
         });
-  }
-
-  Widget checklistWidget(int sortBy, String text) {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      CustomText(
-        text: text,
-        fontSize: 14,
-        fontWeight: (sortBy == controller.orderBy)
-            ? FontWeight.bold
-            : FontWeight.normal,
-      ),
-      (sortBy == controller.orderBy)
-          ? CircleAvatar(
-              radius: 16.0,
-              child: SvgPicture.asset("assets/icon/bx-check.svg"),
-            )
-          : const SizedBox()
-    ]);
   }
 
   Widget bagWidget() {
@@ -268,104 +255,6 @@ class CollectionsMainView extends GetView<CollectionsController> {
           ],
         ),
       ),
-    );
-  }
-
-  void bottomSheet(id) {
-    var sortByContext =
-        int.parse(id.replaceAll("gid://shopify/Collection/", ""));
-    Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(defaultPadding),
-        height: Get.height * .45,
-        decoration: const BoxDecoration(
-          color: primaryColor,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-        ),
-        child: GetBuilder<CollectionsController>(builder: (_) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  IconButton(
-                      onPressed: () => Get.back(),
-                      icon: const Icon(
-                        Icons.close,
-                        size: 18,
-                      )),
-                  const CustomText(
-                    text: "Urut Berdasarkan :",
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ],
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                    fixedSize: Size(Get.width, 10),
-                    alignment: Alignment.centerLeft),
-                onPressed: () {
-                  controller.fetchCollectionProduct(sortByContext, 2);
-                  Get.back();
-                },
-                child: checklistWidget(2, "Produk Terbaru"),
-              ),
-              const Divider(
-                color: colorDiver,
-                thickness: 1,
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                    fixedSize: Size(Get.width, 20),
-                    alignment: Alignment.centerLeft),
-                onPressed: () {
-                  controller.fetchCollectionProduct(sortByContext, 1);
-                  Get.back();
-                },
-                child: checklistWidget(1, "Popularitas"),
-              ),
-              const Divider(
-                color: colorDiver,
-                thickness: 1,
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                    fixedSize: Size(Get.width, 10),
-                    alignment: Alignment.centerLeft),
-                onPressed: () {
-                  controller.fetchCollectionProduct(sortByContext, 3);
-                  Get.back();
-                },
-                child: checklistWidget(3, "Harga Tinggi ke Rendah"),
-              ),
-              const Divider(
-                color: colorDiver,
-                thickness: 1,
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                    fixedSize: Size(Get.width, 10),
-                    alignment: Alignment.centerLeft),
-                onPressed: () {
-                  controller.fetchCollectionProduct(sortByContext, 4);
-                  Get.back();
-                },
-                child: checklistWidget(4, "Harga Rendah ke Tinggi"),
-              ),
-              const Divider(
-                color: colorDiver,
-                thickness: 1,
-              ),
-            ],
-          );
-        }),
-      ),
-      isDismissible: true,
-      enableDrag: false,
-      isScrollControlled: true,
     );
   }
 }

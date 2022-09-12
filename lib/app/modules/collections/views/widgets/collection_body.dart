@@ -19,16 +19,16 @@ class CollectionBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
+        SizedBox(
           height: MediaQuery.of(context).size.height * .75,
           child: GridView.builder(
+              padding: const EdgeInsets.all(0),
               controller: _sControl,
               itemCount: controller.collection.products.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                mainAxisSpacing: 0,
-                crossAxisSpacing: 0,
+                mainAxisSpacing: 24,
+                crossAxisSpacing: 24,
                 childAspectRatio: 2 / 3.9,
               ),
               itemBuilder: (_, i) {

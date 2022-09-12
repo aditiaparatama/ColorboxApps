@@ -7,6 +7,7 @@ class CustomButton extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
   final onPressed;
   final Color? backgroundColor;
+  final Color? borderColor;
   final Color? color;
   final double? height;
   final double? width;
@@ -22,7 +23,8 @@ class CustomButton extends StatelessWidget {
       this.height,
       this.width,
       this.fontSize = 14,
-      this.radius = 10})
+      this.radius = 10,
+      this.borderColor = Colors.black})
       : super(key: key);
 
   @override
@@ -34,7 +36,7 @@ class CustomButton extends StatelessWidget {
             elevation: 0.0,
             fixedSize: Size(width ?? Get.width, height ?? 50),
             backgroundColor: backgroundColor,
-            side: const BorderSide(width: 1.0, color: Colors.black),
+            side: BorderSide(width: 1.0, color: borderColor!),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(radius!),
             )),

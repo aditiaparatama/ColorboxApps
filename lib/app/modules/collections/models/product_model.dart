@@ -151,7 +151,9 @@ class Variants {
     price = json['price'];
     compareAtPrice = json['compareAtPrice'];
     compareAtPrice ??= "0";
-    inventoryQuantity = json['inventoryQuantity'];
+    inventoryQuantity = (json.containsKey("inventoryQuantity"))
+        ? json['inventoryQuantity']
+        : json['quantityAvailable'];
     sku = json['sku'];
     options = [];
     for (int i = 0; i < json['selectedOptions'].length; i++) {

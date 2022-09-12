@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 
 class CollectionsController extends GetxController {
   //GET DATA COllECTION
-  Collection _collection = Collection("", "", 0, [], false, "");
-  Collection _collectionTemp = Collection("", "", 0, [], false, "");
+  Collection _collection = Collection.empty();
+  Collection _collectionTemp = Collection.empty();
   Collection get collection => _collection;
 
   //SET LOADING
@@ -27,8 +27,16 @@ class CollectionsController extends GetxController {
   int selectedIndex = 0;
   int subjectID = 0;
   int orderBy = 2;
+  int _idCollection = 0;
+  String _filtersDefault = "";
+  String filterColor = "";
+  String filterSize = "";
+  String filterPrice = "";
+  List<dynamic> filterList = [];
 
-  void fetchCollectionProduct(int id, int sortBy) async {
+  void fetchCollectionProduct(int id, int sortBy,
+      {bool similiar = false}) async {
+    _idCollection = id;
     orderBy = sortBy;
     // ignore: unused_local_variable
     String? sortKey, reverse;
@@ -46,36 +54,63 @@ class CollectionsController extends GetxController {
       reverse = "false";
     }
 
-    _loading.value = true;
+    if (!similiar) _loading.value = true;
+    // update();
     var data = await CollectionProvider()
-        .postCollection(id, _limit, sortKey!, reverse!);
+        .collectionWithFilter(id, _limit, sortKey!, reverse!, "", "");
     if (data == null) {
       while (data == null) {
         data = await Future.delayed(
             const Duration(milliseconds: 1000),
             () => CollectionProvider()
-                .postCollection(id, _limit, sortKey!, reverse!));
+                .collectionWithFilter(id, _limit, sortKey!, reverse!, "", ""));
       }
     }
-    _collection = Collection("", "", 0, [], false, "");
+    _collection = Collection.empty();
     _collection = Collection.fromJson(data);
     _loading.value = false;
     update();
   }
 
   void fetchAddCollectionProduct(int id) async {
+    // ignore: unused_local_variable
+    String? sortKey, reverse;
+    if (orderBy == 1) {
+      sortKey = "BEST_SELLING";
+      reverse = "false";
+    } else if (orderBy == 2) {
+      sortKey = "CREATED";
+      reverse = "true";
+    } else if (orderBy == 3) {
+      sortKey = "PRICE";
+      reverse = "true";
+    } else if (orderBy == 4) {
+      sortKey = "PRICE";
+      reverse = "false";
+    }
+
     _nextLoad.value = true;
-    var data = await CollectionProvider()
-        .postCollectionNext(id, _limit, _collection.cursor!);
+    var data = await CollectionProvider().collectionWithFilter(
+        id,
+        _limit,
+        sortKey!,
+        reverse!,
+        _filtersDefault,
+        ',after: "${_collection.cursor!}"');
     if (data == null && _collection.hasNextPage!) {
       while (data == null && _collection.hasNextPage!) {
         data = await Future.delayed(
             const Duration(milliseconds: 1000),
-            () => CollectionProvider()
-                .postCollectionNext(id, _limit, _collection.cursor!));
+            () => CollectionProvider().collectionWithFilter(
+                id,
+                _limit,
+                sortKey!,
+                reverse!,
+                _filtersDefault,
+                ',after: "${_collection.cursor!}"'));
       }
     }
-    _collectionTemp = Collection("", "", 0, [], false, "");
+    _collectionTemp = Collection.empty();
     _collectionTemp = Collection.fromJson(data);
 
     _collection.hasNextPage = _collectionTemp.hasNextPage;
@@ -138,6 +173,78 @@ class CollectionsController extends GetxController {
       subjectID = menu[index].subjectID!;
       fetchCollectionProduct(menu[index].subjectID!, defaultSortBy);
     }
+    update();
+  }
+
+  void resetFilter() {
+    filterColor = "";
+    filterSize = "";
+    filterPrice = "";
+    _filtersDefault = "";
+    filterChange("", "");
+  }
+
+  void filterChange(String label, String value) async {
+    filterList = [];
+    _filtersDefault = "";
+    if (label.toLowerCase() == "color") {
+      filterColor = value;
+    }
+    if (label.toLowerCase() == "size") {
+      filterSize = value;
+    }
+    if (label.toLowerCase() == "harga") {
+      filterPrice = value;
+    }
+
+    if (filterColor != "") {
+      filterList
+          .add('{variantOption: { name: "color", value: "$filterColor" }}');
+    }
+    if (filterSize != "") {
+      filterList.add('{variantOption: { name: "size", value: "$filterSize" }}');
+    }
+
+    if (filterPrice != "") {
+      var parseValue =
+          filterPrice.replaceAll("Rp ", "").replaceAll(".", "").split("-");
+      filterList
+          .add('{ price: { min: ${parseValue[0]}, max: ${parseValue[1]} }}');
+    }
+
+    if (filterColor != "" || filterSize != "" || filterPrice != "") {
+      _filtersDefault = ', filters:$filterList';
+    }
+    String? sortKey, reverse;
+    if (orderBy == 1) {
+      sortKey = "BEST_SELLING";
+      reverse = "false";
+    } else if (orderBy == 2) {
+      sortKey = "CREATED";
+      reverse = "true";
+    } else if (orderBy == 3) {
+      sortKey = "PRICE";
+      reverse = "true";
+    } else if (orderBy == 4) {
+      sortKey = "PRICE";
+      reverse = "false";
+    }
+
+    _loading.value = true;
+    update();
+    var data = await CollectionProvider().collectionWithFilter(
+        _idCollection, _limit, sortKey!, reverse!, _filtersDefault, "");
+    if (data == null) {
+      while (data == null) {
+        data = await Future.delayed(
+            const Duration(milliseconds: 1000),
+            () => CollectionProvider().collectionWithFilter(_idCollection,
+                _limit, sortKey!, reverse!, _filtersDefault, ""));
+      }
+    }
+    _collection = Collection.empty();
+    _collection = Collection.fromJson(data);
+    _loading.value = false;
     update();
   }
 }

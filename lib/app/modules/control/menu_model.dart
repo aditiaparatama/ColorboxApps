@@ -24,6 +24,12 @@ class Menu {
     subjectID = json['subject_id'];
     // subMenu = json['items'];
     subMenu = [];
+
+    if (json['items'].length >= 1 && subjectID != null) {
+      json['title'] = "Semua";
+      subMenu.add(SubMenu.fromJson(json));
+    }
+
     for (int i = 0; i < json['items'].length; i++) {
       // print(json['items'][i]);
       subMenu.add(SubMenu.fromJson(json['items'][i]));

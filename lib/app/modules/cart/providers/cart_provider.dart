@@ -130,6 +130,9 @@ class CartProvider extends GetConnect {
   }
 
   Future<dynamic> cartAdd(String id, String variantId) async {
+    if (!variantId.contains("gid://shopify")) {
+      variantId = "gid://shopify/ProductVariant/$variantId";
+    }
     final GraphQLClient _client = getShopifyGraphQLClient();
 
     final QueryOptions options = QueryOptions(

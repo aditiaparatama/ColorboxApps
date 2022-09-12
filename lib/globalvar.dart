@@ -4,7 +4,7 @@ const String url_shopify =
 const String urlStoreFront =
     "https://color-box-indo.myshopify.com/api/2022-07/";
 const String token = "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";
-const String tokenFront = "598ce110bf9791fd63d5e813040128cd";
+const String tokenFront = "4cf2bc2ed2a95336ab1bfd3eacda81f4";
 // ignore: constant_identifier_names
 const String url_widget =
     "https://widget.delamibrands.com/colorbox/mobile/menus.json";

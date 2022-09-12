@@ -1,5 +1,7 @@
+import 'package:colorbox/app/services/shopify_graphql.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:get/get.dart';
+import 'package:graphql/client.dart';
 
 class CollectionProvider extends GetConnect {
   @override
@@ -147,5 +149,78 @@ class CollectionProvider extends GetConnect {
       // ignore: avoid_print
       print(e.toString());
     }
+  }
+
+  Future<dynamic> collectionWithFilter(int id, int limit, String sortKey,
+      String reverse, dynamic filters, dynamic cursor) async {
+    final GraphQLClient _client = getShopifyGraphQLClient();
+
+    final QueryOptions options = QueryOptions(
+      document: gql(
+        """query {
+      collections(first: 1, query: "id:$id") {
+        edges {
+          node {
+            id
+            handle
+            products(first: $limit, sortKey: $sortKey, reverse: $reverse $filters $cursor) {
+              pageInfo {
+                  hasNextPage
+                  hasPreviousPage
+              }
+              filters{
+                label
+                values{
+                    label
+                }
+            }
+              edges {
+                cursor
+                node {
+                  id
+                  title
+                  description
+                  descriptionHtml
+                  productType
+                  options {
+                      name
+                      values
+                  }
+                  images(first: 5){
+                      edges {
+                          node {
+                              src
+                          }
+                      }
+                  }
+                  variants(first: 10){
+                      edges {
+                          node {
+                              id
+                              price
+                              compareAtPrice
+                              quantityAvailable
+                              sku
+                              selectedOptions{
+                                  name
+                                  value
+                              }
+                          }
+                      }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }""",
+      ),
+      variables: {},
+    );
+
+    final QueryResult result = await _client.query(options);
+
+    return result.data!['collections']['edges'][0]['node'];
   }
 }
