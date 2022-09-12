@@ -608,6 +608,8 @@ class SearchCollection extends StatelessWidget {
               labelStyle: const TextStyle(
                   fontSize: 12, color: Color.fromARGB(155, 155, 155, 1)),
               hintText: "Cari produk disini",
+              hintStyle:
+                  const TextStyle(fontSize: 12, color: Color(0xFF9B9B9B)),
               filled: true,
               fillColor: const Color.fromRGBO(250, 250, 250, 1),
               suffixIcon: Padding(

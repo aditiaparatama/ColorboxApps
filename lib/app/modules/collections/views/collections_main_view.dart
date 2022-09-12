@@ -1,10 +1,10 @@
 import 'package:colorbox/app/modules/collections/controllers/collections_controller.dart';
+import 'package:colorbox/app/modules/collections/views/widgets/search_collection.dart';
 import 'package:colorbox/app/modules/collections/views/widgets/collection_body.dart';
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
-import 'package:colorbox/app/modules/collections/views/widgets/search_collection.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
-import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/empty_page.dart';
+import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:colorbox/constance.dart';
