@@ -47,11 +47,6 @@ app.*.map.json
 /android/app/release
 
 #api settings
-<<<<<<< HEAD
-=======
-globalvar.dart
-/lib/globalvar.dart
->>>>>>> c8a65c76368ba86eb5cb80d16abb12cdc7d18067
 lib/globalvar.dart
 ios/
 android/
