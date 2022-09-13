@@ -6,12 +6,12 @@ import 'package:colorbox/app/widgets/custom_radio_color.dart';
 import 'package:colorbox/app/widgets/appbar_custom.dart';
 import 'package:colorbox/app/widgets/custom_radio.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
-import 'package:colorbox/constance.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
@@ -643,21 +643,21 @@ class ProductView2 extends GetView<ProductController> {
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const CustomText(
-                    text: 'Popularitas',
+                children: const [
+                  CustomText(
+                    text: 'Facebook',
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
-                  SizedBox(
-                    child: InkWell(
-                      onTap: () {},
-                      child: CircleAvatar(
-                        radius: 16.0,
-                        child: SvgPicture.asset("assets/icon/bx-check.svg"),
-                      ),
-                    ),
-                  ),
+                  // SizedBox(
+                  //   child: InkWell(
+                  //     onTap: () {},
+                  //     child: CircleAvatar(
+                  //       radius: 16.0,
+                  //       child: SvgPicture.asset("assets/icon/bx-check.svg"),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -675,21 +675,21 @@ class ProductView2 extends GetView<ProductController> {
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const CustomText(
-                    text: 'Produk Terbaru',
+                children: const [
+                  CustomText(
+                    text: 'Twitter',
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
-                  SizedBox(
-                    child: InkWell(
-                      onTap: () {},
-                      child: CircleAvatar(
-                        radius: 16.0,
-                        child: SvgPicture.asset("assets/icon/bx-check.svg"),
-                      ),
-                    ),
-                  ),
+                  // SizedBox(
+                  //   child: InkWell(
+                  //     onTap: () {},
+                  //     child: CircleAvatar(
+                  //       radius: 16.0,
+                  //       child: SvgPicture.asset("assets/icon/bx-check.svg"),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -707,21 +707,21 @@ class ProductView2 extends GetView<ProductController> {
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const CustomText(
-                    text: 'Harga Tinggi ke Rendah',
+                children: const [
+                  CustomText(
+                    text: 'Whatsapp',
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                   ),
-                  SizedBox(
-                    child: InkWell(
-                      onTap: () {},
-                      child: CircleAvatar(
-                        radius: 16.0,
-                        child: SvgPicture.asset("assets/icon/bx-check.svg"),
-                      ),
-                    ),
-                  ),
+                  // SizedBox(
+                  //   child: InkWell(
+                  //     onTap: () {},
+                  //     child: CircleAvatar(
+                  //       radius: 16.0,
+                  //       child: SvgPicture.asset("assets/icon/bx-check.svg"),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -733,26 +733,18 @@ class ProductView2 extends GetView<ProductController> {
               style: TextButton.styleFrom(
                   fixedSize: Size(Get.width, 10),
                   alignment: Alignment.centerLeft),
-              onPressed: () {
-                // controller.fetchCollectionProduct(sortByContext, 4);
-                Get.back();
+              onPressed: () async {
+                const url = "https://wa.me/628111717250?text=Hello";
+                await launchUrlString(url,
+                    mode: LaunchMode.externalApplication);
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const CustomText(
-                    text: 'Harga Rendah ke Tinggi',
+                children: const [
+                  CustomText(
+                    text: 'Telegram',
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
-                  ),
-                  SizedBox(
-                    child: InkWell(
-                      onTap: () {},
-                      child: CircleAvatar(
-                        radius: 16.0,
-                        child: SvgPicture.asset("assets/icon/bx-check.svg"),
-                      ),
-                    ),
                   ),
                 ],
               ),
