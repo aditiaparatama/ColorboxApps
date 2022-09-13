@@ -1,5 +1,5 @@
-import 'package:colorbox/app/modules/control/controllers/control_controller.dart';
 import 'package:colorbox/app/modules/collections/views/widgets/search_collection.dart';
+import 'package:colorbox/app/modules/control/controllers/control_controller.dart';
 import 'package:colorbox/app/modules/control/views/submenu_v2_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/widgets/appbar_custom.dart';

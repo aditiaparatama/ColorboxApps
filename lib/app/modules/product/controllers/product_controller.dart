@@ -91,27 +91,4 @@ class ProductController extends GetxController {
     await localStorageData.getTokenUser.then((value) => _token = value);
     update();
   }
-
-  customUkuran(String ukuran) {
-    switch (ukuran.toLowerCase()) {
-      case "dresses":
-        return 'https://cdn.shopify.com/s/files/1/0423/9120/8086/files/1._Mini_dress.jpg?v=1654594064';
-      case "jacket":
-        return 'https://cdn.shopify.com/s/files/1/0423/9120/8086/files/1._BASIC_JACKET.jpg?v=1654594269';
-      case "pants":
-        return 'https://cdn.shopify.com/s/files/1/0423/9120/8086/files/1._cullotes.jpg?v=1654594354';
-      case "blouse & shirts":
-        return 'https://cdn.shopify.com/s/files/1/0423/9120/8086/files/1._REGULAR_LONG_SLEEVE_SHIRT.jpg?v=1654594524';
-      case "shorts":
-        return 'https://cdn.shopify.com/s/files/1/0423/9120/8086/files/short_pants.jpg?v=1654594706';
-      case "skirts":
-        return 'https://cdn.shopify.com/s/files/1/0423/9120/8086/files/1._Mini_skirt.jpg?v=1654594776';
-      case "sweatshirt & hoodies":
-        return 'https://cdn.shopify.com/s/files/1/0423/9120/8086/files/1._BASIC_SWEATSHIRT.jpg?v=1654594857';
-      case "t-shirts":
-        return 'https://cdn.shopify.com/s/files/1/0423/9120/8086/files/1._Regular_tshirt.jpg?v=1654594920';
-      default:
-        return 'https://cdn.shopify.com/s/files/1/0423/9120/8086/files/2._Regular_tshirt-long_sleeves.jpg?v=1654594921';
-    }
-  }
 }
