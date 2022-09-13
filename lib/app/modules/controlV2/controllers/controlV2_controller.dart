@@ -19,6 +19,7 @@ class ControlV2Controller extends GetxController {
   Widget _currentScreen = HomeView();
 
   UserModel _user = UserModel.isEmpty();
+  UserModel get user => _user;
 
   get currentScreen => _currentScreen;
   Cart get cart => _cart;

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
-void main() {
+void main() async {
   runApp(
     GetMaterialApp(
       debugShowCheckedModeBanner: false,

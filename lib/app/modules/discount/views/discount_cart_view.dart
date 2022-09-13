@@ -39,7 +39,7 @@ class DiscountCartView extends GetView<DiscountController> {
           builder: (context) {
             return (controller.loading.value)
                 ? loadingCircular()
-                : (voucher.isEmpty)
+                : (controller.discount.isEmpty)
                     ? EmptyPage(
                         image: Image.asset(
                           "assets/icon/vouchers.gif",
@@ -160,9 +160,11 @@ class DiscountCartView extends GetView<DiscountController> {
                                                   ? const Color(0xFF212121)
                                                       .withOpacity(0.05)
                                                   : Colors.transparent,
-                                              border: (voucher[0].code ==
-                                                      controller.discount[index]
-                                                          .title)
+                                              border: (voucher.isNotEmpty &&
+                                                      voucher[0].code ==
+                                                          controller
+                                                              .discount[index]
+                                                              .title)
                                                   ? Border.all(
                                                       color: Colors.black)
                                                   : Border.all(
@@ -190,10 +192,12 @@ class DiscountCartView extends GetView<DiscountController> {
                                                   const SizedBox(
                                                     width: 16,
                                                   ),
-                                                  (voucher[0].code ==
-                                                          controller
-                                                              .discount[index]
-                                                              .title)
+                                                  (voucher.isNotEmpty &&
+                                                          voucher[0].code ==
+                                                              controller
+                                                                  .discount[
+                                                                      index]
+                                                                  .title)
                                                       ? Container(
                                                           padding:
                                                               const EdgeInsets
@@ -321,11 +325,14 @@ class DiscountCartView extends GetView<DiscountController> {
                                           left: -20,
                                           child: CircleAvatar(
                                             radius: 16,
-                                            backgroundColor: (voucher[0].code ==
-                                                    controller
-                                                        .discount[index].title)
-                                                ? Colors.black
-                                                : const Color(0xFFE0E0E0),
+                                            backgroundColor:
+                                                (voucher.isNotEmpty &&
+                                                        voucher[0].code ==
+                                                            controller
+                                                                .discount[index]
+                                                                .title)
+                                                    ? Colors.black
+                                                    : const Color(0xFFE0E0E0),
                                             child: const CircleAvatar(
                                               radius: 15,
                                             ),
@@ -335,11 +342,14 @@ class DiscountCartView extends GetView<DiscountController> {
                                           right: -20,
                                           child: CircleAvatar(
                                             radius: 16,
-                                            backgroundColor: (voucher[0].code ==
-                                                    controller
-                                                        .discount[index].title)
-                                                ? Colors.black
-                                                : const Color(0xFFE0E0E0),
+                                            backgroundColor:
+                                                (voucher.isNotEmpty &&
+                                                        voucher[0].code ==
+                                                            controller
+                                                                .discount[index]
+                                                                .title)
+                                                    ? Colors.black
+                                                    : const Color(0xFFE0E0E0),
                                             child: const CircleAvatar(
                                               radius: 15,
                                             ),

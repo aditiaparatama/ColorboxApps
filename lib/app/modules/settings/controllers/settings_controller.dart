@@ -5,7 +5,7 @@ import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:get/get.dart';
 
 class SettingsController extends GetxController {
-  final LocalStorageData localStorageData = Get.find();
+  final LocalStorageData localStorageData = Get.put(LocalStorageData());
   UserModel _userModel = UserModel.isEmpty();
   UserModel get userModel => _userModel;
   CustomerToken? _token = CustomerToken.isEmpty();

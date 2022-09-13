@@ -165,6 +165,7 @@ class CollectionsController extends GetxController {
   }
 
   void onChangeList(int index) {
+    resetFilter(page: true);
     selectedIndex = index;
     if (_parentList!) {
       subjectID = menu.subjectID!;
@@ -176,12 +177,16 @@ class CollectionsController extends GetxController {
     update();
   }
 
-  void resetFilter() {
+  void resetFilter({bool page = false}) {
     filterColor = "";
     filterSize = "";
     filterPrice = "";
     _filtersDefault = "";
-    filterChange("", "");
+    if (page) {
+      filterChange("", "");
+    } else {
+      update();
+    }
   }
 
   void filterChange(String label, String value) async {

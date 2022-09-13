@@ -82,8 +82,7 @@ class CartView extends GetView<CartController> {
           children: [
             const VoucherWidget(),
             const SizedBox(height: 24),
-            (controller.show.value &&
-                    controller.cart.discountAllocations!.isNotEmpty)
+            (controller.show.value)
                 ? SizedBox(
                     child: Column(
                     children: [
@@ -111,11 +110,16 @@ class CartView extends GetView<CartController> {
                             fontSize: 12,
                             color: Color(0xFF777777),
                           ),
-                          CustomText(
-                            text:
-                                "-Rp ${formatter.format(double.parse(controller.cart.discountAllocations![0].amount!.replaceAll(".0", "")).ceil())}",
-                            fontSize: 12,
-                          )
+                          (controller.cart.discountAllocations!.isNotEmpty)
+                              ? CustomText(
+                                  text:
+                                      "-Rp ${formatter.format(double.parse(controller.cart.discountAllocations![0].amount!.replaceAll(".0", "")).ceil())}",
+                                  fontSize: 12,
+                                )
+                              : const CustomText(
+                                  text: "-Rp 0",
+                                  fontSize: 12,
+                                )
                         ],
                       ),
                       const SizedBox(height: 16)
@@ -123,12 +127,10 @@ class CartView extends GetView<CartController> {
                   ))
                 : const SizedBox(),
             InkWell(
-              onTap: (controller.cart.discountAllocations!.isEmpty)
-                  ? null
-                  : () {
-                      controller.show.value = !controller.show.value;
-                      controller.update();
-                    },
+              onTap: () {
+                controller.show.value = !controller.show.value;
+                controller.update();
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -159,7 +161,8 @@ class CartView extends GetView<CartController> {
                     ],
                   ),
                   ElevatedButton(
-                    onPressed: (c.cart.estimatedCost!.totalAmount == "0.0")
+                    onPressed: (c.cart.estimatedCost!.totalAmount == "0.0" &&
+                            c.cart.estimatedCost!.subtotalAmount == "0.0")
                         ? null
                         : () async {
                             await c.getCheckoutUrl();
