@@ -1,14 +1,17 @@
+import 'package:colorbox/app/modules/collections/views/widgets/search_collection.dart';
 import 'package:colorbox/app/modules/product/views/similar_product_view.dart';
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/widgets/custom_radio_color.dart';
+import 'package:colorbox/app/widgets/appbar_custom.dart';
 import 'package:colorbox/app/widgets/custom_radio.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
@@ -29,25 +32,33 @@ class ProductView2 extends GetView<ProductController> {
     var calcu1 = int.parse(controller.variant!.price!.replaceAll(".00", "")) /
         int.parse(controller.variant!.compareAtPrice!.replaceAll(".00", ""));
     int calcu2 = (100 - calcu1 * 100).ceil();
-    // ignore: avoid_print
-    print(controller.variant!.inventoryQuantity.toString());
 
+    // ignore: avoid_print
     return GetBuilder<ProductController>(
         init: Get.put(ProductController()),
         builder: (control) {
+          // print(control.userModel.id!);
+          // var str1 =
+          //     'https://cloud.smartwishlist.webmarked.net/v6/savewishlist.php/?callback=jQuery22306539739531735338_1662970872627&product_id=' +
+          //         controller
+          //             .product.id!
+          //             .replaceAll('gid://shopify/Product/', '')
+          //             .toString() +
+          //         '&variant_id=' +
+          //         controller.product.variants[0].id!
+          //             .replaceAll('gid://shopify/ProductVariant/', '')
+          //             .toString() +
+          //         '&wishlist_id=42391208086fi8qdjr1lot&customer_id=' +
+          //         control.userModel.id!
+          //             .replaceAll('gid://shopify/Customer/', '') +
+          //         '&action=add&hostname=colorbox.co.id&variant=0&store_id=42391208086&_=1662969706415';
+
           return Scaffold(
             backgroundColor: Colors.white,
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(56),
-              child: AppBar(
-                title: const SearchCollection(),
-                centerTitle: false,
-                elevation: 3,
-                leadingWidth: 36,
-                leading: IconButton(
-                    padding: const EdgeInsets.all(16),
-                    onPressed: () => Get.back(),
-                    icon: const Icon(Icons.arrow_back)),
+            appBar: const PreferredSize(
+              preferredSize: Size.fromHeight(56),
+              child: AppBarCustom(
+                widget: SearchCollection(),
               ),
             ),
             body: Column(
@@ -102,8 +113,15 @@ class ProductView2 extends GetView<ProductController> {
                                   bottom: 16,
                                   right: 16,
                                   child: InkWell(
-                                    onTap: () => Get.toNamed(Routes.CART,
-                                        arguments: "collection"),
+                                    // onTap: () {
+                                    //   var url = str1.toString();
+                                    //   launchUrlString(url,
+                                    //       mode: LaunchMode
+                                    //           .externalNonBrowserApplication);
+                                    // },
+                                    // onTap: () => Get.toNamed(Routes.CART,
+                                    //     arguments: "collection"),
+                                    // onTap: () => openBrowserTab(),
                                     child: CircleAvatar(
                                       radius: 16.0,
                                       child: SvgPicture.asset(
@@ -395,8 +413,8 @@ class ProductView2 extends GetView<ProductController> {
                                 contentChild: Column(
                                   children: [
                                     CachedNetworkImage(
-                                      imageUrl: controller.customUkuran(
-                                          controller.product.type.toString()),
+                                      imageUrl:
+                                          "https://cdn.shopify.com/s/files/1/0423/9120/8086/files/size-guide.png?v=1662956296",
                                       fit: BoxFit.fitWidth,
                                       width: Get.width,
                                     ),
@@ -440,56 +458,70 @@ class ProductView2 extends GetView<ProductController> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Container(
-                                      height: 64,
-                                      width: 180,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: const Color.fromRGBO(
-                                                  229, 232, 235, 1))),
-                                      child: Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              SvgPicture.asset(
-                                                  "assets/icon/bx-hubungi-kami.svg"),
-                                              const SizedBox(height: 10),
-                                              const CustomText(
-                                                text: 'Hubungi Kami',
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ],
+                                    InkWell(
+                                      onTap: () async {
+                                        const url =
+                                            "https://wa.me/628111717250?text=Hello";
+                                        await launchUrlString(url,
+                                            mode:
+                                                LaunchMode.externalApplication);
+                                      },
+                                      child: Container(
+                                        height: 64,
+                                        width: 180,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: const Color.fromRGBO(
+                                                    229, 232, 235, 1))),
+                                        child: Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                SvgPicture.asset(
+                                                    "assets/icon/bx-hubungi-kami.svg"),
+                                                const SizedBox(height: 10),
+                                                const CustomText(
+                                                  text: 'Hubungi Kami',
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                    Container(
-                                      height: 64,
-                                      width: 156,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: const Color.fromRGBO(
-                                                  229, 232, 235, 1))),
-                                      child: Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              SvgPicture.asset(
-                                                  "assets/icon/bx-berbagi.svg"),
-                                              const SizedBox(height: 10),
-                                              const CustomText(
-                                                text: 'Berbagi',
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ],
+                                    InkWell(
+                                      onTap: () {
+                                        bottomSheet();
+                                      },
+                                      child: Container(
+                                        height: 64,
+                                        width: 156,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: const Color.fromRGBO(
+                                                    229, 232, 235, 1))),
+                                        child: Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                SvgPicture.asset(
+                                                    "assets/icon/bx-berbagi.svg"),
+                                                const SizedBox(height: 10),
+                                                const CustomText(
+                                                  text: 'Berbagi',
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -571,129 +603,161 @@ class ProductView2 extends GetView<ProductController> {
           );
         });
   }
-}
 
-class SearchCollection extends StatelessWidget {
-  const SearchCollection({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        SizedBox(
-          height: 36,
-          width: 250,
-          child: TextFormField(
-            onTap: () => Get.toNamed(Routes.SEARCH),
-            cursorColor: const Color.fromRGBO(155, 155, 155, 1),
-            decoration: InputDecoration(
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: const BorderSide(
-                  color: Color.fromRGBO(250, 250, 250, 1),
+  void bottomSheet() {
+    Get.bottomSheet(
+      Container(
+        padding: const EdgeInsets.all(defaultPadding),
+        height: Get.height * .41,
+        decoration: const BoxDecoration(
+          color: primaryColor,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                IconButton(
+                    onPressed: () => Get.back(),
+                    icon: const Icon(
+                      Icons.close,
+                      size: 16,
+                    )),
+                const CustomText(
+                  text: "Berbagi :",
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
                 ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-                borderSide: const BorderSide(
-                  color: Color.fromRGBO(250, 250, 250, 1),
-                  width: 1.0,
-                ),
-              ),
-              contentPadding: const EdgeInsets.fromLTRB(16, 10, 0, 0),
-              disabledBorder: InputBorder.none,
-              labelStyle: const TextStyle(
-                  fontSize: 12, color: Color.fromARGB(155, 155, 155, 1)),
-              hintText: "Cari produk disini",
-              hintStyle:
-                  const TextStyle(fontSize: 12, color: Color(0xFF9B9B9B)),
-              filled: true,
-              fillColor: const Color.fromRGBO(250, 250, 250, 1),
-              suffixIcon: Padding(
-                padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                child: GestureDetector(
-                  onTap: () => Get.toNamed(Routes.SEARCH),
-                  child: SvgPicture.asset("assets/icon/bx-search1.svg"),
-                ),
+              ],
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                  fixedSize: Size(Get.width, 20),
+                  alignment: Alignment.centerLeft),
+              onPressed: () {
+                // controller.fetchCollectionProduct(sortByContext, 1);
+                Get.back();
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  CustomText(
+                    text: 'Facebook',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  // SizedBox(
+                  //   child: InkWell(
+                  //     onTap: () {},
+                  //     child: CircleAvatar(
+                  //       radius: 16.0,
+                  //       child: SvgPicture.asset("assets/icon/bx-check.svg"),
+                  //     ),
+                  //   ),
+                  // ),
+                ],
               ),
             ),
-          ),
-        ),
-        SizedBox(
-          child: InkWell(
-            onTap: () => showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                title: const Text('AlertDialog Title'),
-                content: const Text("ini saya"),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'Cancel'),
-                    child: const Text('Cancel'),
+            const Divider(
+              color: colorDiver,
+              thickness: 1,
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                  fixedSize: Size(Get.width, 10),
+                  alignment: Alignment.centerLeft),
+              onPressed: () {
+                // controller.fetchCollectionProduct(sortByContext, 2);
+                Get.back();
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  CustomText(
+                    text: 'Twitter',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
                   ),
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text('OK'),
+                  // SizedBox(
+                  //   child: InkWell(
+                  //     onTap: () {},
+                  //     child: CircleAvatar(
+                  //       radius: 16.0,
+                  //       child: SvgPicture.asset("assets/icon/bx-check.svg"),
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
+            ),
+            const Divider(
+              color: colorDiver,
+              thickness: 1,
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                  fixedSize: Size(Get.width, 10),
+                  alignment: Alignment.centerLeft),
+              onPressed: () {
+                // controller.fetchCollectionProduct(sortByContext, 3);
+                Get.back();
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  CustomText(
+                    text: 'Whatsapp',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  // SizedBox(
+                  //   child: InkWell(
+                  //     onTap: () {},
+                  //     child: CircleAvatar(
+                  //       radius: 16.0,
+                  //       child: SvgPicture.asset("assets/icon/bx-check.svg"),
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
+            ),
+            const Divider(
+              color: colorDiver,
+              thickness: 1,
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                  fixedSize: Size(Get.width, 10),
+                  alignment: Alignment.centerLeft),
+              onPressed: () async {
+                const url = "https://wa.me/628111717250?text=Hello";
+                await launchUrlString(url,
+                    mode: LaunchMode.externalApplication);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  CustomText(
+                    text: 'Telegram',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
                   ),
                 ],
               ),
             ),
-            child: Stack(
-              children: [
-                CircleAvatar(
-                  radius: 16.0,
-                  backgroundColor: Colors.white.withOpacity(0.5),
-                  child: SvgPicture.asset("assets/icon/bx-share-alt.svg"),
-                ),
-              ],
+            const Divider(
+              color: colorDiver,
+              thickness: 1,
             ),
-          ),
+          ],
         ),
-        SizedBox(
-          child: InkWell(
-            onTap: () => Get.toNamed(Routes.CART, arguments: "collection"),
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 0),
-                  child: Center(
-                    child: CircleAvatar(
-                      radius: 16.0,
-                      child: SvgPicture.asset("assets/icon/bx-handbag.svg"),
-                    ),
-                  ),
-                ),
-                Get.find<CartController>().cart.lines!.isNotEmpty
-                    ? Container(
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.only(left: 15, bottom: 5),
-                        child: Container(
-                          width: 15,
-                          height: 15,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: Colors.red),
-                          child: CustomText(
-                            text: Get.find<CartController>()
-                                .cart
-                                .lines!
-                                .length
-                                .toString(),
-                            fontSize: 10,
-                            color: Colors.white,
-                          ),
-                        ),
-                      )
-                    : const SizedBox()
-              ],
-            ),
-          ),
-        ),
-      ],
+      ),
+      isDismissible: true,
+      enableDrag: false,
     );
   }
 }

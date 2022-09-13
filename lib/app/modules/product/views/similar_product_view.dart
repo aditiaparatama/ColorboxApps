@@ -32,7 +32,7 @@ class CollectionsProductView extends GetView<CollectionsController> {
                   itemCount: controller.collection.products.length,
                   // scrollDirection: Axis.horizontal,
                   gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    mainAxisExtent: 320,
+                    mainAxisExtent: 340,
                     maxCrossAxisExtent: 200,
                     childAspectRatio: 2 / 8,
                     crossAxisSpacing: 20,
