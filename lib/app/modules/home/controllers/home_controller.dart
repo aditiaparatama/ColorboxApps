@@ -1,3 +1,4 @@
+import 'package:colorbox/app/modules/home/models/announcement_model.dart';
 import 'package:colorbox/app/modules/home/providers/home_provider.dart';
 import 'package:colorbox/app/modules/home/models/home_model.dart';
 import 'package:get/get.dart';
@@ -12,6 +13,12 @@ class HomeController extends GetxController {
   List<Collections> _collections = List<Collections>.empty();
   List<Collections> get collections => _collections;
 
+  List<Announcement> _announcementHome = [];
+  List<Announcement> get announcementHome => _announcementHome;
+
+  List<Announcement> _announcementProduct = [];
+  List<Announcement> get announcementProduct => _announcementProduct;
+
   String currentItem = 'Home';
   int curIndex = 0;
 
@@ -19,16 +26,24 @@ class HomeController extends GetxController {
   void onInit() async {
     await fetchData();
     await getCategory();
-    await getCollections();
+
     super.onInit();
   }
 
   Future<void> fetchData() async {
-    var json = await HomeProvider().getSlider();
+    var json = await HomeProvider().getHomeSettings();
     _sliders = [];
-    for (int i = 0; i < json.length; i++) {
-      _sliders.add(Sliders.fromJson(json[i]));
+    _announcementHome = [];
+    _announcementProduct = [];
+
+    for (int i = 0; i < json['sliders']['items'].length; i++) {
+      _sliders.add(Sliders.fromJson(json['sliders']['items'][i]));
     }
+
+    getCollections(json['CollectionsHome']['items']);
+    getAnnouncementHome(json['announcementHome']);
+    getAnnouncementProduct(json['announcementProduct']);
+
     update();
   }
 
@@ -41,11 +56,27 @@ class HomeController extends GetxController {
     update();
   }
 
-  Future<void> getCollections() async {
-    var json = await HomeProvider().getCollections();
+  getCollections(json) {
+    // var json = await HomeProvider().getCollections();
     _collections = [];
     for (int i = 0; i < json.length; i++) {
       _collections.add(Collections.fromJson(json[i]));
+    }
+    update();
+  }
+
+  getAnnouncementHome(json) async {
+    _announcementHome = [];
+    for (int i = 0; i < json.length; i++) {
+      _announcementHome.add(Announcement.fromJson(json[i]));
+    }
+    update();
+  }
+
+  getAnnouncementProduct(json) async {
+    _announcementProduct = [];
+    for (int i = 0; i < json.length; i++) {
+      _announcementProduct.add(Announcement.fromJson(json[i]));
     }
     update();
   }

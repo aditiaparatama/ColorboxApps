@@ -6,19 +6,16 @@ import 'package:get/get.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import '../controllers/onboard_controller.dart';
-import 'package:video_player/video_player.dart';
 
 // ignore: use_key_in_widget_constructors, must_be_immutable
 class OnBoardView extends GetView<OnBoardController> {
   final SettingsController _settingsController = Get.put(SettingsController());
-  late VideoPlayerController videoController = VideoPlayerController.network(
-      'https://widget.delamibrands.com/colorbox/mobile/onboard.mp4');
 
   Future<void> initializeSettings() async {
     await _settingsController.getUser();
 
     if (_settingsController.userModel.displayName != null) {
-      // Get.offNamed(Routes.CONTROLV2);
+      Get.offNamed(Routes.CONTROLV2);
     }
     //Simulate other services for 3 seconds
     await Future.delayed(const Duration(seconds: 1));
@@ -32,7 +29,6 @@ class OnBoardView extends GetView<OnBoardController> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return waitingView();
           }
-          videoController.play();
           return Scaffold(
             backgroundColor: Colors.grey,
             body: SafeArea(

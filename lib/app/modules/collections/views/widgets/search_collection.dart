@@ -14,7 +14,7 @@ class SearchCollection extends StatelessWidget {
       height: 36,
       child: TextFormField(
         onTap: () => Get.toNamed(Routes.SEARCH),
-        cursorColor: const Color.fromRGBO(155, 155, 155, 1),
+        cursorColor: Colors.black,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5.0),
@@ -36,7 +36,7 @@ class SearchCollection extends StatelessWidget {
           hintText: "Cari produk disini",
           hintStyle: const TextStyle(fontSize: 12, color: Color(0xFF9B9B9B)),
           filled: true,
-          fillColor: const Color.fromRGBO(250, 250, 250, 1),
+          fillColor: const Color(0xFFF5F6F8),
           suffixIcon: Padding(
             padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
             child: GestureDetector(

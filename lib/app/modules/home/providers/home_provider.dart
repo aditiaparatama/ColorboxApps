@@ -2,6 +2,16 @@ import 'package:colorbox/globalvar.dart';
 import 'package:get/get.dart';
 
 class HomeProvider extends GetConnect {
+  Future<dynamic> getHomeSettings() async {
+    var response = await get(json_home);
+    while (!response.isOk) {
+      response = await get(json_home);
+    }
+
+    var data = response.body;
+    return data;
+  }
+
   Future<List<dynamic>> getSlider() async {
     var response = await get(json_home);
     while (!response.isOk) {
