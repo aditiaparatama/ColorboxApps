@@ -52,20 +52,14 @@ class HomeView extends GetView<HomeController> {
                               width: Get.width,
                             ),
                             const SizedBox(height: 24),
-                            Container(
-                              decoration:
-                                  const BoxDecoration(color: Colors.white),
+                            SizedBox(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  const Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 4),
-                                    child: CustomText(
-                                      text: "Kategori Pakaian",
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                                  const CustomText(
+                                    text: "Kategori Pakaian",
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
                                   ),
                                   const SizedBox(height: 24),
                                   CategoryHomeView(),

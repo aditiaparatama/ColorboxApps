@@ -25,7 +25,7 @@ class CategoryHomeView extends GetView<HomeController> {
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            mainAxisSpacing: 8,
+                            mainAxisSpacing: 4,
                             crossAxisSpacing: 0,
                             childAspectRatio: .98),
                     itemBuilder: (_, i) {
@@ -58,7 +58,7 @@ class CategoryHomeView extends GetView<HomeController> {
                                   text: controller.category[i].title,
                                   textOverflow: TextOverflow.fade,
                                   fontSize: 12,
-                                  fontWeight: FontWeight.w400,
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                             ),
