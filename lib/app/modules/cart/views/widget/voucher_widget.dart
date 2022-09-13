@@ -1,7 +1,6 @@
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/modules/discount/views/discount_cart_view.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
-import 'package:colorbox/app/widgets/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -46,7 +45,7 @@ class VoucherWidget extends GetView<CartController> {
                   ],
                 ),
               ),
-              (controller.loading.value) ? loadingCircular() : const SizedBox(),
+              // (controller.loading.value) ? loadingCircular() : const SizedBox(),
             ],
           );
         });
