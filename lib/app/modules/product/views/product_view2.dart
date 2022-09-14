@@ -134,7 +134,7 @@ class ProductView2 extends GetView<ProductController> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16, 16, 0, 8),
                               child: CustomText(
-                                text: controller.product.title,
+                                text: controller.product.handle!,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                                 color: const Color.fromRGBO(33, 33, 33, 1),
@@ -496,7 +496,7 @@ class ProductView2 extends GetView<ProductController> {
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        bottomSheet();
+                                        bottomSheet(controller.product.handle!);
                                       },
                                       child: Container(
                                         height: 64,
@@ -604,7 +604,9 @@ class ProductView2 extends GetView<ProductController> {
         });
   }
 
-  void bottomSheet() {
+  void bottomSheet(handle) {
+    // ignore: unused_local_variable
+    var urlprod = 'https://colorbox.co.id/products/' + handle;
     Get.bottomSheet(
       Container(
         padding: const EdgeInsets.all(defaultPadding),
@@ -637,9 +639,13 @@ class ProductView2 extends GetView<ProductController> {
               style: TextButton.styleFrom(
                   fixedSize: Size(Get.width, 20),
                   alignment: Alignment.centerLeft),
-              onPressed: () {
-                // controller.fetchCollectionProduct(sortByContext, 1);
-                Get.back();
+              onPressed: () async {
+                var url =
+                    'https://www.facebook.com/dialog/share?app_id=324557847592228&amp;href=' +
+                        urlprod +
+                        '%3Futm_source%3DFacebook';
+                await launchUrlString(url,
+                    mode: LaunchMode.externalApplication);
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -649,79 +655,6 @@ class ProductView2 extends GetView<ProductController> {
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
-                  // SizedBox(
-                  //   child: InkWell(
-                  //     onTap: () {},
-                  //     child: CircleAvatar(
-                  //       radius: 16.0,
-                  //       child: SvgPicture.asset("assets/icon/bx-check.svg"),
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
-            ),
-            const Divider(
-              color: colorDiver,
-              thickness: 1,
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                  fixedSize: Size(Get.width, 10),
-                  alignment: Alignment.centerLeft),
-              onPressed: () {
-                // controller.fetchCollectionProduct(sortByContext, 2);
-                Get.back();
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  CustomText(
-                    text: 'Twitter',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  // SizedBox(
-                  //   child: InkWell(
-                  //     onTap: () {},
-                  //     child: CircleAvatar(
-                  //       radius: 16.0,
-                  //       child: SvgPicture.asset("assets/icon/bx-check.svg"),
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
-            ),
-            const Divider(
-              color: colorDiver,
-              thickness: 1,
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                  fixedSize: Size(Get.width, 10),
-                  alignment: Alignment.centerLeft),
-              onPressed: () {
-                // controller.fetchCollectionProduct(sortByContext, 3);
-                Get.back();
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  CustomText(
-                    text: 'Whatsapp',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  // SizedBox(
-                  //   child: InkWell(
-                  //     onTap: () {},
-                  //     child: CircleAvatar(
-                  //       radius: 16.0,
-                  //       child: SvgPicture.asset("assets/icon/bx-check.svg"),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -734,7 +667,63 @@ class ProductView2 extends GetView<ProductController> {
                   fixedSize: Size(Get.width, 10),
                   alignment: Alignment.centerLeft),
               onPressed: () async {
-                const url = "https://wa.me/628111717250?text=Hello";
+                var url = 'https://twitter.com/share?url=' +
+                    urlprod +
+                    '&amp;text=Check+out+this+product%21+Product+ini+mungkin+menarik+buat+kamu%3A%3Futm_source%3DWhatsapp';
+                await launchUrlString(url,
+                    mode: LaunchMode.externalApplication);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  CustomText(
+                    text: 'Twitter',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ],
+              ),
+            ),
+            const Divider(
+              color: colorDiver,
+              thickness: 1,
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                  fixedSize: Size(Get.width, 10),
+                  alignment: Alignment.centerLeft),
+              onPressed: () async {
+                var url =
+                    'https://api.whatsapp.com/send?text=Check+out+this+product%21+Product+ini+mungkin+menarik+buat+kamu%3A%0D%0A%0D%0A' +
+                        urlprod +
+                        '%3Futm_source%3DWhatsapp';
+                await launchUrlString(url,
+                    mode: LaunchMode.externalApplication);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  CustomText(
+                    text: 'Whatsapp',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ],
+              ),
+            ),
+            const Divider(
+              color: colorDiver,
+              thickness: 1,
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                  fixedSize: Size(Get.width, 10),
+                  alignment: Alignment.centerLeft),
+              onPressed: () async {
+                var url =
+                    'https://t.me/share/url?text=Check+out+this+product%21+Product+ini+mungkin+menarik+buat+kamu%3A&amp;url=' +
+                        urlprod +
+                        '%3Futm_source%3DTelegram';
                 await launchUrlString(url,
                     mode: LaunchMode.externalApplication);
               },
