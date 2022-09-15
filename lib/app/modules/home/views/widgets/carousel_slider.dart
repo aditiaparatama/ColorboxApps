@@ -22,20 +22,14 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicator> {
 
   @override
   Widget build(BuildContext context) {
-    var controller;
-    controller.product = context;
-    controller.variant = controller.product.variants[0];
-    var collection = Get.arguments["idCollection"]
-        .replaceAll('gid://shopify/Collection/', '');
-
-    final List<Widget> imageSliders = widget.controller.product.image
+    final List<Widget> imageSliders = widget.controller.sliders
         .map((item) => Container(
               decoration: const BoxDecoration(shape: BoxShape.circle),
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(0)),
                 child: Center(
                   child: CachedNetworkImage(
-                    imageUrl: controller.product.image[item],
+                    imageUrl: item.images!,
                   ),
                 ),
               ),
@@ -61,8 +55,7 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicator> {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children:
-              widget.controller.product.image.asMap().entries.map((entry) {
+          children: widget.controller.sliders.asMap().entries.map((entry) {
             return GestureDetector(
               onTap: () => _controller.animateToPage(entry.key),
               child: Container(

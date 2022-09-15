@@ -5,13 +5,13 @@ import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/constance.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 
 // ignore: must_be_immutable, use_key_in_widget_constructors
 class CollectionsProductView extends GetView<CollectionsController> {
   final String? id;
 
+  // ignore: prefer_const_constructors_in_immutables
   CollectionsProductView(this.id, {Key? key}) : super(key: key);
 
   @override

@@ -1,5 +1,4 @@
 import 'package:colorbox/app/services/shopify_graphql.dart';
-import 'package:colorbox/globalvar.dart';
 import 'package:get/get.dart';
 import 'package:graphql/client.dart';
 

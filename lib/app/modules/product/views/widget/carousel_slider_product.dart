@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
-import 'package:get/instance_manager.dart';
 import 'package:get/route_manager.dart';
 
 class CarouselWithIndicatorProduct extends StatefulWidget {
@@ -26,9 +25,11 @@ class _CarouselWithIndicatorProductState
 
   @override
   Widget build(BuildContext context) {
+    // ignore: prefer_typing_uninitialized_variables
     var controller;
     controller.product = context;
     controller.variant = controller.product.variants[0];
+    // ignore: unused_local_variable
     var collection = Get.arguments["idCollection"]
         .replaceAll('gid://shopify/Collection/', '');
 

@@ -1,8 +1,5 @@
 import 'package:colorbox/app/modules/home/controllers/homecollections_controller.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/modules/home/views/widgets/item_card.dart';
-import 'package:colorbox/app/widgets/custom_text.dart';
-import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
