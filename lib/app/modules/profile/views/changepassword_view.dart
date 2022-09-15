@@ -79,7 +79,7 @@ class ChangePasswordView extends GetView<ProfileController> {
                                             controller.showPassword!
                                                 ? Icons.visibility
                                                 : Icons.visibility_off,
-                                            color: Colors.black,
+                                            color: colorTextBlack,
                                           ),
                                         ),
                                       ),
@@ -134,7 +134,7 @@ class ChangePasswordView extends GetView<ProfileController> {
                                           },
                                           child: const Icon(
                                             Icons.calendar_today,
-                                            color: Colors.black,
+                                            color: colorTextBlack,
                                           ),
                                         ),
                                       ),
@@ -231,7 +231,7 @@ class ChangePasswordView extends GetView<ProfileController> {
                                               const Text(
                                                 "Lanjutkan dengan Google",
                                                 style: TextStyle(
-                                                    color: Colors.black,
+                                                    color: colorTextBlack,
                                                     fontSize: 14.0),
                                               ),
                                             ],
@@ -250,7 +250,7 @@ class ChangePasswordView extends GetView<ProfileController> {
                                             const CustomText(
                                               text: 'Sudah punya akun?',
                                               fontSize: 13,
-                                              color: Colors.black,
+                                              color: colorTextBlack,
                                             ),
                                             TextButton(
                                               onPressed: () =>

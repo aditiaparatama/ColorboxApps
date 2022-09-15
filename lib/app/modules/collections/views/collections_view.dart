@@ -1,4 +1,5 @@
 import 'package:colorbox/app/widgets/item_card.dart';
+import 'package:colorbox/constance.dart';
 import '../controllers/collections_controller.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -45,7 +46,7 @@ class CollectionsView extends GetView<CollectionsController> {
                 IconButton(
                   icon: const Icon(
                     Icons.search,
-                    color: Colors.black,
+                    color: colorTextBlack,
                   ),
                   onPressed: () {},
                 ),
@@ -90,7 +91,7 @@ class CollectionsView extends GetView<CollectionsController> {
                                 height: Get.height * .5,
                                 child: const Center(
                                     child: CircularProgressIndicator(
-                                  color: Colors.black,
+                                  color: colorTextBlack,
                                 )),
                               )
                             : (control.collection.products.isEmpty)
@@ -205,7 +206,7 @@ class CollectionsView extends GetView<CollectionsController> {
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: (controller.selectedIndex == index)
-                      ? Colors.black
+                      ? colorTextBlack
                       : Colors.grey),
             ),
             Container(
@@ -213,7 +214,7 @@ class CollectionsView extends GetView<CollectionsController> {
               height: 2,
               width: width + .0,
               color: (controller.selectedIndex == index)
-                  ? Colors.black
+                  ? colorTextBlack
                   : Colors.transparent,
             ),
           ],

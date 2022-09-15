@@ -5,6 +5,7 @@ import 'package:colorbox/app/modules/checkout/models/checkout_model.dart';
 import 'package:colorbox/app/modules/checkout/providers/checkout_provider.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
+import 'package:colorbox/constance.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -161,7 +162,7 @@ class CheckoutController extends GetxController {
     Get.snackbar("Info", "Data berhasil diubah",
         snackPosition: SnackPosition.BOTTOM,
         colorText: Colors.white,
-        backgroundColor: Colors.black);
+        backgroundColor: colorTextBlack);
   }
 
   updateShippingAddress(MailingAddress address) async {
@@ -205,7 +206,7 @@ class CheckoutController extends GetxController {
       Get.snackbar(
         "Info",
         "Kode Pos tidak ditemukan",
-        backgroundColor: Colors.black87,
+        backgroundColor: colorTextBlack,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM,
       );
@@ -233,7 +234,7 @@ class CheckoutController extends GetxController {
           "Alert",
           result['checkoutDiscountCodeApplyV2']['checkoutUserErrors'][0]
               ['message'],
-          backgroundColor: Colors.black,
+          backgroundColor: colorTextBlack,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM);
       return;
@@ -243,7 +244,7 @@ class CheckoutController extends GetxController {
     update();
     if (back) Get.back();
     Get.snackbar("Info", "Voucher berhasil digunakan",
-        backgroundColor: Colors.black,
+        backgroundColor: colorTextBlack,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM);
   }

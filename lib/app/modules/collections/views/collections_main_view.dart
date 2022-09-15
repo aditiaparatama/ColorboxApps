@@ -8,6 +8,7 @@ import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/empty_page.dart';
 import 'package:colorbox/app/widgets/widget.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -92,31 +93,32 @@ class CollectionsMainView extends GetView<CollectionsController> {
                             const EdgeInsets.only(left: 16, right: 16, top: 16),
                         child: Row(
                           children: [
-                            SizedBox(
-                              width: Get.width * .65,
-                              child: TabBar(
-                                isScrollable: true,
-                                tabs: control.listTabs,
-                                controller: tabController,
-                                labelColor: Colors.black,
-                                labelPadding:
-                                    const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                                labelStyle: textStyle.copyWith(
-                                    fontSize: 14.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600),
-                                unselectedLabelStyle: textStyle.copyWith(
-                                    fontSize: 14.0,
-                                    color: const Color(0xFF9B9B9B)),
-                                onTap: (index) {
-                                  controller.setTabBar(Get.arguments["menu"],
-                                      parent:
-                                          (Get.arguments["indexMenu"] == null)
-                                              ? true
-                                              : false,
-                                      index: index);
-                                  _pControl.jumpToPage(index);
-                                },
+                            Expanded(
+                              child: SizedBox(
+                                child: TabBar(
+                                  isScrollable: true,
+                                  tabs: control.listTabs,
+                                  controller: tabController,
+                                  labelColor: colorTextBlack,
+                                  labelPadding:
+                                      const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                                  labelStyle: textStyle.copyWith(
+                                      fontSize: 14.0,
+                                      color: colorTextBlack,
+                                      fontWeight: FontWeight.w600),
+                                  unselectedLabelStyle: textStyle.copyWith(
+                                      fontSize: 14.0,
+                                      color: const Color(0xFF9B9B9B)),
+                                  onTap: (index) {
+                                    controller.setTabBar(Get.arguments["menu"],
+                                        parent:
+                                            (Get.arguments["indexMenu"] == null)
+                                                ? true
+                                                : false,
+                                        index: index);
+                                    _pControl.jumpToPage(index);
+                                  },
+                                ),
                               ),
                             ),
                             const SizedBox(width: 8),
@@ -158,55 +160,57 @@ class CollectionsMainView extends GetView<CollectionsController> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        height: Get.height * .77,
-                        child: PageView.builder(
-                            controller: _pControl,
-                            itemCount: control.listTabs.length,
-                            onPageChanged: (index) {
-                              controller.selectedIndex = index;
-                              controller.onChangeList(index);
-                              tabController.index = index;
-                              controller.setTabBar(Get.arguments["menu"],
-                                  parent: (Get.arguments["indexMenu"] == null)
-                                      ? true
-                                      : false,
-                                  index: index);
-                            },
-                            itemBuilder: ((context, index) {
-                              return SizedBox(
-                                  child: controller.loading.value
-                                      ? GridView.builder(
-                                          controller: _sControl,
-                                          itemCount: 4,
-                                          gridDelegate:
-                                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 2,
-                                            mainAxisSpacing: 24,
-                                            crossAxisSpacing: 24,
-                                            childAspectRatio: 0.5,
-                                          ),
-                                          itemBuilder: (_, i) {
-                                            return loadingProduct();
-                                          })
-                                      : (control.collection.products.isEmpty)
-                                          ? SizedBox(
-                                              height: Get.height * .5,
-                                              child: EmptyPage(
-                                                image: Image.asset(
-                                                  "assets/icon/SEARCH.gif",
-                                                  height: 180,
-                                                ),
-                                                textHeader:
-                                                    "Produk tidak ditemukan",
-                                                textContent:
-                                                    "Produk yang kamu cari tidak tersedia",
-                                              ))
-                                          : CollectionBody(
-                                              controller: controller,
-                                              sControl: _sControl));
-                            })),
+                      Flexible(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: PageView.builder(
+                              controller: _pControl,
+                              itemCount: control.listTabs.length,
+                              onPageChanged: (index) {
+                                controller.selectedIndex = index;
+                                controller.onChangeList(index);
+                                tabController.index = index;
+                                controller.setTabBar(Get.arguments["menu"],
+                                    parent: (Get.arguments["indexMenu"] == null)
+                                        ? true
+                                        : false,
+                                    index: index);
+                              },
+                              itemBuilder: ((context, index) {
+                                return SizedBox(
+                                    child: controller.loading.value
+                                        ? GridView.builder(
+                                            shrinkWrap: true,
+                                            controller: _sControl,
+                                            itemCount: 4,
+                                            gridDelegate:
+                                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2,
+                                              mainAxisSpacing: 24,
+                                              crossAxisSpacing: 24,
+                                              childAspectRatio: 9 / 16,
+                                            ),
+                                            itemBuilder: (_, i) {
+                                              return loadingProduct();
+                                            })
+                                        : (control.collection.products.isEmpty)
+                                            ? SizedBox(
+                                                height: Get.height * .5,
+                                                child: EmptyPage(
+                                                  image: Image.asset(
+                                                    "assets/icon/SEARCH.gif",
+                                                    height: 180,
+                                                  ),
+                                                  textHeader:
+                                                      "Produk tidak ditemukan",
+                                                  textContent:
+                                                      "Produk yang kamu cari tidak tersedia",
+                                                ))
+                                            : CollectionBody(
+                                                controller: controller,
+                                                sControl: _sControl));
+                              })),
+                        ),
                       )
                     ],
                   ));

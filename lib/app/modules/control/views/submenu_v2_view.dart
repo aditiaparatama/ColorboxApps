@@ -4,6 +4,7 @@ import 'package:colorbox/app/modules/control/controllers/control_controller.dart
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +86,7 @@ class SubmenuV2View extends StatelessWidget {
                                     .replaceAll("- New Arrival", ""),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.black,
+                                color: colorTextBlack,
                               ),
                             ),
                           ],

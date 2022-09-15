@@ -36,10 +36,21 @@ class OrdersController extends GetxController {
     var result = await OrderProvider()
         .getOrders("gid://shopify/Customer/4510208950422", query: query);
 
-    _pageInfo = PageInfo.fromJson(result['orders']['pageInfo']);
+    if (result == null) {
+      while (result == null) {
+        result = await Future.delayed(
+            const Duration(milliseconds: 1000),
+            () => OrderProvider().getOrders(
+                "gid://shopify/Customer/4510208950422",
+                query: query));
+      }
+    }
+
+    _pageInfo = PageInfo.fromJson(result['customer']['orders']['pageInfo']);
     _orders = [];
-    for (final x in result['orders']['edges']) {
-      _orders.add(Order.fromJson(x['node'], result['orders']['pageInfo']));
+    for (final x in result['customer']['orders']['edges']) {
+      _orders.add(
+          Order.fromJson(x['node'], result['customer']['orders']['pageInfo']));
     }
     _ordersFilter = _orders;
     _loading.value = false;

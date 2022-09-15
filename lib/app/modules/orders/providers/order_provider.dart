@@ -195,7 +195,7 @@ class OrderProvider extends GetConnect {
 
     final QueryResult result = await _client.query(options);
 
-    return result.data!['customer'];
+    return result.data;
   }
 
   Future<dynamic> getOrdersNext(String id, String cursor,

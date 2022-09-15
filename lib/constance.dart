@@ -7,9 +7,17 @@ const double sfontTitle = 20;
 const double sfontPrice = 18;
 const double sfontPromo = 16;
 const double sfontDefault = 14;
-const Color colorPrimary = Colors.black;
+const Color colorPrimary = colorTextBlack;
 const Color secondColor = Colors.white;
 const Color colorDiver = Color(0xFFE5E8EB);
+
+const Color colorBorderGrey = Color(0xFFE5E8EB);
+const Color colorTextGrey = Color(0xFF9B9B9B);
+const Color colorTextBlack = Color(0xFF212121);
+const Color colorSaleRed = Color(0xFFBB0915);
+const Color colorTextRed = Color(0xFFDA2929);
+const Color colorTextBlue = Color(0xFF115AC8);
+
 // ignore: constant_identifier_names
 const CACHED_CART_DATA = 'CACHED_CART_DATA';
 // ignore: constant_identifier_names
@@ -19,7 +27,7 @@ const CACHED_USER_TOKEN = 'CACHED_USER_TOKEN';
 
 const Color primaryColor = Color(0xFFFFFFFF);
 const Color grayColor = Color(0xFF8D8D8E);
-const Color baseColorSkeleton = Colors.black;
+const Color baseColorSkeleton = colorTextBlack;
 const Color highlightColorSkeleton = Colors.grey;
 
 var formatter = NumberFormat.decimalPattern("id");

@@ -1,5 +1,6 @@
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
+import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/widgets/custom_text_form_field.dart';
@@ -20,16 +21,12 @@ class ProfileView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const CustomText(
-            text: "Masuk Akun",
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-          centerTitle: false,
-          elevation: 3,
-          shadowColor: Colors.grey.withOpacity(0.3),
-        ),
+        resizeToAvoidBottomInset: false,
+        appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(56),
+            child: AppBarDefault(
+              text: "Masuk Akun",
+            )),
         backgroundColor: Colors.white,
         body: GetBuilder(
             init: Get.put(ProfileController()),
@@ -46,9 +43,10 @@ class ProfileView extends GetView<ProfileController> {
                           child: SingleChildScrollView(
                             child: Column(
                               children: [
+                                const SizedBox(height: 24),
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 30, right: 20, left: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
                                   child: Form(
                                     key: _formKey,
                                     child: Column(
@@ -75,7 +73,7 @@ class ProfileView extends GetView<ProfileController> {
                                           },
                                         ),
                                         const SizedBox(
-                                          height: 20,
+                                          height: 16,
                                         ),
                                         CustomTextFormField(
                                           suffixIcon: GestureDetector(
@@ -86,7 +84,7 @@ class ProfileView extends GetView<ProfileController> {
                                               !controller.showPassword!
                                                   ? Icons.visibility
                                                   : Icons.visibility_off,
-                                              color: Colors.black,
+                                              color: colorTextBlack,
                                             ),
                                           ),
                                           hint: "Password",
@@ -105,28 +103,29 @@ class ProfileView extends GetView<ProfileController> {
                                           },
                                         ),
                                         const SizedBox(
-                                          height: 0,
+                                          height: 16,
                                         ),
-                                        TextButton(
-                                          onPressed: () => Get.toNamed(
+                                        InkWell(
+                                          onTap: () => Get.toNamed(
                                               Routes.FORGOTPASSWORD),
-                                          child: const Text(
-                                            'Lupa Password?',
-                                            style: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.w600,
-                                                color: Color.fromRGBO(
-                                                    17, 90, 200, 1)),
-                                            textAlign: TextAlign.left,
+                                          child: const SizedBox(
+                                            child: Text(
+                                              'Lupa Password?',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Color(0xFF115AC8)),
+                                              textAlign: TextAlign.left,
+                                            ),
                                           ),
                                         ),
                                         const SizedBox(
-                                          height: 20,
+                                          height: 40,
                                         ),
                                         Container(
                                           alignment: Alignment.center,
                                           child: CustomButton(
-                                            backgroundColor: colorPrimary,
+                                            backgroundColor: colorTextBlack,
                                             color: secondColor,
                                             onPressed: () async {
                                               _formKey.currentState!.save();
@@ -139,6 +138,11 @@ class ProfileView extends GetView<ProfileController> {
                                                   await Get.find<
                                                           SettingsController>()
                                                       .fetchingUser();
+
+                                                  if (globalKey == "onboard") {
+                                                    return Get.offAllNamed(
+                                                        Routes.CONTROLV2);
+                                                  }
                                                   if (globalKey != null) {
                                                     final BottomNavigationBar
                                                         navigationBar =
@@ -158,16 +162,16 @@ class ProfileView extends GetView<ProfileController> {
                                             text: "Masuk",
                                           ),
                                         ),
-                                        const SizedBox(height: 10),
-                                        Column(children: <Widget>[
+                                        const SizedBox(height: 24),
+                                        Column(children: [
                                           Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: <Widget>[
                                                 const CustomText(
                                                   text: 'Belum punya akun?',
-                                                  fontSize: 13,
-                                                  color: Colors.black,
+                                                  fontSize: 12,
+                                                  color: colorTextBlack,
                                                 ),
                                                 GestureDetector(
                                                   onTap: (controller
@@ -180,7 +184,7 @@ class ProfileView extends GetView<ProfileController> {
                                                           : Get.toNamed(
                                                               Routes.REGISTER),
                                                   child: const CustomText(
-                                                    text: "Daftar sekarang",
+                                                    text: " Daftar sekarang",
                                                     fontSize: 12,
                                                     color: Color(0xFF115AC8),
                                                     fontWeight: FontWeight.w600,
@@ -188,15 +192,15 @@ class ProfileView extends GetView<ProfileController> {
                                                 )
                                               ]),
                                         ]),
-                                        const SizedBox(height: 20),
-                                        Column(children: <Widget>[
-                                          Row(children: <Widget>[
+                                        const SizedBox(height: 40),
+                                        Column(children: [
+                                          Row(children: [
                                             Expanded(
                                               child: Container(
                                                   margin: const EdgeInsets.only(
                                                       left: 10.0, right: 20.0),
                                                   child: const Divider(
-                                                    color: Colors.grey,
+                                                    color: colorBorderGrey,
                                                     height: 36,
                                                   )),
                                             ),
@@ -206,54 +210,35 @@ class ProfileView extends GetView<ProfileController> {
                                                   margin: const EdgeInsets.only(
                                                       left: 20.0, right: 10.0),
                                                   child: const Divider(
-                                                    color: Colors.grey,
+                                                    color: colorBorderGrey,
                                                     height: 36,
                                                   )),
                                             ),
                                           ]),
                                         ]),
                                         const SizedBox(height: 40),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: Colors.grey,
-                                            ),
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(10),
-                                            ),
-                                          ),
-                                          child: SizedBox(
-                                            child: MaterialButton(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 5),
-                                                    child: CircleAvatar(
-                                                      child: Image.asset(
-                                                        "assets/icon/google-icon.png",
-                                                        height: 28,
-                                                        width: 28,
-                                                      ),
-                                                    ),
+                                        CustomButton(
+                                            onPressed: () {},
+                                            borderColor: colorBorderGrey,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 5),
+                                                  child: Image.asset(
+                                                    "assets/icon/google-icon.png",
                                                   ),
-                                                  const Text(
-                                                    "Lanjutkan dengan Google",
-                                                    style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 14.0),
-                                                  ),
-                                                ],
-                                              ),
-                                              onPressed: () =>
-                                                  Get.offNamed(Routes.REGISTER),
-                                            ),
-                                          ),
-                                        ),
+                                                ),
+                                                const CustomText(
+                                                  text:
+                                                      "Lanjutkan dengan Google",
+                                                  color: colorTextBlack,
+                                                ),
+                                              ],
+                                            )),
                                       ],
                                     ),
                                   ),

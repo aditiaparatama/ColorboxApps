@@ -1,4 +1,5 @@
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -62,7 +63,7 @@ class _WebViewPageState extends State<WebViewPage> {
                             width: 100,
                             height: 100,
                             child: CircularProgressIndicator(
-                              color: Colors.black,
+                              color: colorTextBlack,
                               strokeWidth: 5,
                             ),
                           ),

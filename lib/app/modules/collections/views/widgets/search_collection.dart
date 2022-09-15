@@ -1,4 +1,5 @@
 import 'package:colorbox/app/routes/app_pages.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,8 +14,9 @@ class SearchCollection extends StatelessWidget {
     return SizedBox(
       height: 36,
       child: TextFormField(
+        readOnly: true,
         onTap: () => Get.toNamed(Routes.SEARCH),
-        cursorColor: Colors.black,
+        cursorColor: colorTextBlack,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5.0),

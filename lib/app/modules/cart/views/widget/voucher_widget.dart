@@ -1,6 +1,7 @@
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/modules/discount/views/discount_cart_view.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -30,7 +31,7 @@ class VoucherWidget extends GetView<CartController> {
                         decoration: BoxDecoration(
                           border: Border.all(
                               color: (controller.cart.lines!.isEmpty)
-                                  ? Colors.black
+                                  ? colorTextBlack
                                   : const Color(0xFFE0E0E0)),
                           borderRadius: BorderRadius.circular(6),
                         ),
@@ -72,7 +73,7 @@ class VoucherWidget extends GetView<CartController> {
             height: 18,
             width: 18,
             child: CircleAvatar(
-              backgroundColor: Colors.black,
+              backgroundColor: colorTextBlack,
               child: Icon(
                 Icons.close,
                 color: Colors.white,

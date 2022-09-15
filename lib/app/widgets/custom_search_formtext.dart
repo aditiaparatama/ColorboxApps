@@ -1,3 +1,4 @@
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 
 class CustomSearchTextForm extends StatelessWidget {
@@ -29,7 +30,7 @@ class CustomSearchTextForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      cursorColor: Colors.black,
+      cursorColor: colorTextBlack,
       keyboardType: textInputType,
       onSaved: onSaved,
       onChanged: onChanged,

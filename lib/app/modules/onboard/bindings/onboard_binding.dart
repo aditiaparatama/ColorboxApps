@@ -1,3 +1,4 @@
+import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/modules/collections/controllers/collections_controller.dart';
 import 'package:get/get.dart';
 
@@ -11,6 +12,9 @@ class OnBoardBinding extends Bindings {
     );
     Get.lazyPut<CollectionsController>(
       () => CollectionsController(),
+    );
+    Get.lazyPut<CartController>(
+      () => CartController(),
     );
   }
 }

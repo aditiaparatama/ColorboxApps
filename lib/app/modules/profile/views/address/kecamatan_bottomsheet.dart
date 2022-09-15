@@ -95,7 +95,7 @@ void bottomSheetKecamatan(_address2, _zip) {
                                             (_address2.text == x['nama'])
                                                 ? const Icon(
                                                     Icons.check,
-                                                    color: Colors.black,
+                                                    color: colorTextBlack,
                                                   )
                                                 : const SizedBox()
                                           ],

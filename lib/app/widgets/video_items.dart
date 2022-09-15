@@ -26,11 +26,33 @@ class _VideoAppState extends State<VideoApp> {
     _controller.play();
   }
 
+  // an arbitrary value, this can be whatever you need it to be
+  double videoContainerRatio = 0.5;
+
+  double getScale() {
+    double videoRatio = _controller.value.aspectRatio;
+
+    if (videoRatio < videoContainerRatio) {
+      ///for tall videos, we just return the inverse of the controller aspect ratio
+      return videoContainerRatio / videoRatio;
+    } else {
+      ///for wide videos, divide the video AR by the fixed container AR
+      ///so that the video does not over scale
+
+      return videoRatio / videoContainerRatio;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       child: _controller.value.isInitialized
-          ? VideoPlayer(_controller)
+          ? Transform.scale(
+              scale: getScale(),
+              child: AspectRatio(
+                  aspectRatio: videoContainerRatio,
+                  child: VideoPlayer(_controller)),
+            )
           : Container(),
     );
   }

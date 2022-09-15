@@ -1,5 +1,6 @@
 import 'package:colorbox/app/modules/orders/models/order_model.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -26,12 +27,12 @@ class TimelineStatus extends StatelessWidget {
                   left: 75,
                   child: Container(
                     color: (order.status == "Diproses")
-                        ? Colors.black
+                        ? colorTextBlack
                         : (order.status == "Dikirim")
-                            ? Colors.black
+                            ? colorTextBlack
                             : const Color(0xFFE5E8EB),
                     height: 2,
-                    width: 70,
+                    width: 100,
                   ),
                 ),
                 Positioned(
@@ -39,10 +40,10 @@ class TimelineStatus extends StatelessWidget {
                   right: 75,
                   child: Container(
                     color: (order.status == "Dikirim")
-                        ? Colors.black
+                        ? colorTextBlack
                         : const Color(0xFFE5E8EB),
                     height: 2,
-                    width: 70,
+                    width: 100,
                   ),
                 ),
                 Row(
@@ -159,7 +160,7 @@ class TimelineStatus extends StatelessWidget {
             height: 40,
             child: CircleAvatar(
               backgroundColor:
-                  (checked) ? Colors.black : const Color(0xFFE5E8EB),
+                  (checked) ? colorTextBlack : const Color(0xFFE5E8EB),
               child: SvgPicture.asset(
                 icon,
                 color: (checked) ? Colors.white : const Color(0xFF9B9B9B),
@@ -173,7 +174,7 @@ class TimelineStatus extends StatelessWidget {
             fontWeight: FontWeight.w600,
             textOverflow: TextOverflow.fade,
             textAlign: TextAlign.center,
-            color: (checked) ? Colors.black : const Color(0xFF9B9B9B),
+            color: (checked) ? colorTextBlack : const Color(0xFF9B9B9B),
           )
         ],
       ),

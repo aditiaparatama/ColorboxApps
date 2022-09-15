@@ -2,7 +2,6 @@ import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 
 class AnnouncementHome extends StatelessWidget {
   const AnnouncementHome({
@@ -33,10 +32,9 @@ class AnnouncementHome extends StatelessWidget {
                 child: SvgPicture.network(controller.announcementHome[0].icon!),
                 backgroundColor: Colors.transparent,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: SizedBox(
-                  width: Get.width * .72,
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10),
                   child: CustomText(
                     text: controller.announcementHome[0].deskripsi,
                     fontSize: 12,

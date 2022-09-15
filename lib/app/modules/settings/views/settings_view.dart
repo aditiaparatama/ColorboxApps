@@ -6,6 +6,7 @@ import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_card_v2.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -211,7 +212,7 @@ class SettingsView extends GetView<SettingsController> {
               },
               text: "Masuk Akun",
               color: Colors.white,
-              backgroundColor: Colors.black,
+              backgroundColor: colorTextBlack,
             ),
             (c.userModel.displayName == null)
                 ? const SizedBox()

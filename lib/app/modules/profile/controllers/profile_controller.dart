@@ -5,6 +5,7 @@ import 'package:colorbox/app/modules/cart/providers/cart_provider.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:colorbox/constance.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -45,6 +46,8 @@ class ProfileController extends GetxController {
   dynamic _kodePosTemp = [];
   dynamic get kodePos => _kodePos;
 
+  final CartController _cartController = Get.find<CartController>();
+
   @override
   void onInit() async {
     await fetchingUser();
@@ -72,7 +75,7 @@ class ProfileController extends GetxController {
 
       setUser(userModel);
 
-      CartProvider().cartBuyerIdentityupdate(Get.find<CartController>().idCart,
+      CartProvider().cartBuyerIdentityupdate(_cartController.idCart!,
           result["customerAccessToken"]['accessToken'], _userModel);
 
       _loading.value = false;
@@ -91,27 +94,36 @@ class ProfileController extends GetxController {
   }
 
   Future<String> register() async {
+    _loading.value = true;
+    update();
+
     var inputname = firstName.toString();
     var inputname2 = inputname.split(" ");
 
     firstN = inputname2[0].toString();
     lastN = inputname2.length > 1 ? inputname2[1].toString() : '';
 
-    // loading.value = true;
-    // update();
-    // print(tglLahir!);
-
-    // (phone!.substring(0, 1) == "0")
-    //     ? phone = "+62${phone!.substring(1, phone!.length)}"
-    //     : phone = "+62${phone!}";
     var result =
         await ProfileProvider().register(email!, password!, firstN!, lastN!);
 
-    // var result2 = await ProfileProvider()
-    //     .addbirhday(email!, password!, firstN!, lastN!, tglLahir!);
+    if (result["msg"] == "success") {
+      tglLahir = DateFormat('yyyy-MM-dd')
+          .format(DateFormat('dd/MM/yyyy').parse(tglLahir!.trim()));
+      var variables = {
+        "input": {
+          "email": email,
+          "firstName": firstN,
+          "id": result['id'],
+          "lastName": lastN,
+          "note": "Birthday: $tglLahir",
+        }
+      };
+      await ProfileProvider().customerUpdate(variables);
+      await login();
+    }
     _loading.value = false;
     update();
-    return result;
+    return result["msg"];
   }
 
   Future<String> forgotpassword() async {
@@ -180,7 +192,7 @@ class ProfileController extends GetxController {
                 ),
               ],
             ),
-            backgroundColor: Colors.black,
+            backgroundColor: colorTextBlack,
             colorText: Colors.white,
             snackPosition: SnackPosition.BOTTOM);
       }
@@ -249,7 +261,7 @@ class ProfileController extends GetxController {
                 ),
               ],
             ),
-            backgroundColor: Colors.black,
+            backgroundColor: colorTextBlack,
             colorText: Colors.white,
             snackPosition: SnackPosition.BOTTOM);
       }
@@ -398,7 +410,7 @@ class ProfileController extends GetxController {
       if (result['customerUpdate']['userErrors'].length >= 1) {
         Get.snackbar(
             "Error", result['customerUpdate']['userErrors'][0]["message"],
-            backgroundColor: Colors.black,
+            backgroundColor: colorTextBlack,
             colorText: Colors.white,
             snackPosition: SnackPosition.BOTTOM);
       } else {
@@ -421,13 +433,13 @@ class ProfileController extends GetxController {
                 ),
               ],
             ),
-            backgroundColor: Colors.black,
+            backgroundColor: colorTextBlack,
             colorText: Colors.white,
             snackPosition: SnackPosition.BOTTOM);
       }
     } catch (e) {
       Get.snackbar("Error", e.toString(),
-          backgroundColor: Colors.black,
+          backgroundColor: colorTextBlack,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM);
     }

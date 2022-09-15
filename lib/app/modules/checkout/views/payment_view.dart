@@ -1,3 +1,4 @@
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -53,7 +54,7 @@ class _WebPaymentViewState extends State<WebPaymentView> {
                             width: 100,
                             height: 100,
                             child: CircularProgressIndicator(
-                              color: Colors.black,
+                              color: colorTextBlack,
                               strokeWidth: 5,
                             ),
                           ),

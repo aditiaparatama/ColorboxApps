@@ -12,12 +12,12 @@ void filterBottomSheet() {
   Get.bottomSheet(
     Container(
       padding: const EdgeInsets.only(top: 27, right: 24, bottom: 16, left: 24),
-      height: Get.height *
-          ((controller.filterColor != "" ||
-                  controller.filterSize != "" ||
-                  controller.filterPrice != "")
-              ? .4
-              : .35),
+      // height: Get.height *
+      //     ((controller.filterColor != "" ||
+      //             controller.filterSize != "" ||
+      //             controller.filterPrice != "")
+      //         ? .4
+      //         : .35),
       decoration: const BoxDecoration(
         color: primaryColor,
         borderRadius: BorderRadius.only(
@@ -49,7 +49,7 @@ void filterBottomSheet() {
                 ),
                 InkWell(
                   onTap: () {
-                    controller.resetFilter();
+                    controller.resetFilter(page: true);
                     Get.back();
                   },
                   child: const CustomText(

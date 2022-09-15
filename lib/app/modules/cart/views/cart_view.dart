@@ -29,10 +29,9 @@ class CartView extends GetView<CartController> {
               backgroundColor: Colors.white,
               // bottomSheet: bottomCart(),
               body: SafeArea(
-                  child: SingleChildScrollView(
-                child: Column(children: [
-                  SizedBox(
-                    height: Get.height * .67,
+                  child: Column(children: [
+                Expanded(
+                  child: SizedBox(
                     child: (c.cart.lines!.isEmpty)
                         ? EmptyPage(
                             image: Image.asset(
@@ -56,9 +55,9 @@ class CartView extends GetView<CartController> {
                                   index: index,
                                 )),
                   ),
-                  bottomCart(),
-                ]),
-              )));
+                ),
+                bottomCart(),
+              ])));
         });
   }
 
@@ -167,7 +166,7 @@ class CartView extends GetView<CartController> {
                         : () async {
                             await c.getCheckoutUrl();
                             var profile = Get.find<SettingsController>();
-                            await profile.fetchingUser();
+                            await profile.getUser();
                             (profile.userModel.displayName == null)
                                 ? Get.toNamed(Routes.PROFILE,
                                     arguments: [c, "cart"])
@@ -177,7 +176,7 @@ class CartView extends GetView<CartController> {
                           },
                     style: ElevatedButton.styleFrom(
                         fixedSize: const Size(156, 48),
-                        primary: Colors.black,
+                        primary: colorTextBlack,
                         padding: const EdgeInsets.all(14)),
                     child: const CustomText(
                       text: "Checkout",

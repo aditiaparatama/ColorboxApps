@@ -1,4 +1,5 @@
 import 'package:colorbox/app/modules/product/controllers/product_controller.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -121,7 +122,7 @@ Color customColor(String color) {
     case "white":
       return Colors.white;
     case "black":
-      return Colors.black;
+      return colorTextBlack;
     case "transparent":
       return Colors.transparent;
     case "olive":

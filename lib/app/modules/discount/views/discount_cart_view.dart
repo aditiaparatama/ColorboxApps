@@ -57,7 +57,7 @@ class DiscountCartView extends GetView<DiscountController> {
                                   left: 16, right: 16, top: 24, bottom: 16),
                               child: TextFormField(
                                 controller: searchController,
-                                cursorColor: Colors.black,
+                                cursorColor: colorTextBlack,
                                 onChanged: (value) => controller.update(),
                                 decoration: InputDecoration(
                                     hintText: "Masukkan Kode Voucher",
@@ -80,7 +80,7 @@ class DiscountCartView extends GetView<DiscountController> {
                                               },
                                         text: "Gunakan",
                                         color: Colors.white,
-                                        backgroundColor: Colors.black,
+                                        backgroundColor: colorTextBlack,
                                         height: 40,
                                         width: 94,
                                         fontSize: 12,
@@ -91,7 +91,7 @@ class DiscountCartView extends GetView<DiscountController> {
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(6)),
                                         borderSide: BorderSide(
-                                            color: Colors.black, width: 1)),
+                                            color: colorTextBlack, width: 1)),
                                     enabledBorder: const OutlineInputBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(6)),
@@ -126,7 +126,7 @@ class DiscountCartView extends GetView<DiscountController> {
 
                                 Color _colorFont = (_totalPrice < _minPrice)
                                     ? Colors.grey
-                                    : Colors.black;
+                                    : colorTextBlack;
 
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -166,7 +166,7 @@ class DiscountCartView extends GetView<DiscountController> {
                                                               .discount[index]
                                                               .title)
                                                   ? Border.all(
-                                                      color: Colors.black)
+                                                      color: colorTextBlack)
                                                   : Border.all(
                                                       color: const Color(
                                                           0xFFE0E0E0)),
@@ -207,7 +207,8 @@ class DiscountCartView extends GetView<DiscountController> {
                                                                   vertical: 4),
                                                           decoration:
                                                               BoxDecoration(
-                                                            color: Colors.black,
+                                                            color:
+                                                                colorTextBlack,
                                                             borderRadius:
                                                                 BorderRadius
                                                                     .circular(
@@ -331,7 +332,7 @@ class DiscountCartView extends GetView<DiscountController> {
                                                             controller
                                                                 .discount[index]
                                                                 .title)
-                                                    ? Colors.black
+                                                    ? colorTextBlack
                                                     : const Color(0xFFE0E0E0),
                                             child: const CircleAvatar(
                                               radius: 15,
@@ -348,7 +349,7 @@ class DiscountCartView extends GetView<DiscountController> {
                                                             controller
                                                                 .discount[index]
                                                                 .title)
-                                                    ? Colors.black
+                                                    ? colorTextBlack
                                                     : const Color(0xFFE0E0E0),
                                             child: const CircleAvatar(
                                               radius: 15,

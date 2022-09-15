@@ -42,7 +42,7 @@ class ShippingWidget extends GetView<CheckoutController> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
+          border: Border.all(color: colorTextBlack),
           borderRadius: const BorderRadius.all(Radius.circular(6))),
       child: Row(
         children: [

@@ -70,254 +70,280 @@ class OrdersView extends GetView<OrdersController> {
                           )
                         : Padding(
                             padding: const EdgeInsets.only(left: 16, right: 16),
-                            child: Stack(
+                            child: Column(
                               children: [
-                                ListView.separated(
-                                    controller: _sControl,
-                                    separatorBuilder: (_, index) =>
-                                        const SizedBox(height: 16),
-                                    itemCount: controller.ordersFilter.length,
-                                    itemBuilder: (_, index) {
-                                      dynamic variant = controller
-                                          .ordersFilter[index]
-                                          .lineItems!
-                                          .items![0]
-                                          .variantTitle!
-                                          .split("/");
-                                      String? status =
-                                          controller.ordersFilter[index].status;
-                                      String imageStatus = "wallet-solid.svg";
+                                Expanded(
+                                  child: SizedBox(
+                                    child: ListView.separated(
+                                        controller: _sControl,
+                                        separatorBuilder: (_, index) =>
+                                            const SizedBox(height: 16),
+                                        itemCount:
+                                            controller.ordersFilter.length,
+                                        itemBuilder: (_, index) {
+                                          dynamic variant = controller
+                                              .ordersFilter[index]
+                                              .lineItems!
+                                              .items![0]
+                                              .variantTitle!
+                                              .split("/");
+                                          String? status = controller
+                                              .ordersFilter[index].status;
+                                          String imageStatus =
+                                              "wallet-solid.svg";
 
-                                      if (status == "Menunggu Pembayaran") {
-                                        imageStatus = "wallet-solid.svg";
-                                      }
-                                      if (status == "Diproses") {
-                                        imageStatus = "box-solid.svg";
-                                      }
-                                      if (status == "Dikirim") {
-                                        imageStatus = "Dikirim.svg";
-                                      }
+                                          if (status == "Menunggu Pembayaran") {
+                                            imageStatus = "wallet-solid.svg";
+                                          }
+                                          if (status == "Diproses") {
+                                            imageStatus = "box-solid.svg";
+                                          }
+                                          if (status == "Dikirim") {
+                                            imageStatus = "Dikirim.svg";
+                                          }
 
-                                      return Column(
-                                        children: [
-                                          SizedBox(
-                                            height: (index == 0) ? 24 : 0,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () => Get.to(OrderDetailView(
-                                                index,
-                                                filter: filter)),
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.all(16.0),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                border: Border.all(
-                                                    color: const Color(
-                                                        0xFFE5E8EB)),
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(6)),
+                                          return Column(
+                                            children: [
+                                              SizedBox(
+                                                height: (index == 0) ? 24 : 0,
                                               ),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
+                                              GestureDetector(
+                                                onTap: () => Get.to(
+                                                    OrderDetailView(index,
+                                                        filter: filter)),
+                                                child: Container(
+                                                  padding: const EdgeInsets.all(
+                                                      16.0),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    border: Border.all(
+                                                        color: const Color(
+                                                            0xFFE5E8EB)),
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                            Radius.circular(6)),
+                                                  ),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
-                                                      const CustomText(
-                                                        text: "Status Pesanan",
-                                                        fontSize: 12,
-                                                        color:
-                                                            Color(0xFF777777),
-                                                      ),
                                                       Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
                                                         children: [
-                                                          SvgPicture.asset(
-                                                              "assets/icon/orders/$imageStatus"),
-                                                          const SizedBox(
-                                                              width: 4),
+                                                          const CustomText(
+                                                            text:
+                                                                "Status Pesanan",
+                                                            fontSize: 12,
+                                                            color: Color(
+                                                                0xFF777777),
+                                                          ),
+                                                          Row(
+                                                            children: [
+                                                              SvgPicture.asset(
+                                                                  "assets/icon/orders/$imageStatus"),
+                                                              const SizedBox(
+                                                                  width: 4),
+                                                              CustomText(
+                                                                text: controller
+                                                                    .ordersFilter[
+                                                                        index]
+                                                                    .status,
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(height: 8),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          const CustomText(
+                                                            text: "No Pesanan",
+                                                            fontSize: 12,
+                                                            color: Color(
+                                                                0xFF777777),
+                                                          ),
                                                           CustomText(
                                                             text: controller
                                                                 .ordersFilter[
                                                                     index]
-                                                                .status,
+                                                                .name,
                                                             fontSize: 10,
                                                             fontWeight:
                                                                 FontWeight.w600,
                                                           ),
                                                         ],
                                                       ),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(height: 8),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      const CustomText(
-                                                        text: "No Pesanan",
-                                                        fontSize: 12,
-                                                        color:
-                                                            Color(0xFF777777),
+                                                      const SizedBox(
+                                                          height: 12),
+                                                      const Divider(
+                                                        color: colorDiver,
+                                                        thickness: 1,
                                                       ),
-                                                      CustomText(
-                                                        text: controller
-                                                            .ordersFilter[index]
-                                                            .name,
-                                                        fontSize: 10,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(height: 12),
-                                                  const Divider(
-                                                    color: colorDiver,
-                                                    thickness: 1,
-                                                  ),
-                                                  const SizedBox(height: 12),
-                                                  Row(
-                                                    children: [
-                                                      CachedNetworkImage(
-                                                        imageUrl: controller
-                                                            .ordersFilter[index]
-                                                            .lineItems!
-                                                            .items![0]
-                                                            .image!,
-                                                        height: 55,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                      const SizedBox(width: 10),
-                                                      Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
+                                                      const SizedBox(
+                                                          height: 12),
+                                                      Row(
                                                         children: [
-                                                          SizedBox(
-                                                            width:
-                                                                Get.width * .65,
-                                                            child: CustomText(
-                                                              text: controller
-                                                                  .ordersFilter[
-                                                                      index]
-                                                                  .lineItems!
-                                                                  .items![0]
-                                                                  .title,
-                                                              fontSize: 12,
-                                                            ),
+                                                          CachedNetworkImage(
+                                                            imageUrl: controller
+                                                                .ordersFilter[
+                                                                    index]
+                                                                .lineItems!
+                                                                .items![0]
+                                                                .image!,
+                                                            height: 55,
+                                                            fit: BoxFit.cover,
                                                           ),
                                                           const SizedBox(
-                                                              height: 8),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
+                                                              width: 10),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
                                                                     .start,
                                                             children: [
-                                                              const CustomText(
-                                                                text:
-                                                                    "Warna : ",
-                                                                fontSize: 12,
-                                                                color: Color(
-                                                                    0xFF777777),
-                                                              ),
-                                                              CustomText(
-                                                                text: variant[1]
-                                                                    .trim(),
-                                                                fontSize: 12,
-                                                                color: const Color(
-                                                                    0xFF777777),
+                                                              SizedBox(
+                                                                width:
+                                                                    Get.width *
+                                                                        .65,
+                                                                child:
+                                                                    CustomText(
+                                                                  text: controller
+                                                                      .ordersFilter[
+                                                                          index]
+                                                                      .lineItems!
+                                                                      .items![0]
+                                                                      .title,
+                                                                  fontSize: 12,
+                                                                ),
                                                               ),
                                                               const SizedBox(
-                                                                  width: 16),
-                                                              const CustomText(
-                                                                text:
-                                                                    "Ukuran : ",
-                                                                fontSize: 12,
-                                                                color: Color(
-                                                                    0xFF777777),
-                                                              ),
-                                                              CustomText(
-                                                                text: variant[0]
-                                                                    .trim(),
-                                                                fontSize: 12,
-                                                                color: const Color(
-                                                                    0xFF777777),
-                                                              ),
+                                                                  height: 8),
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  const CustomText(
+                                                                    text:
+                                                                        "Warna : ",
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Color(
+                                                                        0xFF777777),
+                                                                  ),
+                                                                  CustomText(
+                                                                    text: variant[
+                                                                            1]
+                                                                        .trim(),
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: const Color(
+                                                                        0xFF777777),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                      width:
+                                                                          16),
+                                                                  const CustomText(
+                                                                    text:
+                                                                        "Ukuran : ",
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Color(
+                                                                        0xFF777777),
+                                                                  ),
+                                                                  CustomText(
+                                                                    text: variant[
+                                                                            0]
+                                                                        .trim(),
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: const Color(
+                                                                        0xFF777777),
+                                                                  ),
+                                                                ],
+                                                              )
                                                             ],
                                                           )
                                                         ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                      height: (controller
+                                                      ),
+                                                      SizedBox(
+                                                          height: (controller
+                                                                      .ordersFilter[
+                                                                          index]
+                                                                      .lineItems!
+                                                                      .items!
+                                                                      .length >
+                                                                  1)
+                                                              ? 8
+                                                              : 0),
+                                                      (controller
                                                                   .ordersFilter[
                                                                       index]
                                                                   .lineItems!
                                                                   .items!
                                                                   .length >
                                                               1)
-                                                          ? 8
-                                                          : 0),
-                                                  (controller
-                                                              .ordersFilter[
-                                                                  index]
-                                                              .lineItems!
-                                                              .items!
-                                                              .length >
-                                                          1)
-                                                      ? CustomText(
-                                                          text:
-                                                              "+ ${controller.ordersFilter[index].subtotalLineItemsQuantity! - 1} produk lainnya",
-                                                          fontSize: 12,
-                                                        )
-                                                      : const SizedBox(),
-                                                  const SizedBox(height: 12),
-                                                  const Divider(
-                                                    color: colorDiver,
-                                                    thickness: 1,
-                                                  ),
-                                                  const SizedBox(height: 12),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      const CustomText(
-                                                          text: "Total",
-                                                          fontSize: 12,
-                                                          color: Color(
-                                                              0xFF777777)),
-                                                      CustomText(
-                                                        text:
-                                                            "Rp ${formatter.format(int.parse(controller.ordersFilter[index].totalPriceSet!.shopMoney!.replaceAll(".0", "")))}",
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.bold,
+                                                          ? CustomText(
+                                                              text:
+                                                                  "+ ${controller.ordersFilter[index].subtotalLineItemsQuantity! - 1} produk lainnya",
+                                                              fontSize: 12,
+                                                            )
+                                                          : const SizedBox(),
+                                                      const SizedBox(
+                                                          height: 12),
+                                                      const Divider(
+                                                        color: colorDiver,
+                                                        thickness: 1,
+                                                      ),
+                                                      const SizedBox(
+                                                          height: 12),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          const CustomText(
+                                                              text: "Total",
+                                                              fontSize: 12,
+                                                              color: Color(
+                                                                  0xFF777777)),
+                                                          CustomText(
+                                                            text:
+                                                                "Rp ${formatter.format(int.parse(controller.ordersFilter[index].totalPriceSet!.shopMoney!.replaceAll(".0", "")))}",
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          )
+                                                        ],
                                                       )
                                                     ],
-                                                  )
-                                                ],
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    }),
+                                            ],
+                                          );
+                                        }),
+                                  ),
+                                ),
                                 (controller.loadingMore.value)
-                                    ? Positioned(
-                                        bottom: 10,
-                                        left: Get.width * .4,
-                                        child: const CircularProgressIndicator(
-                                          color: Colors.black,
+                                    ? Container(
+                                        padding: const EdgeInsets.all(12),
+                                        child: const Center(
+                                          child: CircularProgressIndicator(
+                                            color: colorTextBlack,
+                                          ),
                                         ),
                                       )
-                                    : const SizedBox()
+                                    : const SizedBox(),
                               ],
                             ),
                           ));
@@ -336,7 +362,7 @@ class OrdersView extends GetView<OrdersController> {
           borderRadius: const BorderRadius.all(Radius.circular(6)),
         ),
         child: Shimmer.fromColors(
-          baseColor: Colors.black,
+          baseColor: colorTextBlack,
           highlightColor: Colors.grey,
           child: Column(
             children: [

@@ -1,4 +1,5 @@
 import 'package:colorbox/app/modules/controlV2/controllers/controlV2_controller.dart';
+import 'package:colorbox/constance.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -49,7 +50,7 @@ class ControlV2View extends GetView<ControlV2Controller> {
             controller.changeSelectedValue(index, globalKey);
           },
           // elevation: 8,
-          selectedItemColor: Colors.black,
+          selectedItemColor: colorTextBlack,
           backgroundColor: Colors.white,
         ),
       );
@@ -65,7 +66,7 @@ class ControlV2View extends GetView<ControlV2Controller> {
               assetActive ?? assets,
               height: size,
               width: size,
-              color: Colors.black,
+              color: colorTextBlack,
             ),
             const SizedBox(
               height: 4,

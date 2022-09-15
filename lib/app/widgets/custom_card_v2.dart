@@ -26,7 +26,7 @@ class CustomCardV2 extends GetView<SettingsController> {
           ),
           CustomText(
             text: textHeader,
-            color: Colors.black,
+            color: colorTextBlack,
             fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
@@ -75,7 +75,7 @@ class CustomCardV2 extends GetView<SettingsController> {
                         const Icon(
                           Icons.arrow_forward_ios,
                           size: 16,
-                          color: Colors.black,
+                          color: colorTextBlack,
                         ),
                       ],
                     ),

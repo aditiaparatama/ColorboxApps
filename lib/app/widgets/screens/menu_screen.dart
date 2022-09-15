@@ -1,5 +1,6 @@
 import 'package:colorbox/app/modules/control/controllers/control_controller.dart';
 import 'package:colorbox/app/modules/control/menu_model.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
@@ -61,9 +62,9 @@ class MenuScreen extends StatelessWidget {
 
   Widget buildMenuItem(Menu item) => ListTileTheme(
         selectedColor: Colors.white,
-        iconColor: Colors.black,
+        iconColor: colorTextBlack,
         child: ListTile(
-          selectedTileColor: Colors.black,
+          selectedTileColor: colorTextBlack,
           selected: item.title == currentItem,
           minLeadingWidth: 20,
           leading: const SizedBox(

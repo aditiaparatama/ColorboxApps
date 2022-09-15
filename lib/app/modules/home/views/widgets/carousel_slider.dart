@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 
 class CarouselWithIndicator extends StatefulWidget {
@@ -65,7 +66,7 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicator> {
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: (_current == entry.key)
-                        ? Colors.black
+                        ? colorTextBlack
                         : const Color(0xFFE5E8EB)),
               ),
             );

@@ -33,7 +33,7 @@ class ListAddress extends StatelessWidget {
                               width: defaultPadding / 2,
                               height: defaultPadding * 5,
                               decoration: const BoxDecoration(
-                                color: Colors.black87,
+                                color: colorTextBlack,
                                 borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(5),
                                     bottomRight: Radius.circular(5)),

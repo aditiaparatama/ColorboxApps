@@ -1,3 +1,4 @@
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 
@@ -50,7 +51,7 @@ class CustomTextFormField extends StatelessWidget {
         ),
       TextFormField(
         focusNode: focusNode,
-        cursorColor: Colors.black,
+        cursorColor: colorTextBlack,
         controller: textEditingController,
         onChanged: onChange,
         onSaved: onSave,
@@ -63,8 +64,6 @@ class CustomTextFormField extends StatelessWidget {
         style: const TextStyle(fontSize: 14),
         decoration: InputDecoration(
           labelText: hint!,
-          labelStyle: const TextStyle(fontSize: 14),
-          hintStyle: const TextStyle(fontSize: 14),
           suffixIcon: suffixIcon,
           prefixText: prefixText,
           prefix: prefix,
@@ -73,7 +72,7 @@ class CustomTextFormField extends StatelessWidget {
               borderSide: BorderSide(
                 color: (textEditingController != null &&
                         textEditingController!.text.isNotEmpty)
-                    ? Colors.black
+                    ? colorTextBlack
                     : const Color(0xFFE5E8EB),
                 width: 1.0,
               )),
@@ -82,7 +81,7 @@ class CustomTextFormField extends StatelessWidget {
               borderSide: BorderSide(
                 color: (textEditingController != null &&
                         textEditingController!.text.isNotEmpty)
-                    ? Colors.black
+                    ? colorTextBlack
                     : const Color(0xFFE5E8EB),
                 width: 1.0,
               )),

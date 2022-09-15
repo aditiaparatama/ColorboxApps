@@ -1,6 +1,7 @@
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -22,8 +23,9 @@ class HomeSearch extends StatelessWidget {
             height: 36,
             width: MediaQuery.of(context).size.width - 70,
             child: TextFormField(
+              readOnly: true,
               onTap: () => Get.toNamed(Routes.SEARCH),
-              cursorColor: Colors.black,
+              cursorColor: colorTextBlack,
               decoration: InputDecoration(
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6.0),

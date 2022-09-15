@@ -1,3 +1,4 @@
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 
 Color customColors(String color) {
@@ -17,7 +18,7 @@ Color customColors(String color) {
     case "blue":
       return Colors.blue;
     case "black":
-      return Colors.black;
+      return colorTextBlack;
     case "green":
       return Colors.green;
     case "brown":

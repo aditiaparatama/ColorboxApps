@@ -64,7 +64,7 @@ Shimmer loadingProduct() {
 Center loadingCircular() {
   return const Center(
     child: CircularProgressIndicator(
-      color: Colors.black,
+      color: colorTextBlack,
     ),
   );
 }

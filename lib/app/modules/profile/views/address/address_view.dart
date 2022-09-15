@@ -4,6 +4,7 @@ import 'package:colorbox/app/modules/profile/views/address/address_form.dart';
 import 'package:colorbox/app/modules/profile/views/widgets/card_address_widget.dart';
 import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -40,7 +41,7 @@ class AddressView extends GetView<ProfileController> {
         builder: (c) {
           return (controller.userModel.displayName == null)
               ? const Center(
-                  child: CircularProgressIndicator(color: Colors.black),
+                  child: CircularProgressIndicator(color: colorTextBlack),
                 )
               : Stack(
                   children: [
@@ -61,7 +62,7 @@ class AddressView extends GetView<ProfileController> {
                     (controller.loading.value)
                         ? const Center(
                             child: CircularProgressIndicator(
-                              color: Colors.black,
+                              color: colorTextBlack,
                             ),
                           )
                         : const SizedBox()
