@@ -1,22 +1,26 @@
-import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
+import 'package:colorbox/app/modules/product/controllers/product_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
+import 'package:get/route_manager.dart';
 
-class CarouselWithIndicator extends StatefulWidget {
-  const CarouselWithIndicator({
+class CarouselWithIndicatorProduct extends StatefulWidget {
+  const CarouselWithIndicatorProduct({
     Key? key,
     required this.controller,
   }) : super(key: key);
 
-  final HomeController controller;
+  final ProductController controller;
 
   @override
-  State<CarouselWithIndicator> createState() => _CarouselWithIndicatorState();
+  State<CarouselWithIndicatorProduct> createState() =>
+      _CarouselWithIndicatorProductState();
 }
 
-class _CarouselWithIndicatorState extends State<CarouselWithIndicator> {
+class _CarouselWithIndicatorProductState
+    extends State<CarouselWithIndicatorProduct> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
 

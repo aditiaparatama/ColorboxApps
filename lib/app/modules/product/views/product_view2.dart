@@ -1,7 +1,8 @@
 import 'package:colorbox/app/modules/collections/views/widgets/search_collection.dart';
-import 'package:colorbox/app/modules/product/views/similar_product_view.dart';
+import 'package:colorbox/app/modules/product/views/widget/carousel_slider_product.dart';
+import 'package:colorbox/app/modules/product/views/widget/share_social_media.dart';
+import 'package:colorbox/app/modules/product/views/widget/similar_product_view.dart';
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
-import 'package:colorbox/app/modules/product/views/widget/callus.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/widgets/custom_radio_color.dart';
 import 'package:colorbox/app/widgets/appbar_custom.dart';
@@ -12,16 +13,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:get/get.dart';
 
 import '../controllers/product_controller.dart';
 
 // ignore: must_be_immutable, use_key_in_widget_constructors
 class ProductView2 extends GetView<ProductController> {
-  var formatter = NumberFormat('###,000');
-
   @override
   Widget build(BuildContext context) {
     controller.product = Get.arguments["product"];
@@ -37,6 +36,7 @@ class ProductView2 extends GetView<ProductController> {
     return GetBuilder<ProductController>(
         init: Get.put(ProductController()),
         builder: (control) {
+          print(controller);
           // print(control.userModel.id!);
           // var str1 =
           //     'https://cloud.smartwishlist.webmarked.net/v6/savewishlist.php/?callback=jQuery22306539739531735338_1662970872627&product_id=' +
@@ -52,7 +52,6 @@ class ProductView2 extends GetView<ProductController> {
           //         control.userModel.id!
           //             .replaceAll('gid://shopify/Customer/', '') +
           //         '&action=add&hostname=colorbox.co.id&variant=0&store_id=42391208086&_=1662969706415';
-
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: const PreferredSize(
