@@ -82,7 +82,7 @@ class ItemCard extends StatelessWidget {
                       height: 15.0,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(2),
-                        color: const Color.fromRGBO(187, 9, 21, 1),
+                        color: colorSaleRed,
                       ),
                       child: Center(
                         child: Text(

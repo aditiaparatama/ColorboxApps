@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/widgets/appbar_custom.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
@@ -26,70 +27,69 @@ class CollectionList extends StatelessWidget {
               ),
             ),
             backgroundColor: Colors.white,
-            body: ListView.builder(
-                padding: const EdgeInsets.fromLTRB(16, 24, 25, 12),
-                itemCount: c.menu.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(5, 5, 5, 8),
-                    child: InkWell(
-                      onTap: () {
-                        (c.menu[index].subMenu.isNotEmpty)
-                            ? Get.to(SubmenuV2View(curIndex: index))
-                            : Get.toNamed(Routes.COLLECTIONS, arguments: {
-                                "menu": c.menu[index],
-                                "menuIndex": null,
-                                "sortBy": defaultSortBy
-                              });
-                      },
-                      child: SizedBox(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                  width: 1.0,
-                                  color: Color.fromRGBO(229, 232, 235, 1)),
+            body: Column(
+              children: [
+                const SizedBox(height: 12),
+                Flexible(
+                  child: SizedBox(
+                    child: ListView.separated(
+                        shrinkWrap: true,
+                        separatorBuilder: (_, index) => const Divider(
+                              color: colorBorderGrey,
+                              thickness: 1,
                             ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        itemCount: c.menu.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return InkWell(
+                            onTap: () {
+                              (c.menu[index].subMenu.isNotEmpty)
+                                  ? Get.to(SubmenuV2View(curIndex: index))
+                                  : Get.toNamed(Routes.COLLECTIONS, arguments: {
+                                      "menu": c.menu[index],
+                                      "menuIndex": null,
+                                      "sortBy": defaultSortBy
+                                    });
+                            },
+                            child: Container(
+                              padding:
+                                  const EdgeInsets.only(top: 12, bottom: 8),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(5, 2, 0, 7),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(50.0),
-                                      child: CachedNetworkImage(
-                                        imageUrl: c.menu[index].image!,
-                                        fit: BoxFit.cover,
-                                        height: 50.0,
-                                        width: 50.0,
+                                  Row(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(50.0),
+                                        child: CachedNetworkImage(
+                                          imageUrl: c.menu[index].image!,
+                                          fit: BoxFit.cover,
+                                          height: 50.0,
+                                          width: 50.0,
+                                        ),
                                       ),
-                                    ),
+                                      const SizedBox(width: 16),
+                                      CustomText(
+                                        text: c.menu[index].title!,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: const Color.fromRGBO(0, 0, 0, 1),
+                                      ),
+                                    ],
                                   ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(16, 0, 0, 5),
-                                    child: CustomText(
-                                      text: c.menu[index].title!,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      color: const Color.fromRGBO(0, 0, 0, 1),
-                                    ),
-                                  ),
+                                  SvgPicture.asset(
+                                      "assets/icon/bx-arrow-right2.svg"),
                                 ],
                               ),
-                              SvgPicture.asset(
-                                  "assets/icon/bx-arrow-right2.svg"),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }),
+                            ),
+                          );
+                        }),
+                  ),
+                ),
+              ],
+            ),
           );
         });
   }

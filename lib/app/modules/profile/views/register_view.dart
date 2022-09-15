@@ -1,3 +1,4 @@
+import 'package:colorbox/app/modules/profile/views/profile_view.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
@@ -19,6 +20,62 @@ class RegisterView extends GetView<ProfileController> {
   static const str = 'date: 2019:04:01';
   final valuestest = str.split(': ');
   bool showAlert = false;
+
+  Future<void> _showMyDialog(context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          content: Container(
+            height: 320,
+            padding: const EdgeInsets.all(24.0),
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(6))),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                    "assets/icon/Email-Registered-Illustration.svg"),
+                const SizedBox(height: 8),
+                const CustomText(
+                  text: "Email Sudah Terdaftar",
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                CustomText(
+                  text: "Alamat email '${controller.email}' sudah terdaftar",
+                  textOverflow: TextOverflow.fade,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                CustomButton(
+                  onPressed: () {
+                    Get.back();
+                    Get.to(ProfileView("onboard"));
+                  },
+                  text: "Masuk akun",
+                  backgroundColor: colorTextBlack,
+                  color: Colors.white,
+                ),
+                const SizedBox(height: 12),
+                CustomButton(
+                  onPressed: () => Get.back(),
+                  text: "Kembali",
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -215,6 +272,10 @@ class RegisterView extends GetView<ProfileController> {
                                             if (result == "success") {
                                               Get.offAllNamed(Routes.CONTROLV2);
                                             } else {
+                                              if (result ==
+                                                  "Email sudah diambil") {
+                                                _showMyDialog(context);
+                                              }
                                               controller.loading.value = false;
                                               controller.update();
                                             }

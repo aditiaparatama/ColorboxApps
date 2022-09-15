@@ -16,6 +16,7 @@ class SearchController extends GetxController {
   List<Product> get product => _product;
 
   final int _limit = 10;
+  bool firstView = true;
 
   void fetchSearchProduct(String search) async {
     _loading.value = true;
@@ -33,6 +34,7 @@ class SearchController extends GetxController {
     }
 
     _loading.value = false;
+    firstView = false;
     update();
   }
 

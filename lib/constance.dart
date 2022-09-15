@@ -9,7 +9,7 @@ const double sfontPromo = 16;
 const double sfontDefault = 14;
 const Color colorPrimary = colorTextBlack;
 const Color secondColor = Colors.white;
-const Color colorDiver = Color(0xFFE5E8EB);
+const Color colorDiver = Color(0xFFF5F6F8);
 
 const Color colorBorderGrey = Color(0xFFE5E8EB);
 const Color colorTextGrey = Color(0xFF9B9B9B);

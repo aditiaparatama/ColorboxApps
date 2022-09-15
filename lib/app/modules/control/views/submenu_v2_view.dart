@@ -20,6 +20,7 @@ class SubmenuV2View extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(56),
         child: AppBar(
@@ -37,68 +38,73 @@ class SubmenuV2View extends StatelessWidget {
           ],
         ),
       ),
-      body: ListView.builder(
-          padding: const EdgeInsets.fromLTRB(16, 24, 21, 12),
-          itemCount: c[curIndex].subMenu.length,
-          itemBuilder: (BuildContext _, int index) {
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(5, 5, 5, 8),
-              child: InkWell(
-                onTap: () {
-                  Get.toNamed(Routes.COLLECTIONS, arguments: {
-                    "menu": c[curIndex].subMenu,
-                    "indexMenu": index,
-                    "sortBy": defaultSortBy
-                  });
-                },
-                child: SizedBox(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                            width: 1.0,
-                            color: Color.fromRGBO(229, 232, 235, 1)),
+      body: Column(
+        children: [
+          const SizedBox(height: 12),
+          Flexible(
+            child: SizedBox(
+              child: ListView.separated(
+                  separatorBuilder: (_, index) => const Divider(
+                        color: colorBorderGrey,
+                        thickness: 1,
                       ),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: c[curIndex].subMenu.length,
+                  itemBuilder: (BuildContext _, int index) {
+                    return Column(
                       children: [
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(5, 2, 0, 7),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(50.0),
-                                child: CachedNetworkImage(
-                                  imageUrl: c[curIndex].subMenu[index].image!,
-                                  fit: BoxFit.cover,
-                                  height: 50.0,
-                                  width: 50.0,
+                        InkWell(
+                          onTap: () {
+                            Get.toNamed(Routes.COLLECTIONS, arguments: {
+                              "menu": c[curIndex].subMenu,
+                              "indexMenu": index,
+                              "sortBy": defaultSortBy
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.only(top: 12, bottom: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(50.0),
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            c[curIndex].subMenu[index].image!,
+                                        fit: BoxFit.cover,
+                                        height: 50.0,
+                                        width: 50.0,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    CustomText(
+                                      text: c[curIndex]
+                                          .subMenu[index]
+                                          .title!
+                                          .replaceAll("- New Arrival", ""),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: colorTextBlack,
+                                    ),
+                                  ],
                                 ),
-                              ),
+                                SvgPicture.asset(
+                                    "assets/icon/bx-arrow-right2.svg"),
+                              ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(16, 0, 0, 5),
-                              child: CustomText(
-                                text: c[curIndex]
-                                    .subMenu[index]
-                                    .title!
-                                    .replaceAll("- New Arrival", ""),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: colorTextBlack,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                        SvgPicture.asset("assets/icon/bx-arrow-right2.svg"),
+                        if (index == (c[curIndex].subMenu.length - 1))
+                          const SizedBox(height: 40),
                       ],
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }),
+                    );
+                  }),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

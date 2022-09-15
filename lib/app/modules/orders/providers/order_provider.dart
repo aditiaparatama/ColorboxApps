@@ -470,6 +470,7 @@ class OrderProvider extends GetConnect {
     );
 
     final QueryResult result = await _client.query(options);
+    if (result.data == null) return null;
 
     return result.data!['customer'];
   }
