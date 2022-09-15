@@ -1,6 +1,7 @@
 import 'package:colorbox/app/modules/collections/views/widgets/search_collection.dart';
 import 'package:colorbox/app/modules/product/views/similar_product_view.dart';
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
+import 'package:colorbox/app/modules/product/views/widget/callus.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/widgets/custom_radio_color.dart';
 import 'package:colorbox/app/widgets/appbar_custom.dart';
@@ -11,7 +12,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get/get.dart';
@@ -80,10 +80,9 @@ class ProductView2 extends GetView<ProductController> {
                                 CarouselSlider.builder(
                                   itemCount: controller.product.image.length,
                                   options: CarouselOptions(
-                                    height: 550,
                                     autoPlay: false,
                                     viewportFraction: 1,
-                                    aspectRatio: 1 / 1,
+                                    aspectRatio: 5 / 7,
                                     enlargeCenterPage: true,
                                   ),
                                   itemBuilder: (context, index, realIdx) {
@@ -134,7 +133,7 @@ class ProductView2 extends GetView<ProductController> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(16, 16, 0, 8),
                               child: CustomText(
-                                text: controller.product.handle!,
+                                text: controller.product.title!,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                                 color: const Color.fromRGBO(33, 33, 33, 1),
@@ -460,8 +459,9 @@ class ProductView2 extends GetView<ProductController> {
                                   children: [
                                     InkWell(
                                       onTap: () async {
-                                        const url =
-                                            "https://wa.me/628111717250?text=Hello";
+                                        var url =
+                                            'https://wa.me/628111717250?text=Halo Admin Colorbox, saya ingin bertanya tentang produk ini: https://colorbox.co.id/products/' +
+                                                controller.product.handle!;
                                         await launchUrlString(url,
                                             mode:
                                                 LaunchMode.externalApplication);
@@ -602,151 +602,5 @@ class ProductView2 extends GetView<ProductController> {
             ),
           );
         });
-  }
-
-  void bottomSheet(handle) {
-    // ignore: unused_local_variable
-    var urlprod = 'https://colorbox.co.id/products/' + handle;
-    Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.all(defaultPadding),
-        height: Get.height * .41,
-        decoration: const BoxDecoration(
-          color: primaryColor,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                IconButton(
-                    onPressed: () => Get.back(),
-                    icon: const Icon(
-                      Icons.close,
-                      size: 16,
-                    )),
-                const CustomText(
-                  text: "Berbagi :",
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-              ],
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                  fixedSize: Size(Get.width, 20),
-                  alignment: Alignment.centerLeft),
-              onPressed: () async {
-                var url =
-                    'https://www.facebook.com/dialog/share?app_id=324557847592228&amp;href=' +
-                        urlprod +
-                        '%3Futm_source%3DFacebook';
-                await launchUrlString(url,
-                    mode: LaunchMode.externalApplication);
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  CustomText(
-                    text: 'Facebook',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ],
-              ),
-            ),
-            const Divider(
-              color: colorDiver,
-              thickness: 1,
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                  fixedSize: Size(Get.width, 10),
-                  alignment: Alignment.centerLeft),
-              onPressed: () async {
-                var url = 'https://twitter.com/share?url=' +
-                    urlprod +
-                    '&amp;text=Check+out+this+product%21+Product+ini+mungkin+menarik+buat+kamu%3A%3Futm_source%3DWhatsapp';
-                await launchUrlString(url,
-                    mode: LaunchMode.externalApplication);
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  CustomText(
-                    text: 'Twitter',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ],
-              ),
-            ),
-            const Divider(
-              color: colorDiver,
-              thickness: 1,
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                  fixedSize: Size(Get.width, 10),
-                  alignment: Alignment.centerLeft),
-              onPressed: () async {
-                var url =
-                    'https://api.whatsapp.com/send?text=Check+out+this+product%21+Product+ini+mungkin+menarik+buat+kamu%3A%0D%0A%0D%0A' +
-                        urlprod +
-                        '%3Futm_source%3DWhatsapp';
-                await launchUrlString(url,
-                    mode: LaunchMode.externalApplication);
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  CustomText(
-                    text: 'Whatsapp',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ],
-              ),
-            ),
-            const Divider(
-              color: colorDiver,
-              thickness: 1,
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                  fixedSize: Size(Get.width, 10),
-                  alignment: Alignment.centerLeft),
-              onPressed: () async {
-                var url =
-                    'https://t.me/share/url?text=Check+out+this+product%21+Product+ini+mungkin+menarik+buat+kamu%3A&amp;url=' +
-                        urlprod +
-                        '%3Futm_source%3DTelegram';
-                await launchUrlString(url,
-                    mode: LaunchMode.externalApplication);
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  CustomText(
-                    text: 'Telegram',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ],
-              ),
-            ),
-            const Divider(
-              color: colorDiver,
-              thickness: 1,
-            ),
-          ],
-        ),
-      ),
-      isDismissible: true,
-      enableDrag: false,
-    );
   }
 }

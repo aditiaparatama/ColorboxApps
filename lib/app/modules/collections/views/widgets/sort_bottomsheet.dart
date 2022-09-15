@@ -1,8 +1,8 @@
 import 'package:colorbox/app/modules/collections/controllers/collections_controller.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 void sortBottomSheet(id) {
