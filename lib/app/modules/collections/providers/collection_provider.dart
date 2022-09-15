@@ -30,6 +30,7 @@ class CollectionProvider extends GetConnect {
                 node {
                   id
                   title
+                  handle
                   description
                   descriptionHtml
                   productType
@@ -96,6 +97,7 @@ class CollectionProvider extends GetConnect {
                 node {
                   id
                   title
+                  handle
                   description
                   descriptionHtml
                   productType
@@ -179,6 +181,7 @@ class CollectionProvider extends GetConnect {
                 node {
                   id
                   title
+                  handle
                   description
                   descriptionHtml
                   productType

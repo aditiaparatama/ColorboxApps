@@ -4,6 +4,7 @@ class Product {
   String? title;
   String? type;
   String? description;
+  String? handle;
   List<Options> options = List<Options>.empty();
   List<String> image = List<String>.empty();
   List<Variants> variants = List<Variants>.empty();
@@ -11,14 +12,25 @@ class Product {
   bool? hasNextPage;
   String? cursor;
 
-  Product(this.id, this.idCollection, this.title, this.type, this.description,
-      this.image, this.options, this.variants, this.hasNextPage, this.cursor);
+  Product(
+      this.id,
+      this.idCollection,
+      this.title,
+      this.type,
+      this.description,
+      this.handle,
+      this.image,
+      this.options,
+      this.variants,
+      this.hasNextPage,
+      this.cursor);
 
   Product.fromJson(var json) {
     id = json['id'];
     title = json['title'];
     type = json['productType'];
     description = json['descriptionHtml'];
+    handle = json['handle'];
 
     image = [];
     for (var i = 0; i < json['images']['edges'].length; i++) {
