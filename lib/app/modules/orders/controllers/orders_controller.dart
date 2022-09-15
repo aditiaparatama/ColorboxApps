@@ -98,6 +98,18 @@ class OrdersController extends GetxController {
         "gid://shopify/Customer/4510208950422",
         DateFormat("yyyy-MM-dd").format(dateMin),
         null);
+
+    if (result == null) {
+      while (result == null) {
+        result = await Future.delayed(
+            const Duration(milliseconds: 1000),
+            () => OrderProvider().getActiveOrders(
+                "gid://shopify/Customer/4510208950422",
+                DateFormat("yyyy-MM-dd").format(dateMin),
+                null));
+      }
+    }
+
     temp.add(result['orders']['edges'].length);
     while (result['orders']['pageInfo']['hasNextPage']) {
       result = await Future.delayed(

@@ -1,5 +1,7 @@
+import 'package:colorbox/app/services/shopify_graphql.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:get/get.dart';
+import 'package:graphql/client.dart';
 
 class SearchProvider extends GetConnect {
   @override
@@ -10,7 +12,11 @@ class SearchProvider extends GetConnect {
   }
 
   Future<dynamic> postSearch(String value, int limit) async {
-    String body = """query {
+    final GraphQLClient _client = getShopifyGraphQLClient(admin: true);
+
+    final QueryOptions options = QueryOptions(
+        document: gql(
+          """query {
       products(first: $limit, sortKey: CREATED_AT, reverse: true, query: "(title:$value) OR (sku:$value) OR (article:$value)") {
         pageInfo {
           hasNextPage
@@ -51,13 +57,13 @@ class SearchProvider extends GetConnect {
           }
         }
       }
-    }""";
+    }""",
+        ),
+        variables: {});
 
     try {
-      var response = await post(url_shopify + "graphql.json", body,
-          contentType: "application/graphql",
-          headers: {"X-Shopify-Access-Token": token, 'Retry-After': '5.0'});
-      return await response.body['data']['products'];
+      final QueryResult result = await _client.query(options);
+      return await result.data!['products'];
     } catch (e) {
       // ignore: avoid_print
       print(e.toString());
@@ -65,7 +71,9 @@ class SearchProvider extends GetConnect {
   }
 
   Future<dynamic> postSearchNext(String value, int limit, String cursor) async {
-    String body = """query {
+    final GraphQLClient _client = getShopifyGraphQLClient(admin: true);
+
+    final QueryOptions options = QueryOptions(document: gql("""query {
       products(first: $limit, sortKey: CREATED_AT, reverse: true, query: "(title:$value) OR (sku:$value) OR (article:$value)", after: "$cursor") {
         pageInfo {
           hasNextPage
@@ -106,13 +114,11 @@ class SearchProvider extends GetConnect {
           }
         }
       }
-    }""";
+    }"""), variables: {});
 
     try {
-      var response = await post(url_shopify + "graphql.json", body,
-          contentType: "application/graphql",
-          headers: {"X-Shopify-Access-Token": token, 'Retry-After': '5.0'});
-      return await response.body['data']['products'];
+      final QueryResult result = await _client.query(options);
+      return await result.data!['products'];
     } catch (e) {
       // ignore: avoid_print
       print(e.toString());

@@ -1,3 +1,4 @@
+import 'package:colorbox/app/modules/profile/views/profile_view.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
@@ -28,8 +29,8 @@ class RegisterView extends GetView<ProfileController> {
         return AlertDialog(
           contentPadding: EdgeInsets.zero,
           content: Container(
-            height: 302,
-            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 40),
+            height: 320,
+            padding: const EdgeInsets.all(24.0),
             decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(6))),
@@ -51,17 +52,21 @@ class RegisterView extends GetView<ProfileController> {
                 CustomText(
                   text: "Alamat email '${controller.email}' sudah terdaftar",
                   textOverflow: TextOverflow.fade,
+                  textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
                 CustomButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.back();
+                    Get.to(ProfileView("onboard"));
+                  },
                   text: "Masuk akun",
                   backgroundColor: colorTextBlack,
                   color: Colors.white,
                 ),
                 const SizedBox(height: 12),
                 CustomButton(
-                  onPressed: () {},
+                  onPressed: () => Get.back(),
                   text: "Kembali",
                 )
               ],
