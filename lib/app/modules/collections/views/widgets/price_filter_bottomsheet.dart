@@ -240,7 +240,7 @@ void priceFilterBottomSheet() {
                           ? const Color(0xFF9B9B9B)
                           : (hargaMax.text == "")
                               ? const Color(0xFF9B9B9B)
-                              : Colors.black,
+                              : colorTextBlack,
                       borderColor: Colors.transparent,
                     )
                   ],

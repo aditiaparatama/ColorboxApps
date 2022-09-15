@@ -36,7 +36,7 @@ class ProfileProvider extends GetConnect {
     return result.data!['customerAccessTokenCreate'];
   }
 
-  Future<String> register(
+  Future<dynamic> register(
       String email, String password, String firstN, String lastN) async {
     final GraphQLClient _client = getShopifyGraphQLClient();
 
@@ -74,10 +74,13 @@ class ProfileProvider extends GetConnect {
       // ignore: avoid_print
       Get.snackbar("Warning",
           result.data!['customerCreate']['customerUserErrors'][0]["message"]);
-      return "";
+      return {"id": "", "msg": ""};
     }
 
-    return "success";
+    return {
+      "id": result.data!['customerCreate']['customer']['id'],
+      "msg": "success"
+    };
   }
 
   Future<String> forgotpassword(String email) async {

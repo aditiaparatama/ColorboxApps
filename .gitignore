@@ -47,7 +47,6 @@ app.*.map.json
 /android/app/release
 
 #api settingsss
-globalvar.dart
 lib/globalvar.dart
 ios/
 android/

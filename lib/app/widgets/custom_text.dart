@@ -1,3 +1,4 @@
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 
 class CustomText extends StatelessWidget {
@@ -15,7 +16,7 @@ class CustomText extends StatelessWidget {
       this.text,
       this.fontWeight = FontWeight.normal,
       this.fontSize = 14,
-      this.color = Colors.black,
+      this.color = colorTextBlack,
       this.decoration = TextDecoration.none,
       this.textOverflow = TextOverflow.ellipsis,
       this.textAlign = TextAlign.left,

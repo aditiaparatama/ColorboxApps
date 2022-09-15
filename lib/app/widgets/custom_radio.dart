@@ -1,4 +1,5 @@
 import 'package:colorbox/app/modules/product/controllers/product_controller.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -81,7 +82,7 @@ class RadioItem extends StatelessWidget {
                           ? const Color.fromRGBO(155, 155, 155, 1)
                           : _item.isSelected
                               ? Colors.white
-                              : Colors.black,
+                              : colorTextBlack,
                       fontWeight: _item.isSelected
                           ? FontWeight.w400
                           : FontWeight.normal,
@@ -91,12 +92,12 @@ class RadioItem extends StatelessWidget {
               color: _item.stock == 0
                   ? const Color.fromRGBO(229, 232, 235, 1)
                   : _item.isSelected
-                      ? Colors.black
+                      ? colorTextBlack
                       : Colors.transparent,
               border: Border.all(
                   width: 1.0,
                   color: _item.isSelected
-                      ? Colors.black
+                      ? colorTextBlack
                       : const Color.fromRGBO(155, 155, 155, 0.3)),
               borderRadius: const BorderRadius.all(Radius.circular(5.0)),
             ),

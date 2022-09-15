@@ -1,3 +1,4 @@
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'custom_text.dart';
@@ -13,6 +14,7 @@ class CustomButton extends StatelessWidget {
   final double? width;
   final double? fontSize;
   final double? radius;
+  final Widget? child;
 
   const CustomButton(
       {Key? key,
@@ -23,8 +25,9 @@ class CustomButton extends StatelessWidget {
       this.height,
       this.width,
       this.fontSize = 14,
-      this.radius = 10,
-      this.borderColor = Colors.black})
+      this.radius = 6,
+      this.borderColor = colorTextBlack,
+      this.child})
       : super(key: key);
 
   @override
@@ -40,11 +43,13 @@ class CustomButton extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(radius!),
             )),
-        child: CustomText(
-          text: text!,
-          color: color,
-          fontWeight: FontWeight.bold,
-          fontSize: fontSize,
-        ));
+        child: (child != null)
+            ? child
+            : CustomText(
+                text: text!,
+                color: color,
+                fontWeight: FontWeight.bold,
+                fontSize: fontSize,
+              ));
   }
 }

@@ -1,4 +1,5 @@
 import 'package:colorbox/app/routes/app_pages.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -19,9 +20,9 @@ class OnBoardingScreen extends StatelessWidget {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.black,
+                  color: colorTextBlack,
                   border: Border.all(
-                    color: Colors.black,
+                    color: colorTextBlack,
                   ),
                   borderRadius: const BorderRadius.all(
                     Radius.circular(5),

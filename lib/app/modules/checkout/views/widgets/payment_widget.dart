@@ -29,7 +29,7 @@ class PaymentWidget extends GetView<CheckoutController> {
                 padding: const EdgeInsets.all(defaultPadding),
                 width: Get.width,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
+                  border: Border.all(color: colorTextBlack),
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Row(

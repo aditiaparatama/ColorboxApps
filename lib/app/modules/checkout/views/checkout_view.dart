@@ -43,7 +43,7 @@ class CheckoutView extends GetView<CheckoutController> {
                   height: 45,
                 ),
                 CustomButton(
-                  backgroundColor: Colors.black87,
+                  backgroundColor: colorTextBlack,
                   color: Colors.white,
                   onPressed: () => Navigator.of(context).pop(false),
                   //return false when click on "No"
@@ -88,7 +88,7 @@ class CheckoutView extends GetView<CheckoutController> {
                     ),
                     const SizedBox(height: 24),
                     CustomButton(
-                      backgroundColor: Colors.black87,
+                      backgroundColor: colorTextBlack,
                       color: Colors.white,
                       onPressed: () async {
                         String urlString = await controller.paymentCheckout();
@@ -137,7 +137,7 @@ class CheckoutView extends GetView<CheckoutController> {
                   child: (controller.checkout.id == null)
                       ? const Center(
                           child: CircularProgressIndicator(
-                            color: Colors.black,
+                            color: colorTextBlack,
                           ),
                         )
                       : SingleChildScrollView(
@@ -227,12 +227,12 @@ class CheckoutView extends GetView<CheckoutController> {
                                               const CustomText(
                                                 text: "Subtotal Produk",
                                                 fontSize: 12,
-                                                color: Colors.black54,
+                                                color: colorTextBlack,
                                               ),
                                               CustomText(
                                                 text:
                                                     "Rp ${formatter.format(int.parse(controller.checkout.lineItemsSubtotalPrice!.replaceAll(".0", "")))}",
-                                                color: Colors.black54,
+                                                color: colorTextBlack,
                                                 fontSize: 12,
                                               ),
                                             ],
@@ -247,7 +247,7 @@ class CheckoutView extends GetView<CheckoutController> {
                                               const CustomText(
                                                 text: "Ongkos Kirim",
                                                 fontSize: 12,
-                                                color: Colors.black54,
+                                                color: colorTextBlack,
                                               ),
                                               (controller.checkout
                                                               .shippingLine ==
@@ -260,12 +260,12 @@ class CheckoutView extends GetView<CheckoutController> {
                                                   ? const CustomText(
                                                       text: "Rp 0",
                                                       fontSize: 12,
-                                                      color: Colors.black54,
+                                                      color: colorTextBlack,
                                                     )
                                                   : CustomText(
                                                       text:
                                                           "Rp ${formatter.format(int.parse(controller.checkout.shippingLine!.amount!.replaceAll(".0", "")))}",
-                                                      color: Colors.black54,
+                                                      color: colorTextBlack,
                                                       fontSize: 12,
                                                     ),
                                             ],
@@ -280,7 +280,7 @@ class CheckoutView extends GetView<CheckoutController> {
                                               const CustomText(
                                                 text: "Potongan Harga",
                                                 fontSize: 12,
-                                                color: Colors.black54,
+                                                color: colorTextBlack,
                                               ),
                                               (controller.checkout
                                                           .discountApplications ==
@@ -288,12 +288,12 @@ class CheckoutView extends GetView<CheckoutController> {
                                                   ? const CustomText(
                                                       text: "Rp 0",
                                                       fontSize: 12,
-                                                      color: Colors.black54,
+                                                      color: colorTextBlack,
                                                     )
                                                   : CustomText(
                                                       text:
                                                           "-Rp ${formatter.format(int.parse(controller.checkout.discountApplications!.amount!.replaceAll(".0", "")))}",
-                                                      color: Colors.black54,
+                                                      color: colorTextBlack,
                                                       fontSize: 12,
                                                     ),
                                             ],
@@ -338,7 +338,7 @@ class CheckoutView extends GetView<CheckoutController> {
                                             },
                                             text: "Lakukan Pembayaran",
                                             color: Colors.white,
-                                            backgroundColor: Colors.black87,
+                                            backgroundColor: colorTextBlack,
                                             width: 200,
                                             height: 48,
                                             fontSize: 14,
@@ -353,7 +353,7 @@ class CheckoutView extends GetView<CheckoutController> {
                                         height: Get.height,
                                         child: const Center(
                                           child: CircularProgressIndicator(
-                                            color: Colors.black,
+                                            color: colorTextBlack,
                                           ),
                                         ),
                                       )

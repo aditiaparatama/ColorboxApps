@@ -1,5 +1,6 @@
 import 'package:colorbox/app/modules/cart/providers/cart_provider.dart';
 import 'package:colorbox/app/modules/cart/models/cart_model.dart';
+import 'package:colorbox/constance.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,7 +17,7 @@ class CartController extends GetxController {
   ValueNotifier<bool> show = ValueNotifier(false);
 
   String? _idCart;
-  String get idCart => _idCart!;
+  String? get idCart => _idCart;
   String? _checkoutUrl;
   String? get checkoutUrl => _checkoutUrl;
   int curIndex = 0;
@@ -85,7 +86,7 @@ class CartController extends GetxController {
         "Peringatan",
         "Silahkan pilih ukuran!",
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.black,
+        backgroundColor: colorTextBlack,
         colorText: Colors.white,
       );
     } else {
@@ -105,7 +106,7 @@ class CartController extends GetxController {
           "Peringatan",
           "Silahkan pilih warna produk!",
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.black,
+          backgroundColor: colorTextBlack,
           colorText: Colors.white,
         );
       }
@@ -161,7 +162,7 @@ class CartController extends GetxController {
               ),
             ],
           ),
-          backgroundColor: Colors.black,
+          backgroundColor: colorTextBlack,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM);
     }
@@ -185,7 +186,7 @@ class CartController extends GetxController {
               ),
             ],
           ),
-          backgroundColor: Colors.black,
+          backgroundColor: colorTextBlack,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM);
     }
@@ -213,7 +214,7 @@ class CartController extends GetxController {
               ),
             ],
           ),
-          backgroundColor: Colors.black,
+          backgroundColor: colorTextBlack,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM);
     }

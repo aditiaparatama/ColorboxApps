@@ -93,7 +93,7 @@ void bottomSheetProvince(_province, _city) {
                                             (_province.text == x.name)
                                                 ? const Icon(
                                                     Icons.check,
-                                                    color: Colors.black,
+                                                    color: colorTextBlack,
                                                   )
                                                 : const SizedBox()
                                           ],

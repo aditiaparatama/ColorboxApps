@@ -1,3 +1,4 @@
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 
 class MyInputTheme {
@@ -31,26 +32,26 @@ class MyInputTheme {
         //Borders
         //Enabled and not showing error
         enabledBorder: _buildBorder(const Color(0xFFE5E8EB)),
-        focusedBorder: _buildBorder(Colors.black),
+        focusedBorder: _buildBorder(colorTextBlack),
         //Has error but not focus
         errorBorder: _buildBorder(Colors.red),
         // Has error and focus
         focusedErrorBorder: _buildBorder(Colors.red),
         // Default value if borders are null
-        border: _buildBorder(Colors.black),
+        border: _buildBorder(colorTextBlack),
         // Enabled and focused
         disabledBorder: _buildBorder(const Color(0xFFE5E8EB)),
 
         // TextStyles
-        suffixStyle: _builtTextStyle(Colors.black),
-        counterStyle: _builtTextStyle(Colors.grey, size: 12.0),
-        floatingLabelStyle: _builtTextStyle(Colors.black),
+        suffixStyle: _builtTextStyle(colorTextBlack),
+        counterStyle: _builtTextStyle(Colors.grey, size: 14.0),
+        floatingLabelStyle: _builtTextStyle(colorTextBlack),
         // Make error and helper the same size, so that the field
         // does not grow in heigth when there is an error text
-        errorStyle: _builtTextStyle(Colors.red, size: 12.0),
-        helperStyle: _builtTextStyle(Colors.black, size: 12.0),
-        hintStyle: _builtTextStyle(Colors.grey, size: 14),
-        labelStyle: _builtTextStyle(const Color(0xFF9B9B9B), size: 14),
-        prefixStyle: _builtTextStyle(Colors.black),
+        errorStyle: _builtTextStyle(Colors.red, size: 14.0),
+        helperStyle: _builtTextStyle(colorTextBlack, size: 14.0),
+        hintStyle: _builtTextStyle(colorTextGrey, size: 14),
+        labelStyle: _builtTextStyle(colorTextGrey, size: 14),
+        prefixStyle: _builtTextStyle(colorTextBlack),
       );
 }

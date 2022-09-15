@@ -1,9 +1,11 @@
 import 'package:colorbox/app/routes/app_pages.dart';
+import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
-// import 'package:colorbox/app/widgets/custom_text_form_field.dart';
+import 'package:colorbox/app/widgets/custom_text_form_field.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../controllers/profile_controller.dart';
@@ -12,24 +14,22 @@ import '../controllers/profile_controller.dart';
 class RegisterView extends GetView<ProfileController> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController birthday = TextEditingController();
+  FocusNode emailFocus = FocusNode();
 
   static const str = 'date: 2019:04:01';
   final valuestest = str.split(': ');
+  bool showAlert = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: const CustomText(
-            text: "Daftar Akun 3",
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-          centerTitle: false,
-          elevation: 3,
-          shadowColor: Colors.grey.withOpacity(0.3),
-        ),
+        backgroundColor: Colors.white,
+        appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(56),
+            child: AppBarDefault(
+              text: "Daftar Akun",
+            )),
         body: GetBuilder<ProfileController>(builder: (controller) {
           return Stack(
             children: [
@@ -43,36 +43,44 @@ class RegisterView extends GetView<ProfileController> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
+                            const SizedBox(height: 24),
                             Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 30, right: 20, left: 20),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
                               child: Form(
                                 key: _formKey,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    TextFormField(
-                                      cursorColor: Colors.black,
-                                      decoration: const InputDecoration(
-                                        labelText: "Email",
-                                      ),
-                                      onSaved: (value) {
-                                        controller.email = value;
-                                      },
-                                      validator: (value) {
-                                        if (RegExp(
-                                                r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                                            .hasMatch(value!)) {
-                                          return null;
-                                        }
-                                        return "Format email salah";
-                                      },
-                                    ),
+                                    CustomTextFormField(
+                                        hint: "Email",
+                                        onSave: (value) {
+                                          controller.email = value;
+                                        },
+                                        validator: (value) {
+                                          if (RegExp(
+                                                  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                                              .hasMatch(value!)) {
+                                            return null;
+                                          }
+                                          FocusScope.of(context)
+                                              .requestFocus(emailFocus);
+                                          return "Format email salah";
+                                        },
+                                        focusNode: emailFocus,
+                                        suffixIcon: Padding(
+                                          padding: const EdgeInsets.all(14.0),
+                                          child: showAlert
+                                              ? SvgPicture.asset(
+                                                  "assets/icon/circle-exclamation-solid.svg",
+                                                )
+                                              : null,
+                                        )),
                                     const SizedBox(
-                                      height: 20,
+                                      height: 16,
                                     ),
                                     TextFormField(
-                                      cursorColor: Colors.black,
+                                      cursorColor: colorTextBlack,
                                       decoration: InputDecoration(
                                         labelText: "Password",
                                         suffixIcon: GestureDetector(
@@ -83,7 +91,7 @@ class RegisterView extends GetView<ProfileController> {
                                             !controller.showPassword!
                                                 ? Icons.visibility
                                                 : Icons.visibility_off,
-                                            color: Colors.black,
+                                            color: colorTextBlack,
                                           ),
                                         ),
                                       ),
@@ -99,25 +107,28 @@ class RegisterView extends GetView<ProfileController> {
                                       },
                                     ),
                                     const SizedBox(
-                                      height: 20,
+                                      height: 16,
                                     ),
-                                    TextFormField(
-                                      cursorColor: Colors.black,
-                                      decoration: const InputDecoration(
-                                        labelText: "Nama",
-                                      ),
-                                      onSaved: (value) {
-                                        controller.firstName = value;
-                                      },
-                                      validator: (value) {
-                                        if (value == "" || value == null) {
-                                          return "Nama tidak boleh kosong";
-                                        }
-                                        return null;
-                                      },
-                                    ),
+                                    CustomTextFormField(
+                                        hint: "Nama Lengkap",
+                                        onSave: (value) {
+                                          controller.firstName = value;
+                                        },
+                                        validator: (value) {
+                                          if (value == "" || value == null) {
+                                            return "Nama tidak boleh kosong";
+                                          }
+                                          return null;
+                                        },
+                                        suffixIcon: Padding(
+                                            padding: const EdgeInsets.all(14.0),
+                                            child: showAlert
+                                                ? SvgPicture.asset(
+                                                    "assets/icon/circle-exclamation-solid.svg",
+                                                  )
+                                                : null)),
                                     const SizedBox(
-                                      height: 20,
+                                      height: 16,
                                     ),
                                     InkWell(
                                       onTap: () => showDatePicker(
@@ -146,10 +157,10 @@ class RegisterView extends GetView<ProfileController> {
                                                     primary: Colors
                                                         .white, // button text color
                                                     side: const BorderSide(
-                                                        color: Colors.black,
+                                                        color: colorTextBlack,
                                                         width: 1),
                                                     backgroundColor:
-                                                        Colors.black),
+                                                        colorTextBlack),
                                               ),
                                             ),
                                             child: child!,
@@ -161,7 +172,7 @@ class RegisterView extends GetView<ProfileController> {
                                                 .format(value!);
                                       }),
                                       child: TextFormField(
-                                        cursorColor: Colors.black,
+                                        cursorColor: colorTextBlack,
                                         enabled: false,
                                         controller: birthday,
                                         decoration: InputDecoration(
@@ -170,7 +181,7 @@ class RegisterView extends GetView<ProfileController> {
                                             onTap: () {},
                                             child: const Icon(
                                               Icons.calendar_today,
-                                              color: Colors.black,
+                                              color: colorTextBlack,
                                             ),
                                           ),
                                         ),
@@ -196,18 +207,20 @@ class RegisterView extends GetView<ProfileController> {
                                         color: secondColor,
                                         onPressed: () async {
                                           _formKey.currentState!.save();
+                                          showAlert = false;
                                           if (_formKey.currentState!
                                               .validate()) {
                                             var result =
                                                 await controller.register();
                                             if (result == "success") {
-                                              Get.back();
-                                              Get.snackbar("Congratulations!",
-                                                  "Data has been created");
+                                              Get.offAllNamed(Routes.CONTROLV2);
                                             } else {
                                               controller.loading.value = false;
                                               controller.update();
                                             }
+                                          } else {
+                                            showAlert = true;
+                                            controller.update();
                                           }
                                         },
                                         text: "Daftar",
@@ -267,7 +280,7 @@ class RegisterView extends GetView<ProfileController> {
                                               const Text(
                                                 "Lanjutkan dengan Google",
                                                 style: TextStyle(
-                                                    color: Colors.black,
+                                                    color: colorTextBlack,
                                                     fontSize: 14.0),
                                               ),
                                             ],
@@ -286,7 +299,7 @@ class RegisterView extends GetView<ProfileController> {
                                             const CustomText(
                                               text: 'Sudah punya akun?',
                                               fontSize: 13,
-                                              color: Colors.black,
+                                              color: colorTextBlack,
                                             ),
                                             TextButton(
                                               onPressed: () =>

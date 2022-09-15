@@ -34,12 +34,14 @@ class ItemCard extends StatelessWidget {
         children: [
           CachedNetworkImage(
             imageUrl: image!,
-            imageBuilder: (context, imageProvider) => Container(
-              height: 220,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: imageProvider,
-                  fit: BoxFit.cover,
+            imageBuilder: (context, imageProvider) => AspectRatio(
+              aspectRatio: 2.08 / 3,
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),

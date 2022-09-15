@@ -313,7 +313,7 @@ class ProductView2 extends GetView<ProductController> {
                                                     .values[0],
                                           ),
                                           fontSize: 14,
-                                          color: Colors.black,
+                                          color: colorTextBlack,
                                           fontWeight: FontWeight.w600,
                                         ),
                                         const SizedBox(height: 16),
@@ -322,7 +322,7 @@ class ProductView2 extends GetView<ProductController> {
                                           width: 24.0,
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                              color: Colors.black,
+                                              color: colorTextBlack,
                                               width: 2.0,
                                             ),
                                             borderRadius:
@@ -400,7 +400,7 @@ class ProductView2 extends GetView<ProductController> {
                               child: GFAccordion(
                                 title: 'Panduan Ukuran',
                                 textStyle: const TextStyle(
-                                    color: Colors.black,
+                                    color: colorTextBlack,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600),
                                 margin: const EdgeInsets.only(left: 0),
@@ -432,7 +432,7 @@ class ProductView2 extends GetView<ProductController> {
                               child: GFAccordion(
                                 title: 'Detail Produk',
                                 textStyle: const TextStyle(
-                                    color: Colors.black,
+                                    color: colorTextBlack,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600),
                                 margin: const EdgeInsets.only(left: 0),

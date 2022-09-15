@@ -95,7 +95,7 @@ void bottomSheetCity(_city, _address2) {
                                             (_city.text == x['kota'])
                                                 ? const Icon(
                                                     Icons.check,
-                                                    color: Colors.black,
+                                                    color: colorTextBlack,
                                                   )
                                                 : const SizedBox()
                                           ],

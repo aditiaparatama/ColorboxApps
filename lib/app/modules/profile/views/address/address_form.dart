@@ -8,6 +8,7 @@ import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/widgets/custom_text_form_field.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -94,7 +95,7 @@ class AddressForm extends GetView<ProfileController> {
                         ),
                       ],
                     ),
-                    backgroundColor: Colors.black,
+                    backgroundColor: colorTextBlack,
                     colorText: Colors.white,
                     snackPosition: SnackPosition.BOTTOM);
               } else {
@@ -114,7 +115,7 @@ class AddressForm extends GetView<ProfileController> {
                         ),
                       ],
                     ),
-                    backgroundColor: Colors.black,
+                    backgroundColor: colorTextBlack,
                     colorText: Colors.white,
                     snackPosition: SnackPosition.BOTTOM);
               }
@@ -124,7 +125,7 @@ class AddressForm extends GetView<ProfileController> {
           width: Get.width,
           height: 60,
           color: Colors.white,
-          backgroundColor: Colors.black,
+          backgroundColor: colorTextBlack,
         ),
       ),
       body: SafeArea(
@@ -171,7 +172,7 @@ class AddressForm extends GetView<ProfileController> {
                                     },
                                     icon: const Icon(
                                       Icons.cancel_sharp,
-                                      color: Colors.black,
+                                      color: colorTextBlack,
                                       size: 18,
                                     ))
                                 : const SizedBox(),
@@ -205,7 +206,7 @@ class AddressForm extends GetView<ProfileController> {
                                     },
                                     icon: const Icon(
                                       Icons.cancel_sharp,
-                                      color: Colors.black,
+                                      color: colorTextBlack,
                                       size: 18,
                                     ))
                                 : const SizedBox(),
@@ -253,7 +254,7 @@ class AddressForm extends GetView<ProfileController> {
                                     },
                                     icon: const Icon(
                                       Icons.cancel_sharp,
-                                      color: Colors.black,
+                                      color: colorTextBlack,
                                       size: 18,
                                     ))
                                 : const SizedBox(),
@@ -285,7 +286,7 @@ class AddressForm extends GetView<ProfileController> {
                                         Radius.circular(6)),
                                     borderSide: BorderSide(
                                       color: (_zip.text.isNotEmpty)
-                                          ? Colors.black
+                                          ? colorTextBlack
                                           : const Color(0xFFE5E8EB),
                                       width: 1.0,
                                     )),
@@ -325,7 +326,7 @@ class AddressForm extends GetView<ProfileController> {
                                         Radius.circular(6)),
                                     borderSide: BorderSide(
                                       color: (_zip.text.isNotEmpty)
-                                          ? Colors.black
+                                          ? colorTextBlack
                                           : const Color(0xFFE5E8EB),
                                       width: 1.0,
                                     )),
@@ -365,7 +366,7 @@ class AddressForm extends GetView<ProfileController> {
                                         Radius.circular(6)),
                                     borderSide: BorderSide(
                                       color: (_zip.text.isNotEmpty)
-                                          ? Colors.black
+                                          ? colorTextBlack
                                           : const Color(0xFFE5E8EB),
                                       width: 1.0,
                                     )),
@@ -406,7 +407,7 @@ class AddressForm extends GetView<ProfileController> {
                                         Radius.circular(6)),
                                     borderSide: BorderSide(
                                       color: (_zip.text.isNotEmpty)
-                                          ? Colors.black
+                                          ? colorTextBlack
                                           : const Color(0xFFE5E8EB),
                                       width: 1.0,
                                     )),

@@ -91,7 +91,7 @@ void bottomSheetZip(_zip) {
                                             (_zip.text == x)
                                                 ? const Icon(
                                                     Icons.check,
-                                                    color: Colors.black,
+                                                    color: colorTextBlack,
                                                   )
                                                 : const SizedBox()
                                           ],

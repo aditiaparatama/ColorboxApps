@@ -1,6 +1,9 @@
+import 'package:colorbox/app/modules/profile/bindings/profile_binding.dart';
+import 'package:colorbox/app/modules/profile/views/profile_view.dart';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/video_items.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -42,18 +45,18 @@ class OnBoardView extends GetView<OnBoardController> {
                             end: Alignment.bottomCenter,
                             colors: [
                           Colors.white.withOpacity(0.25),
-                          Colors.black.withOpacity(0.25)
+                          colorTextBlack.withOpacity(0.25)
                         ])),
-                    padding: const EdgeInsets.all(30.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: colorTextBlack,
                             border: Border.all(
-                              color: Colors.black,
+                              color: colorTextBlack,
                             ),
                             borderRadius: const BorderRadius.all(
                               Radius.circular(6),
@@ -104,13 +107,14 @@ class OnBoardView extends GetView<OnBoardController> {
                                 ],
                               ),
                               onPressed: () {
-                                Get.offNamed(Routes.PROFILE);
+                                Get.to(ProfileView("onboard"),
+                                    binding: ProfileBinding());
                               },
                             ),
                           ),
                         ),
                         const SizedBox(
-                          height: 30,
+                          height: 32,
                         ),
                         // ignore: avoid_unnecessary_containers
                         Container(
@@ -141,6 +145,7 @@ class OnBoardView extends GetView<OnBoardController> {
                             onPressed: () => Get.offNamed(Routes.CONTROLV2),
                           ),
                         ),
+                        const SizedBox(height: 40),
                       ],
                     ),
                   ),

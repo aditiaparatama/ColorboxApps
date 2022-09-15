@@ -1,5 +1,6 @@
 import 'package:colorbox/app/modules/collections/providers/collection_provider.dart';
 import 'package:colorbox/app/modules/home/models/homecollection_model.dart';
+import 'package:colorbox/constance.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -219,7 +220,7 @@ class HomeCollectionsController extends GetxController {
             child: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-              color: (tabIndex == i) ? Colors.black : Colors.transparent,
+              color: (tabIndex == i) ? colorTextBlack : Colors.transparent,
               border: Border.all(color: Colors.grey)),
           child: Text(
               argMenu[i]

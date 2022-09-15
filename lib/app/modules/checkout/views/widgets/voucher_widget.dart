@@ -1,6 +1,7 @@
 import 'package:colorbox/app/modules/checkout/controllers/checkout_controller.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -36,7 +37,7 @@ class VoucherWidget extends GetView<CheckoutController> {
                       border: Border.all(
                           color:
                               (controller.checkout.discountApplications == null)
-                                  ? Colors.black
+                                  ? colorTextBlack
                                   : const Color(0xFFE0E0E0)),
                       borderRadius: BorderRadius.circular(6),
                     ),
@@ -72,7 +73,7 @@ class VoucherWidget extends GetView<CheckoutController> {
             height: 18,
             width: 18,
             child: CircleAvatar(
-              backgroundColor: Colors.black,
+              backgroundColor: colorTextBlack,
               child: Icon(
                 Icons.close,
                 color: Colors.white,

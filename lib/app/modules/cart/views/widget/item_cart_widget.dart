@@ -62,7 +62,7 @@ class ItemCartWidget extends StatelessWidget {
                                 TextSpan(
                                     text: options[1],
                                     style: const TextStyle(
-                                        color: Colors.black,
+                                        color: colorTextBlack,
                                         fontWeight: FontWeight.bold))
                               ]),
                         ),
@@ -78,7 +78,7 @@ class ItemCartWidget extends StatelessWidget {
                                 TextSpan(
                                     text: options[0],
                                     style: const TextStyle(
-                                        color: Colors.black,
+                                        color: colorTextBlack,
                                         fontWeight: FontWeight.bold))
                               ]),
                         ),
@@ -222,7 +222,7 @@ class ItemCartWidget extends StatelessWidget {
                   alignment: Alignment.center,
                   padding: const EdgeInsets.only(top: 35),
                   child: const CircularProgressIndicator(
-                    color: Colors.black,
+                    color: colorTextBlack,
                   ),
                 )
               : const SizedBox()

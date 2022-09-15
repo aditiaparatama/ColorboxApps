@@ -1,5 +1,6 @@
 import 'package:colorbox/app/modules/collections/providers/collection_provider.dart';
 import 'package:colorbox/app/modules/collections/models/collection_model.dart';
+import 'package:colorbox/constance.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,7 +33,9 @@ class CollectionsController extends GetxController {
   String filterColor = "";
   String filterSize = "";
   String filterPrice = "";
-  List<dynamic> filterList = [];
+  List<dynamic> filterList = [
+    {"available": true}
+  ];
 
   void fetchCollectionProduct(int id, int sortBy,
       {bool similiar = false}) async {
@@ -54,16 +57,18 @@ class CollectionsController extends GetxController {
       reverse = "false";
     }
 
+    _filtersDefault = ', filters:$filterList';
+
     if (!similiar) _loading.value = true;
     // update();
-    var data = await CollectionProvider()
-        .collectionWithFilter(id, _limit, sortKey!, reverse!, "", "");
+    var data = await CollectionProvider().collectionWithFilter(
+        id, _limit, sortKey!, reverse!, _filtersDefault, "");
     if (data == null) {
       while (data == null) {
         data = await Future.delayed(
             const Duration(milliseconds: 1000),
-            () => CollectionProvider()
-                .collectionWithFilter(id, _limit, sortKey!, reverse!, "", ""));
+            () => CollectionProvider().collectionWithFilter(
+                id, _limit, sortKey!, reverse!, _filtersDefault, ""));
       }
     }
     _collection = Collection.empty();
@@ -131,7 +136,7 @@ class CollectionsController extends GetxController {
       listTabs.add(Tab(
         child: Container(
             padding: const EdgeInsets.all(8),
-            color: Colors.black,
+            color: colorTextBlack,
             child: Text(
               menu.title,
               style: const TextStyle(
@@ -144,10 +149,10 @@ class CollectionsController extends GetxController {
             child: Container(
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
-              color: (index == i) ? Colors.black : null,
+              color: (index == i) ? colorTextBlack : null,
               border: Border.all(
                   color:
-                      (index == i) ? Colors.black : const Color(0xFFE5E8EB))),
+                      (index == i) ? colorTextBlack : const Color(0xFFE5E8EB))),
           child: Text(
             argMenu[i]
                 .title!
@@ -190,7 +195,9 @@ class CollectionsController extends GetxController {
   }
 
   void filterChange(String label, String value) async {
-    filterList = [];
+    filterList = [
+      {"available": true}
+    ];
     _filtersDefault = "";
     if (label.toLowerCase() == "color") {
       filterColor = value;
@@ -217,9 +224,9 @@ class CollectionsController extends GetxController {
           .add('{ price: { min: ${parseValue[0]}, max: ${parseValue[1]} }}');
     }
 
-    if (filterColor != "" || filterSize != "" || filterPrice != "") {
-      _filtersDefault = ', filters:$filterList';
-    }
+    // if (filterColor != "" || filterSize != "" || filterPrice != "") {
+    _filtersDefault = ', filters:$filterList';
+    // }
     String? sortKey, reverse;
     if (orderBy == 1) {
       sortKey = "BEST_SELLING";

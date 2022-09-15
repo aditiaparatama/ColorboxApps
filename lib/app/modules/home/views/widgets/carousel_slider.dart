@@ -65,7 +65,7 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicator> {
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: (_current == entry.key)
-                        ? Colors.black
+                        ? colorTextBlack
                         : const Color(0xFFE5E8EB)),
               ),
             );

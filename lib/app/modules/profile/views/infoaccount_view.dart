@@ -4,6 +4,7 @@ import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text_form_field.dart';
 import 'package:colorbox/app/widgets/widget.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -65,7 +66,7 @@ class InformationAccount extends StatelessWidget {
           },
           text: "Simpan",
           color: Colors.white,
-          backgroundColor: Colors.black,
+          backgroundColor: colorTextBlack,
         ),
       ),
       body: GetBuilder(
@@ -99,7 +100,7 @@ class InformationAccount extends StatelessWidget {
                                     },
                                     icon: const Icon(
                                       Icons.cancel_sharp,
-                                      color: Colors.black,
+                                      color: colorTextBlack,
                                       size: 18,
                                     ))
                                 : const SizedBox(),
@@ -126,7 +127,7 @@ class InformationAccount extends StatelessWidget {
                                     },
                                     icon: const Icon(
                                       Icons.cancel_sharp,
-                                      color: Colors.black,
+                                      color: colorTextBlack,
                                       size: 18,
                                     ))
                                 : const SizedBox(),
@@ -145,17 +146,17 @@ class InformationAccount extends StatelessWidget {
                                 return Theme(
                                   data: Theme.of(context).copyWith(
                                     colorScheme: const ColorScheme.light(
-                                      primary: Colors.black, // <-- SEE HERE
+                                      primary: colorTextBlack, // <-- SEE HERE
                                       onPrimary: Colors.white, // <-- SEE HERE
-                                      onSurface: Colors.black, // <-- SEE HERE
+                                      onSurface: colorTextBlack, // <-- SEE HERE
                                     ),
                                     textButtonTheme: TextButtonThemeData(
                                       style: TextButton.styleFrom(
                                           primary:
                                               Colors.white, // button text color
                                           side: const BorderSide(
-                                              color: Colors.black, width: 1),
-                                          backgroundColor: Colors.black),
+                                              color: colorTextBlack, width: 1),
+                                          backgroundColor: colorTextBlack),
                                     ),
                                   ),
                                   child: child!,
@@ -166,7 +167,7 @@ class InformationAccount extends StatelessWidget {
                                   DateFormat('dd/MM/yyyy').format(value!);
                             }),
                             child: TextFormField(
-                              cursorColor: Colors.black,
+                              cursorColor: colorTextBlack,
                               enabled: false,
                               controller: birthdayTextController,
                               onChanged: (_) => controller.update(),
@@ -177,7 +178,7 @@ class InformationAccount extends StatelessWidget {
                                   onTap: () {},
                                   child: const Icon(
                                     Icons.calendar_today,
-                                    color: Colors.black,
+                                    color: colorTextBlack,
                                     size: 18,
                                   ),
                                 ),
@@ -187,7 +188,7 @@ class InformationAccount extends StatelessWidget {
                                     borderSide: BorderSide(
                                       color: (birthdayTextController
                                               .text.isNotEmpty)
-                                          ? Colors.black
+                                          ? colorTextBlack
                                           : const Color(0xFFE5E8EB),
                                       width: 1.0,
                                     )),
@@ -197,7 +198,7 @@ class InformationAccount extends StatelessWidget {
                                     borderSide: BorderSide(
                                       color: (birthdayTextController
                                               .text.isNotEmpty)
-                                          ? Colors.black
+                                          ? colorTextBlack
                                           : const Color(0xFFE5E8EB),
                                       width: 1.0,
                                     )),
