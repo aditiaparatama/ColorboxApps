@@ -70,11 +70,19 @@ class ProfileProvider extends GetConnect {
 
     final QueryResult result = await _client.query(options);
 
+    if (result.data == null) return {"id": "", "msg": ""};
+
     if (result.data!['customerCreate']['customerUserErrors'].length > 0) {
-      // ignore: avoid_print
-      Get.snackbar("Warning",
-          result.data!['customerCreate']['customerUserErrors'][0]["message"]);
-      return {"id": "", "msg": ""};
+      if (result.data!['customerCreate']['customerUserErrors'][0]["message"] !=
+          "Email sudah diambil") {
+        Get.snackbar("Warning",
+            result.data!['customerCreate']['customerUserErrors'][0]["message"]);
+      }
+      return {
+        "id": "",
+        "msg": result.data!['customerCreate']['customerUserErrors'][0]
+            ["message"]
+      };
     }
 
     return {

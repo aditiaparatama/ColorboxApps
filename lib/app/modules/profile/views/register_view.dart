@@ -20,6 +20,58 @@ class RegisterView extends GetView<ProfileController> {
   final valuestest = str.split(': ');
   bool showAlert = false;
 
+  Future<void> _showMyDialog(context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          content: Container(
+            height: 302,
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 40),
+            decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(6))),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                    "assets/icon/Email-Registered-Illustration.svg"),
+                const SizedBox(height: 8),
+                const CustomText(
+                  text: "Email Sudah Terdaftar",
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                CustomText(
+                  text: "Alamat email '${controller.email}' sudah terdaftar",
+                  textOverflow: TextOverflow.fade,
+                ),
+                const SizedBox(height: 24),
+                CustomButton(
+                  onPressed: () {},
+                  text: "Masuk akun",
+                  backgroundColor: colorTextBlack,
+                  color: Colors.white,
+                ),
+                const SizedBox(height: 12),
+                CustomButton(
+                  onPressed: () {},
+                  text: "Kembali",
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -215,6 +267,10 @@ class RegisterView extends GetView<ProfileController> {
                                             if (result == "success") {
                                               Get.offAllNamed(Routes.CONTROLV2);
                                             } else {
+                                              if (result ==
+                                                  "Email sudah diambil") {
+                                                _showMyDialog(context);
+                                              }
                                               controller.loading.value = false;
                                               controller.update();
                                             }
