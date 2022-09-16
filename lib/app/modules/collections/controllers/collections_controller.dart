@@ -59,14 +59,16 @@ class CollectionsController extends GetxController {
 
     _filtersDefault = ', filters:$filterList';
 
-    if (!similiar) _loading.value = true;
+    if (!similiar) {
+      _loading.value = true;
+    }
     // update();
     var data = await CollectionProvider().collectionWithFilter(
         id, _limit, sortKey!, reverse!, _filtersDefault, "");
     if (data == null) {
       while (data == null) {
         data = await Future.delayed(
-            const Duration(milliseconds: 1000),
+            const Duration(milliseconds: 1200),
             () => CollectionProvider().collectionWithFilter(
                 id, _limit, sortKey!, reverse!, _filtersDefault, ""));
       }
@@ -172,6 +174,8 @@ class CollectionsController extends GetxController {
   void onChangeList(int index) {
     resetFilter(page: true);
     selectedIndex = index;
+    _collection = Collection.empty();
+    update();
     if (_parentList!) {
       subjectID = menu.subjectID!;
       fetchCollectionProduct(menu.subjectID!, defaultSortBy);

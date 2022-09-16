@@ -169,12 +169,12 @@ class CollectionsMainView extends GetView<CollectionsController> {
                                 itemCount: control.listTabs.length,
                                 onPageChanged: (index) {
                                   controller.selectedIndex = index;
-                                  controller.onChangeList(index);
                                   tabController.index = index;
                                   controller.setTabBar(_menu,
                                       parent:
                                           (indexMenu == null) ? true : false,
                                       index: index);
+                                  controller.onChangeList(index);
                                 },
                                 itemBuilder: ((context, index) {
                                   return SizedBox(

@@ -6,7 +6,6 @@ import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/custom_radio_color.dart';
-import 'package:colorbox/app/widgets/appbar_custom.dart';
 import 'package:colorbox/app/widgets/custom_radio.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/constance.dart';
