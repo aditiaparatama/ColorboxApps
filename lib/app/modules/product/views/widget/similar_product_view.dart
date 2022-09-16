@@ -28,15 +28,15 @@ class CollectionsProductView extends GetView<CollectionsController> {
                 )
               : GridView.builder(
                   shrinkWrap: true,
+                  padding: EdgeInsets.zero,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: controller.collection.products.length,
                   // scrollDirection: Axis.horizontal,
-                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    mainAxisExtent: 340,
-                    maxCrossAxisExtent: 200,
-                    childAspectRatio: 2 / 8,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 10,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 24,
+                    crossAxisSpacing: 24,
+                    childAspectRatio: 2.6 / 5,
                   ),
                   itemBuilder: (_, i) {
                     var calcu1 = int.parse(controller
@@ -61,26 +61,39 @@ class CollectionsProductView extends GetView<CollectionsController> {
                           CachedNetworkImage(
                             imageUrl:
                                 controller.collection.products[i].image[0],
+                            imageBuilder: (context, imageProvider) =>
+                                AspectRatio(
+                              aspectRatio: 2.08 / 3,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
                             progressIndicatorBuilder:
                                 (context, url, downloadProgress) =>
-                                    CircularProgressIndicator(
-                                        value: downloadProgress.progress),
+                                    Image.asset("assets/images/Image.jpg"),
                             errorWidget: (context, url, error) =>
                                 const Icon(Icons.error),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 4, vertical: 10),
-                            child: CustomText(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              text: controller.collection.products[i].title,
-                              textOverflow: TextOverflow.ellipsis,
-                            ),
+                          const SizedBox(height: 12),
+                          CustomText(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            text: controller.collection.products[i].title,
+                            textOverflow: TextOverflow.ellipsis,
                           ),
+                          const SizedBox(height: 8),
                           (controller.collection.products[i].variants[0]
-                                      .compareAtPrice! ==
-                                  "0")
+                                          .compareAtPrice! ==
+                                      "0" ||
+                                  controller.collection.products[i].variants[0]
+                                          .compareAtPrice! ==
+                                      controller.collection.products[i]
+                                          .variants[0].price!)
                               ? CustomText(
                                   text: "Rp " +
                                       formatter.format(int.parse(controller
@@ -106,21 +119,20 @@ class CollectionsProductView extends GetView<CollectionsController> {
                                                       .compareAtPrice!
                                                       .replaceAll(".00", ""))) +
                                               "  ",
-                                          fontSize: 12,
+                                          fontSize: 10,
                                           fontWeight: FontWeight.w400,
-                                          color: const Color.fromRGBO(
-                                              155, 155, 155, 1),
+                                          color: colorTextGrey,
                                           decoration:
                                               TextDecoration.lineThrough,
                                         ),
+                                        const SizedBox(width: 8),
                                         Container(
-                                          width: 33.0,
-                                          height: 20.0,
+                                          width: 30.0,
+                                          height: 15.0,
                                           decoration: BoxDecoration(
                                             borderRadius:
-                                                BorderRadius.circular(5),
-                                            color: const Color.fromRGBO(
-                                                187, 9, 21, 1),
+                                                BorderRadius.circular(2),
+                                            color: colorSaleRed,
                                           ),
                                           child: Center(
                                             child: Text(
@@ -137,7 +149,7 @@ class CollectionsProductView extends GetView<CollectionsController> {
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(height: 5),
+                                    const SizedBox(height: 4),
                                     Column(
                                       children: [
                                         Row(
@@ -154,8 +166,7 @@ class CollectionsProductView extends GetView<CollectionsController> {
                                                               ".00", ""))),
                                               fontSize: 14,
                                               fontWeight: FontWeight.w700,
-                                              color: const Color.fromARGB(
-                                                  255, 229, 57, 53),
+                                              color: colorTextRed,
                                             ),
                                           ],
                                         ),

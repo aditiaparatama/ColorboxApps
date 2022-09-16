@@ -71,7 +71,7 @@ class ItemCard extends StatelessWidget {
                       style: const TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w400,
-                          color: Color.fromRGBO(155, 155, 155, 1),
+                          color: colorTextGrey,
                           decoration: TextDecoration.lineThrough),
                     ),
                     const SizedBox(width: 8),
@@ -108,7 +108,7 @@ class ItemCard extends StatelessWidget {
                       style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
-                          color: Color.fromARGB(255, 229, 57, 53)),
+                          color: colorTextRed),
                     ),
                   ],
                 )
