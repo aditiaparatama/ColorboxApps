@@ -270,9 +270,9 @@ class ProductView2 extends GetView<ProductController> {
                                 children: [
                                   const SizedBox(height: 16),
                                   CustomText(
-                                    text: 'controller.product.options[0].name'
+                                    text: controller.product.options[0].name!
                                         .replaceAll(
-                                            'controller.product.options[0].name',
+                                            controller.product.options[0].name!,
                                             "Pilih Ukuran : " +
                                                 controller.ukuran),
                                     fontSize: 14,
@@ -474,50 +474,47 @@ class ProductView2 extends GetView<ProductController> {
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 0,
-                    child: Container(
-                      height: 80,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.05),
-                            spreadRadius: 1,
-                            blurRadius: 6,
-                            offset: const Offset(
-                                0, -5), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          fixedSize: Size(Get.width, 48),
-                          primary: const Color.fromRGBO(33, 33, 33, 1),
+                  Container(
+                    height: 80,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.05),
+                          spreadRadius: 1,
+                          blurRadius: 6,
+                          offset:
+                              const Offset(0, -5), // changes position of shadow
                         ),
-                        onPressed: controller.variant!.inventoryQuantity == 0
-                            ? null
-                            : () {
-                                Get.find<CartController>().addCart(
-                                    controller.variant!.id!,
-                                    context,
-                                    controller.ukuran);
-                              },
-                        child: controller.variant!.inventoryQuantity == 0
-                            ? const CustomText(
-                                text: "Produk Habis",
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                              )
-                            : const CustomText(
-                                text: "Tambahkan ke keranjang",
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
+                      ],
+                    ),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: Size(Get.width, 48),
+                        primary: const Color.fromRGBO(33, 33, 33, 1),
                       ),
+                      onPressed: controller.variant!.inventoryQuantity == 0
+                          ? null
+                          : () {
+                              Get.find<CartController>().addCart(
+                                  controller.variant!.id!,
+                                  context,
+                                  controller.ukuran);
+                            },
+                      child: controller.variant!.inventoryQuantity == 0
+                          ? const CustomText(
+                              text: "Produk Habis",
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            )
+                          : const CustomText(
+                              text: "Tambahkan ke keranjang",
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
                     ),
                   ),
                 ],

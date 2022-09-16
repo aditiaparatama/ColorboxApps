@@ -11,7 +11,7 @@ void bottomSheet(handle) {
   Get.bottomSheet(
     Container(
       padding: const EdgeInsets.all(defaultPadding),
-      height: Get.height * .41,
+      height: Get.height * .45,
       decoration: const BoxDecoration(
         color: primaryColor,
         borderRadius: BorderRadius.only(
