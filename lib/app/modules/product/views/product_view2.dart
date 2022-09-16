@@ -469,7 +469,6 @@ class ProductView2 extends GetView<ProductController> {
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 40),
                           ],
                         ),
                       ),
@@ -479,8 +478,19 @@ class ProductView2 extends GetView<ProductController> {
                     bottom: 0,
                     child: Container(
                       height: 80,
-                      color: Colors.white,
                       padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.05),
+                            spreadRadius: 1,
+                            blurRadius: 6,
+                            offset: const Offset(
+                                0, -5), // changes position of shadow
+                          ),
+                        ],
+                      ),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           fixedSize: Size(Get.width, 48),
