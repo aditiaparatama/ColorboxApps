@@ -85,130 +85,136 @@ class CollectionsMainView extends GetView<CollectionsController> {
                       ],
                     ),
                   ),
-                  body: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(left: 16, right: 16, top: 16),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                child: TabBar(
-                                  isScrollable: true,
-                                  tabs: control.listTabs,
-                                  controller: tabController,
-                                  labelColor: colorTextBlack,
-                                  labelPadding:
-                                      const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                                  labelStyle: textStyle.copyWith(
-                                      fontSize: 14.0,
-                                      color: colorTextBlack,
-                                      fontWeight: FontWeight.w600),
-                                  unselectedLabelStyle: textStyle.copyWith(
-                                      fontSize: 14.0,
-                                      color: const Color(0xFF9B9B9B)),
-                                  onTap: (index) {
-                                    controller.setTabBar(_menu,
-                                        parent:
-                                            (indexMenu == null) ? true : false,
-                                        index: index);
-                                    _pControl.jumpToPage(index);
-                                  },
+                  body: SafeArea(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 16, right: 16, top: 16),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: SizedBox(
+                                  child: TabBar(
+                                    isScrollable: true,
+                                    tabs: control.listTabs,
+                                    controller: tabController,
+                                    labelColor: colorTextBlack,
+                                    labelPadding:
+                                        const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                                    labelStyle: textStyle.copyWith(
+                                        fontSize: 14.0,
+                                        color: colorTextBlack,
+                                        fontWeight: FontWeight.w600),
+                                    unselectedLabelStyle: textStyle.copyWith(
+                                        fontSize: 14.0,
+                                        color: const Color(0xFF9B9B9B)),
+                                    onTap: (index) {
+                                      controller.setTabBar(_menu,
+                                          parent: (indexMenu == null)
+                                              ? true
+                                              : false,
+                                          index: index);
+                                      _pControl.jumpToPage(index);
+                                    },
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 8),
-                            InkWell(
-                              onTap: (controller.loading.value)
-                                  ? null
-                                  : () =>
-                                      sortBottomSheet(control.collection.id!),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 11, vertical: 8),
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                      left:
-                                          BorderSide(color: Color(0xFFE5E8EB)),
-                                      top: BorderSide(color: Color(0xFFE5E8EB)),
-                                      bottom:
-                                          BorderSide(color: Color(0xFFE5E8EB))),
+                              const SizedBox(width: 8),
+                              InkWell(
+                                onTap: (controller.loading.value)
+                                    ? null
+                                    : () =>
+                                        sortBottomSheet(control.collection.id!),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 11, vertical: 8),
+                                  decoration: const BoxDecoration(
+                                    border: Border(
+                                        left: BorderSide(
+                                            color: Color(0xFFE5E8EB)),
+                                        top: BorderSide(
+                                            color: Color(0xFFE5E8EB)),
+                                        bottom: BorderSide(
+                                            color: Color(0xFFE5E8EB))),
+                                  ),
+                                  child: SvgPicture.asset(
+                                      "assets/icon/ArrowsDownUp.svg"),
                                 ),
-                                child: SvgPicture.asset(
-                                    "assets/icon/ArrowsDownUp.svg"),
                               ),
-                            ),
-                            InkWell(
-                              onTap: (controller.loading.value)
-                                  ? null
-                                  : () => filterBottomSheet(),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 11, vertical: 8),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: const Color(0xFFE5E8EB))),
-                                child: SvgPicture.asset(
-                                    "assets/icon/SlidersHorizontal.svg"),
+                              InkWell(
+                                onTap: (controller.loading.value)
+                                    ? null
+                                    : () => filterBottomSheet(),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 11, vertical: 8),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: const Color(0xFFE5E8EB))),
+                                  child: SvgPicture.asset(
+                                      "assets/icon/SlidersHorizontal.svg"),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      Flexible(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: PageView.builder(
-                              controller: _pControl,
-                              itemCount: control.listTabs.length,
-                              onPageChanged: (index) {
-                                controller.selectedIndex = index;
-                                controller.onChangeList(index);
-                                tabController.index = index;
-                                controller.setTabBar(_menu,
-                                    parent: (indexMenu == null) ? true : false,
-                                    index: index);
-                              },
-                              itemBuilder: ((context, index) {
-                                return SizedBox(
-                                    child: controller.loading.value
-                                        ? GridView.builder(
-                                            shrinkWrap: true,
-                                            controller: _sControl,
-                                            itemCount: 4,
-                                            gridDelegate:
-                                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2,
-                                              mainAxisSpacing: 24,
-                                              crossAxisSpacing: 24,
-                                              childAspectRatio: 9 / 16,
-                                            ),
-                                            itemBuilder: (_, i) {
-                                              return loadingProduct();
-                                            })
-                                        : (control.collection.products.isEmpty)
-                                            ? SizedBox(
-                                                height: Get.height * .5,
-                                                child: EmptyPage(
-                                                  image: Image.asset(
-                                                    "assets/icon/SEARCH.gif",
-                                                    height: 180,
-                                                  ),
-                                                  textHeader:
-                                                      "Produk tidak ditemukan",
-                                                  textContent:
-                                                      "Produk yang kamu cari tidak tersedia",
-                                                ))
-                                            : CollectionBody(
-                                                controller: controller,
-                                                sControl: _sControl));
-                              })),
-                        ),
-                      )
-                    ],
+                        const SizedBox(height: 16),
+                        Flexible(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: PageView.builder(
+                                controller: _pControl,
+                                itemCount: control.listTabs.length,
+                                onPageChanged: (index) {
+                                  controller.selectedIndex = index;
+                                  controller.onChangeList(index);
+                                  tabController.index = index;
+                                  controller.setTabBar(_menu,
+                                      parent:
+                                          (indexMenu == null) ? true : false,
+                                      index: index);
+                                },
+                                itemBuilder: ((context, index) {
+                                  return SizedBox(
+                                      child: controller.loading.value
+                                          ? GridView.builder(
+                                              shrinkWrap: true,
+                                              controller: _sControl,
+                                              itemCount: 4,
+                                              gridDelegate:
+                                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 2,
+                                                mainAxisSpacing: 24,
+                                                crossAxisSpacing: 24,
+                                                childAspectRatio: 9 / 16,
+                                              ),
+                                              itemBuilder: (_, i) {
+                                                return loadingProduct();
+                                              })
+                                          : (control
+                                                  .collection.products.isEmpty)
+                                              ? SizedBox(
+                                                  height: Get.height * .5,
+                                                  child: EmptyPage(
+                                                    image: Image.asset(
+                                                      "assets/icon/SEARCH.gif",
+                                                      height: 180,
+                                                    ),
+                                                    textHeader:
+                                                        "Produk tidak ditemukan",
+                                                    textContent:
+                                                        "Produk yang kamu cari tidak tersedia",
+                                                  ))
+                                              : CollectionBody(
+                                                  controller: controller,
+                                                  sControl: _sControl));
+                                })),
+                          ),
+                        )
+                      ],
+                    ),
                   ));
             }),
           );
