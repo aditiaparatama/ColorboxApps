@@ -34,20 +34,20 @@ class CollectionsMainView extends GetView<CollectionsController> {
   Widget build(BuildContext context) {
     var sortBy = Get.arguments["sortBy"];
     var indexMenu = Get.arguments["indexMenu"];
+    var _menu = Get.arguments["menu"];
 
-    controller.setTabBar(Get.arguments["menu"],
-        parent: (Get.arguments["indexMenu"] == null) ? true : false,
-        index: indexMenu ?? 0);
+    controller.setTabBar(_menu,
+        parent: (indexMenu == null) ? true : false, index: indexMenu ?? 0);
     controller.fetchCollectionProduct(
-        (Get.arguments["indexMenu"] == null)
+        (indexMenu == null)
             ? controller.menu.subjectID!
-            : controller.menu[Get.arguments["indexMenu"]].subjectID!,
+            : controller.menu[indexMenu].subjectID!,
         sortBy!);
-    controller.subjectID = (Get.arguments["indexMenu"] == null)
+    controller.subjectID = (indexMenu == null)
         ? controller.menu.subjectID!
-        : controller.menu[Get.arguments["indexMenu"]].subjectID!;
+        : controller.menu[indexMenu].subjectID!;
     _sControl.addListener(onScroll);
-    if (Get.arguments["indexMenu"] != null) {
+    if (indexMenu != null) {
       controller.onChangeList(indexMenu);
     }
 
@@ -110,11 +110,9 @@ class CollectionsMainView extends GetView<CollectionsController> {
                                       fontSize: 14.0,
                                       color: const Color(0xFF9B9B9B)),
                                   onTap: (index) {
-                                    controller.setTabBar(Get.arguments["menu"],
+                                    controller.setTabBar(_menu,
                                         parent:
-                                            (Get.arguments["indexMenu"] == null)
-                                                ? true
-                                                : false,
+                                            (indexMenu == null) ? true : false,
                                         index: index);
                                     _pControl.jumpToPage(index);
                                   },
@@ -170,10 +168,8 @@ class CollectionsMainView extends GetView<CollectionsController> {
                                 controller.selectedIndex = index;
                                 controller.onChangeList(index);
                                 tabController.index = index;
-                                controller.setTabBar(Get.arguments["menu"],
-                                    parent: (Get.arguments["indexMenu"] == null)
-                                        ? true
-                                        : false,
+                                controller.setTabBar(_menu,
+                                    parent: (indexMenu == null) ? true : false,
                                     index: index);
                               },
                               itemBuilder: ((context, index) {

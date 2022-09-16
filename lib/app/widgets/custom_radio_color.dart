@@ -1,5 +1,6 @@
 import 'package:colorbox/app/modules/product/controllers/product_controller.dart';
 import 'package:colorbox/constance.dart';
+import 'package:colorbox/helper/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -62,18 +63,32 @@ class RadioItem extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Container(
-            height: 18.0,
-            width: 18.0,
-            margin: const EdgeInsets.only(left: 1),
-            child: const Center(),
+            height: 24.0,
+            width: 24.0,
             decoration: BoxDecoration(
-              color: customColor(_item.buttonText),
               border: Border.all(
-                  width: _item.isSelected ? 1.0 : 1.0,
-                  color: _item.isSelected
-                      ? customColor(_item.buttonText)
-                      : Colors.grey),
-              borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+                color: colorTextBlack,
+                width: 1.0,
+              ),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(50),
+              ),
+            ),
+            child: Center(
+              child: Container(
+                height: 18.0,
+                width: 18.0,
+                child: const Center(),
+                decoration: BoxDecoration(
+                  color: customColors(_item.buttonText),
+                  border: Border.all(
+                      width: _item.isSelected ? 1.0 : 1.0,
+                      color: _item.isSelected
+                          ? customColors(_item.buttonText)
+                          : Colors.grey),
+                  borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+                ),
+              ),
             ),
           ),
         ],
@@ -87,51 +102,4 @@ class RadioModel {
   final String buttonText;
 
   RadioModel(this.isSelected, this.buttonText);
-}
-
-Color customColor(String color) {
-  switch (color.toLowerCase()) {
-    case "amber":
-      return Colors.amber;
-    case "amber accent":
-      return Colors.amberAccent;
-    case "brown":
-      return Colors.brown;
-    case "cyan":
-      return Colors.cyan;
-    case "green":
-      return Colors.green;
-    case "grey":
-      return Colors.grey;
-    case "indigo":
-      return Colors.indigo;
-    case "lime":
-      return Colors.lime;
-    case "orange":
-      return Colors.orange;
-    case "pink":
-      return Colors.pink;
-    case "purple":
-      return Colors.purple;
-    case "red":
-      return Colors.red;
-    case "teal":
-      return Colors.teal;
-    case "yellow":
-      return Colors.yellow;
-    case "white":
-      return Colors.white;
-    case "black":
-      return colorTextBlack;
-    case "transparent":
-      return Colors.transparent;
-    case "olive":
-      return const Color(0xFFB2B266);
-    case "maroon":
-      return const Color(0xFF800000);
-    case "navy":
-      return const Color(0xFF0B0B45);
-    default:
-      return Colors.grey;
-  }
 }
