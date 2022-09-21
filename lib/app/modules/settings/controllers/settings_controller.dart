@@ -1,3 +1,4 @@
+import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/modules/orders/controllers/orders_controller.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
@@ -16,10 +17,7 @@ class SettingsController extends GetxController {
   @override
   void onInit() async {
     await getUser();
-    if (_userModel.displayName != null) {
-      pesananCount = await ordersController.countOrderActive();
-      update();
-    }
+    getTotalOrders();
     super.onInit();
   }
 
@@ -33,9 +31,18 @@ class SettingsController extends GetxController {
     update();
   }
 
-  void logout() {
+  getTotalOrders() async {
+    if (_userModel.displayName != null) {
+      pesananCount = await ordersController.countOrderActive();
+      update();
+    }
+  }
+
+  Future<void> logout() async {
     localStorageData.deleteUser();
     _userModel = UserModel.isEmpty();
+    await Get.find<CartController>().reCreateCart();
+
     update();
   }
 

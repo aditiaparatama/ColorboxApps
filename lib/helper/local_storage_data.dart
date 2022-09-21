@@ -34,7 +34,7 @@ class LocalStorageData extends GetxController {
     await pref.setString(CACHED_CART_DATA, id);
   }
 
-  void deleteCart() async {
+  Future<void> deleteCart() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(CACHED_CART_DATA);
   }

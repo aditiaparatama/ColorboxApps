@@ -25,12 +25,14 @@ class InformationAccount extends StatelessWidget {
     SettingsController _settingController = Get.find<SettingsController>();
     namaTextController.text = _settingController.userModel.displayName!;
     emailTextController.text = _settingController.userModel.email!;
-    birthdayTextController.text = (_settingController.userModel.note != null)
+    birthdayTextController.text = (_settingController.userModel.note != null &&
+            _settingController.userModel.note != "")
         ? DateFormat('dd/MM/yyyy')
             .format(DateTime.parse(_settingController.userModel.note!.trim()))
         : "";
 
-    DateTime _initialDate = (_settingController.userModel.note != null)
+    DateTime _initialDate = (_settingController.userModel.note != null &&
+            _settingController.userModel.note != "")
         ? DateTime.parse(_settingController.userModel.note!.trim())
         : controller.showDateBirth!;
 
@@ -152,7 +154,7 @@ class InformationAccount extends StatelessWidget {
                                     ),
                                     textButtonTheme: TextButtonThemeData(
                                       style: TextButton.styleFrom(
-                                          primary:
+                                          foregroundColor:
                                               Colors.white, // button text color
                                           side: const BorderSide(
                                               color: colorTextBlack, width: 1),

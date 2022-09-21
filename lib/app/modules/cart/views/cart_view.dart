@@ -24,7 +24,6 @@ class CartView extends GetView<CartController> {
                   preferredSize: Size.fromHeight(56),
                   child: AppBarDefault(
                     text: "Keranjang",
-                    icon: Icon(Icons.close),
                   )),
               backgroundColor: Colors.white,
               // bottomSheet: bottomCart(),
@@ -166,7 +165,7 @@ class CartView extends GetView<CartController> {
                         : () async {
                             await c.getCheckoutUrl();
                             var profile = Get.find<SettingsController>();
-                            await profile.getUser();
+                            await profile.fetchingUser();
                             (profile.userModel.displayName == null)
                                 ? Get.toNamed(Routes.PROFILE,
                                     arguments: [c, "cart"])
@@ -176,7 +175,8 @@ class CartView extends GetView<CartController> {
                           },
                     style: ElevatedButton.styleFrom(
                         fixedSize: const Size(156, 48),
-                        primary: colorTextBlack,
+                        backgroundColor: colorTextBlack,
+                        disabledBackgroundColor: colorTextGrey,
                         padding: const EdgeInsets.all(14)),
                     child: const CustomText(
                       text: "Checkout",

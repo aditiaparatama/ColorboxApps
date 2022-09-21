@@ -15,6 +15,7 @@ class CustomRadio extends StatefulWidget {
 
 class CustomRadioState extends State<CustomRadio> {
   List<RadioModel> radioData = [];
+  final ProductController _productController = Get.put(ProductController());
 
   @override
   void initState() {
@@ -23,10 +24,10 @@ class CustomRadioState extends State<CustomRadio> {
       radioData.add(RadioModel(
           false,
           widget.listData![i],
-          Get.find<ProductController>().getStock(
+          _productController.getStock(
               widget.listData![i],
-              (Get.find<ProductController>().variant!.options.length > 1)
-                  ? Get.find<ProductController>().variant!.options[1].value!
+              (_productController.variant!.options.length > 1)
+                  ? _productController.variant!.options[1].value!
                   : "")));
     }
   }
@@ -41,10 +42,10 @@ class CustomRadioState extends State<CustomRadio> {
           //highlightColor: Colors.red,
           splashColor: Colors.blueAccent,
           onTap: () {
-            Get.find<ProductController>().getSelectedValue(
+            _productController.getSelectedValue(
                 radioData[index].buttonText,
-                (Get.find<ProductController>().variant!.options.length > 1)
-                    ? Get.find<ProductController>().variant!.options[1].value!
+                (_productController.variant!.options.length > 1)
+                    ? _productController.variant!.options[1].value!
                     : "");
             setState(() {
               // ignore: avoid_function_literals_in_foreach_calls

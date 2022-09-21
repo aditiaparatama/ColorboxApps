@@ -28,7 +28,7 @@ class CollectionBody extends StatelessWidget {
                 itemCount: controller.collection.products.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 24,
+                  mainAxisSpacing: 16,
                   crossAxisSpacing: 24,
                   childAspectRatio: 2.6 / 5,
                 ),

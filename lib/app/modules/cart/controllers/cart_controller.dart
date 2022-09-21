@@ -42,6 +42,7 @@ class CartController extends GetxController {
     localStorageData.deleteCart();
     _idCart = await CartProvider().createCart();
     setCart(_idCart!);
+    await getCart();
     update();
   }
 

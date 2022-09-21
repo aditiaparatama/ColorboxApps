@@ -61,46 +61,50 @@ class HomeSearch extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            height: 36,
-            width: 30,
-            child: InkWell(
-              onTap: () => Get.toNamed(Routes.CART, arguments: "collection"),
-              child: Stack(
-                children: [
-                  Center(
-                    child: CircleAvatar(
-                      radius: 16.0,
-                      child: SvgPicture.asset("assets/icon/bx-handbag.svg"),
+          GetBuilder<CartController>(
+              init: Get.put(CartController()),
+              builder: (cartController) {
+                return SizedBox(
+                  height: 36,
+                  width: 30,
+                  child: InkWell(
+                    onTap: () =>
+                        Get.toNamed(Routes.CART, arguments: "collection"),
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: CircleAvatar(
+                            radius: 16.0,
+                            child:
+                                SvgPicture.asset("assets/icon/bx-handbag.svg"),
+                          ),
+                        ),
+                        cartController.cart.lines!.isNotEmpty
+                            ? Container(
+                                alignment: Alignment.centerRight,
+                                padding:
+                                    const EdgeInsets.only(left: 15, bottom: 5),
+                                child: Container(
+                                  width: 15,
+                                  height: 15,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: Colors.red),
+                                  child: CustomText(
+                                    text: cartController.cart.totalQuantity
+                                        .toString(),
+                                    fontSize: 10,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
+                            : const SizedBox()
+                      ],
                     ),
                   ),
-                  Get.find<CartController>().cart.lines!.isNotEmpty
-                      ? Container(
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.only(left: 15, bottom: 5),
-                          child: Container(
-                            width: 15,
-                            height: 15,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: Colors.red),
-                            child: CustomText(
-                              text: Get.find<CartController>()
-                                  .cart
-                                  .lines!
-                                  .length
-                                  .toString(),
-                              fontSize: 10,
-                              color: Colors.white,
-                            ),
-                          ),
-                        )
-                      : const SizedBox()
-                ],
-              ),
-            ),
-          ),
+                );
+              }),
         ],
       ),
     );

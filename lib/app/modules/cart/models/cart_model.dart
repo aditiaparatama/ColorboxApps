@@ -9,9 +9,18 @@ class Cart {
   String? note;
   List<Line>? lines;
   String? checkoutUrl;
+  int? totalQuantity;
 
-  Cart(this.id, this.createdAt, this.discountCodes, this.estimatedCost,
-      this.note, this.lines, this.checkoutUrl);
+  Cart(
+      this.id,
+      this.createdAt,
+      this.discountCodes,
+      this.estimatedCost,
+      this.note,
+      this.lines,
+      this.checkoutUrl,
+      this.totalQuantity,
+      this.discountAllocations);
 
   Cart.fromJson(var json) {
     id = json["id"];
@@ -32,6 +41,8 @@ class Cart {
     for (int i = 0; i < json["lines"]["edges"].length; i++) {
       lines!.add(Line.fromJson(json["lines"]["edges"][i]["node"]));
     }
+
+    totalQuantity = json['totalQuantity'];
   }
 
   Cart.empty() {

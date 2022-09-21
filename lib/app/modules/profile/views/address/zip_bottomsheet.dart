@@ -63,45 +63,47 @@ void bottomSheetZip(_zip) {
                       ? SizedBox(
                           child: loadingCircular(),
                         )
-                      : SizedBox(
-                          height: Get.height * .35,
-                          width: Get.width,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                for (final x in controller.kodePos) ...[
-                                  InkWell(
-                                      onTap: () {
-                                        _zip.text = x!;
-                                        Get.back();
-                                        controller.update();
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            CustomText(
-                                              text: x,
-                                              fontWeight: (_zip.text == x)
-                                                  ? FontWeight.bold
-                                                  : FontWeight.normal,
+                      : Expanded(
+                          child: SizedBox(
+                              width: Get.width,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    for (final x in controller.kodePos) ...[
+                                      InkWell(
+                                          onTap: () {
+                                            _zip.text = x!;
+                                            Get.back();
+                                            controller.update();
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                CustomText(
+                                                  text: x,
+                                                  fontWeight: (_zip.text == x)
+                                                      ? FontWeight.bold
+                                                      : FontWeight.normal,
+                                                ),
+                                                (_zip.text == x)
+                                                    ? const Icon(
+                                                        Icons.check,
+                                                        color: colorTextBlack,
+                                                      )
+                                                    : const SizedBox()
+                                              ],
                                             ),
-                                            (_zip.text == x)
-                                                ? const Icon(
-                                                    Icons.check,
-                                                    color: colorTextBlack,
-                                                  )
-                                                : const SizedBox()
-                                          ],
-                                        ),
-                                      )),
-                                  const Divider(),
-                                ]
-                              ],
-                            ),
-                          )),
+                                          )),
+                                      const Divider(),
+                                    ]
+                                  ],
+                                ),
+                              )),
+                        ),
                 ]);
           }),
     ),

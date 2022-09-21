@@ -40,6 +40,7 @@ class CartProvider extends GetConnect {
         {
           cart(id:"$id") {
             id
+            totalQuantity
             attributes{
                 key
                 value

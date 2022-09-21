@@ -235,7 +235,7 @@ class ProductView extends GetView<ProductController> {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       fixedSize: Size(Get.width, 50),
-                      primary: colorTextBlack,
+                      backgroundColor: colorTextBlack,
                     ),
                     onPressed: controller.variant!.inventoryQuantity == 0
                         ? null

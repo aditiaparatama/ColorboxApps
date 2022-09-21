@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:colorbox/app/modules/profile/controllers/profile_controller.dart';
 import 'package:colorbox/app/widgets/custom_search_formtext.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
@@ -9,6 +11,16 @@ import 'package:flutter/material.dart';
 void bottomSheetProvince(_province, _city) {
   ProfileController controller = Get.put(ProfileController());
   controller.resetProvince();
+  Timer? _debounce;
+
+  _onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      // do something with query
+      controller.searchProvince(query);
+    });
+  }
+
   Get.bottomSheet(
     Container(
       height: Get.height * .75,
@@ -47,9 +59,7 @@ void bottomSheetProvince(_province, _city) {
                   ),
                   CustomSearchTextForm(
                     textHint: "Cari Provinsi",
-                    onChanged: (value) {
-                      controller.searchProvince(value);
-                    },
+                    onChanged: _onSearchChanged,
                     onSaved: (value) {},
                     validator: (value) {
                       if (value != null || value != "") {
@@ -61,47 +71,48 @@ void bottomSheetProvince(_province, _city) {
                   const SizedBox(height: 16),
                   (controller.province == null)
                       ? SizedBox(child: loadingCircular())
-                      : SizedBox(
-                          height: Get.height * .5,
-                          width: Get.width,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                for (final x in controller.province!) ...[
-                                  InkWell(
-                                      onTap: () {
-                                        _province.text = x.name!;
-                                        _city.text = "";
-                                        Get.back();
-                                        controller.update();
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 8.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            CustomText(
-                                              text: x.name!,
-                                              fontSize: 14,
-                                              fontWeight:
-                                                  (_province.text == x.name)
-                                                      ? FontWeight.bold
-                                                      : FontWeight.normal,
-                                            ),
-                                            (_province.text == x.name)
-                                                ? const Icon(
-                                                    Icons.check,
-                                                    color: colorTextBlack,
-                                                  )
-                                                : const SizedBox()
-                                          ],
-                                        ),
-                                      )),
-                                  const Divider(),
+                      : Expanded(
+                          child: SizedBox(
+                            width: Get.width,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  for (final x in controller.province!) ...[
+                                    InkWell(
+                                        onTap: () {
+                                          _province.text = x.name!;
+                                          _city.text = "";
+                                          Get.back();
+                                          controller.update();
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              CustomText(
+                                                text: x.name!,
+                                                fontSize: 14,
+                                                fontWeight:
+                                                    (_province.text == x.name)
+                                                        ? FontWeight.bold
+                                                        : FontWeight.normal,
+                                              ),
+                                              (_province.text == x.name)
+                                                  ? const Icon(
+                                                      Icons.check,
+                                                      color: colorTextBlack,
+                                                    )
+                                                  : const SizedBox()
+                                            ],
+                                          ),
+                                        )),
+                                    const Divider(),
+                                  ],
                                 ],
-                              ],
+                              ),
                             ),
                           ),
                         ),

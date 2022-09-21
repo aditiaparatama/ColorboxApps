@@ -246,13 +246,16 @@ class CheckoutItems {
 }
 
 class DiscountCodeApplication {
+  String? typename;
   String? code;
   String? amount;
   String? percentage;
 
-  DiscountCodeApplication(this.code, this.amount, this.percentage);
+  DiscountCodeApplication(
+      this.code, this.amount, this.percentage, this.typename);
 
   DiscountCodeApplication.fromJson(var json) {
+    typename = json['__typename'];
     code = json['code'];
 
     if (json['value']['__typename'] == "MoneyV2") {

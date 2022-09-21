@@ -33,14 +33,22 @@ class AddressForm extends GetView<ProfileController> {
     if (id != null) {
       var x = controller.userModel.addresses!.firstWhere((e) => e.id == id);
 
+      if (x.province != null && x.province != "") {
+        controller.searchProvince(x.province!);
+      }
+
+      if (x.phone!.substring(0, 2) == "08") {
+        x.phone = x.phone!.substring(1, x.phone!.length);
+      }
       _namaLengkap.text = x.firstName! + " " + x.lastName!;
       _telpon.text = x.phone!.replaceAll("+62", "");
       _address1.text = x.address1!;
       _province.text = x.province!;
       _city.text = x.city!;
-      _address2.text = x.address2!;
+      _address2.text = x.address2 ?? "";
       _zip.text = x.zip!;
     }
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: PreferredSize(
@@ -50,82 +58,86 @@ class AddressForm extends GetView<ProfileController> {
             icon: const Icon(Icons.close),
           )),
       backgroundColor: Colors.white,
-      bottomSheet: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.8),
-              spreadRadius: 3,
-              blurRadius: 7,
-              offset: const Offset(0, 7), // changes position of shadow
-            ),
-          ],
-        ),
-        width: Get.width,
-        child: CustomButton(
-          onPressed: () async {
-            _formKey.currentState!.save();
-
-            if (_formKey.currentState!.validate()) {
-              int result = await controller.saveAddress(id);
-
-              if (result == 1) {
-                await controller.getAddress();
-                if (checkout) {
-                  Get.offNamed(Routes.CHECKOUT);
-                } else {
-                  Get.back();
-                }
-                Get.snackbar("",
-                    "Alamat berhasil " + ((id == null) ? "disimpan" : "diubah"),
-                    titleText: Row(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/icon/Check-Circle.svg",
-                          color: Colors.white,
-                        ),
-                        const SizedBox(width: 4),
-                        const CustomText(
-                          text: "Berhasil",
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ],
-                    ),
-                    backgroundColor: colorTextBlack,
-                    colorText: Colors.white,
-                    snackPosition: SnackPosition.BOTTOM);
-              } else {
-                Get.snackbar("", "Mohon Coba Lagi",
-                    titleText: Row(
-                      children: [
-                        SvgPicture.asset(
-                          "assets/icon/Exclamation-Circle.svg",
-                          color: Colors.white,
-                        ),
-                        const SizedBox(width: 4),
-                        const CustomText(
-                          text: "Gagal",
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ],
-                    ),
-                    backgroundColor: colorTextBlack,
-                    colorText: Colors.white,
-                    snackPosition: SnackPosition.BOTTOM);
-              }
-            }
-          },
-          text: "Simpan",
+      bottomSheet: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.05),
+                spreadRadius: 1,
+                blurRadius: 6,
+                offset: const Offset(0, -5), // changes position of shadow
+              ),
+            ],
+          ),
           width: Get.width,
-          height: 60,
-          color: Colors.white,
-          backgroundColor: colorTextBlack,
+          child: CustomButton(
+            onPressed: () async {
+              _formKey.currentState!.save();
+
+              if (_formKey.currentState!.validate()) {
+                int result = await controller.saveAddress(id);
+
+                if (result == 1) {
+                  await controller.getAddress();
+                  if (checkout) {
+                    Get.offNamed(Routes.CHECKOUT);
+                  } else {
+                    Get.back();
+                  }
+                  Get.snackbar(
+                      "",
+                      "Alamat berhasil " +
+                          ((id == null) ? "disimpan" : "diubah"),
+                      titleText: Row(
+                        children: [
+                          SvgPicture.asset(
+                            "assets/icon/Check-Circle.svg",
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 4),
+                          const CustomText(
+                            text: "Berhasil",
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ],
+                      ),
+                      backgroundColor: colorTextBlack,
+                      colorText: Colors.white,
+                      snackPosition: SnackPosition.BOTTOM);
+                } else {
+                  Get.snackbar("", "Mohon Coba Lagi",
+                      titleText: Row(
+                        children: [
+                          SvgPicture.asset(
+                            "assets/icon/Exclamation-Circle.svg",
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 4),
+                          const CustomText(
+                            text: "Gagal",
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ],
+                      ),
+                      backgroundColor: colorTextBlack,
+                      colorText: Colors.white,
+                      snackPosition: SnackPosition.BOTTOM);
+                }
+              }
+            },
+            text: "Simpan",
+            width: Get.width,
+            height: 60,
+            color: Colors.white,
+            backgroundColor: colorTextBlack,
+          ),
         ),
       ),
       body: SafeArea(

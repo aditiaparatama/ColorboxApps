@@ -211,7 +211,7 @@ class RegisterView extends GetView<ProfileController> {
                                               textButtonTheme:
                                                   TextButtonThemeData(
                                                 style: TextButton.styleFrom(
-                                                    primary: Colors
+                                                    foregroundColor: Colors
                                                         .white, // button text color
                                                     side: const BorderSide(
                                                         color: colorTextBlack,

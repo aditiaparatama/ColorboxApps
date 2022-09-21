@@ -219,8 +219,8 @@ class SettingsView extends GetView<SettingsController> {
                 : ListTile(
                     leading: const Icon(Icons.logout),
                     title: const CustomText(text: "Log Out"),
-                    onTap: () {
-                      c.logout();
+                    onTap: () async {
+                      await c.logout();
                     },
                   )
           ],

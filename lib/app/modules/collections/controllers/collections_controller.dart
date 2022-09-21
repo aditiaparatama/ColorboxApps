@@ -37,7 +37,7 @@ class CollectionsController extends GetxController {
     {"available": true}
   ];
 
-  void fetchCollectionProduct(int id, int sortBy,
+  Future<void> fetchCollectionProduct(int id, int sortBy,
       {bool similiar = false}) async {
     _idCollection = id;
     orderBy = sortBy;
@@ -107,7 +107,7 @@ class CollectionsController extends GetxController {
     if (data == null && _collection.hasNextPage!) {
       while (data == null && _collection.hasNextPage!) {
         data = await Future.delayed(
-            const Duration(milliseconds: 1000),
+            const Duration(milliseconds: 1200),
             () => CollectionProvider().collectionWithFilter(
                 id,
                 _limit,
@@ -168,20 +168,20 @@ class CollectionsController extends GetxController {
         )));
       }
     }
-    update();
+    // update();
   }
 
-  void onChangeList(int index) {
-    resetFilter(page: true);
+  Future<void> onChangeList(int index) async {
+    resetFilter(page: false);
     selectedIndex = index;
     _collection = Collection.empty();
     update();
     if (_parentList!) {
       subjectID = menu.subjectID!;
-      fetchCollectionProduct(menu.subjectID!, defaultSortBy);
+      await fetchCollectionProduct(menu.subjectID!, defaultSortBy);
     } else {
       subjectID = menu[index].subjectID!;
-      fetchCollectionProduct(menu[index].subjectID!, defaultSortBy);
+      await fetchCollectionProduct(menu[index].subjectID!, defaultSortBy);
     }
     update();
   }
@@ -209,7 +209,7 @@ class CollectionsController extends GetxController {
     if (label.toLowerCase() == "size") {
       filterSize = value;
     }
-    if (label.toLowerCase() == "harga") {
+    if (label.toLowerCase() == "harga" || label.toLowerCase() == "price") {
       filterPrice = value;
     }
 
@@ -253,7 +253,7 @@ class CollectionsController extends GetxController {
     if (data == null) {
       while (data == null) {
         data = await Future.delayed(
-            const Duration(milliseconds: 1000),
+            const Duration(milliseconds: 1200),
             () => CollectionProvider().collectionWithFilter(_idCollection,
                 _limit, sortKey!, reverse!, _filtersDefault, ""));
       }

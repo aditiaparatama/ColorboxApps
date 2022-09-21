@@ -45,12 +45,14 @@ class OrdersController extends GetxController {
                 query: query));
       }
     }
-
-    _pageInfo = PageInfo.fromJson(result['customer']['orders']['pageInfo']);
-    _orders = [];
-    for (final x in result['customer']['orders']['edges']) {
-      _orders.add(
-          Order.fromJson(x['node'], result['customer']['orders']['pageInfo']));
+    if (result['customer'] != null &&
+        result['customer']['orders']['edges'].length > 0) {
+      _pageInfo = PageInfo.fromJson(result['customer']['orders']['pageInfo']);
+      _orders = [];
+      for (final x in result['customer']['orders']['edges']) {
+        _orders.add(Order.fromJson(
+            x['node'], result['customer']['orders']['pageInfo']));
+      }
     }
     _ordersFilter = _orders;
     _loading.value = false;

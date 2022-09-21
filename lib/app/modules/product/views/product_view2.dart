@@ -71,7 +71,7 @@ class ProductView2 extends GetView<ProductController> {
                             Stack(
                               children: [
                                 CarouselWithIndicatorProduct(
-                                    controller: controller),
+                                    controller: control),
                                 Positioned(
                                   bottom: 16,
                                   right: 16,
@@ -102,7 +102,7 @@ class ProductView2 extends GetView<ProductController> {
                                 children: [
                                   const SizedBox(height: 16),
                                   CustomText(
-                                    text: controller.product.title!,
+                                    text: control.product.title!,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
                                     color: const Color.fromRGBO(33, 33, 33, 1),
@@ -111,8 +111,7 @@ class ProductView2 extends GetView<ProductController> {
                                   Row(
                                     children: [
                                       CustomText(
-                                        text:
-                                            "SKU : " + controller.variant!.sku!,
+                                        text: "SKU : " + control.variant!.sku!,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400,
                                         color: const Color.fromRGBO(
@@ -120,18 +119,16 @@ class ProductView2 extends GetView<ProductController> {
                                       ),
                                     ],
                                   ),
-                                  (controller.product.variants[0]
-                                                  .compareAtPrice ==
+                                  (control.product.variants[0].compareAtPrice ==
                                               "0" ||
-                                          controller.product.variants[0]
+                                          control.product.variants[0]
                                                   .compareAtPrice ==
-                                              controller
-                                                  .product.variants[0].price)
+                                              control.product.variants[0].price)
                                       ? CustomText(
                                           text: "Rp " +
-                                              formatter.format(int.parse(
-                                                  controller.variant!.price!
-                                                      .replaceAll(".00", ""))),
+                                              formatter.format(int.parse(control
+                                                  .variant!.price!
+                                                  .replaceAll(".00", ""))),
                                           fontSize: 18,
                                           fontWeight: FontWeight.w700,
                                         )
@@ -143,7 +140,7 @@ class ProductView2 extends GetView<ProductController> {
                                                 CustomText(
                                                   text: "Rp " +
                                                       formatter.format(
-                                                          int.parse(controller
+                                                          int.parse(control
                                                               .variant!.price!
                                                               .replaceAll(
                                                                   ".00", ""))),
@@ -156,7 +153,7 @@ class ProductView2 extends GetView<ProductController> {
                                                 CustomText(
                                                   text: "Rp " +
                                                       formatter.format(
-                                                          int.parse(controller
+                                                          int.parse(control
                                                               .variant!
                                                               .compareAtPrice!
                                                               .replaceAll(
@@ -236,7 +233,7 @@ class ProductView2 extends GetView<ProductController> {
                             const SizedBox(height: 16),
                             Container(color: colorDiver, height: 8),
                             const SizedBox(height: 16),
-                            (controller.product.options.length > 1)
+                            (control.product.options.length > 1)
                                 ? Container(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16),
@@ -245,12 +242,11 @@ class ProductView2 extends GetView<ProductController> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         CustomText(
-                                          text: controller
-                                              .product.options[1].name!
+                                          text: control.product.options[1].name!
                                               .replaceAll(
-                                            controller.product.options[1].name!,
+                                            control.product.options[1].name!,
                                             "Pilih Warna : " +
-                                                controller.product.options[1]
+                                                control.product.options[1]
                                                     .values[0],
                                           ),
                                           fontSize: 14,
@@ -262,7 +258,7 @@ class ProductView2 extends GetView<ProductController> {
                                           width: Get.width,
                                           height: 25,
                                           child: CustomRadioColor(
-                                            listData: controller
+                                            listData: control
                                                 .product.options[1].values
                                                 .toList(),
                                           ),
@@ -281,20 +277,18 @@ class ProductView2 extends GetView<ProductController> {
                                 children: [
                                   const SizedBox(height: 16),
                                   CustomText(
-                                    text: controller.product.options[0].name!
+                                    text: control.product.options[0].name!
                                         .replaceAll(
-                                            controller.product.options[0].name!,
-                                            "Pilih Ukuran : " +
-                                                controller.ukuran),
+                                            control.product.options[0].name!,
+                                            "Pilih Ukuran : " + control.ukuran),
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                   ),
                                   const SizedBox(height: 16),
-                                  if (controller.variant!.inventoryQuantity! <=
-                                      5)
+                                  if (control.variant!.inventoryQuantity! <= 5)
                                     CustomText(
                                       text: 'Tersisa ' +
-                                          controller.variant!.inventoryQuantity
+                                          control.variant!.inventoryQuantity
                                               .toString() +
                                           ' produk lagi !',
                                       fontSize: 12,
@@ -305,7 +299,7 @@ class ProductView2 extends GetView<ProductController> {
                                     width: Get.width,
                                     height: 40,
                                     child: CustomRadio(
-                                      listData: controller
+                                      listData: control
                                           .product.options[0].values
                                           .toList(),
                                     ),
@@ -363,7 +357,7 @@ class ProductView2 extends GetView<ProductController> {
                                 margin: EdgeInsets.zero,
                                 titlePadding: EdgeInsets.zero,
                                 contentChild:
-                                    Html(data: controller.product.description),
+                                    Html(data: control.product.description),
                                 collapsedIcon: const Icon(Icons.add),
                                 expandedIcon: const Icon(Icons.minimize),
                                 collapsedTitleBackgroundColor: Colors.white,
@@ -387,7 +381,7 @@ class ProductView2 extends GetView<ProductController> {
                                     onTap: () async {
                                       var url =
                                           'https://wa.me/628111717250?text=Halo Admin Colorbox, saya ingin bertanya tentang produk ini: https://colorbox.co.id/products/' +
-                                              controller.product.handle!;
+                                              control.product.handle!;
                                       await launchUrlString(url,
                                           mode: LaunchMode.externalApplication);
                                     },
@@ -421,7 +415,7 @@ class ProductView2 extends GetView<ProductController> {
                                 Expanded(
                                   child: InkWell(
                                     onTap: () {
-                                      bottomSheet(controller.product.handle!);
+                                      bottomSheet(control.product.handle!);
                                     },
                                     child: Container(
                                       height: 64,
@@ -503,18 +497,18 @@ class ProductView2 extends GetView<ProductController> {
                     ),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        fixedSize: Size(Get.width, 48),
-                        primary: const Color.fromRGBO(33, 33, 33, 1),
-                      ),
-                      onPressed: controller.variant!.inventoryQuantity == 0
+                          fixedSize: Size(Get.width, 48),
+                          backgroundColor: colorTextBlack,
+                          disabledBackgroundColor: colorTextGrey),
+                      onPressed: control.variant!.inventoryQuantity == 0
                           ? null
                           : () {
                               Get.find<CartController>().addCart(
-                                  controller.variant!.id!,
+                                  control.variant!.id!,
                                   context,
-                                  controller.ukuran);
+                                  control.ukuran);
                             },
-                      child: controller.variant!.inventoryQuantity == 0
+                      child: control.variant!.inventoryQuantity == 0
                           ? const CustomText(
                               text: "Produk Habis",
                               color: Colors.white,
@@ -537,45 +531,46 @@ class ProductView2 extends GetView<ProductController> {
   }
 
   Widget bagWidget() {
-    return Center(
-      child: InkWell(
-        onTap: () => Get.toNamed(Routes.CART),
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                right: 16,
-              ),
-              child: SvgPicture.asset(
-                "assets/icon/Handbag.svg",
+    return GetBuilder<CartController>(
+        init: Get.put(CartController()),
+        builder: (cartController) {
+          return Center(
+            child: InkWell(
+              onTap: () => Get.toNamed(Routes.CART),
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      right: 16,
+                    ),
+                    child: SvgPicture.asset(
+                      "assets/icon/Handbag.svg",
+                    ),
+                  ),
+                  cartController.cart.lines!.isNotEmpty
+                      ? Positioned(
+                          top: 0,
+                          right: 10,
+                          child: Container(
+                            width: 15,
+                            height: 15,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                color: Colors.red),
+                            child: CustomText(
+                              text:
+                                  cartController.cart.totalQuantity!.toString(),
+                              fontSize: 10,
+                              color: Colors.white,
+                            ),
+                          ),
+                        )
+                      : const SizedBox()
+                ],
               ),
             ),
-            Get.find<CartController>().cart.lines!.isNotEmpty
-                ? Positioned(
-                    top: 0,
-                    right: 10,
-                    child: Container(
-                      width: 15,
-                      height: 15,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: Colors.red),
-                      child: CustomText(
-                        text: Get.find<CartController>()
-                            .cart
-                            .lines!
-                            .length
-                            .toString(),
-                        fontSize: 10,
-                        color: Colors.white,
-                      ),
-                    ),
-                  )
-                : const SizedBox()
-          ],
-        ),
-      ),
-    );
+          );
+        });
   }
 }

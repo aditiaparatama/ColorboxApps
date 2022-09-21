@@ -277,10 +277,14 @@ class ProfileController extends GetxController {
     update();
   }
 
-  searchProvince(String value) {
+  searchProvince(String value) async {
+    if (_countries!.provinces!.isEmpty) {
+      await fetchingProvince();
+    }
     _province = _countries!.provinces!
         .where((e) => e.name!.toLowerCase().contains(value.toLowerCase()))
         .toList();
+
     update();
   }
 

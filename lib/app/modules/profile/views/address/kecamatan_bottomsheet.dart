@@ -63,49 +63,51 @@ void bottomSheetKecamatan(_address2, _zip) {
                             child: CustomText(text: "Data not found"),
                           ),
                         )
-                      : SizedBox(
-                          height: Get.height * .5,
-                          width: Get.width,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                for (final x
-                                    in controller.kecamatan['kecamatan']) ...[
-                                  InkWell(
-                                      onTap: () {
-                                        _address2.text = x['nama']!;
-                                        _zip.text = "";
-                                        Get.back();
-                                        controller.update();
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            CustomText(
-                                              text: x['nama'],
-                                              fontSize: 14,
-                                              fontWeight:
-                                                  (_address2.text == x['nama'])
+                      : Expanded(
+                          child: SizedBox(
+                              width: Get.width,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    for (final x in controller
+                                        .kecamatan['kecamatan']) ...[
+                                      InkWell(
+                                          onTap: () {
+                                            _address2.text = x['nama']!;
+                                            _zip.text = "";
+                                            Get.back();
+                                            controller.update();
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                CustomText(
+                                                  text: x['nama'],
+                                                  fontSize: 14,
+                                                  fontWeight: (_address2.text ==
+                                                          x['nama'])
                                                       ? FontWeight.bold
                                                       : FontWeight.normal,
+                                                ),
+                                                (_address2.text == x['nama'])
+                                                    ? const Icon(
+                                                        Icons.check,
+                                                        color: colorTextBlack,
+                                                      )
+                                                    : const SizedBox()
+                                              ],
                                             ),
-                                            (_address2.text == x['nama'])
-                                                ? const Icon(
-                                                    Icons.check,
-                                                    color: colorTextBlack,
-                                                  )
-                                                : const SizedBox()
-                                          ],
-                                        ),
-                                      )),
-                                  const Divider(),
-                                ]
-                              ],
-                            ),
-                          )),
+                                          )),
+                                      const Divider(),
+                                    ]
+                                  ],
+                                ),
+                              )),
+                        ),
                 ]);
           }),
     ),

@@ -63,49 +63,51 @@ void bottomSheetCity(_city, _address2) {
                             child: CustomText(text: "Data not found"),
                           ),
                         )
-                      : SizedBox(
-                          height: Get.height * .5,
-                          width: Get.width,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                for (final x in controller.wilayah) ...[
-                                  InkWell(
-                                      onTap: () {
-                                        _city.text = x['kota']!;
-                                        _address2.text = "";
-                                        Get.back();
-                                        controller.update();
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 8),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            CustomText(
-                                              text: x['kota'],
-                                              fontSize: 14,
-                                              fontWeight:
-                                                  (_city.text == x['kota'])
-                                                      ? FontWeight.bold
-                                                      : FontWeight.normal,
+                      : Expanded(
+                          child: SizedBox(
+                              width: Get.width,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    for (final x in controller.wilayah) ...[
+                                      InkWell(
+                                          onTap: () {
+                                            _city.text = x['kota']!;
+                                            _address2.text = "";
+                                            Get.back();
+                                            controller.update();
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 8),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                CustomText(
+                                                  text: x['kota'],
+                                                  fontSize: 14,
+                                                  fontWeight:
+                                                      (_city.text == x['kota'])
+                                                          ? FontWeight.bold
+                                                          : FontWeight.normal,
+                                                ),
+                                                (_city.text == x['kota'])
+                                                    ? const Icon(
+                                                        Icons.check,
+                                                        color: colorTextBlack,
+                                                      )
+                                                    : const SizedBox()
+                                              ],
                                             ),
-                                            (_city.text == x['kota'])
-                                                ? const Icon(
-                                                    Icons.check,
-                                                    color: colorTextBlack,
-                                                  )
-                                                : const SizedBox()
-                                          ],
-                                        ),
-                                      )),
-                                  const Divider(),
-                                ]
-                              ],
-                            ),
-                          )),
+                                          )),
+                                      const Divider(),
+                                    ]
+                                  ],
+                                ),
+                              )),
+                        ),
                 ]);
           }),
     ),

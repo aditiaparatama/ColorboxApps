@@ -15,8 +15,6 @@ import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/home_controller.dart';
-
 // ignore: use_key_in_widget_constructors, must_be_immutable
 class HomeView extends GetView<HomeController> {
   TextEditingController search = TextEditingController();

@@ -44,6 +44,6 @@ class Filter {
     for (final x in json['values']) {
       values!.add(x['label']);
     }
-    values!.sort((a, b) => a.compareTo(b));
+    // values!.sort((a, b) => a.compareTo(b));
   }
 }

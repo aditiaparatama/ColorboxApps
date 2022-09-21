@@ -16,6 +16,7 @@ class CustomRadioColor extends StatefulWidget {
 
 class CustomRadioColorState extends State<CustomRadioColor> {
   List<RadioModel> radioData = [];
+  final ProductController _productController = Get.put(ProductController());
 
   @override
   void initState() {
@@ -35,8 +36,8 @@ class CustomRadioColorState extends State<CustomRadioColor> {
           //highlightColor: Colors.red,
           splashColor: Colors.blueAccent,
           onTap: () {
-            Get.find<ProductController>().getSelectedValue(
-                Get.find<ProductController>().variant!.options[0].value!,
+            _productController.getSelectedValue(
+                _productController.variant!.options[0].value!,
                 radioData[index].buttonText);
             setState(() {
               // ignore: avoid_function_literals_in_foreach_calls

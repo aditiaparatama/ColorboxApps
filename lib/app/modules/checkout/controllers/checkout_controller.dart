@@ -3,6 +3,7 @@ import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/modules/cart/models/cart_model.dart';
 import 'package:colorbox/app/modules/checkout/models/checkout_model.dart';
 import 'package:colorbox/app/modules/checkout/providers/checkout_provider.dart';
+import 'package:colorbox/app/modules/checkout/providers/draft_order_provider.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/constance.dart';
@@ -32,9 +33,9 @@ class CheckoutController extends GetxController {
   @override
   void onInit() async {
     await getAddress();
-    // await createCheckout();
-    _idCheckout =
-        "gid://shopify/Checkout/63841f1aba2db5781bf989ad1b266aaa?key=6516de972e56a147e31f56d37b86b15a";
+    await createCheckout();
+    // _idCheckout =
+    //     "gid://shopify/Checkout/63841f1aba2db5781bf989ad1b266aaa?key=6516de972e56a147e31f56d37b86b15a";
     await getCheckout();
     await getETDShipping();
     super.onInit();
@@ -260,7 +261,17 @@ class CheckoutController extends GetxController {
     update();
   }
 
-  Future<String> paymentCheckout() async {
+  Future<String> createOrder() async {
+    String draftOrderId = await createDraftOrder();
+    dynamic order = await completeDraftOrder(draftOrderId);
+    String urlInvoice = await paymentCheckout(order);
+
+    updateOrderForUrlPayment(order['id'], urlInvoice);
+
+    return urlInvoice;
+  }
+
+  Future<String> paymentCheckout(order) async {
     String createdDate = DateFormat("yyyyMMddHHmmss")
         .format(DateTime.parse(_checkout.createdAt!));
     String phone = _checkout.shippingAddress!.phone!;
@@ -272,7 +283,7 @@ class CheckoutController extends GetxController {
 
     var inputData = {
       "external_id":
-          "invoice-$createdDate-${_checkout.shippingAddress!.phone!.replaceAll("+", "")}",
+          "shopifyInvoice-$createdDate-${order['name']}-${order['id'].replaceAll('gid://shopify/Order/', '')}",
       "amount": int.parse(_checkout.totalPriceV2!.replaceAll(".0", "")),
       "payer_email": _checkout.email,
       "description": "Invoice Customer ${_checkout.shippingAddress!.firstName}",
@@ -283,9 +294,11 @@ class CheckoutController extends GetxController {
             "quantity": x.quantity,
             "price": (x.discountAllocations!.isEmpty)
                 ? x.variants!.price
-                : (int.parse(x.variants!.price!.replaceAll(".00", "")) -
-                    int.parse(x.discountAllocations![0].allocatedAmount!
-                        .replaceAll(".0", "")))
+                : (double.parse(x.variants!.price!.replaceAll(".00", ""))
+                        .ceil() -
+                    double.parse(x.discountAllocations![0].allocatedAmount!
+                            .replaceAll(".0", ""))
+                        .ceil())
           }
         ]
       ],
@@ -305,5 +318,96 @@ class CheckoutController extends GetxController {
     var result = await CheckoutProvider().createInvoice(inputData);
 
     return result["invoice_url"];
+  }
+
+  Future<String> createDraftOrder() async {
+    var variableInput = {
+      "input": {
+        if (_checkout.discountApplications != null)
+          "appliedDiscount": {
+            "amount": _checkout.discountApplications!.amount,
+            "description": _checkout.discountApplications!.code,
+            "title": _checkout.discountApplications!.code,
+            "value": (_checkout.discountApplications!.amount != null)
+                ? double.parse(_checkout.discountApplications!.amount!)
+                : double.parse(_checkout.discountApplications!.percentage!),
+            "valueType": (_checkout.discountApplications!.amount != null)
+                ? "FIXED_AMOUNT"
+                : "PERCENTAGE"
+          },
+        "customerId": _user.id,
+        "email": _user.email,
+        "lineItems": [
+          for (final x in _checkout.lineItems!) ...[
+            {
+              // if (x.discountAllocations != null &&
+              //     x.discountAllocations![0].discountApplication!
+              //             .allocationMethod !=
+              //         "ACROSS")
+              //   "appliedDiscount": {
+              //     "amount": x.discountAllocations![0].allocatedAmount,
+              //     "description": "",
+              //     "title": x.discountAllocations![0].discountApplication,
+              //     "value": 1.1,
+              //     "valueType": "FIXED_AMOUNT"
+              //   },
+              "originalUnitPrice": x.variants!.price,
+              "quantity": x.quantity,
+              "requiresShipping": true,
+              "sku": x.variants!.sku,
+              "taxable": false,
+              "title": x.title,
+              "variantId": x.variants!.id,
+              "weight": {
+                "unit": x.variants!.weightUnit,
+                "value": x.variants!.weight
+              }
+            },
+          ]
+        ],
+        "note": "",
+        "shippingAddress": {
+          "address1": _checkout.shippingAddress!.address1,
+          "address2": _checkout.shippingAddress!.address2,
+          "city": _checkout.shippingAddress!.city,
+          "company": _checkout.shippingAddress!.company,
+          "country": _checkout.shippingAddress!.country,
+          "firstName": _checkout.shippingAddress!.firstName,
+          "lastName": _checkout.shippingAddress!.lastName,
+          "phone": _checkout.shippingAddress!.phone,
+          "province": _checkout.shippingAddress!.province,
+          "zip": _checkout.shippingAddress!.zip
+        },
+        "shippingLine": {
+          "price": _checkout.shippingLine!.amount,
+          "shippingRateHandle": _checkout.shippingLine!.handle,
+          "title": _checkout.shippingLine!.title
+        },
+        "sourceName": "mobile_apps",
+        "tags": ["apps"],
+        "taxExempt": false,
+        "useCustomerDefaultAddress": true
+      }
+    };
+
+    var result = await DraftOrderProvider().draftOrderCreate(variableInput);
+
+    return result["draftOrderCreate"]["draftOrder"]["id"];
+  }
+
+  Future<dynamic> completeDraftOrder(String draftOrderId) async {
+    var variableInput = {"id": draftOrderId};
+
+    var result = await DraftOrderProvider().draftOrderComplete(variableInput);
+
+    return result["draftOrderComplete"]["draftOrder"]["order"];
+  }
+
+  updateOrderForUrlPayment(String orderId, String urlInvoice) async {
+    var variableInput = {
+      "input": {"id": orderId, "note": urlInvoice}
+    };
+
+    await DraftOrderProvider().orderUpdateUrl(variableInput);
   }
 }
