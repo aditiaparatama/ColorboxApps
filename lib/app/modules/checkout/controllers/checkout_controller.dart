@@ -267,6 +267,7 @@ class CheckoutController extends GetxController {
     String urlInvoice = await paymentCheckout(order);
 
     updateOrderForUrlPayment(order['id'], urlInvoice);
+    Get.find<CartController>().reCreateCart();
 
     return urlInvoice;
   }

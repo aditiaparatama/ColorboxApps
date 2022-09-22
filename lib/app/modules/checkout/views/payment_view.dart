@@ -1,5 +1,7 @@
+import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebPaymentView extends StatefulWidget {
@@ -20,8 +22,21 @@ class _WebPaymentViewState extends State<WebPaymentView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title!),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(56),
+        child: AppBar(
+          centerTitle: false,
+          elevation: 3,
+          shadowColor: Colors.grey.withOpacity(0.3),
+          leadingWidth: 36,
+          leading: IconButton(
+              padding: const EdgeInsets.all(16),
+              onPressed: () {
+                Get.offAllNamed(Routes.CONTROLV2);
+                Get.toNamed(Routes.ORDERS);
+              },
+              icon: const Icon(Icons.arrow_back)),
+        ),
       ),
       body: Stack(
         children: [
