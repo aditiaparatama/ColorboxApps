@@ -169,9 +169,10 @@ class CartView extends GetView<CartController> {
                             (profile.userModel.displayName == null)
                                 ? Get.toNamed(Routes.PROFILE,
                                     arguments: [c, "cart"])
-                                : (profile.userModel.addresses == null)
-                                    ? Get.to(AddressForm(null, true))
-                                    : Get.toNamed(Routes.CHECKOUT);
+                                : (profile.userModel.addresses != null &&
+                                        profile.userModel.addresses!.isNotEmpty)
+                                    ? Get.toNamed(Routes.CHECKOUT)
+                                    : Get.to(AddressForm(null, true));
                           },
                     style: ElevatedButton.styleFrom(
                         fixedSize: const Size(156, 48),

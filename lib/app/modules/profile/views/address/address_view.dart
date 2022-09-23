@@ -4,6 +4,7 @@ import 'package:colorbox/app/modules/profile/views/address/address_form.dart';
 import 'package:colorbox/app/modules/profile/views/widgets/card_address_widget.dart';
 import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:colorbox/app/widgets/empty_page.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -43,31 +44,40 @@ class AddressView extends GetView<ProfileController> {
               ? const Center(
                   child: CircularProgressIndicator(color: colorTextBlack),
                 )
-              : Stack(
-                  children: [
-                    ListView.builder(
-                        itemCount: controller.userModel.addresses!.length,
-                        itemBuilder: (_, index) {
-                          return InkWell(
-                              onTap: (fromDetail)
-                                  ? null
-                                  : () {
-                                      Get.find<CheckoutController>()
-                                          .updateShippingAddress(controller
-                                              .userModel.addresses![index]);
-                                      Get.back();
-                                    },
-                              child: CardAddressWidget(index));
-                        }),
-                    (controller.loading.value)
-                        ? const Center(
-                            child: CircularProgressIndicator(
-                              color: colorTextBlack,
-                            ),
-                          )
-                        : const SizedBox()
-                  ],
-                );
+              : (controller.userModel.addresses!.isEmpty)
+                  ? EmptyPage(
+                      image: Image.asset(
+                        "assets/icon/MAPS.gif",
+                        height: 180,
+                      ),
+                      textHeader: "Belum Ada Alamat",
+                      textContent: "Belum ada daftar alamat yang tersimpan",
+                    )
+                  : Stack(
+                      children: [
+                        ListView.builder(
+                            itemCount: controller.userModel.addresses!.length,
+                            itemBuilder: (_, index) {
+                              return InkWell(
+                                  onTap: (fromDetail)
+                                      ? null
+                                      : () {
+                                          Get.find<CheckoutController>()
+                                              .updateShippingAddress(controller
+                                                  .userModel.addresses![index]);
+                                          Get.back();
+                                        },
+                                  child: CardAddressWidget(index));
+                            }),
+                        (controller.loading.value)
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: colorTextBlack,
+                                ),
+                              )
+                            : const SizedBox()
+                      ],
+                    );
         },
       )),
     );

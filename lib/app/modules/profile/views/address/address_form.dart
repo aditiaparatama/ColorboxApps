@@ -19,6 +19,7 @@ class AddressForm extends GetView<ProfileController> {
   AddressForm(this.id, this.checkout, {Key? key}) : super(key: key);
   final String? id;
   final bool checkout;
+  bool namaAlert = false, telpAlert = false, address1Alert = false;
 
   final TextEditingController _namaLengkap = TextEditingController();
   final TextEditingController _telpon = TextEditingController();
@@ -130,6 +131,8 @@ class AddressForm extends GetView<ProfileController> {
                       colorText: Colors.white,
                       snackPosition: SnackPosition.BOTTOM);
                 }
+              } else {
+                controller.update();
               }
             },
             text: "Simpan",
@@ -165,14 +168,17 @@ class AddressForm extends GetView<ProfileController> {
                           ),
                           CustomTextFormField(
                             textEditingController: _namaLengkap,
+                            showAlert: namaAlert,
                             onSave: (value) {
                               controller.address!.firstName = value;
                             },
                             onChange: (_) => controller.update(),
                             validator: (value) {
                               if (value == null || value == "") {
+                                namaAlert = true;
                                 return "tidak boleh kosong";
                               }
+                              namaAlert = false;
                               return null;
                             },
                             hint: "Nama Penerima",
@@ -194,6 +200,7 @@ class AddressForm extends GetView<ProfileController> {
                           ),
                           CustomTextFormField(
                             textEditingController: _telpon,
+                            showAlert: telpAlert,
                             textInputType: TextInputType.phone,
                             onSave: (value) {
                               controller.address!.phone = "+62" + value!;
@@ -201,8 +208,10 @@ class AddressForm extends GetView<ProfileController> {
                             onChange: (_) => controller.update(),
                             validator: (input) {
                               if (input == null || input.length < 4) {
+                                telpAlert = true;
                                 return "This field requires a minimum of 4 numbers";
                               }
+                              telpAlert = false;
                               return null;
                             },
                             hint: "Nomor Telepon",
@@ -246,6 +255,7 @@ class AddressForm extends GetView<ProfileController> {
                           ),
                           CustomTextFormField(
                             textEditingController: _address1,
+                            showAlert: address1Alert,
                             textInputType: TextInputType.multiline,
                             onSave: (value) {
                               controller.address!.address1 = value;
@@ -253,8 +263,10 @@ class AddressForm extends GetView<ProfileController> {
                             onChange: (_) => controller.update(),
                             validator: (value) {
                               if (value == null || value == "") {
+                                address1Alert = true;
                                 return "tidak boleh kosong";
                               }
+                              address1Alert = false;
                               return null;
                             },
                             hint: "Alamat",

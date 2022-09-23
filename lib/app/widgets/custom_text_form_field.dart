@@ -54,6 +54,7 @@ class CustomTextFormField extends StatelessWidget {
       TextFormField(
         autocorrect: false,
         enableSuggestions: false,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         focusNode: focusNode,
         cursorColor: colorTextBlack,
         controller: textEditingController,
@@ -71,7 +72,7 @@ class CustomTextFormField extends StatelessWidget {
           floatingLabelStyle: TextStyle(
               color: (showAlert!) ? colorTextRed : colorTextBlack,
               fontSize: 14),
-          suffixIcon: (suffixIcon == null && showAlert!)
+          suffixIcon: (showAlert!)
               ? Padding(
                   padding: const EdgeInsets.all(14.0),
                   child: SvgPicture.asset(

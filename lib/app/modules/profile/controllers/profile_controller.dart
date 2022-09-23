@@ -215,6 +215,20 @@ class ProfileController extends GetxController {
       _address!.lastName = x[2];
     }
 
+    switch (_address!.province) {
+      case "Sumatera Utara":
+        _address!.province = 'North Sumatra';
+        break;
+      case "Sumatera Barat":
+        _address!.province = 'West Sumatra';
+        break;
+      case "Sumatera Selatan":
+        _address!.province = 'South Sumatra';
+        break;
+      default:
+        _address!.province = _address!.province;
+    }
+
     _token = await localStorageData.getTokenUser;
     if (_token!.accessToken != null) {
       var result = (id == null)
