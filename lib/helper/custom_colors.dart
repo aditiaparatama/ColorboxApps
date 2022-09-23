@@ -3,12 +3,6 @@ import 'package:flutter/material.dart';
 
 Color customColors(String color) {
   switch (color.toLowerCase().replaceAll(" ", "")) {
-    case "pink":
-      return Colors.pink;
-    case "softpink":
-      return Colors.pink.shade100;
-    case "lightpink":
-      return Colors.pink.shade100;
     case "grey":
       return Colors.grey;
     case "black":
@@ -27,30 +21,16 @@ Color customColors(String color) {
       return const Color(0xFFD3D3D3);
     case "lt.grey":
       return const Color(0xFFD3D3D3);
-    case "khaki":
-      return const Color(0xFFF0E68C);
     case "ash":
       return const Color(0xFF696969);
     case "ochre":
       return const Color(0xFFCC7722);
     case "charcoal":
       return const Color(0xFF36454f);
-    case "terracotta":
-      return const Color(0xFFEC7063);
-    case "chocolate":
-      return const Color(0xFFD2691E);
-    case "taupe":
-      return const Color(0xFF483c32);
     case "lime":
       return const Color(0xFF27D507);
-    case "dustypink":
-      return const Color(0xFFb77b82);
     case "darkgrey":
       return const Color(0xFF6B6B6B);
-    case "copper":
-      return const Color(0xFFB87333);
-    case "darkbrown":
-      return const Color(0xFF4E3524);
     case "citrus":
       return const Color(0xFF9FB70A);
     case "camel":
@@ -263,6 +243,74 @@ Color customColors(String color) {
       return const Color(0xFFB67F9C);
     case "plum":
       return const Color(0xFF622360);
+    //color pink
+    case "pink":
+      return Colors.pink;
+    case "softpink":
+      return const Color(0xFFF5DDDB);
+    case "babypink":
+      return const Color(0xFFF1DBDF);
+    case "fuchsia":
+      return const Color(0xFFD4408D);
+    case "blush":
+      return const Color(0xFFE8C7C8);
+    case "dustypink":
+      return const Color(0xFFC59492);
+    case "neonpink":
+      return const Color(0xFFE3337B);
+    case "rose":
+      return const Color(0xFFF33A6A);
+    case "hotpink":
+      return const Color(0xFFE33587);
+    case "guava":
+      return const Color(0xFFD98585);
+    case "lt.pink":
+      return const Color(0xFFECB3BC);
+    case "ltpink":
+      return const Color(0xFFECB3BC);
+    case "lightpink":
+      return const Color(0xFFECB3BC);
+    //brown
+    case "tan":
+      return const Color(0xFFB09678);
+    case "khaki":
+      return const Color(0xFFB5A990);
+    case "taupe":
+      return const Color(0xFFA9A099);
+    case "copper":
+      return const Color(0xFFB47C5D);
+    case "bronze":
+      return const Color(0xFF8C7049);
+    case "chocolate":
+      return const Color(0xFF6F3F13);
+    case "darkbrown":
+      return const Color(0xFFECB3BC);
+    case "lightbrown":
+      return const Color(0xFFB1967A);
+    case "lt.brown":
+      return const Color(0xFFB1967A);
+    case "ltbrown":
+      return const Color(0xFFB1967A);
+    case "rustybrown":
+      return const Color(0xFF805648);
+    case "goldenbrown":
+      return const Color(0xFF8B6839);
+    case "walnut":
+      return const Color(0xFF766A60);
+    case "wood":
+      return const Color(0xFF976237);
+    case "espresso":
+      return const Color(0xFF362219);
+    case "coffee":
+      return const Color(0xFF674D39);
+    case "terracotta":
+      return const Color(0xFF7D3424);
+    case "oatmeal":
+      return const Color(0xFFD4CABD);
+    case "almond":
+      return const Color(0xFF7D3424);
+    case "tobacco":
+      return const Color(0xFF917357);
     default:
       return Colors.grey;
   }

@@ -103,8 +103,8 @@ class ProfileController extends GetxController {
     firstN = inputname2[0].toString();
     lastN = inputname2.length > 1 ? inputname2[1].toString() : '';
 
-    var result =
-        await ProfileProvider().register(email!, password!, firstN!, lastN!);
+    var result = await ProfileProvider()
+        .register(email!.toLowerCase(), password!, firstN!, lastN!);
 
     if (result["msg"] == "success") {
       tglLahir = DateFormat('yyyy-MM-dd')
