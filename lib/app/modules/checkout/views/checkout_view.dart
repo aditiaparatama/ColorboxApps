@@ -129,7 +129,7 @@ class CheckoutView extends GetView<CheckoutController> {
             child: AppBarDefault(
               text: "Checkout",
             )),
-        backgroundColor: const Color(0xFFF5F5F5),
+        backgroundColor: Colors.white,
         body: GetBuilder(
             init: Get.put(CheckoutController()),
             builder: (c) {

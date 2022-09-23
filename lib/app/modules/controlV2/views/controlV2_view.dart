@@ -14,7 +14,7 @@ class ControlV2View extends GetView<ControlV2Controller> {
   Widget build(BuildContext context) {
     return GetBuilder<ControlV2Controller>(
         init: Get.put(ControlV2Controller()),
-        builder: (context) {
+        builder: (_) {
           return Scaffold(
             body: DoubleBackToCloseApp(
                 snackBar: const SnackBar(
