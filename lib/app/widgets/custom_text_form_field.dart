@@ -1,10 +1,11 @@
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final String? text, hint;
-  final bool? obscureText, readOnly, enabled;
+  final bool? obscureText, readOnly, enabled, showAlert;
   final Widget? suffixIcon;
   final String? prefixText;
   final Widget? prefix;
@@ -25,6 +26,7 @@ class CustomTextFormField extends StatelessWidget {
       this.obscureText = false,
       this.readOnly = false,
       this.enabled = true,
+      this.showAlert = false,
       this.suffixIcon,
       this.prefixText,
       this.prefix,
@@ -66,7 +68,17 @@ class CustomTextFormField extends StatelessWidget {
         style: const TextStyle(fontSize: 14),
         decoration: InputDecoration(
           labelText: hint!,
-          suffixIcon: suffixIcon,
+          floatingLabelStyle: TextStyle(
+              color: (showAlert!) ? colorTextRed : colorTextBlack,
+              fontSize: 14),
+          suffixIcon: (suffixIcon == null && showAlert!)
+              ? Padding(
+                  padding: const EdgeInsets.all(14.0),
+                  child: SvgPicture.asset(
+                    "assets/icon/circle-exclamation-solid.svg",
+                  ),
+                )
+              : suffixIcon,
           prefixText: prefixText,
           prefix: prefix,
           border: OutlineInputBorder(

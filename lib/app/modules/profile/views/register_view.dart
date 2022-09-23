@@ -19,7 +19,7 @@ class RegisterView extends GetView<ProfileController> {
 
   static const str = 'date: 2019:04:01';
   final valuestest = str.split(': ');
-  bool showAlert = false;
+  bool emailAlert = false, namaAlert = false;
 
   Future<void> _showMyDialog(context) async {
     return showDialog<void>(
@@ -110,29 +110,29 @@ class RegisterView extends GetView<ProfileController> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     CustomTextFormField(
-                                        hint: "Email",
-                                        onSave: (value) {
-                                          controller.email = value;
-                                        },
-                                        validator: (value) {
-                                          if (RegExp(
-                                                  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                                              .hasMatch(value!)) {
-                                            return null;
-                                          }
-                                          FocusScope.of(context)
-                                              .requestFocus(emailFocus);
-                                          return "Format email salah";
-                                        },
-                                        focusNode: emailFocus,
-                                        suffixIcon: Padding(
-                                          padding: const EdgeInsets.all(14.0),
-                                          child: showAlert
-                                              ? SvgPicture.asset(
-                                                  "assets/icon/circle-exclamation-solid.svg",
-                                                )
-                                              : null,
-                                        )),
+                                      hint: "Email",
+                                      showAlert: emailAlert,
+                                      onSave: (value) {
+                                        controller.email = value;
+                                      },
+                                      validator: (value) {
+                                        if (value == "" || value == null) {
+                                          emailAlert = true;
+                                          return "Email wajib diisi";
+                                        }
+                                        if (RegExp(
+                                                r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                                            .hasMatch(value!)) {
+                                          emailAlert = false;
+                                          return null;
+                                        }
+                                        emailAlert = true;
+                                        FocusScope.of(context)
+                                            .requestFocus(emailFocus);
+                                        return "Format email salah";
+                                      },
+                                      focusNode: emailFocus,
+                                    ),
                                     const SizedBox(
                                       height: 16,
                                     ),
@@ -158,7 +158,7 @@ class RegisterView extends GetView<ProfileController> {
                                       },
                                       validator: (value) {
                                         if (value == "" || value == null) {
-                                          return "Password tidak boleh kosong";
+                                          return "Password wajib diisi";
                                         }
                                         return null;
                                       },
@@ -167,23 +167,20 @@ class RegisterView extends GetView<ProfileController> {
                                       height: 16,
                                     ),
                                     CustomTextFormField(
-                                        hint: "Nama Lengkap",
-                                        onSave: (value) {
-                                          controller.firstName = value;
-                                        },
-                                        validator: (value) {
-                                          if (value == "" || value == null) {
-                                            return "Nama tidak boleh kosong";
-                                          }
-                                          return null;
-                                        },
-                                        suffixIcon: Padding(
-                                            padding: const EdgeInsets.all(14.0),
-                                            child: showAlert
-                                                ? SvgPicture.asset(
-                                                    "assets/icon/circle-exclamation-solid.svg",
-                                                  )
-                                                : null)),
+                                      hint: "Nama Lengkap",
+                                      showAlert: namaAlert,
+                                      onSave: (value) {
+                                        controller.firstName = value;
+                                      },
+                                      validator: (value) {
+                                        if (value == "" || value == null) {
+                                          namaAlert = true;
+                                          return "Nama wajib diisi";
+                                        }
+                                        namaAlert = false;
+                                        return null;
+                                      },
+                                    ),
                                     const SizedBox(
                                       height: 16,
                                     ),
@@ -248,7 +245,7 @@ class RegisterView extends GetView<ProfileController> {
                                         // obscureText: test,
                                         validator: (value) {
                                           if (value == "" || value == null) {
-                                            return "Tgl. Lahir tidak boleh kosong";
+                                            return "Tgl. Lahir wajib diisi";
                                           }
                                           return null;
                                         },
@@ -264,7 +261,6 @@ class RegisterView extends GetView<ProfileController> {
                                         color: secondColor,
                                         onPressed: () async {
                                           _formKey.currentState!.save();
-                                          showAlert = false;
                                           if (_formKey.currentState!
                                               .validate()) {
                                             var result =
@@ -280,7 +276,6 @@ class RegisterView extends GetView<ProfileController> {
                                               controller.update();
                                             }
                                           } else {
-                                            showAlert = true;
                                             controller.update();
                                           }
                                         },

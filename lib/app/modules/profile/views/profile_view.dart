@@ -18,7 +18,7 @@ class ProfileView extends GetView<ProfileController> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   FocusNode emailFocus = FocusNode();
-  bool showAlert = false;
+  bool emailAlert = false;
 
   ProfileView(this.globalKey, {Key? key}) : super(key: key);
   @override
@@ -57,33 +57,27 @@ class ProfileView extends GetView<ProfileController> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         CustomTextFormField(
-                                            textEditingController:
-                                                emailController,
-                                            hint: "Email",
-                                            onSave: (value) {
-                                              controller.email = value;
-                                            },
-                                            onChange: (_) =>
-                                                controller.update(),
-                                            validator: (value) {
-                                              if (RegExp(
-                                                      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                                                  .hasMatch(value!)) {
-                                                return null;
-                                              }
-                                              FocusScope.of(context)
-                                                  .requestFocus(emailFocus);
-                                              return "Format email salah";
-                                            },
-                                            suffixIcon: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(14.0),
-                                              child: showAlert
-                                                  ? SvgPicture.asset(
-                                                      "assets/icon/circle-exclamation-solid.svg",
-                                                    )
-                                                  : null,
-                                            )),
+                                          textEditingController:
+                                              emailController,
+                                          hint: "Email",
+                                          showAlert: emailAlert,
+                                          onSave: (value) {
+                                            controller.email = value;
+                                          },
+                                          onChange: (_) => controller.update(),
+                                          validator: (value) {
+                                            if (RegExp(
+                                                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                                                .hasMatch(value!)) {
+                                              emailAlert = false;
+                                              return null;
+                                            }
+                                            emailAlert = true;
+                                            FocusScope.of(context)
+                                                .requestFocus(emailFocus);
+                                            return "Format email salah";
+                                          },
+                                        ),
                                         const SizedBox(
                                           height: 16,
                                         ),
@@ -190,7 +184,6 @@ class ProfileView extends GetView<ProfileController> {
                                                           SnackPosition.BOTTOM);
                                                 }
                                               } else {
-                                                showAlert = true;
                                                 controller.update();
                                               }
                                             },

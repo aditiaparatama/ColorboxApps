@@ -34,9 +34,9 @@ class MyInputTheme {
         enabledBorder: _buildBorder(const Color(0xFFE5E8EB)),
         focusedBorder: _buildBorder(colorTextBlack),
         //Has error but not focus
-        errorBorder: _buildBorder(Colors.red),
+        errorBorder: _buildBorder(colorTextRed),
         // Has error and focus
-        focusedErrorBorder: _buildBorder(Colors.red),
+        focusedErrorBorder: _buildBorder(colorTextRed),
         // Default value if borders are null
         border: _buildBorder(colorTextBlack),
         // Enabled and focused
@@ -48,7 +48,7 @@ class MyInputTheme {
         floatingLabelStyle: _builtTextStyle(colorTextBlack),
         // Make error and helper the same size, so that the field
         // does not grow in heigth when there is an error text
-        errorStyle: _builtTextStyle(Colors.red, size: 14.0),
+        errorStyle: _builtTextStyle(colorTextRed, size: 12.0),
         helperStyle: _builtTextStyle(colorTextBlack, size: 14.0),
         hintStyle: _builtTextStyle(colorTextGrey, size: 14),
         labelStyle: _builtTextStyle(colorTextGrey, size: 14),
