@@ -6,6 +6,7 @@ import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/widgets/custom_text_form_field.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../controllers/profile_controller.dart';
 
@@ -17,6 +18,8 @@ class ProfileView extends GetView<ProfileController> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   FocusNode emailFocus = FocusNode();
+  bool showAlert = false;
+
   ProfileView(this.globalKey, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -54,24 +57,33 @@ class ProfileView extends GetView<ProfileController> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         CustomTextFormField(
-                                          textEditingController:
-                                              emailController,
-                                          hint: "Email",
-                                          onSave: (value) {
-                                            controller.email = value;
-                                          },
-                                          onChange: (_) => controller.update(),
-                                          validator: (value) {
-                                            if (RegExp(
-                                                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                                                .hasMatch(value!)) {
-                                              return null;
-                                            }
-                                            FocusScope.of(context)
-                                                .requestFocus(emailFocus);
-                                            return "Format email salah";
-                                          },
-                                        ),
+                                            textEditingController:
+                                                emailController,
+                                            hint: "Email",
+                                            onSave: (value) {
+                                              controller.email = value;
+                                            },
+                                            onChange: (_) =>
+                                                controller.update(),
+                                            validator: (value) {
+                                              if (RegExp(
+                                                      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                                                  .hasMatch(value!)) {
+                                                return null;
+                                              }
+                                              FocusScope.of(context)
+                                                  .requestFocus(emailFocus);
+                                              return "Format email salah";
+                                            },
+                                            suffixIcon: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(14.0),
+                                              child: showAlert
+                                                  ? SvgPicture.asset(
+                                                      "assets/icon/circle-exclamation-solid.svg",
+                                                    )
+                                                  : null,
+                                            )),
                                         const SizedBox(
                                           height: 16,
                                         ),
@@ -152,11 +164,34 @@ class ProfileView extends GetView<ProfileController> {
                                                     Get.back();
                                                   }
                                                 } else {
-                                                  Get.snackbar(
-                                                      "Warning", result,
+                                                  Get.snackbar("", result,
+                                                      titleText: Row(
+                                                        children: [
+                                                          SvgPicture.asset(
+                                                            "assets/icon/Exclamation-Circle.svg",
+                                                            color: Colors.white,
+                                                          ),
+                                                          const SizedBox(
+                                                              width: 4),
+                                                          const CustomText(
+                                                            text:
+                                                                "Terjadi Kesalahan",
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 16,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      backgroundColor:
+                                                          colorTextBlack,
+                                                      colorText: Colors.white,
                                                       snackPosition:
                                                           SnackPosition.BOTTOM);
                                                 }
+                                              } else {
+                                                showAlert = true;
+                                                controller.update();
                                               }
                                             },
                                             text: "Masuk",

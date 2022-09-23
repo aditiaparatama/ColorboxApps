@@ -59,13 +59,13 @@ class ProfileController extends GetxController {
     _loading.value = true;
     update();
     var result = await ProfileProvider().login(email!, password!);
-    CustomerToken token = CustomerToken.json(result["customerAccessToken"]);
 
     if (result['customerUserErrors'].length > 0) {
       _loading.value = false;
       update();
-      return "Email/ Password tidak valid";
+      return "Alamat email atau password salah";
     } else {
+      CustomerToken token = CustomerToken.json(result["customerAccessToken"]);
       setToken(token);
       var user = await ProfileProvider()
           .getUser(result["customerAccessToken"]['accessToken']);
@@ -111,7 +111,7 @@ class ProfileController extends GetxController {
           .format(DateFormat('dd/MM/yyyy').parse(tglLahir!.trim()));
       var variables = {
         "input": {
-          "email": email,
+          "email": email!.toLowerCase(),
           "firstName": firstN,
           "id": result['id'],
           "lastName": lastN,
@@ -207,14 +207,12 @@ class ProfileController extends GetxController {
     update();
     var x = _address!.firstName!.split(" ");
 
+    _address!.firstName = x[0];
+    _address!.lastName = (x.length > 1) ? x[1] : "";
+
     if (x.length > 2) {
       _address!.firstName = x[0] + " " + x[1];
       _address!.lastName = x[2];
-    }
-
-    if (x.length > 1) {
-      _address!.firstName = x[0];
-      _address!.lastName = x[1];
     }
 
     _token = await localStorageData.getTokenUser;

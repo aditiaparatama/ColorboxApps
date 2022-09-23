@@ -30,6 +30,8 @@ class CustomSearchTextForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autocorrect: false,
+      enableSuggestions: false,
       cursorColor: colorTextBlack,
       keyboardType: textInputType,
       onSaved: onSaved,
