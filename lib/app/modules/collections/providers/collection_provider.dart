@@ -13,7 +13,8 @@ class CollectionProvider extends GetConnect {
 
   Future<dynamic> postCollection(
       int id, int limit, String sortKey, String reverse) async {
-    String body = """query {
+    String body =
+        """query {
       collections(first: 1, query: "id:$id") {
         edges {
           node {
@@ -50,6 +51,7 @@ class CollectionProvider extends GetConnect {
                           node {
                               id
                               price
+                              barcode
                               compareAtPrice
                               inventoryQuantity
                               sku
@@ -80,7 +82,8 @@ class CollectionProvider extends GetConnect {
   }
 
   Future<dynamic> postCollectionNext(int id, int limit, String cursor) async {
-    String body = """query {
+    String body =
+        """query {
       collections(first: 1, query: "id:$id") {
         edges {
           node {
@@ -124,6 +127,7 @@ class CollectionProvider extends GetConnect {
                           node {
                               id
                               price
+                              barcode
                               compareAtPrice
                               inventoryQuantity
                               sku
@@ -201,6 +205,7 @@ class CollectionProvider extends GetConnect {
                           node {
                               id
                               price
+                              barcode
                               compareAtPrice
                               quantityAvailable
                               sku

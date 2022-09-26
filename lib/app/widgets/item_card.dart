@@ -22,7 +22,6 @@ class ItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     var calcu1 = int.parse(price!.replaceAll(".00", "")) /
         int.parse(compareAtPrice!.replaceAll(".00", ""));
-    int calcu2 = (100 - calcu1 * 100).ceil();
 
     return Container(
       decoration: BoxDecoration(
@@ -84,7 +83,7 @@ class ItemCard extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          calcu2.toString() + '%',
+                          (100 - calcu1 * 100).ceil().toString() + '%',
                           style: const TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w600,

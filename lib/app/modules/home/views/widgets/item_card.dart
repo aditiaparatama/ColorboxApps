@@ -8,12 +8,12 @@ import 'package:get/get.dart';
 class ItemCard extends StatelessWidget {
   const ItemCard({
     Key? key,
-    required this.calcu2,
+    required this.calcu1,
     required this.collection,
     required this.i,
   }) : super(key: key);
 
-  final int calcu2;
+  final double calcu1;
   final dynamic collection;
   final int i;
 
@@ -88,7 +88,7 @@ class ItemCard extends StatelessWidget {
                           ),
                           child: Center(
                             child: Text(
-                              calcu2.toString() + '%',
+                              (100 - calcu1 * 100).ceil().toString() + '%',
                               style: const TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w600,

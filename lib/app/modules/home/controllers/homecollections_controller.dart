@@ -33,14 +33,19 @@ class HomeCollectionsController extends GetxController {
   final List<Widget> _listTabs = [];
   List<Widget> get listTabs => _listTabs;
   int tabIndex = 0;
+  // ignore: prefer_typing_uninitialized_variables
   var menu;
   bool? _parentList;
   int pageIndex = 0;
 
-  final int _limit = 20;
+  final int _limit = 10;
   int selectedIndex = 0;
   int subjectID = 0;
   int orderBy = 2;
+  String _filtersDefault = "";
+  List<dynamic> filterList = [
+    {"available": true}
+  ];
 
   void fetchCollectionProduct(int id, int sortBy) async {
     orderBy = sortBy;
@@ -60,9 +65,12 @@ class HomeCollectionsController extends GetxController {
       reverse = "false";
     }
 
+    _filtersDefault = ', filters:$filterList';
+
     _loading.value = true;
-    var data =
-        await CollectionProvider().postCollection(id, 5, sortKey!, reverse!);
+    var data = await CollectionProvider()
+        .collectionWithFilter(id, 5, sortKey!, reverse!, _filtersDefault, "");
+
     if (data == null) {
       while (data == null) {
         data = await Future.delayed(
@@ -95,9 +103,12 @@ class HomeCollectionsController extends GetxController {
       reverse = "false";
     }
 
+    _filtersDefault = ', filters:$filterList';
+
     _loading.value = true;
-    var data = await CollectionProvider()
-        .postCollection(id, _limit, sortKey!, reverse!);
+    var data = await CollectionProvider().collectionWithFilter(
+        id, _limit, sortKey!, reverse!, _filtersDefault, "");
+
     if (data == null) {
       while (data == null) {
         data = await Future.delayed(
@@ -130,9 +141,12 @@ class HomeCollectionsController extends GetxController {
       reverse = "false";
     }
 
+    _filtersDefault = ', filters:$filterList';
+
     _loading.value = true;
-    var data =
-        await CollectionProvider().postCollection(id, 5, sortKey!, reverse!);
+    var data = await CollectionProvider()
+        .collectionWithFilter(id, 5, sortKey!, reverse!, _filtersDefault, "");
+
     if (data == null) {
       while (data == null) {
         data = await Future.delayed(
@@ -165,9 +179,12 @@ class HomeCollectionsController extends GetxController {
       reverse = "false";
     }
 
+    _filtersDefault = ', filters:$filterList';
+
     _loading.value = true;
-    var data = await CollectionProvider()
-        .postCollection(id, _limit, sortKey!, reverse!);
+    var data = await CollectionProvider().collectionWithFilter(
+        id, _limit, sortKey!, reverse!, _filtersDefault, "");
+
     if (data == null) {
       while (data == null) {
         data = await Future.delayed(

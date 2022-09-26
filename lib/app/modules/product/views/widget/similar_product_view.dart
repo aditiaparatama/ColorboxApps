@@ -45,7 +45,6 @@ class CollectionsProductView extends GetView<CollectionsController> {
                         int.parse(controller
                             .collection.products[i].variants[0].compareAtPrice!
                             .replaceAll(".00", ""));
-                    int calcu2 = (100 - calcu1 * 100).ceil();
 
                     return GestureDetector(
                       onTap: () {
@@ -136,7 +135,10 @@ class CollectionsProductView extends GetView<CollectionsController> {
                                           ),
                                           child: Center(
                                             child: Text(
-                                              calcu2.toString() + '%',
+                                              (100 - calcu1 * 100)
+                                                      .ceil()
+                                                      .toString() +
+                                                  '%',
                                               style: const TextStyle(
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.w600,

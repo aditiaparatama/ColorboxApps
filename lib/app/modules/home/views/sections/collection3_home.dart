@@ -43,10 +43,9 @@ class CollectionHome3 extends GetView<HomeCollectionsController> {
                           int.parse(controller.collection3.products[i]
                               .variants[0].compareAtPrice!
                               .replaceAll(".00", ""));
-                      int calcu2 = (100 - calcu1 * 100).ceil();
 
                       return ItemCard(
-                        calcu2: calcu2,
+                        calcu1: calcu1,
                         collection: controller.collection3,
                         i: i,
                       );

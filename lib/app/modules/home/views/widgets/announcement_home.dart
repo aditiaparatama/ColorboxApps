@@ -1,7 +1,7 @@
 import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/material.dart';
 
 class AnnouncementHome extends StatelessWidget {
   const AnnouncementHome({

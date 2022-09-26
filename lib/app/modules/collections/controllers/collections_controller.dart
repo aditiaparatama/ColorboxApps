@@ -20,6 +20,7 @@ class CollectionsController extends GetxController {
   //SET LIST TAB COLLECTION
   final List<Widget> _listTabs = [];
   List<Widget> get listTabs => _listTabs;
+  // ignore: prefer_typing_uninitialized_variables
   var menu;
   bool? _parentList;
   int pageIndex = 0;

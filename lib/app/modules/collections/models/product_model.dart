@@ -54,7 +54,7 @@ class Product {
   Product.fromSearch(var json, int index) {
     id = json['edges'][index]['node']['id'];
     title = json['edges'][index]['node']['title'];
-    description = json['edges'][index]['node']['description'];
+    description = json['edges'][index]['node']['descriptionHtml'];
     image = [];
     for (var i = 0;
         i < json['edges'][index]['node']['images']['edges'].length;
@@ -133,6 +133,7 @@ class Variants {
   String? id;
   String? title;
   String? sku;
+  String? barcode;
   int? grams;
   String? price;
   String? compareAtPrice;
@@ -147,6 +148,7 @@ class Variants {
       this.id,
       this.title,
       this.sku,
+      this.barcode,
       this.grams,
       this.price,
       this.compareAtPrice,
@@ -167,6 +169,7 @@ class Variants {
         ? json['inventoryQuantity']
         : json['quantityAvailable'];
     sku = json['sku'];
+    barcode = json['barcode'];
     options = [];
     for (int i = 0; i < json['selectedOptions'].length; i++) {
       options.add(Options.fromVariant(json['selectedOptions'][i]));
@@ -195,6 +198,7 @@ class Variants {
     compareAtPrice ??= "0.00";
     inventoryQuantity = json['quantityAvailable'];
     sku = json['sku'];
+    barcode = json['barcode'];
     options = [];
     for (int i = 0; i < json['selectedOptions'].length; i++) {
       options.add(Options.fromVariant(json['selectedOptions'][i]));

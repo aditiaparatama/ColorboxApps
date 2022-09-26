@@ -1,18 +1,18 @@
-import 'package:colorbox/app/modules/collections/views/widgets/search_collection.dart';
 import 'package:colorbox/app/modules/product/views/widget/carousel_slider_product.dart';
-import 'package:colorbox/app/modules/product/views/widget/share_social_media.dart';
+import 'package:colorbox/app/modules/collections/views/widgets/search_collection.dart';
 import 'package:colorbox/app/modules/product/views/widget/similar_product_view.dart';
+import 'package:colorbox/app/modules/product/views/widget/share_social_media.dart';
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/custom_radio_color.dart';
 import 'package:colorbox/app/widgets/custom_radio.dart';
-import 'package:colorbox/app/widgets/custom_text.dart';
-import 'package:colorbox/constance.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,17 +24,20 @@ class ProductView2 extends GetView<ProductController> {
   Widget build(BuildContext context) {
     controller.product = Get.arguments["product"];
     controller.variant = controller.product.variants[0];
+
     var collection = Get.arguments["idCollection"]
         .replaceAll('gid://shopify/Collection/', '');
-
     var calcu1 = int.parse(controller.variant!.price!.replaceAll(".00", "")) /
         int.parse(controller.variant!.compareAtPrice!.replaceAll(".00", ""));
-    int calcu2 = (100 - calcu1 * 100).ceil();
 
     // ignore: avoid_print
     return GetBuilder<ProductController>(
         init: Get.put(ProductController()),
         builder: (control) {
+          var str1 =
+              'https://widget.delamibrands.com/colorbox/mobile/whistlistprod.php';
+
+          print(str1);
           return Scaffold(
             resizeToAvoidBottomInset: false,
             backgroundColor: Colors.white,
@@ -76,12 +79,11 @@ class ProductView2 extends GetView<ProductController> {
                                   bottom: 16,
                                   right: 16,
                                   child: InkWell(
-                                    // onTap: () {
-                                    //   var url = str1.toString();
-                                    //   launchUrlString(url,
-                                    //       mode: LaunchMode
-                                    //           .externalNonBrowserApplication);
-                                    // },
+                                    onTap: () async {
+                                      var url = str1.toString();
+                                      await launchUrlString(url,
+                                          mode: LaunchMode.inAppWebView);
+                                    },
                                     // onTap: () => Get.toNamed(Routes.CART,
                                     //     arguments: "collection"),
                                     // onTap: () => openBrowserTab(),
@@ -111,14 +113,17 @@ class ProductView2 extends GetView<ProductController> {
                                   Row(
                                     children: [
                                       CustomText(
-                                        text: "SKU : " + control.variant!.sku!,
-                                        fontSize: 12,
+                                        text: control.variant!.sku! +
+                                            " | " +
+                                            control.variant!.barcode!,
+                                        fontSize: 10,
                                         fontWeight: FontWeight.w400,
                                         color: const Color.fromRGBO(
                                             155, 155, 155, 1),
                                       ),
                                     ],
                                   ),
+                                  const SizedBox(height: 6),
                                   (control.product.variants[0].compareAtPrice ==
                                               "0" ||
                                           control.product.variants[0]
@@ -141,19 +146,6 @@ class ProductView2 extends GetView<ProductController> {
                                                   text: "Rp " +
                                                       formatter.format(
                                                           int.parse(control
-                                                              .variant!.price!
-                                                              .replaceAll(
-                                                                  ".00", ""))),
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: const Color.fromRGBO(
-                                                      187, 9, 21, 1),
-                                                ),
-                                                const SizedBox(width: 8),
-                                                CustomText(
-                                                  text: "Rp " +
-                                                      formatter.format(
-                                                          int.parse(control
                                                               .variant!
                                                               .compareAtPrice!
                                                               .replaceAll(
@@ -161,11 +153,11 @@ class ProductView2 extends GetView<ProductController> {
                                                       "  ",
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w400,
-                                                  color: colorTextGrey,
+                                                  color: colorTextBlack,
                                                   decoration: TextDecoration
                                                       .lineThrough,
                                                 ),
-                                                const SizedBox(width: 4),
+                                                const SizedBox(width: 2),
                                                 Container(
                                                   width: 30.0,
                                                   height: 15.0,
@@ -177,7 +169,10 @@ class ProductView2 extends GetView<ProductController> {
                                                   ),
                                                   child: Center(
                                                     child: Text(
-                                                      calcu2.toString() + '%',
+                                                      (100 - calcu1 * 100)
+                                                              .ceil()
+                                                              .toString() +
+                                                          '%',
                                                       style: const TextStyle(
                                                         fontSize: 10,
                                                         fontWeight:
@@ -189,6 +184,19 @@ class ProductView2 extends GetView<ProductController> {
                                                           TextAlign.center,
                                                     ),
                                                   ),
+                                                ),
+                                                const SizedBox(width: 9),
+                                                CustomText(
+                                                  text: "Rp " +
+                                                      formatter.format(
+                                                          int.parse(control
+                                                              .variant!.price!
+                                                              .replaceAll(
+                                                                  ".00", ""))),
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: const Color.fromRGBO(
+                                                      187, 9, 21, 1),
                                                 ),
                                               ],
                                             ),

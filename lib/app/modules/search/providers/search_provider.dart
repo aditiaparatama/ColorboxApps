@@ -27,6 +27,7 @@ class SearchProvider extends GetConnect {
             id
             title
             description
+            descriptionHtml
             options {
                 name
                 values
@@ -43,6 +44,7 @@ class SearchProvider extends GetConnect {
                     node {
                         id
                         price
+                        barcode
                         compareAtPrice
                         inventoryQuantity
                         sku
@@ -72,7 +74,9 @@ class SearchProvider extends GetConnect {
   Future<dynamic> postSearchNext(String value, int limit, String cursor) async {
     final GraphQLClient _client = getShopifyGraphQLClient(admin: true);
 
-    final QueryOptions options = QueryOptions(document: gql("""query {
+    final QueryOptions options = QueryOptions(
+        document: gql(
+            """query {
       products(first: $limit, sortKey: CREATED_AT, reverse: true, query: "(title:$value) OR (sku:$value) OR (article:$value)", after: "$cursor") {
         pageInfo {
           hasNextPage
@@ -84,6 +88,7 @@ class SearchProvider extends GetConnect {
             id
             title
             description
+            descriptionHtml
             options {
                 name
                 values
@@ -100,6 +105,7 @@ class SearchProvider extends GetConnect {
                     node {
                         id
                         price
+                        barcode
                         compareAtPrice
                         inventoryQuantity
                         sku
@@ -113,7 +119,8 @@ class SearchProvider extends GetConnect {
           }
         }
       }
-    }"""), variables: {});
+    }"""),
+        variables: {});
 
     try {
       final QueryResult result = await _client.query(options);
