@@ -73,8 +73,6 @@ class ProfileView extends GetView<ProfileController> {
                                               return null;
                                             }
                                             emailAlert = true;
-                                            FocusScope.of(context)
-                                                .requestFocus(emailFocus);
                                             return "Format email salah";
                                           },
                                         ),

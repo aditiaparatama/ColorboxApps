@@ -137,8 +137,9 @@ class CheckoutController extends GetxController {
     if (_user.defaultAddress!.address1 != null) {
       var x = _checkout.toJson();
       _listShipping = await CheckoutProvider().getShippingRates(x);
-      _listShipping = _listShipping.firstWhere(
-          (e) => e['service_name'] == _checkout.shippingLine!.title);
+      _listShipping = _listShipping.firstWhere((e) =>
+          e['service_name'].replaceAll(" ", "") ==
+          _checkout.shippingLine!.title!.replaceAll(" ", ""));
       _etd = _listShipping['description'].split("(")[0];
     }
     update();

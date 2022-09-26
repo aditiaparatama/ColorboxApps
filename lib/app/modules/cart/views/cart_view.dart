@@ -146,7 +146,7 @@ class CartView extends GetView<CartController> {
                         children: [
                           CustomText(
                             text:
-                                "Rp ${(c.cart.estimatedCost!.totalAmount! == "0.0") ? "0" : formatter.format(double.parse(c.cart.estimatedCost!.totalAmount!.replaceAll(".0", "")).ceil())}",
+                                "Rp ${(c.cart.estimatedCost == null || c.cart.estimatedCost!.totalAmount! == "0.0") ? "0" : formatter.format(double.parse(c.cart.estimatedCost!.totalAmount!.replaceAll(".0", "")).ceil())}",
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),

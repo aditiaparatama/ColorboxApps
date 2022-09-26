@@ -166,7 +166,8 @@ class CheckoutView extends GetView<CheckoutController> {
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(
+                                    Container(
+                                      color: colorDiver,
                                       height: 8,
                                     ),
                                     Container(
@@ -200,9 +201,17 @@ class CheckoutView extends GetView<CheckoutController> {
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(height: 8),
+
+                                    Container(
+                                      color: colorDiver,
+                                      height: 8,
+                                    ),
                                     const VoucherWidget(),
-                                    const SizedBox(height: 8),
+
+                                    Container(
+                                      color: colorDiver,
+                                      height: 8,
+                                    ),
                                     //ringkasan total
                                     Container(
                                       color: Colors.white,

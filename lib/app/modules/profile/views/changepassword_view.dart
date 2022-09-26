@@ -1,6 +1,7 @@
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:colorbox/app/widgets/custom_text_form_field.dart';
 // import 'package:colorbox/app/widgets/custom_text_form_field.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
@@ -49,11 +50,9 @@ class ChangePasswordView extends GetView<ProfileController> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    TextFormField(
-                                      decoration: const InputDecoration(
-                                        labelText: "Email",
-                                      ),
-                                      onSaved: (value) {
+                                    CustomTextFormField(
+                                      hint: "Email",
+                                      onSave: (value) {
                                         controller.email = value;
                                       },
                                       validator: (value) {
@@ -68,23 +67,21 @@ class ChangePasswordView extends GetView<ProfileController> {
                                     const SizedBox(
                                       height: 20,
                                     ),
-                                    TextFormField(
-                                      decoration: InputDecoration(
-                                        labelText: "Password",
-                                        suffixIcon: GestureDetector(
-                                          onTap: () {
-                                            controller.togglevisibility();
-                                          },
-                                          child: Icon(
-                                            controller.showPassword!
-                                                ? Icons.visibility
-                                                : Icons.visibility_off,
-                                            color: colorTextBlack,
-                                          ),
+                                    CustomTextFormField(
+                                      hint: "Password",
+                                      suffixIcon: GestureDetector(
+                                        onTap: () {
+                                          controller.togglevisibility();
+                                        },
+                                        child: Icon(
+                                          controller.showPassword!
+                                              ? Icons.visibility
+                                              : Icons.visibility_off,
+                                          color: colorTextBlack,
                                         ),
                                       ),
                                       obscureText: controller.showPassword!,
-                                      onSaved: (value) {
+                                      onSave: (value) {
                                         controller.password = value;
                                       },
                                       validator: (value) {
@@ -97,11 +94,9 @@ class ChangePasswordView extends GetView<ProfileController> {
                                     const SizedBox(
                                       height: 20,
                                     ),
-                                    TextFormField(
-                                      decoration: const InputDecoration(
-                                        labelText: "Nama",
-                                      ),
-                                      onSaved: (value) {
+                                    CustomTextFormField(
+                                      hint: "Nama",
+                                      onSave: (value) {
                                         controller.firstName = value;
                                       },
                                       validator: (value) {

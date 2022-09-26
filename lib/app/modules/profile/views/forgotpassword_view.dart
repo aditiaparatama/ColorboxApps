@@ -1,6 +1,7 @@
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:colorbox/app/widgets/custom_text_form_field.dart';
 // import 'package:colorbox/app/widgets/custom_text_form_field.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class ForgotPasswordView extends GetView<ProfileController> {
 
   static const str = 'date: 2019:04:01';
   final valuestest = str.split(': ');
+  bool emailAlert = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class ForgotPasswordView extends GetView<ProfileController> {
           elevation: 3,
           shadowColor: Colors.grey.withOpacity(0.3),
         ),
-        body: GetBuilder<ProfileController>(builder: (controller) {
+        body: GetBuilder<ProfileController>(builder: (_) {
           return Stack(
             children: [
               SingleChildScrollView(
@@ -67,19 +69,21 @@ class ForgotPasswordView extends GetView<ProfileController> {
                                     const SizedBox(
                                       height: 20,
                                     ),
-                                    TextFormField(
-                                      decoration: const InputDecoration(
-                                        labelText: "Email",
-                                      ),
-                                      onSaved: (value) {
+                                    CustomTextFormField(
+                                      hint: "Email",
+                                      showAlert: emailAlert,
+                                      onSave: (value) {
                                         controller.email = value;
                                       },
+                                      onChange: (value) => controller.update(),
                                       validator: (value) {
                                         if (RegExp(
                                                 r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
                                             .hasMatch(value!)) {
+                                          emailAlert = false;
                                           return null;
                                         }
+                                        emailAlert = true;
                                         return "Format email salah";
                                       },
                                     ),
@@ -106,6 +110,8 @@ class ForgotPasswordView extends GetView<ProfileController> {
                                               controller.loading.value = false;
                                               controller.update();
                                             }
+                                          } else {
+                                            controller.update();
                                           }
                                         },
                                         text: "Kirim",
