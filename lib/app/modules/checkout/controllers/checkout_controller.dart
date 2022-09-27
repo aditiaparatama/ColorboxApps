@@ -6,9 +6,11 @@ import 'package:colorbox/app/modules/checkout/providers/checkout_provider.dart';
 import 'package:colorbox/app/modules/checkout/providers/draft_order_provider.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
+import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/constance.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -262,15 +264,49 @@ class CheckoutController extends GetxController {
     update();
   }
 
-  Future<String> createOrder() async {
-    String draftOrderId = await createDraftOrder();
-    dynamic order = await completeDraftOrder(draftOrderId);
-    String urlInvoice = await paymentCheckout(order);
+  Future<String?> createOrder() async {
+    // String draftOrderId = await createDraftOrder();
+    // dynamic order = await completeDraftOrder(draftOrderId);
+    _loading.value = true;
+    update();
 
-    updateOrderForUrlPayment(order['id'], urlInvoice);
-    Get.find<CartController>().reCreateCart();
+    dynamic order = await pesan();
+    if (order != null && order.containsKey("order")) {
+      String? urlInvoice = await paymentCheckout(order["order"]);
 
-    return urlInvoice;
+      updateOrderForUrlPayment(
+          order['order']['admin_graphql_api_id'], urlInvoice);
+      Get.find<CartController>().reCreateCart();
+
+      return urlInvoice;
+    } else {
+      if (order != null &&
+          order["errors"]["line_items"][0] == "Unable to reserve inventory") {
+        Get.snackbar("", "Stok produk sudah habis",
+            titleText: Row(
+              children: [
+                SvgPicture.asset(
+                  "assets/icon/Exclamation-Circle.svg",
+                  color: Colors.white,
+                ),
+                const SizedBox(width: 4),
+                const CustomText(
+                  text: "Gagal",
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ],
+            ),
+            backgroundColor: colorTextBlack,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM);
+      }
+      _loading.value = false;
+      update();
+    }
+
+    return "";
   }
 
   Future<String> paymentCheckout(order) async {
@@ -285,7 +321,7 @@ class CheckoutController extends GetxController {
 
     var inputData = {
       "external_id":
-          "shopifyInvoice-$createdDate-${order['name']}-${order['id'].replaceAll('gid://shopify/Order/', '')}",
+          "shopifyInvoice-$createdDate-${order['name']}-${order['id']}",
       "amount": int.parse(_checkout.totalPriceV2!.replaceAll(".0", "")),
       "payer_email": _checkout.email,
       "description": "Invoice Customer ${_checkout.shippingAddress!.firstName}",
@@ -296,10 +332,8 @@ class CheckoutController extends GetxController {
             "quantity": x.quantity,
             "price": (x.discountAllocations!.isEmpty)
                 ? x.variants!.price
-                : (double.parse(x.variants!.price!.replaceAll(".00", ""))
-                        .ceil() -
-                    double.parse(x.discountAllocations![0].allocatedAmount!
-                            .replaceAll(".0", ""))
+                : (double.parse(x.variants!.price!).ceil() -
+                    double.parse(x.discountAllocations![0].allocatedAmount!)
                         .ceil())
           }
         ]
@@ -342,17 +376,6 @@ class CheckoutController extends GetxController {
         "lineItems": [
           for (final x in _checkout.lineItems!) ...[
             {
-              // if (x.discountAllocations != null &&
-              //     x.discountAllocations![0].discountApplication!
-              //             .allocationMethod !=
-              //         "ACROSS")
-              //   "appliedDiscount": {
-              //     "amount": x.discountAllocations![0].allocatedAmount,
-              //     "description": "",
-              //     "title": x.discountAllocations![0].discountApplication,
-              //     "value": 1.1,
-              //     "valueType": "FIXED_AMOUNT"
-              //   },
               "originalUnitPrice": x.variants!.price,
               "quantity": x.quantity,
               "requiresShipping": true,
@@ -411,5 +434,89 @@ class CheckoutController extends GetxController {
     };
 
     await DraftOrderProvider().orderUpdateUrl(variableInput);
+  }
+
+  Future<dynamic> pesan() async {
+    var _lineItems = [];
+
+    for (final x in _checkout.lineItems!) {
+      _lineItems.add({
+        "variant_id":
+            x.variants!.id!.replaceAll("gid://shopify/ProductVariant/", ""),
+        "quantity": x.quantity
+      });
+    }
+
+    var createOrder = {
+      "order": {
+        "inventory_behaviour": "decrement_obeying_policy",
+        "email": _user.email,
+        "gateway": "Xendit Mobile",
+        "send_receipt": true,
+        "financial_status": "pending",
+        "payment_gateway_names": ["Xendit Mobile"],
+        "tags": "apps",
+        "line_items": _lineItems,
+        "shipping_lines": [
+          {
+            "title": _checkout.shippingLine!.title,
+            "price": _checkout.shippingLine!.amount ?? 0,
+            "code": "",
+            "source": _checkout.shippingLine!.handle,
+          }
+        ],
+        "billing_address": {
+          "first_name": _checkout.shippingAddress!.firstName,
+          "address1": _checkout.shippingAddress!.address1,
+          "phone": _checkout.shippingAddress!.phone,
+          "city": _checkout.shippingAddress!.city,
+          "zip": _checkout.shippingAddress!.zip,
+          "province": _checkout.shippingAddress!.province,
+          "country": _checkout.shippingAddress!.country,
+          "last_name": _checkout.shippingAddress!.lastName,
+          "address2": _checkout.shippingAddress!.address2,
+          "company": "",
+          "latitude": null,
+          "longitude": null,
+          "name":
+              "${_checkout.shippingAddress!.firstName} ${_checkout.shippingAddress!.lastName}",
+          "country_code": "ID",
+          "province_code": _checkout.shippingAddress!.province
+        },
+        "shipping_address": {
+          "first_name": _checkout.shippingAddress!.firstName,
+          "address1": _checkout.shippingAddress!.address1,
+          "phone": _checkout.shippingAddress!.phone,
+          "city": _checkout.shippingAddress!.city,
+          "zip": _checkout.shippingAddress!.zip,
+          "province": _checkout.shippingAddress!.province,
+          "country": _checkout.shippingAddress!.country,
+          "last_name": _checkout.shippingAddress!.lastName,
+          "address2": _checkout.shippingAddress!.address2,
+          "company": "",
+          "latitude": null,
+          "longitude": null,
+          "name":
+              "${_checkout.shippingAddress!.firstName} ${_checkout.shippingAddress!.lastName}",
+          "country_code": "ID",
+          "province_code": _checkout.shippingAddress!.province
+        },
+        if (_checkout.discountApplications != null &&
+            _checkout.discountApplications!.code != "")
+          "discount_codes": [
+            {
+              "code": _checkout.discountApplications!.code,
+              "amount": (_checkout.discountApplications!.amount != null)
+                  ? double.parse(_checkout.discountApplications!.amount!)
+                  : double.parse(_checkout.discountApplications!.percentage!),
+              "type": (_checkout.discountApplications!.amount != null)
+                  ? "FIXED_AMOUNT"
+                  : "PERCENTAGE"
+            }
+          ]
+      }
+    };
+
+    return await DraftOrderProvider().orderCreate(createOrder);
   }
 }

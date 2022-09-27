@@ -17,6 +17,7 @@ const Color colorTextBlack = Color(0xFF212121);
 const Color colorSaleRed = Color(0xFFBB0915);
 const Color colorTextRed = Color(0xFFDA2929);
 const Color colorTextBlue = Color(0xFF115AC8);
+const Color colorOverlay = Color(0xFF777777);
 
 // ignore: constant_identifier_names
 const CACHED_CART_DATA = 'CACHED_CART_DATA';

@@ -100,6 +100,13 @@ class CartProvider extends GetConnect {
                         product {
                             id
                             title
+                            collections(first:5){
+                              edges{
+                                node{
+                                  id
+                                }
+                              }
+                            }
                         }
                         title
                         price

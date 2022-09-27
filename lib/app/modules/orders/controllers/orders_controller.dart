@@ -34,15 +34,14 @@ class OrdersController extends GetxController {
         : ", query:\"(NOT financial_status:expired) AND NOT status:cancelled\"";
     _ordersFilter = [];
     var result = await OrderProvider()
-        .getOrders("gid://shopify/Customer/4510208950422", query: query);
+        .getOrders(settingController.userModel.id!, query: query);
 
     if (result == null) {
       while (result == null) {
         result = await Future.delayed(
             const Duration(milliseconds: 1000),
-            () => OrderProvider().getOrders(
-                "gid://shopify/Customer/4510208950422",
-                query: query));
+            () => OrderProvider()
+                .getOrders(settingController.userModel.id!, query: query));
       }
     }
     if (result['customer'] != null &&
@@ -81,7 +80,7 @@ class OrdersController extends GetxController {
         : ", query:\"(NOT financial_status:expired) AND NOT status:cancelled\"";
     update();
     var result = await OrderProvider().getOrdersNext(
-        "gid://shopify/Customer/4510208950422", pageInfo.endCursor!,
+        settingController.userModel.id!, pageInfo.endCursor!,
         query: query);
     _pageInfo = PageInfo.fromJson(result['orders']['pageInfo']);
     for (final x in result['orders']['edges']) {
@@ -97,7 +96,7 @@ class OrdersController extends GetxController {
     var temp = [];
 
     var result = await OrderProvider().getActiveOrders(
-        "gid://shopify/Customer/4510208950422",
+        settingController.userModel.id!,
         DateFormat("yyyy-MM-dd").format(dateMin),
         null);
 
@@ -106,7 +105,7 @@ class OrdersController extends GetxController {
         result = await Future.delayed(
             const Duration(milliseconds: 1000),
             () => OrderProvider().getActiveOrders(
-                "gid://shopify/Customer/4510208950422",
+                settingController.userModel.id!,
                 DateFormat("yyyy-MM-dd").format(dateMin),
                 null));
       }
@@ -117,7 +116,7 @@ class OrdersController extends GetxController {
       result = await Future.delayed(
           const Duration(milliseconds: 1000),
           () => OrderProvider().getActiveOrders(
-              "gid://shopify/Customer/4510208950422",
+              settingController.userModel.id!,
               DateFormat("yyyy-MM-dd").format(dateMin),
               result['orders']['pageInfo']['endCursor']));
       temp.add(result['orders']['edges'].length);

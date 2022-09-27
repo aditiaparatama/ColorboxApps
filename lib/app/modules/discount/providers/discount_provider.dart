@@ -1,16 +1,10 @@
-import 'package:colorbox/globalvar.dart';
+import 'package:colorbox/app/services/shopify_graphql.dart';
 import 'package:get/get.dart';
 import 'package:graphql/client.dart';
 
 class DiscountProvider extends GetConnect {
   Future<dynamic> getDiscount() async {
-    final GraphQLClient _client = GraphQLClient(
-      cache: GraphQLCache(),
-      link: HttpLink(
-        url_shopify + 'graphql.json',
-        defaultHeaders: {'X-Shopify-Access-Token': token},
-      ),
-    );
+    final GraphQLClient _client = getShopifyGraphQLClient(admin: true);
 
     final QueryOptions options = QueryOptions(
       document: gql(
@@ -85,6 +79,72 @@ class DiscountProvider extends GetConnect {
             }
           }
         }
+      ''',
+      ),
+    );
+
+    final QueryResult result = await _client.query(options);
+
+    return result.data;
+  }
+
+  Future<dynamic> getDiscountAutomatic() async {
+    final GraphQLClient _client = getShopifyGraphQLClient(admin: true);
+
+    final QueryOptions options = QueryOptions(
+      document: gql(
+        r'''
+        {
+          automaticDiscountNodes(first:2, query:"status:active"){
+              edges{
+                  node{
+                      automaticDiscount{
+                          __typename
+                          ...on DiscountAutomaticBasic{
+                              title
+                              customerGets{
+                                  appliesOnOneTimePurchase
+                                  appliesOnSubscription
+                                  items{
+                                      __typename
+                                      ...on DiscountCollections{
+                                          collections(first:1){
+                                              edges{
+                                                  node{
+                                                      id
+                                                      handle
+                                                  }
+                                              }
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                          ...on DiscountAutomaticBxgy{
+                              title
+                              customerGets{
+                                  appliesOnOneTimePurchase
+                                  appliesOnSubscription
+                                  items{
+                                      __typename
+                                      ...on DiscountCollections{
+                                          collections(first:15){
+                                              edges{
+                                                  node{
+                                                      id
+                                                      handle
+                                                  }
+                                              }
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
       ''',
       ),
     );

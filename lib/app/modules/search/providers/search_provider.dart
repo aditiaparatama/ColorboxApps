@@ -16,7 +16,7 @@ class SearchProvider extends GetConnect {
     final QueryOptions options = QueryOptions(
         document: gql(
           """query {
-      products(first: $limit, sortKey: CREATED_AT, reverse: true, query: "(title:$value) OR (sku:$value) OR (article:$value)") {
+      products(first: $limit, sortKey: CREATED_AT, reverse: true, query: "(title:$value) OR (sku:$value) OR (article:$value) OR (barcode:$value)") {
         pageInfo {
           hasNextPage
           hasPreviousPage
@@ -25,6 +25,14 @@ class SearchProvider extends GetConnect {
           cursor
           node {
             id
+            collections(first:5){
+              edges{
+                node{
+                  id
+                }
+              }
+            }
+            totalInventory
             title
             description
             descriptionHtml
@@ -74,10 +82,8 @@ class SearchProvider extends GetConnect {
   Future<dynamic> postSearchNext(String value, int limit, String cursor) async {
     final GraphQLClient _client = getShopifyGraphQLClient(admin: true);
 
-    final QueryOptions options = QueryOptions(
-        document: gql(
-            """query {
-      products(first: $limit, sortKey: CREATED_AT, reverse: true, query: "(title:$value) OR (sku:$value) OR (article:$value)", after: "$cursor") {
+    final QueryOptions options = QueryOptions(document: gql("""query {
+      products(first: $limit, sortKey: CREATED_AT, reverse: true, query: "(title:$value) OR (sku:$value) OR (article:$value) OR (barcode:$value)", after: "$cursor") {
         pageInfo {
           hasNextPage
           hasPreviousPage
@@ -86,6 +92,14 @@ class SearchProvider extends GetConnect {
           cursor
           node {
             id
+            collections(first:5){
+              edges{
+                node{
+                  id
+                }
+              }
+            }
+            totalInventory
             title
             description
             descriptionHtml
@@ -119,8 +133,7 @@ class SearchProvider extends GetConnect {
           }
         }
       }
-    }"""),
-        variables: {});
+    }"""), variables: {});
 
     try {
       final QueryResult result = await _client.query(options);

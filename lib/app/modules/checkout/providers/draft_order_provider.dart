@@ -1,4 +1,5 @@
 import 'package:colorbox/app/services/shopify_graphql.dart';
+import 'package:colorbox/globalvar.dart';
 import 'package:get/get.dart';
 import 'package:graphql/client.dart';
 
@@ -90,5 +91,17 @@ class DraftOrderProvider extends GetConnect {
     final QueryResult result = await _client.query(options);
 
     return result.data;
+  }
+
+  Future<dynamic> orderCreate(dynamic variable) async {
+    try {
+      var response = await post(url_shopify + "orders.json", variable,
+          contentType: "application/json",
+          headers: {"X-Shopify-Access-Token": token, 'Retry-After': '5.0'});
+      return response.body;
+    } catch (e) {
+      // ignore: avoid_print
+      print(e.toString());
+    }
   }
 }

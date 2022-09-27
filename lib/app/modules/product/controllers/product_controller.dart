@@ -1,10 +1,12 @@
 import 'package:colorbox/app/modules/collections/models/product_model.dart';
+import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:get/get.dart';
 
 class ProductController extends GetxController {
   final LocalStorageData localStorageData = Get.find();
+  final HomeController homeController = Get.put(HomeController());
   Product product = Product.isEmpty();
   UserModel _userModel = UserModel.isEmpty();
   UserModel get userModel => _userModel;
@@ -14,6 +16,14 @@ class ProductController extends GetxController {
   Variants? variant;
   String ukuran = "";
   String textCart = "Add Cart";
+  String? sizeTemp;
+
+  @override
+  void onInit() async {
+    getUser();
+
+    super.onInit();
+  }
 
   void getSelectedValue(String size, String color) {
     for (int i = 0; i < product.variants.length; i++) {
@@ -77,10 +87,6 @@ class ProductController extends GetxController {
       }
     }
     return stock;
-  }
-
-  ProductController() {
-    getUser();
   }
 
   getUser() async {

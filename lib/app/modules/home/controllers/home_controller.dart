@@ -16,8 +16,8 @@ class HomeController extends GetxController {
   List<Announcement> _announcementHome = [];
   List<Announcement> get announcementHome => _announcementHome;
 
-  // List<Announcement> _announcementProduct = [];
-  // List<Announcement> get announcementProduct => _announcementProduct;
+  List<Announcement> _announcementProduct = [];
+  List<Announcement> get announcementProduct => _announcementProduct;
 
   String currentItem = 'Home';
   int curIndex = 0;
@@ -34,7 +34,7 @@ class HomeController extends GetxController {
     var json = await HomeProvider().getHomeSettings();
     _sliders = [];
     _announcementHome = [];
-    // _announcementProduct = [];
+    _announcementProduct = [];
 
     for (int i = 0; i < json['sliders']['items'].length; i++) {
       _sliders.add(Sliders.fromJson(json['sliders']['items'][i]));
@@ -42,7 +42,7 @@ class HomeController extends GetxController {
 
     getCollections(json['CollectionsHome']['items']);
     getAnnouncementHome(json['announcementHome']);
-    // getAnnouncementProduct(json['announcementProduct']);
+    getAnnouncementProduct(json['announcementProduct']);
 
     update();
   }
@@ -73,11 +73,11 @@ class HomeController extends GetxController {
     update();
   }
 
-  // getAnnouncementProduct(json) async {
-  //   _announcementProduct = [];
-  //   for (int i = 0; i < json.length; i++) {
-  //     _announcementProduct.add(Announcement.fromJson(json[i]));
-  //   }
-  //   update();
-  // }
+  getAnnouncementProduct(json) async {
+    _announcementProduct = [];
+    for (int i = 0; i < json.length; i++) {
+      _announcementProduct.add(Announcement.fromJson(json[i]));
+    }
+    update();
+  }
 }

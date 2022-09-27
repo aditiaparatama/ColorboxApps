@@ -14,13 +14,13 @@ class ControlV2View extends GetView<ControlV2Controller> {
   Widget build(BuildContext context) {
     return GetBuilder<ControlV2Controller>(
         init: Get.put(ControlV2Controller()),
-        builder: (_) {
+        builder: (control) {
           return Scaffold(
             body: DoubleBackToCloseApp(
                 snackBar: const SnackBar(
                   content: Text('Tap back again to leave'),
                 ),
-                child: controller.currentScreen),
+                child: control.currentScreen),
             bottomNavigationBar: bottomNavigationBar(),
           );
         });

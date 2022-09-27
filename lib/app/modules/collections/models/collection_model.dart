@@ -2,6 +2,7 @@ import 'package:colorbox/app/modules/collections/models/product_model.dart';
 
 class Collection {
   String? id;
+  String? title;
   String? handle;
   int? productsCount;
   List<Filter>? filters;
@@ -14,6 +15,7 @@ class Collection {
 
   Collection.fromJson(var json) {
     id = json['id'];
+    title = json['title'];
     handle = json['handle'];
     productsCount =
         (json.containsKey("productsCount")) ? json['productsCount'] : null;
@@ -27,7 +29,9 @@ class Collection {
 
     filters = [];
     for (final x in json['products']['filters']) {
-      filters!.add(Filter.fromJson(x));
+      if (x['label'] != 'Availability') {
+        filters!.add(Filter.fromJson(x));
+      }
     }
   }
 

@@ -42,6 +42,7 @@ class CustomRadioState extends State<CustomRadio> {
           //highlightColor: Colors.red,
           splashColor: Colors.blueAccent,
           onTap: () {
+            _productController.sizeTemp = radioData[index].buttonText;
             _productController.getSelectedValue(
                 radioData[index].buttonText,
                 (_productController.variant!.options.length > 1)

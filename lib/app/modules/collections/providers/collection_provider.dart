@@ -13,12 +13,12 @@ class CollectionProvider extends GetConnect {
 
   Future<dynamic> postCollection(
       int id, int limit, String sortKey, String reverse) async {
-    String body =
-        """query {
+    String body = """query {
       collections(first: 1, query: "id:$id") {
         edges {
           node {
             id
+            title
             handle
             productsCount
             products(first: $limit, sortKey: $sortKey, reverse: $reverse) {
@@ -82,12 +82,12 @@ class CollectionProvider extends GetConnect {
   }
 
   Future<dynamic> postCollectionNext(int id, int limit, String cursor) async {
-    String body =
-        """query {
+    String body = """query {
       collections(first: 1, query: "id:$id") {
         edges {
           node {
             id
+            title
             handle
             productsCount
             products(first: $limit, after: "$cursor") {
@@ -163,11 +163,12 @@ class CollectionProvider extends GetConnect {
 
     final QueryOptions options = QueryOptions(
       document: gql(
-        """query {
+        """query MultipleVariantOptionsWithInStock {
       collections(first: 1, query: "id:$id") {
         edges {
           node {
             id
+            title
             handle
             products(first: $limit, sortKey: $sortKey, reverse: $reverse $filters $cursor) {
               pageInfo {

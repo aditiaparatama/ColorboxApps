@@ -2,6 +2,7 @@ class Product {
   String? id;
   String? idCollection;
   String? title;
+  int? totalInventory;
   String? type;
   String? description;
   String? handle;
@@ -16,6 +17,7 @@ class Product {
       this.id,
       this.idCollection,
       this.title,
+      this.totalInventory,
       this.type,
       this.description,
       this.handle,
@@ -28,6 +30,7 @@ class Product {
   Product.fromJson(var json) {
     id = json['id'];
     title = json['title'];
+    totalInventory = json['totalInventory'];
     type = json['productType'];
     description = json['descriptionHtml'];
     handle = json['handle'];
@@ -54,6 +57,7 @@ class Product {
   Product.fromSearch(var json, int index) {
     id = json['edges'][index]['node']['id'];
     title = json['edges'][index]['node']['title'];
+    totalInventory = json['edges'][index]['node']['totalInventory'];
     description = json['edges'][index]['node']['descriptionHtml'];
     image = [];
     for (var i = 0;
@@ -79,6 +83,9 @@ class Product {
       var index = json['edges'].length - 1;
       if (hasNextPage!) cursor = json['edges'][index]['cursor'];
     }
+
+    idCollection =
+        json['edges'][index]['node']['collections']['edges'][0]['node']['id'];
   }
 
   Product.fromWishlist(var json, String variantId) {
@@ -131,6 +138,8 @@ class Options {
 
 class Variants {
   String? id;
+  String? idProduct;
+  List<String>? idCollection;
   String? title;
   String? sku;
   String? barcode;
@@ -146,6 +155,8 @@ class Variants {
 
   Variants(
       this.id,
+      this.idProduct,
+      this.idCollection,
       this.title,
       this.sku,
       this.barcode,
@@ -178,6 +189,8 @@ class Variants {
 
   Variants.fromCart(var json) {
     id = json["id"];
+    idProduct =
+        (json["product"].containsKey("id")) ? json["product"]["id"] : null;
     title = json["title"];
     titleProduct = json["product"]["title"];
     price = json["price"];
@@ -189,6 +202,11 @@ class Variants {
       options.add(Options.fromVariant(json['selectedOptions'][i]));
     }
     image = json["image"]["src"];
+
+    idCollection = [];
+    for (final x in json['product']['collections']['edges']) {
+      idCollection!.add(x['node']['id']);
+    }
   }
 
   Variants.fromWishlist(var json) {

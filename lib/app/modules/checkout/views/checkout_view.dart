@@ -91,7 +91,8 @@ class CheckoutView extends GetView<CheckoutController> {
                       backgroundColor: colorTextBlack,
                       color: Colors.white,
                       onPressed: () async {
-                        String urlString = await controller.createOrder();
+                        String? urlString = await controller.createOrder();
+                        if (urlString == "" || urlString == null) return;
                         Navigator.of(context).pop(true);
                         Get.off(WebPaymentView(
                             title: "Pembayaran", url: urlString));

@@ -8,6 +8,7 @@ class ItemCard extends StatelessWidget {
   final String? price;
   final String? image;
   final String? compareAtPrice;
+  final int? totalInventory;
   final Function onPress;
   const ItemCard({
     Key? key,
@@ -15,6 +16,7 @@ class ItemCard extends StatelessWidget {
     this.price,
     this.image,
     this.compareAtPrice,
+    this.totalInventory,
     required this.onPress,
   }) : super(key: key);
 
@@ -31,22 +33,52 @@ class ItemCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CachedNetworkImage(
-            imageUrl: image!,
-            imageBuilder: (context, imageProvider) => AspectRatio(
-              aspectRatio: 2.08 / 3,
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.cover,
+          Stack(
+            children: [
+              CachedNetworkImage(
+                imageUrl: image!,
+                imageBuilder: (context, imageProvider) => AspectRatio(
+                  aspectRatio: 2.08 / 3,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                 ),
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Image.asset("assets/images/Image.jpg"),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
-            ),
-            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                Image.asset("assets/images/Image.jpg"),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
+              (totalInventory != null && totalInventory == 0)
+                  ? AspectRatio(
+                      aspectRatio: 2.08 / 3,
+                      child: Container(
+                          color: colorOverlay.withOpacity(0.5),
+                          child: SizedBox(
+                            height: 220,
+                            child: Center(
+                              child: SizedBox(
+                                width: 60,
+                                height: 60,
+                                child: CircleAvatar(
+                                  backgroundColor:
+                                      const Color(0xFF212121).withOpacity(0.75),
+                                  child: const CustomText(
+                                    text: "Habis",
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )),
+                    )
+                  : const SizedBox(),
+            ],
           ),
           const SizedBox(height: 12),
           Container(

@@ -1,9 +1,12 @@
+import 'package:colorbox/app/modules/collections/controllers/collections_controller.dart';
 import 'package:colorbox/app/modules/collections/models/product_model.dart';
 import 'package:colorbox/app/modules/search/providers/search_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SearchController extends GetxController {
+  final CollectionsController collectionsController =
+      Get.put(CollectionsController());
   //SET LOADING
   ValueNotifier<bool> get loading => _loading;
   final ValueNotifier<bool> _loading = ValueNotifier(false);

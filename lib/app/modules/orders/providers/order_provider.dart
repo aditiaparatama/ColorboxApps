@@ -28,7 +28,20 @@ class OrderProvider extends GetConnect {
                         discountApplications(first: 2){
                             edges{
                                 node{
-                                    __typename 
+                                    __typename
+                                      ... on ManualDiscountApplication{
+                                            title
+                                            value{
+                                                __typename 
+                                                ... on MoneyV2{
+                                                    amount
+                                                }
+                                                __typename
+                                                ... on PricingPercentageValue{
+                                                    percentage
+                                                }
+                                            }
+                                        } 
                                         ... on DiscountCodeApplication{
                                             code
                                             value{
@@ -87,6 +100,20 @@ class OrderProvider extends GetConnect {
                                                 }
                                                 __typename 
                                                 ... on AutomaticDiscountApplication{
+                                                    title
+                                                    value{
+                                                        __typename 
+                                                        ... on MoneyV2{
+                                                            amount
+                                                        }
+                                                        __typename
+                                                        ... on PricingPercentageValue{
+                                                            percentage
+                                                        }
+                                                    }
+                                                }
+                                                __typename 
+                                                ... on ManualDiscountApplication{
                                                     title
                                                     value{
                                                         __typename 

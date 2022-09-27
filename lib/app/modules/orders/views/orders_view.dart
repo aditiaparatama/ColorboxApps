@@ -318,7 +318,7 @@ class OrdersView extends GetView<OrdersController> {
                                                                   0xFF777777)),
                                                           CustomText(
                                                             text:
-                                                                "Rp ${formatter.format(int.parse(controller.ordersFilter[index].totalPriceSet!.shopMoney!.replaceAll(".0", "")))}",
+                                                                "Rp ${formatter.format(double.parse(controller.ordersFilter[index].totalPriceSet!.shopMoney!).ceil())}",
                                                             fontSize: 12,
                                                             fontWeight:
                                                                 FontWeight.bold,

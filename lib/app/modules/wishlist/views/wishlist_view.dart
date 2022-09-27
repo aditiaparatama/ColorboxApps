@@ -171,7 +171,7 @@ class WishlistView extends GetView<WishlistController> {
                                                                     const Color(
                                                                             0xFF212121)
                                                                         .withOpacity(
-                                                                            0.65),
+                                                                            0.75),
                                                                 child:
                                                                     const CustomText(
                                                                   text: "Habis",

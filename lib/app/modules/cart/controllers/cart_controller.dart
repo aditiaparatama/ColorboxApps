@@ -99,7 +99,7 @@ class CartController extends GetxController {
             content: SvgPicture.asset("assets/icon/bx-addproduct.svg"),
           ),
         );
-        Future.delayed(const Duration(seconds: 2), () {
+        Future.delayed(const Duration(seconds: 1), () {
           Get.back();
         });
       } else {

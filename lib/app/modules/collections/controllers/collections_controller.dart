@@ -141,7 +141,7 @@ class CollectionsController extends GetxController {
             padding: const EdgeInsets.all(8),
             color: colorTextBlack,
             child: Text(
-              menu.title,
+              menu.title ?? "",
               style: const TextStyle(
                   color: Colors.white, fontWeight: FontWeight.bold),
             )),

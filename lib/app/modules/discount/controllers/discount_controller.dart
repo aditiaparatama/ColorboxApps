@@ -1,16 +1,22 @@
 import 'package:colorbox/app/modules/discount/models/discount_model.dart';
 import 'package:colorbox/app/modules/discount/providers/discount_provider.dart';
+import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
+import 'package:colorbox/app/modules/home/models/announcement_model.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class DiscountController extends GetxController {
+  final HomeController homeController = Get.put(HomeController());
   ValueNotifier get loading => _loading;
   final ValueNotifier<bool> _loading = ValueNotifier(false);
   List<Discount> _discount = [];
   List<Discount> get discount => _discount;
+  List<DiscountAutomatic> _discountAutomatic = [];
+  List<DiscountAutomatic> get discountAutomatic => _discountAutomatic;
   final UserModel _user = Get.find<SettingsController>().userModel;
+  var listingDiscountAutomatic = [];
 
   @override
   void onInit() {
@@ -43,5 +49,44 @@ class DiscountController extends GetxController {
     }
     _loading.value = false;
     update();
+  }
+
+  Future<void> getDiscountAutomatic() async {
+    var result = await DiscountProvider().getDiscountAutomatic();
+    _discountAutomatic = [];
+    if (result != null) {
+      for (final x in result['automaticDiscountNodes']['edges']) {
+        _discountAutomatic
+            .add(DiscountAutomatic.fromJson(x['node']['automaticDiscount']));
+      }
+    }
+  }
+
+  Future<dynamic> groupingDiscountAutomatic(List<String>? idCollection) async {
+    await homeController.fetchData();
+    listingDiscountAutomatic = homeController.announcementProduct;
+
+    await getDiscountAutomatic();
+
+    int index = -1;
+
+    for (final x in idCollection!) {
+      index = (_discountAutomatic[0].collections!.indexWhere((e) => e.id == x));
+      if (index >= 0) break;
+    }
+
+    if (_discountAutomatic.isNotEmpty && index >= 0) {
+      Announcement tempData = Announcement(
+          "https://widget.delamibrands.com/colorbox/mobile/icons/badge-percent.svg",
+          _discountAutomatic[index].title);
+      listingDiscountAutomatic.add(tempData);
+    }
+
+    if (index < 0) return null;
+
+    return {
+      "idCollection": _discountAutomatic[0].collections![index].id,
+      "titlePromo": _discountAutomatic[index].title
+    };
   }
 }

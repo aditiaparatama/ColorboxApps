@@ -65,6 +65,27 @@ class Order {
       status = "Diproses";
     }
 
+    if (json['displayFinancialStatus'] == "VOIDED" &&
+        json["cancelReason"] == "CUSTOMER") {
+      status = "Dibatalkan";
+      cancelReason =
+          "Mohon maaf, pesanan kamu dibatalkan karena ada kesalahan pada sistem. Silahkan menghubungi customer service.";
+    }
+
+    if (json['displayFinancialStatus'] == "REFUNDED" &&
+        json["cancelReason"] == "CUSTOMER") {
+      status = "Dibatalkan";
+      cancelReason =
+          "Mohon maaf, pesanan kamu dibatalkan karena ada kesalahan pada sistem. Silahkan menghubungi customer service.";
+    }
+
+    if (json['displayFinancialStatus'] == "PENDING" &&
+        json["cancelReason"] == "CUSTOMER") {
+      status = "Dibatalkan";
+      cancelReason =
+          "Mohon maaf, pesanan kamu dibatalkan karena ada kesalahan pada sistem. Silahkan menghubungi customer service.";
+    }
+
     if (tags!.contains("sudah_proses")) {
       status = "Diproses";
     }

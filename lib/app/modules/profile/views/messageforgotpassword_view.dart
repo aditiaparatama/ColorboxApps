@@ -7,8 +7,6 @@ import '../controllers/profile_controller.dart';
 
 // ignore: use_key_in_widget_constructors, must_be_immutable
 class MessageForgotPasswordView extends GetView<ProfileController> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   static const str = 'date: 2019:04:01';
   final valuestest = str.split(': ');
 

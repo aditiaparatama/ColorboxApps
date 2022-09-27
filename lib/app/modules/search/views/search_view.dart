@@ -5,7 +5,6 @@ import 'package:colorbox/app/widgets/empty_page.dart';
 import 'package:colorbox/app/widgets/item_card.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/constance.dart';
-import 'package:colorbox/globalvar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,7 +18,7 @@ class SearchView extends GetView<SearchController> {
 
   _onSearchChanged(String query) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 500), () {
+    _debounce = Timer(const Duration(milliseconds: 300), () {
       // do something with query
       controller.fetchSearchProduct(search.text);
     });
@@ -131,8 +130,9 @@ class SearchView extends GetView<SearchController> {
                                                     arguments: {
                                                       "product":
                                                           control.product[i],
-                                                      "idCollection":
-                                                          NewArrivalString
+                                                      "idCollection": control
+                                                          .product[i]
+                                                          .idCollection
                                                     }),
                                                 child: ItemCard(
                                                   title:
@@ -154,6 +154,9 @@ class SearchView extends GetView<SearchController> {
                                                           .compareAtPrice!
                                                           .replaceAll(
                                                               ".00", ""),
+                                                  totalInventory: control
+                                                      .product[i]
+                                                      .totalInventory,
                                                   onPress: () {},
                                                 ),
                                               );

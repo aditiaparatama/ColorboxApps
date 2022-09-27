@@ -151,3 +151,37 @@ class DiscountMinimumSubtotal {
 
   DiscountMinimumSubtotal(this.greaterThanOrEqualToSubtotal);
 }
+
+class DiscountAutomatic {
+  String? typename;
+  String? title;
+  List<DiscountCollection>? collections;
+
+  DiscountAutomatic(this.typename, this.title, this.collections);
+
+  DiscountAutomatic.fromJson(var json) {
+    typename = json["__typename"];
+    title = json["title"];
+
+    collections = [];
+    if (json["customerGets"]["items"]["collections"]["edges"].length > 0) {
+      for (final x in json["customerGets"]["items"]["collections"]["edges"]) {
+        collections!.add(DiscountCollection.fromJson(x["node"]));
+      }
+    }
+  }
+}
+
+class DiscountCollection {
+  String? id;
+  String? handle;
+
+  DiscountCollection.empty();
+
+  DiscountCollection(this.id, this.handle);
+
+  DiscountCollection.fromJson(var json) {
+    id = json["id"];
+    handle = json["handle"];
+  }
+}
