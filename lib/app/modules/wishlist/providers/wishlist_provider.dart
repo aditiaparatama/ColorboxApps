@@ -16,4 +16,14 @@ class WhistlistProvider extends GetConnect {
       return {"message": e.toString()};
     }
   }
+
+  Future<dynamic> getAction(String url) async {
+    try {
+      var response = await get(url);
+
+      return response.body;
+    } catch (e) {
+      return {"message": e.toString()};
+    }
+  }
 }

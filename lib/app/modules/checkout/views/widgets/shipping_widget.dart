@@ -104,7 +104,9 @@ class ShippingWidget extends GetView<CheckoutController> {
           Row(
             children: [
               CustomText(
-                text: controller.checkout.shippingLine!.amount ?? "FREE",
+                text: (controller.checkout.shippingLine!.amount! == "0.0")
+                    ? "FREE"
+                    : "Rp ${formatter.format(int.parse(controller.checkout.shippingLine!.amount!.replaceAll(".0", "")))}",
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),

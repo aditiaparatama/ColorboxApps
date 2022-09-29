@@ -26,10 +26,19 @@ class ProductView2 extends GetView<ProductController> {
   final DiscountController discountController = Get.put(DiscountController());
 
   Future<void> initializeSettings() async {
+    await controller.wishlistController.fetchWishlist();
+    if (controller.wishlistController.wishlist.items != null &&
+        controller.wishlistController.wishlist.items.isNotEmpty) {
+      controller.existWishlist = controller.wishlistController.wishlist.items
+          .indexWhere((e) =>
+              e['id'] ==
+              controller.product.id!.replaceAll("gid://shopify/Product/", ""));
+    }
+
     await discountController
         .groupingDiscountAutomatic([Get.arguments["idCollection"]]);
     //Simulate other services for 3 seconds
-    await Future.delayed(const Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 100));
   }
 
   @override
@@ -107,8 +116,11 @@ class ProductView2 extends GetView<ProductController> {
                                           // onTap: () => openBrowserTab(),
                                           child: CircleAvatar(
                                             radius: 16.0,
-                                            child: SvgPicture.asset(
-                                                "assets/icon/bx-heart.svg"),
+                                            child: SvgPicture.asset((controller
+                                                        .existWishlist >=
+                                                    0)
+                                                ? "assets/icon/Heart.svg"
+                                                : "assets/icon/bx-heart.svg"),
                                           ),
                                         ),
                                       ),
@@ -242,8 +254,9 @@ class ProductView2 extends GetView<ProductController> {
                                   const SizedBox(height: 16),
                                   Container(color: colorDiver, height: 8),
                                   const SizedBox(height: 16),
-                                  SizedBox(
-                                    height: 64,
+                                  Container(
+                                    constraints:
+                                        const BoxConstraints(maxHeight: 90),
                                     child: ListView.separated(
                                         shrinkWrap: true,
                                         separatorBuilder: (context, index) =>

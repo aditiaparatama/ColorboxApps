@@ -131,7 +131,7 @@ class CheckoutModel {
           "country": "ID",
           "postal_code": "16820", //gudang delami
           "city": "Bekasi",
-          "name": shippingAddress!.firstName
+          "name": "Delamibrands"
         },
         "destination": {
           "country": "ID",
@@ -174,7 +174,7 @@ class ShippingRates {
 
   ShippingRates.fromJson(var json) {
     handle = json['handle'];
-    amount = json['amount'];
+    amount = json['priceV2']['amount'];
     title = json['title'];
   }
 }
@@ -259,11 +259,13 @@ class DiscountCodeApplication {
     code = json['code'];
 
     if (json['value']['__typename'] == "MoneyV2") {
-      amount = json['value']['amount'];
+      amount = json['value']['amount'] ?? "0.0";
+      percentage = "0.0";
     }
 
     if (json['value']['__typename'] == "PricingPercentageValue") {
-      percentage = json['value']['percentage'];
+      amount = "0.0";
+      percentage = json['value']['percentage'].toString();
     }
   }
 }

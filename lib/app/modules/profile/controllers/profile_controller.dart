@@ -4,6 +4,7 @@ import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/modules/cart/providers/cart_provider.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
+import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/constance.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
@@ -78,6 +79,7 @@ class ProfileController extends GetxController {
       CartProvider().cartBuyerIdentityupdate(_cartController.idCart!,
           result["customerAccessToken"]['accessToken'], _userModel);
 
+      Get.find<SettingsController>().getTotalOrders();
       _loading.value = false;
       update();
     }

@@ -204,8 +204,10 @@ class Variants {
     image = json["image"]["src"];
 
     idCollection = [];
-    for (final x in json['product']['collections']['edges']) {
-      idCollection!.add(x['node']['id']);
+    if (json['product'].containsKey("collections")) {
+      for (final x in json['product']['collections']['edges']) {
+        idCollection!.add(x['node']['id']);
+      }
     }
   }
 

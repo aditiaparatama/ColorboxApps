@@ -1,12 +1,14 @@
 import 'package:colorbox/app/modules/collections/models/product_model.dart';
 import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
+import 'package:colorbox/app/modules/wishlist/controllers/wishlist_controller.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:get/get.dart';
 
 class ProductController extends GetxController {
   final LocalStorageData localStorageData = Get.find();
   final HomeController homeController = Get.put(HomeController());
+  final WishlistController wishlistController = Get.put(WishlistController());
   Product product = Product.isEmpty();
   UserModel _userModel = UserModel.isEmpty();
   UserModel get userModel => _userModel;
@@ -17,11 +19,11 @@ class ProductController extends GetxController {
   String ukuran = "";
   String textCart = "Add Cart";
   String? sizeTemp;
+  int existWishlist = -1;
 
   @override
   void onInit() async {
     getUser();
-
     super.onInit();
   }
 

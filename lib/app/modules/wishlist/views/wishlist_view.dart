@@ -32,7 +32,7 @@ class WishlistView extends GetView<WishlistController> {
             builder: (c) {
               return (controller.loading.value)
                   ? loadingCircular()
-                  : (controller.product.isEmpty)
+                  : (controller.tempProduct.isEmpty)
                       ? EmptyPage(
                           image: Image.asset(
                             "assets/icon/WHISTLIST.gif",

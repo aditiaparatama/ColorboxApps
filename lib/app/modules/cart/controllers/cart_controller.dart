@@ -43,7 +43,6 @@ class CartController extends GetxController {
     _idCart = await CartProvider().createCart();
     setCart(_idCart!);
     await getCart();
-    update();
   }
 
   Future<void> getCart() async {

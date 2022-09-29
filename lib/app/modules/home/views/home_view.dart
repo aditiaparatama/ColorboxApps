@@ -43,7 +43,8 @@ class HomeView extends GetView<HomeController> {
                             // ignore: sized_box_for_whitespace
                             CarouselWithIndicator(controller: controller),
 
-                            AnnouncementHome(controller: controller),
+                            if (controller.announcementHome.isNotEmpty)
+                              AnnouncementHome(controller: controller),
 
                             Container(
                               color: const Color(0xFFF5F5F5),

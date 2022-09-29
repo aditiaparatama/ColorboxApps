@@ -37,7 +37,7 @@ class CheckoutController extends GetxController {
     await getAddress();
     await createCheckout();
     // _idCheckout =
-    //     "gid://shopify/Checkout/63841f1aba2db5781bf989ad1b266aaa?key=6516de972e56a147e31f56d37b86b15a";
+    //     "gid://shopify/Checkout/47b0f5b7ae2b3c2301f23caca3e469fc?key=f6274b347880b51c019e2c95b8bb84be";
     // await getCheckout();
     await getETDShipping();
     super.onInit();
@@ -55,6 +55,8 @@ class CheckoutController extends GetxController {
 
   createCheckout() async {
     List<CheckoutItems>? items = await getItems();
+
+    int looping = 0;
 
     //buat varibles input checkout
     dynamic variable = {
@@ -96,6 +98,8 @@ class CheckoutController extends GetxController {
             const Duration(milliseconds: 1000),
             () => CheckoutProvider()
                 .checkoutGetData(result['checkoutCreate']['checkout']['id']));
+        if (looping >= 5) break;
+        looping += 1;
       }
 
       //update shipping rates

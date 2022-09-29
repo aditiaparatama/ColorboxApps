@@ -3,6 +3,7 @@ import 'package:colorbox/app/modules/orders/controllers/orders_controller.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SettingsController extends GetxController {
@@ -13,6 +14,8 @@ class SettingsController extends GetxController {
   CustomerToken? get token => _token;
   OrdersController get ordersController => Get.put(OrdersController());
   int pesananCount = 0;
+  final ValueNotifier _loading = ValueNotifier(false);
+  ValueNotifier get loading => _loading;
 
   @override
   void onInit() async {
@@ -32,6 +35,7 @@ class SettingsController extends GetxController {
   }
 
   getTotalOrders() async {
+    await getUser();
     if (_userModel.displayName != null) {
       pesananCount = await ordersController.countOrderActive();
       update();
@@ -39,10 +43,12 @@ class SettingsController extends GetxController {
   }
 
   Future<void> logout() async {
+    _loading.value = true;
+    update();
     localStorageData.deleteUser();
     _userModel = UserModel.isEmpty();
     await Get.find<CartController>().reCreateCart();
-
+    _loading.value = false;
     update();
   }
 

@@ -15,6 +15,7 @@ class WishlistController extends GetxController {
   final ValueNotifier<bool> _loading = ValueNotifier(false);
   List<Product> _product = [];
   List<Product> _tempProduct = [];
+  List<Product> get tempProduct => _tempProduct;
   List<Product> get product => _product;
   int _selected = 0;
   int get selected => _selected;
@@ -32,23 +33,34 @@ class WishlistController extends GetxController {
     if (_user.id != null) {
       var result = await WhistlistProvider()
           .getAllData(_user.id!.replaceAll("gid://shopify/Customer/", ""));
+      if (!result.contains("<!doctype html>") && result != null) {
+        _wishlist = Wishlist.fromJson(result);
 
-      _wishlist = Wishlist.fromJson(result);
-
-      if (_wishlist.items.length > 0) {
-        _product = [];
-        var ids = [];
-        var variantIds = [];
-        for (final x in _wishlist.items) {
-          ids.add('"gid://shopify/Product/${x['id']}"');
-          variantIds.add(x['variant_id']);
+        if (_wishlist.items.length > 0) {
+          _product = [];
+          var ids = [];
+          var variantIds = [];
+          for (final x in _wishlist.items) {
+            ids.add('"gid://shopify/Product/${x['id']}"');
+            variantIds.add(x['variant_id']);
+          }
+          await fetchingProduct({"ids": ids, "variantIds": variantIds});
         }
-        await fetchingProduct({"ids": ids, "variantIds": variantIds});
       }
     }
     _loading.value = false;
     _tempProduct = _product;
     update();
+  }
+
+  Future<void> fetchWishlist() async {
+    UserModel? _user = await localStorageData.getUser;
+    var result = await WhistlistProvider()
+        .getAllData(_user.id!.replaceAll("gid://shopify/Customer/", ""));
+
+    if (!result.contains("<!doctype html>") && result != null) {
+      _wishlist = Wishlist.fromJson(result);
+    }
   }
 
   Future<void> fetchingProduct(dynamic params) async {
@@ -81,5 +93,10 @@ class WishlistController extends GetxController {
       }
     }
     update();
+  }
+
+  actionWishlist(String variantId, {String action = "add"}) {
+    String url =
+        "https://cloud.smartwishlist.webmarked.net/v6/savewishlist.php/?callback=jQuery341049474196017360716_1664350775889&product_id=7810927657208&variant_id=$variantId&wishlist_id=62250877176hd732sp6jio&customer_id=6395546108152&action=add&hostname=wood.co.id&variant=1&store_id=62250877176&_=1664350775892";
   }
 }

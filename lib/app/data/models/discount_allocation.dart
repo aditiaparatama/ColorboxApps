@@ -30,7 +30,7 @@ class DiscountApplication {
     }
 
     if (json['value']['__typename'] == "PricingPercentageValue") {
-      percentage = json['value']['percentage'];
+      percentage = json['value']['percentage'].toString();
     }
   }
 }

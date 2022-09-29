@@ -244,6 +244,20 @@ class CheckoutProvider extends GetConnect {
                                 }
                             }
                         }
+                        __typename 
+                        ... on AutomaticDiscountApplication{
+                            title
+                            value{
+                                 __typename 
+                                ... on MoneyV2{
+                                    amount
+                                }
+                                __typename
+                                ... on PricingPercentageValue{
+                                    percentage
+                                }
+                            }
+                        }
                     }
                 }
             }

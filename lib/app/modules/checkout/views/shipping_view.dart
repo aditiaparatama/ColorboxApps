@@ -72,7 +72,9 @@ class ShippingView extends GetView<CheckoutController> {
                                         ],
                                       ),
                                       CustomText(
-                                        text: x.amount ?? "FREE",
+                                        text: (x.amount == "0.0")
+                                            ? "FREE"
+                                            : "Rp ${formatter.format(int.parse(x.amount!.replaceAll(".0", "")))}",
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
                                       ),
