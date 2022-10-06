@@ -1,9 +1,12 @@
 import 'dart:math';
+import 'package:colorbox/app/modules/cart/models/cart_model.dart';
 import 'package:colorbox/app/modules/cart/views/widget/voucher_widget.dart';
 import 'package:colorbox/app/modules/collections/controllers/collections_controller.dart';
-import 'package:colorbox/app/modules/discount/controllers/discount_controller.dart';
+import 'package:colorbox/app/modules/control/menu_model.dart';
+import 'package:colorbox/app/modules/control/sub_menu_model.dart';
 import 'package:colorbox/app/modules/profile/views/address/address_form.dart';
 import 'package:colorbox/app/widgets/appbar_default.dart';
+import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/empty_page.dart';
 import 'package:colorbox/app/widgets/item_card_cart.dart';
 import 'package:colorbox/app/widgets/widget.dart';
@@ -18,24 +21,24 @@ import '../controllers/cart_controller.dart';
 
 // ignore: use_key_in_widget_constructors, must_be_immutable
 class CartView extends GetView<CartController> {
-  final DiscountController discountController = Get.put(DiscountController());
   final CollectionsController collectionsController =
       Get.put(CollectionsController());
   int index = 0;
 
   Future<void> initializeSettings() async {
-    await discountController.getDiscountAutomatic();
-    if (discountController.discountAutomatic.isNotEmpty) {
+    await controller.getCart2();
+    // await controller.discountController.getDiscountAutomatic();
+    if (controller.discountController.discountAutomatic.isNotEmpty) {
       var indexRandom = Random();
-      int index =
-          (discountController.discountAutomatic[0].collections!.isNotEmpty)
-              ? indexRandom.nextInt(
-                  discountController.discountAutomatic[0].collections!.length)
-              : 0;
+      int index = (controller
+              .discountController.discountAutomatic[0].collections!.isNotEmpty)
+          ? indexRandom.nextInt(controller
+              .discountController.discountAutomatic[0].collections!.length)
+          : 0;
 
       await collectionsController.fetchCollectionProduct(
-          int.parse(discountController
-              .discountAutomatic[0].collections![index].id!
+          int.parse(controller
+              .discountController.discountAutomatic[0].collections![index].id!
               .replaceAll('gid://shopify/Collection/', '')),
           2);
     }
@@ -66,97 +69,144 @@ class CartView extends GetView<CartController> {
                     backgroundColor: Colors.white,
                     // bottomSheet: bottomCart(),
                     body: SafeArea(
-                        child: Column(children: [
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                child: (c.cart.lines!.isEmpty)
-                                    ? Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 40),
-                                        child: EmptyPage(
-                                          image: Image.asset(
-                                            "assets/icon/BAG.gif",
-                                            height: 180,
-                                          ),
-                                          textHeader: "Keranjang Kamu Kosong",
-                                          textContent:
-                                              "Ayo segera belanja dan tambahkan produk kedalam keranjang",
-                                        ),
-                                      )
-                                    : ListView.separated(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        separatorBuilder: (context, index) =>
-                                            const Divider(
-                                              color: colorDiver,
-                                              thickness: 1,
-                                            ),
-                                        itemCount: c.cart.lines!.length,
-                                        itemBuilder: (_, index) =>
-                                            ItemCartWidget(
-                                              formatter: formatter,
-                                              controller: controller,
-                                              index: index,
-                                            )),
-                              ),
-                              (discountController.discountAutomatic.isEmpty)
-                                  ? const SizedBox()
-                                  : GetBuilder<CollectionsController>(
-                                      init: Get.put(CollectionsController()),
-                                      builder: (_) {
-                                        return Column(
-                                          children: [
-                                            Container(
-                                              color: colorDiver,
-                                              height: 8,
-                                            ),
-                                            Container(
-                                              padding: const EdgeInsets.only(
-                                                  top: 24, bottom: 16),
-                                              child: CustomText(
-                                                text: discountController
-                                                        .discountAutomatic[0]
-                                                        .title ??
-                                                    "",
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
+                        child: Stack(
+                      children: [
+                        Column(children: [
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    child: (c.cart.lines!.isEmpty)
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 40),
+                                            child: EmptyPage(
+                                              image: Image.asset(
+                                                "assets/icon/BAG.gif",
+                                                height: 180,
                                               ),
+                                              textHeader:
+                                                  "Keranjang Kamu Kosong",
+                                              textContent:
+                                                  "Ayo segera belanja dan tambahkan produk kedalam keranjang",
                                             ),
-                                            Container(
-                                              padding: const EdgeInsets.only(
-                                                  left: 16),
-                                              height: 200,
-                                              child: (collectionsController
-                                                      .collection
-                                                      .products
-                                                      .isEmpty)
-                                                  ? const Center(
-                                                      child:
-                                                          CircularProgressIndicator(),
-                                                    )
-                                                  : GridView.builder(
-                                                      itemCount:
-                                                          collectionsController
-                                                              .collection
-                                                              .products
-                                                              .length,
-                                                      scrollDirection:
-                                                          Axis.horizontal,
-                                                      gridDelegate:
-                                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                                        crossAxisCount: 1,
-                                                        mainAxisSpacing: 12,
-                                                        crossAxisSpacing: 12,
-                                                        childAspectRatio:
-                                                            3 / 1.3,
-                                                      ),
-                                                      itemBuilder: (_, i) {
-                                                        var calcu1 = int.parse(
-                                                                collectionsController
+                                          )
+                                        : ListView.separated(
+                                            shrinkWrap: true,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            separatorBuilder:
+                                                (context, index) =>
+                                                    const Divider(
+                                                      color: colorDiver,
+                                                      thickness: 1,
+                                                    ),
+                                            itemCount: c.cart.lines!.length,
+                                            itemBuilder: (_, index) {
+                                              int temp = -1;
+                                              Menu? collectionPromo =
+                                                  Menu.empty();
+                                              for (final x in c
+                                                  .cart
+                                                  .lines![index]
+                                                  .merchandise!
+                                                  .idCollection!) {
+                                                for (final y in controller
+                                                    .discountController
+                                                    .discountAutomatic) {
+                                                  temp = y.collections!
+                                                      .indexWhere(
+                                                          (e) => e.id == x);
+                                                  if (temp >= 0) {
+                                                    collectionPromo = Menu(
+                                                        subMenu: List<
+                                                            SubMenu>.empty(),
+                                                        title: controller
+                                                            .discountController
+                                                            .discountAutomatic[
+                                                                temp]
+                                                            .title,
+                                                        subjectID: int.parse(
+                                                            x.replaceAll(
+                                                                "gid://shopify/Collection/",
+                                                                "")));
+
+                                                    break;
+                                                  }
+                                                }
+                                                if (temp >= 0) break;
+                                              }
+
+                                              return ItemCartWidget(
+                                                formatter: formatter,
+                                                controller: controller,
+                                                index: index,
+                                                collectionPromo:
+                                                    collectionPromo,
+                                              );
+                                            }),
+                                  ),
+                                  (controller.discountController
+                                          .discountAutomatic.isEmpty)
+                                      ? const SizedBox()
+                                      : GetBuilder<CollectionsController>(
+                                          init:
+                                              Get.put(CollectionsController()),
+                                          builder: (_) {
+                                            return Column(
+                                              children: [
+                                                Container(
+                                                  color: colorDiver,
+                                                  height: 8,
+                                                ),
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 24, bottom: 16),
+                                                  child: CustomText(
+                                                    text: controller
+                                                            .discountController
+                                                            .discountAutomatic[
+                                                                0]
+                                                            .title ??
+                                                        "",
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                                Container(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 16),
+                                                  height: 200,
+                                                  child: (collectionsController
+                                                          .collection
+                                                          .products
+                                                          .isEmpty)
+                                                      ? const Center(
+                                                          child:
+                                                              CircularProgressIndicator(),
+                                                        )
+                                                      : GridView.builder(
+                                                          itemCount:
+                                                              collectionsController
+                                                                  .collection
+                                                                  .products
+                                                                  .length,
+                                                          scrollDirection:
+                                                              Axis.horizontal,
+                                                          gridDelegate:
+                                                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                                            crossAxisCount: 1,
+                                                            mainAxisSpacing: 12,
+                                                            crossAxisSpacing:
+                                                                12,
+                                                            childAspectRatio:
+                                                                3 / 1.3,
+                                                          ),
+                                                          itemBuilder: (_, i) {
+                                                            var calcu1 = int.parse(collectionsController
                                                                     .collection
                                                                     .products[i]
                                                                     .variants[0]
@@ -164,8 +214,7 @@ class CartView extends GetView<CartController> {
                                                                     .replaceAll(
                                                                         ".00",
                                                                         "")) /
-                                                            int.parse(
-                                                                collectionsController
+                                                                int.parse(collectionsController
                                                                     .collection
                                                                     .products[i]
                                                                     .variants[0]
@@ -173,32 +222,67 @@ class CartView extends GetView<CartController> {
                                                                     .replaceAll(
                                                                         ".00",
                                                                         ""));
-
-                                                        return ItemCardCart(
-                                                          calcu1: calcu1,
-                                                          collection:
-                                                              collectionsController
-                                                                  .collection,
-                                                          i: i,
-                                                        );
-                                                      }),
-                                            ),
-                                            const SizedBox(height: 40)
-                                          ],
-                                        );
-                                      }),
-                            ],
+                                                            return ItemCardCart(
+                                                              calcu1: calcu1,
+                                                              collection:
+                                                                  collectionsController
+                                                                      .collection,
+                                                              i: i,
+                                                            );
+                                                          }),
+                                                ),
+                                                const SizedBox(height: 40)
+                                              ],
+                                            );
+                                          }),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      bottomCart(),
-                    ])));
+                          bottomCart(context),
+                        ]),
+                        (c.checkoutTap) ? loadingCircular() : const SizedBox()
+                      ],
+                    )));
               });
         });
   }
 
-  Widget bottomCart() {
+  Widget bottomCart(BuildContext context) {
     return GetBuilder<CartController>(builder: (c) {
+      final _cartItems = controller.cart.lines;
+      double? totalPotongan;
+      double? totalHarga = (c.cart.estimatedCost == null ||
+              c.cart.estimatedCost!.totalAmount! == "0.0")
+          ? 0
+          : double.parse(
+              c.cart.estimatedCost!.totalAmount!.replaceAll(".0", ""));
+
+      if (controller.discountRunning.isNotEmpty) {
+        int check =
+            controller.discountRunning.indexWhere((e) => e.applied ?? false);
+        totalHarga = (check >= 0) ? 0 : totalHarga;
+        totalPotongan = 0;
+        for (final x in controller.discountRunning) {
+          totalPotongan = (totalPotongan ?? 0.0) + x.totalDiscount!;
+          totalHarga = totalHarga! + x.currentSubtotal!;
+        }
+      }
+      if (controller.cart.discountCodes != null &&
+          controller.cart.discountCodes!.isNotEmpty &&
+          controller.cart.discountCodes![0].code != "") {
+        totalHarga = 0;
+        totalPotongan = 0;
+        for (final x in controller.cart.discountAllocations ?? []) {
+          totalPotongan = (totalPotongan ?? 0.0) + double.parse(x.amount!);
+        }
+        for (Line y in _cartItems ?? []) {
+          if (y.merchandise!.inventoryQuantity! > 0) {
+            totalHarga = totalHarga! + double.parse(y.merchandise!.price!);
+          }
+        }
+      }
+
       return Container(
         height: (controller.show.value) ? 218 : 160,
         padding: const EdgeInsets.all(16),
@@ -227,11 +311,11 @@ class CartView extends GetView<CartController> {
                           const CustomText(
                             text: "Subtotal Produk",
                             fontSize: 12,
-                            color: Color(0xFF777777),
+                            color: colorTextGrey,
                           ),
                           CustomText(
                             text:
-                                "Rp ${formatter.format(double.parse(controller.cart.estimatedCost!.subtotalAmount!.replaceAll(".0", "")).ceil())}",
+                                "Rp  ${formatter.format((totalHarga!).ceil())}",
                             fontSize: 12,
                           )
                         ],
@@ -241,14 +325,14 @@ class CartView extends GetView<CartController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const CustomText(
-                            text: "Subtotal Voucher",
+                            text: "Potongan Harga",
                             fontSize: 12,
-                            color: Color(0xFF777777),
+                            color: colorTextGrey,
                           ),
-                          (controller.cart.discountAllocations!.isNotEmpty)
+                          (totalPotongan != null && totalPotongan != 0)
                               ? CustomText(
                                   text:
-                                      "-Rp ${formatter.format(double.parse(controller.cart.discountAllocations![0].amount!.replaceAll(".0", "")).ceil())}",
+                                      "-Rp ${formatter.format(totalPotongan.ceil())}",
                                   fontSize: 12,
                                 )
                               : const CustomText(
@@ -283,7 +367,7 @@ class CartView extends GetView<CartController> {
                         children: [
                           CustomText(
                             text:
-                                "Rp ${(c.cart.estimatedCost == null || c.cart.estimatedCost!.totalAmount! == "0.0") ? "0" : formatter.format(double.parse(c.cart.estimatedCost!.totalAmount!.replaceAll(".0", "")).ceil())}",
+                                "Rp ${(c.cart.estimatedCost == null || c.cart.estimatedCost!.totalAmount! == "0.0") ? "0" : formatter.format((totalHarga! - (totalPotongan ?? 0)).ceil())}",
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
@@ -299,18 +383,25 @@ class CartView extends GetView<CartController> {
                     onPressed: (c.cart.estimatedCost!.totalAmount == "0.0" &&
                             c.cart.estimatedCost!.subtotalAmount == "0.0")
                         ? null
-                        : () async {
-                            await c.getCheckoutUrl();
-                            var profile = Get.find<SettingsController>();
-                            await profile.fetchingUser();
-                            (profile.userModel.displayName == null)
-                                ? Get.toNamed(Routes.PROFILE,
-                                    arguments: [c, "cart"])
-                                : (profile.userModel.addresses != null &&
-                                        profile.userModel.addresses!.isNotEmpty)
-                                    ? Get.toNamed(Routes.CHECKOUT)
-                                    : Get.to(AddressForm(null, true));
-                          },
+                        : (c.checkoutTap)
+                            ? null
+                            : () async {
+                                c.checkoutTap = true;
+                                c.update();
+                                await c.getCheckoutUrl();
+                                var profile = Get.find<SettingsController>();
+                                await profile.fetchingUser();
+                                (profile.userModel.displayName == null)
+                                    ? Get.toNamed(Routes.PROFILE,
+                                        arguments: [c, "cart"])
+                                    : (profile.userModel.addresses != null &&
+                                            profile.userModel.addresses!
+                                                .isNotEmpty)
+                                        ? (controller.listHabis.length > 0)
+                                            ? showAlert(context)
+                                            : Get.toNamed(Routes.CHECKOUT)
+                                        : Get.to(AddressForm(null, true));
+                              },
                     style: ElevatedButton.styleFrom(
                         fixedSize: const Size(156, 48),
                         backgroundColor: colorTextBlack,
@@ -330,5 +421,64 @@ class CartView extends GetView<CartController> {
         ),
       );
     });
+  }
+
+  Future<bool> showAlert(BuildContext context) async {
+    return await showDialog(
+          //show confirm dialogue
+          //the return value will be from "Yes" or "No" options
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const CustomText(
+              text: 'Stok Tidak Tersedia',
+              fontSize: 14,
+              textAlign: TextAlign.center,
+              fontWeight: FontWeight.bold,
+            ),
+            content: const CustomText(
+              text:
+                  'Produk yang kamu pesan ada yang tidak tersedia. Lanjutkan checkout tanpa produk tersebut?',
+              fontSize: 12,
+              textOverflow: TextOverflow.fade,
+              textAlign: TextAlign.center,
+            ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: CustomButton(
+                  backgroundColor: colorTextBlack,
+                  color: Colors.white,
+                  onPressed: () {
+                    Get.toNamed(Routes.CHECKOUT);
+                    controller.checkoutTap = false;
+                    controller.update();
+                  },
+                  //return true when click on "Yes"
+                  text: 'Lanjutkan Checkout',
+                  fontSize: 14,
+                  height: 48,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: CustomButton(
+                  backgroundColor: Colors.white,
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                    controller.checkoutTap = false;
+                    controller.update();
+                  },
+                  //return false when click on "No"
+                  text: 'Kembali',
+                  fontSize: 14,
+                  height: 48,
+                ),
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        ) ??
+        false; //if showDialouge had returned null, then return false
   }
 }

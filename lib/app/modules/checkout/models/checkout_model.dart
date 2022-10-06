@@ -248,15 +248,35 @@ class CheckoutItems {
 class DiscountCodeApplication {
   String? typename;
   String? code;
+  String? title;
+  String? targetSelection;
+  String? targetType;
+  String? allocationMethod;
   String? amount;
   String? percentage;
 
   DiscountCodeApplication(
-      this.code, this.amount, this.percentage, this.typename);
+      this.code,
+      this.amount,
+      this.percentage,
+      this.typename,
+      this.targetSelection,
+      this.targetType,
+      this.allocationMethod);
 
   DiscountCodeApplication.fromJson(var json) {
     typename = json['__typename'];
-    code = json['code'];
+    targetSelection = json['targetSelection'];
+    targetType = json['targetType'];
+    allocationMethod = json['allocationMethod'];
+
+    if (typename == "DiscountCodeApplication") {
+      code = json['code'];
+    }
+
+    if (typename == "AutomaticDiscountApplication") {
+      title = json['title'];
+    }
 
     if (json['value']['__typename'] == "MoneyV2") {
       amount = json['value']['amount'] ?? "0.0";

@@ -1,14 +1,18 @@
 import 'package:colorbox/app/modules/collections/models/product_model.dart';
 import 'package:colorbox/app/modules/product/providers/product_providers.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
+import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
 import 'package:colorbox/app/modules/wishlist/models/wishlist_model.dart';
 import 'package:colorbox/app/modules/wishlist/providers/wishlist_provider.dart';
+import 'package:colorbox/app/widgets/widget.dart';
+import 'package:colorbox/globalvar.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class WishlistController extends GetxController {
   final LocalStorageData localStorageData = Get.find();
+  final SettingsController settingsController = Get.put(SettingsController());
   Wishlist _wishlist = Wishlist.empty();
   Wishlist get wishlist => _wishlist;
   ValueNotifier get loading => _loading;
@@ -23,6 +27,7 @@ class WishlistController extends GetxController {
   @override
   void onInit() async {
     await fetchingData();
+    await settingsController.getUser();
     super.onInit();
   }
 
@@ -33,7 +38,7 @@ class WishlistController extends GetxController {
     if (_user.id != null) {
       var result = await WhistlistProvider()
           .getAllData(_user.id!.replaceAll("gid://shopify/Customer/", ""));
-      if (!result.contains("<!doctype html>") && result != null) {
+      if (result != null && result.containsKey("items")) {
         _wishlist = Wishlist.fromJson(result);
 
         if (_wishlist.items.length > 0) {
@@ -56,9 +61,9 @@ class WishlistController extends GetxController {
   Future<void> fetchWishlist() async {
     UserModel? _user = await localStorageData.getUser;
     var result = await WhistlistProvider()
-        .getAllData(_user.id!.replaceAll("gid://shopify/Customer/", ""));
+        .getAllData((_user.id ?? "").replaceAll("gid://shopify/Customer/", ""));
 
-    if (!result.contains("<!doctype html>") && result != null) {
+    if (result != null && result.containsKey("items")) {
       _wishlist = Wishlist.fromJson(result);
     }
   }
@@ -95,8 +100,22 @@ class WishlistController extends GetxController {
     update();
   }
 
-  actionWishlist(String variantId, {String action = "add"}) {
-    String url =
-        "https://cloud.smartwishlist.webmarked.net/v6/savewishlist.php/?callback=jQuery341049474196017360716_1664350775889&product_id=7810927657208&variant_id=$variantId&wishlist_id=62250877176hd732sp6jio&customer_id=6395546108152&action=add&hostname=wood.co.id&variant=1&store_id=62250877176&_=1664350775892";
+  Future<void> actionWishlist(String productId, String variantId,
+      {String action = "add"}) async {
+    if (settingsController.userModel.displayName == null) return;
+    var variables = {
+      "productid": productId.replaceAll("gid://shopify/Product/", ""),
+      "variantid": variantId.replaceAll("gid://shopify/ProductVariant/", ""),
+      "customerid": settingsController.userModel.id!
+          .replaceAll("gid://shopify/Customer/", ""),
+      "action": action,
+      "apikey": apiKeyWishlist,
+      "version": "1"
+    };
+    var result = await WhistlistProvider().getAction(variables);
+
+    if (result != null && result["type"] == "error") {
+      alertGagal(result["message"]);
+    }
   }
 }

@@ -98,6 +98,13 @@ class DraftOrderProvider extends GetConnect {
       var response = await post(url_shopify + "orders.json", variable,
           contentType: "application/json",
           headers: {"X-Shopify-Access-Token": token, 'Retry-After': '5.0'});
+
+      // while (!response.isOk) {
+      //   response = await post(url_shopify + "orders.json", variable,
+      //       contentType: "application/json",
+      //       headers: {"X-Shopify-Access-Token": token, 'Retry-After': '5.0'});
+      // }
+
       return response.body;
     } catch (e) {
       // ignore: avoid_print

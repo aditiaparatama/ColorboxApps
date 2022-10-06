@@ -123,7 +123,7 @@ class HomeCollectionsController extends GetxController {
     update();
   }
 
-  void fetchCollectionProduct3(int id, int sortBy) async {
+  Future<void> fetchCollectionProduct3(int id, int sortBy) async {
     orderBy = sortBy;
     // ignore: unused_local_variable
     String? sortKey, reverse;

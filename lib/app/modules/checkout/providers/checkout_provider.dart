@@ -233,6 +233,9 @@ class CheckoutProvider extends GetConnect {
                         __typename 
                         ... on DiscountCodeApplication{
                             code
+                            allocationMethod
+                            targetSelection
+                            targetType
                             value{
                                  __typename 
                                 ... on MoneyV2{
@@ -244,9 +247,11 @@ class CheckoutProvider extends GetConnect {
                                 }
                             }
                         }
-                        __typename 
                         ... on AutomaticDiscountApplication{
                             title
+                            targetSelection
+                            targetType
+                            allocationMethod
                             value{
                                  __typename 
                                 ... on MoneyV2{
@@ -420,6 +425,25 @@ class CheckoutProvider extends GetConnect {
                         __typename 
                         ... on DiscountCodeApplication{
                             code
+                            allocationMethod
+                            targetSelection
+                            targetType
+                            value{
+                                 __typename 
+                                ... on MoneyV2{
+                                    amount
+                                }
+                                __typename
+                                ... on PricingPercentageValue{
+                                    percentage
+                                }
+                            }
+                        }
+                        ... on AutomaticDiscountApplication{
+                            title
+                            targetSelection
+                            targetType
+                            allocationMethod
                             value{
                                  __typename 
                                 ... on MoneyV2{
@@ -598,6 +622,25 @@ class CheckoutProvider extends GetConnect {
                         __typename 
                         ... on DiscountCodeApplication{
                             code
+                            allocationMethod
+                            targetSelection
+                            targetType
+                            value{
+                                 __typename 
+                                ... on MoneyV2{
+                                    amount
+                                }
+                                __typename
+                                ... on PricingPercentageValue{
+                                    percentage
+                                }
+                            }
+                        }
+                        ... on AutomaticDiscountApplication{
+                            title
+                            targetSelection
+                            targetType
+                            allocationMethod
                             value{
                                  __typename 
                                 ... on MoneyV2{
@@ -790,6 +833,25 @@ class CheckoutProvider extends GetConnect {
                         __typename 
                         ... on DiscountCodeApplication{
                             code
+                            allocationMethod
+                            targetSelection
+                            targetType
+                            value{
+                                 __typename 
+                                ... on MoneyV2{
+                                    amount
+                                }
+                                __typename
+                                ... on PricingPercentageValue{
+                                    percentage
+                                }
+                            }
+                        }
+                        ... on AutomaticDiscountApplication{
+                            title
+                            targetSelection
+                            targetType
+                            allocationMethod
                             value{
                                  __typename 
                                 ... on MoneyV2{
@@ -967,6 +1029,25 @@ class CheckoutProvider extends GetConnect {
                         __typename 
                         ... on DiscountCodeApplication{
                             code
+                            allocationMethod
+                            targetSelection
+                            targetType
+                            value{
+                                 __typename 
+                                ... on MoneyV2{
+                                    amount
+                                }
+                                __typename
+                                ... on PricingPercentageValue{
+                                    percentage
+                                }
+                            }
+                        }
+                        ... on AutomaticDiscountApplication{
+                            title
+                            targetSelection
+                            targetType
+                            allocationMethod
                             value{
                                  __typename 
                                 ... on MoneyV2{

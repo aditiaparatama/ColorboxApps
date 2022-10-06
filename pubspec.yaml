@@ -11,9 +11,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   dotted_line: ^3.1.0
   double_back_to_close_app: ^2.1.0
+  firebase_core: ^1.23.0
+  firebase_messaging: ^13.0.3
   flutter:
     sdk: flutter
   flutter_html: ^2.2.1
+  flutter_local_notifications: ^11.0.1
   flutter_svg: 0.23.0+1
   flutter_zoom_drawer: ^2.3.1+1
   get: 4.6.1
@@ -30,9 +33,15 @@ dependencies:
   webview_flutter: ^2.0.4
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.10.0
   flutter_lints: ^1.0.0
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon_256x256.png"
 
 flutter:
   uses-material-design: true

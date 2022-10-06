@@ -17,9 +17,10 @@ class WhistlistProvider extends GetConnect {
     }
   }
 
-  Future<dynamic> getAction(String url) async {
+  Future<dynamic> getAction(dynamic variables) async {
     try {
-      var response = await get(url);
+      FormData data = FormData(variables);
+      var response = await post(urlWishlist, data);
 
       return response.body;
     } catch (e) {

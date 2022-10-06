@@ -1,12 +1,14 @@
 import 'package:colorbox/app/modules/checkout/views/list_address.dart';
 import 'package:colorbox/app/modules/checkout/views/payment_view.dart';
 import 'package:colorbox/app/modules/checkout/views/widgets/address_widget.dart';
+import 'package:colorbox/app/modules/checkout/views/widgets/alert_stock.dart';
 import 'package:colorbox/app/modules/checkout/views/widgets/item_checkout.dart';
 import 'package:colorbox/app/modules/checkout/views/widgets/shipping_widget.dart';
 import 'package:colorbox/app/modules/checkout/views/widgets/voucher_widget.dart';
 import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:colorbox/app/widgets/widget.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +16,7 @@ import 'package:get/get.dart';
 
 import '../controllers/checkout_controller.dart';
 
-// ignore: use_key_in_widget_constructors
+// ignore: use_key_in_widget_constructors, must_be_immutable
 class CheckoutView extends GetView<CheckoutController> {
   @override
   Widget build(BuildContext context) {
@@ -69,52 +71,68 @@ class CheckoutView extends GetView<CheckoutController> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
                 height: 240,
-                child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const CustomText(
-                      text: 'Lakukan pembayaran?',
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 8),
-                    const CustomText(
-                      text: 'Pastikan pesanan kamu sudah sesuai',
-                      fontSize: 14,
-                      textAlign: TextAlign.center,
-                      textOverflow: TextOverflow.fade,
-                    ),
-                    const SizedBox(height: 24),
-                    CustomButton(
-                      backgroundColor: colorTextBlack,
-                      color: Colors.white,
-                      onPressed: () async {
-                        String? urlString = await controller.createOrder();
-                        if (urlString == "" || urlString == null) return;
-                        Navigator.of(context).pop(true);
-                        Get.off(WebPaymentView(
-                            title: "Pembayaran", url: urlString));
-                      },
-                      //return true when click on "Yes"
-                      text: 'Lanjut Bayar',
-                      fontSize: 14,
-                      width: Get.width,
-                      height: 45,
-                    ),
-                    const SizedBox(height: 12),
-                    CustomButton(
-                      backgroundColor: Colors.white,
-                      onPressed: () => Navigator.of(context).pop(false),
-                      //return false when click on "No"
-                      text: 'Kembali',
-                      fontSize: 14,
-                      width: Get.width,
-                      height: 45,
-                    ),
-                  ],
-                ),
+                child: GetBuilder<CheckoutController>(builder: (_) {
+                  return Stack(
+                    children: [
+                      Column(
+                        children: [
+                          const CustomText(
+                            text: 'Lakukan pembayaran?',
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 8),
+                          const CustomText(
+                            text: 'Pastikan pesanan kamu sudah sesuai',
+                            fontSize: 14,
+                            textAlign: TextAlign.center,
+                            textOverflow: TextOverflow.fade,
+                          ),
+                          const SizedBox(height: 24),
+                          CustomButton(
+                            backgroundColor: colorTextBlack,
+                            color: Colors.white,
+                            onPressed: (controller.checkoutTap)
+                                ? null
+                                : () async {
+                                    String? urlString =
+                                        await controller.createOrder();
+                                    if (urlString == "" || urlString == null) {
+                                      return;
+                                    }
+                                    if (urlString == "stok-habis") {
+                                      alertStock(context);
+                                      return;
+                                    }
+                                    Navigator.of(context).pop(true);
+                                    Get.off(WebPaymentView(
+                                        title: "Pembayaran", url: urlString));
+                                  },
+                            //return true when click on "Yes"
+                            text: 'Lanjut Bayar',
+                            fontSize: 14,
+                            width: Get.width,
+                            height: 45,
+                          ),
+                          const SizedBox(height: 12),
+                          CustomButton(
+                            backgroundColor: Colors.white,
+                            onPressed: () => Navigator.of(context).pop(false),
+                            //return false when click on "No"
+                            text: 'Kembali',
+                            fontSize: 14,
+                            width: Get.width,
+                            height: 45,
+                          ),
+                        ],
+                      ),
+                      (controller.checkoutTap)
+                          ? loadingCircular()
+                          : const SizedBox()
+                    ],
+                  );
+                }),
               ),
             ),
           ) ??
@@ -300,12 +318,21 @@ class CheckoutView extends GetView<CheckoutController> {
                                                       fontSize: 12,
                                                       color: colorTextBlack,
                                                     )
-                                                  : CustomText(
-                                                      text:
-                                                          "-Rp ${formatter.format(int.parse(controller.checkout.discountApplications!.amount!.replaceAll(".0", "")))}",
-                                                      color: colorTextBlack,
-                                                      fontSize: 12,
-                                                    ),
+                                                  : (controller
+                                                              .discountAmount ==
+                                                          null)
+                                                      ? CustomText(
+                                                          text:
+                                                              "-Rp ${formatter.format(int.parse(controller.checkout.discountApplications!.amount!.replaceAll(".0", "")))}",
+                                                          color: colorTextBlack,
+                                                          fontSize: 12,
+                                                        )
+                                                      : CustomText(
+                                                          text:
+                                                              "-Rp ${formatter.format(controller.discountAmount)}",
+                                                          color: colorTextBlack,
+                                                          fontSize: 12,
+                                                        ),
                                             ],
                                           ),
                                         ],

@@ -1,4 +1,4 @@
-package com.example.colorbox
+package id.co.colorbox
 
 import io.flutter.embedding.android.FlutterActivity
 

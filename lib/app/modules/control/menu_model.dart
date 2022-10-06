@@ -15,7 +15,7 @@ class Menu {
       this.subject,
       this.subjectID,
       required this.subMenu});
-
+  Menu.empty();
   Menu.fromJson(var json) {
     id = json['id'];
     title = json['title'];

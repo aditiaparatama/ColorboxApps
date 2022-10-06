@@ -3,7 +3,7 @@ import 'package:colorbox/app/modules/collections/models/product_model.dart';
 class Cart {
   String? id;
   DateTime? createdAt;
-  List<DiscountCodes>? discountCodes;
+  List<DiscountCodes>? discountCodes = [];
   List<DiscountAllocations>? discountAllocations;
   EstimatedCost? estimatedCost;
   String? note;
@@ -100,22 +100,39 @@ class Line {
 }
 
 class DiscountAllocations {
+  String? typename;
   String? title;
   String? amount;
 
-  DiscountAllocations(this.title, this.amount);
+  DiscountAllocations(this.typename, this.title, this.amount);
 
   DiscountAllocations.fromJson(var json) {
+    typename = json['__typename'];
     title = json['title'];
     amount = json["discountedAmount"]["amount"].toString();
   }
 
   DiscountAllocations.fromCart(var json) {
+    typename = json['__typename'];
     amount = json["discountedAmount"]["amount"].toString();
   }
 
-  DiscountAllocations.empty() {
-    title = null;
-    amount = null;
-  }
+  DiscountAllocations.empty();
+}
+
+class DiscountRunning {
+  String? title;
+  int? minQuantity;
+  double? minSubtotal;
+
+  int? currentQuantity;
+  double? currentSubtotal;
+  double? totalDiscount;
+
+  bool? applied;
+
+  DiscountRunning(this.title, this.minQuantity, this.minSubtotal, this.applied,
+      this.currentQuantity, this.currentSubtotal, this.totalDiscount);
+
+  DiscountRunning.isEmpty();
 }

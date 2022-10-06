@@ -20,6 +20,16 @@ class DiscountCartView extends GetView<DiscountController> {
   @override
   Widget build(BuildContext context) {
     var voucher = cartController.cart.discountCodes ?? [];
+    int exist = -1;
+    for (final x in cartController.cart.lines!) {
+      if (x.discountAllocations != null &&
+          x.discountAllocations!.typename ==
+              "CartAutomaticDiscountAllocation") {
+        exist = 1;
+        break;
+      }
+      if (exist > 0) break;
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -36,7 +46,7 @@ class DiscountCartView extends GetView<DiscountController> {
       ),
       body: GetBuilder(
           init: Get.put(DiscountController()),
-          builder: (context) {
+          builder: (_) {
             return (controller.loading.value)
                 ? loadingCircular()
                 : (controller.discount.isEmpty)
@@ -69,6 +79,11 @@ class DiscountCartView extends GetView<DiscountController> {
                                         onPressed: (searchController.text == "")
                                             ? null
                                             : () async {
+                                                if (exist > 0) {
+                                                  await showAlert(context,
+                                                      searchController.text);
+                                                  return;
+                                                }
                                                 controller.loading.value = true;
                                                 controller.update();
                                                 await cartController
@@ -138,6 +153,13 @@ class DiscountCartView extends GetView<DiscountController> {
                                         onTap: (_totalPrice < _minPrice)
                                             ? null
                                             : () async {
+                                                if (exist > 0) {
+                                                  await showAlert(
+                                                      context,
+                                                      controller.discount[index]
+                                                          .title!);
+                                                  return;
+                                                }
                                                 controller.loading.value = true;
                                                 controller.update();
                                                 await cartController
@@ -366,5 +388,66 @@ class DiscountCartView extends GetView<DiscountController> {
                       );
           }),
     );
+  }
+
+  Future<bool> showAlert(BuildContext context, String code) async {
+    return await showDialog(
+          //show confirm dialogue
+          //the return value will be from "Yes" or "No" options
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const CustomText(
+              text: 'Ganti Dengan Voucher?',
+              fontSize: 14,
+              textAlign: TextAlign.center,
+              fontWeight: FontWeight.bold,
+            ),
+            content: const CustomText(
+              text:
+                  'Saat ini kamu menggunakan promo yang sedang berjalan, menggunakan voucher berarti menghapus promo. Lanjut gunakan voucher?',
+              fontSize: 12,
+              textOverflow: TextOverflow.fade,
+              textAlign: TextAlign.center,
+            ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: CustomButton(
+                  backgroundColor: colorTextBlack,
+                  color: Colors.white,
+                  onPressed: () async {
+                    Navigator.of(context).pop(false);
+                    controller.loading.value = true;
+                    controller.update();
+                    await cartController.updateDiscountCode(code);
+                    controller.loading.value = false;
+                    controller.update();
+                  },
+                  //return true when click on "Yes"
+                  text: 'Gunakan Voucher',
+                  fontSize: 16,
+                  height: 48,
+                  width: 248,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: CustomButton(
+                  backgroundColor: Colors.white,
+                  color: colorTextBlack,
+                  onPressed: () => Navigator.of(context).pop(false),
+                  //return false when click on "No"
+                  text: 'Kembali',
+                  fontSize: 16,
+                  height: 48,
+                  width: 248,
+                ),
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        ) ??
+        false; //if showDialouge had returned null, then return false
   }
 }

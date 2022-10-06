@@ -197,6 +197,9 @@ class Variants {
     compareAtPrice = json["compareAtPrice"] ??= "0";
     weight = json["weight"];
     weightUnit = json["weightUnit"];
+    inventoryQuantity = (json.containsKey("inventoryQuantity"))
+        ? json['inventoryQuantity']
+        : json['quantityAvailable'];
     options = [];
     for (int i = 0; i < json['selectedOptions'].length; i++) {
       options.add(Options.fromVariant(json['selectedOptions'][i]));

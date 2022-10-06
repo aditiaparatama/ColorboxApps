@@ -20,19 +20,38 @@ class ItemCheckoutWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final options =
-        controller.checkout.lineItems![index].variants!.title!.split("/");
+    final _checkout = controller.checkout.lineItems![index];
+    String? _discountType = controller.checkout.discountApplications!.typename;
+    final options = _checkout.variants!.title!.split("/");
+
+    // final discountType = controller.checkout.discountApplications;
+
+    // double? discountAmount;
+    double lineItemPrice = double.parse(controller
+        .checkout.lineItems![index].variants!.price!
+        .replaceAll(".00", ""));
+
+    // if (discountType != null &&
+    //     _checkout.discountAllocations![0]
+    //             .discountApplication!.percentage !=
+    //         null) {
+    //   discountAmount = double.parse(controller
+    //       .checkout.lineItems![index].discountAllocations![0].allocatedAmount!
+    //       .replaceAll(".0", ""));
+    //   lineItemPrice = lineItemPrice - discountAmount.ceil();
+    // }
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFE5E8EB)),
+        border: Border.all(color: colorBorderGrey),
         borderRadius: const BorderRadius.all(Radius.circular(6)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CachedNetworkImage(
-            imageUrl: controller.checkout.lineItems![index].variants!.image!,
+            imageUrl: _checkout.variants!.image!,
             height: 65,
             fit: BoxFit.cover,
           ),
@@ -59,13 +78,13 @@ class ItemCheckoutWidget extends StatelessWidget {
                         text: "Warna : ",
                         style: const TextStyle(
                           fontSize: 12,
-                          color: Color(0xFF777777),
+                          color: colorTextGrey,
                         ),
                         children: [
                           TextSpan(
                               text: options[1],
                               style: const TextStyle(
-                                  color: Color(0xFF777777),
+                                  color: colorTextGrey,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600))
                         ]),
@@ -78,25 +97,107 @@ class ItemCheckoutWidget extends StatelessWidget {
                         text: "Ukuran : ",
                         style: const TextStyle(
                           fontSize: 12,
-                          color: Color(0xFF777777),
+                          color: colorTextGrey,
                         ),
                         children: [
                           TextSpan(
                               text: options[0],
                               style: const TextStyle(
-                                  color: Color(0xFF777777),
+                                  color: colorTextGrey,
                                   fontWeight: FontWeight.w600))
                         ]),
                   ),
                 ],
               ),
               const SizedBox(height: defaultPadding),
-              CustomText(
-                text:
-                    "Rp ${formatter.format(int.parse(controller.checkout.lineItems![index].variants!.price!.replaceAll(".00", "")))}",
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-              ),
+              (_checkout.discountAllocations != null &&
+                      _checkout.discountAllocations!.isNotEmpty &&
+                      _discountType == "AutomaticDiscountApplication")
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: const BoxDecoration(
+                              color: colorBoxInfo,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(2))),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.discount_outlined,
+                                size: 12,
+                                color: colorTextBlack,
+                              ),
+                              CustomText(
+                                text:
+                                    " ${controller.checkout.discountApplications!.title} [",
+                                color: colorTextBlack,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              CustomText(
+                                text:
+                                    "-Rp ${formatter.format(double.parse(_checkout.discountAllocations![0].allocatedAmount!).ceil())}]",
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                              )
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        SizedBox(
+                          width: Get.width * .7,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  CustomText(
+                                    text:
+                                        "Rp ${formatter.format(int.parse(_checkout.variants!.price!.replaceAll(".00", "")))}",
+                                    decoration: TextDecoration.lineThrough,
+                                    color: colorTextGrey,
+                                    fontSize: 10,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  CustomText(
+                                    text:
+                                        "Rp ${formatter.format(double.parse(_checkout.variants!.price!.replaceAll(".00", "")).ceil() - double.parse(_checkout.discountAllocations![0].allocatedAmount!).ceil())}",
+                                    fontSize: 12,
+                                    color: colorSaleRed,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ],
+                              ),
+                              CustomText(
+                                text: "x${_checkout.quantity}",
+                                fontSize: 12,
+                                color: colorTextGrey,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                  : SizedBox(
+                      width: Get.width * .7,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomText(
+                            text: "Rp ${formatter.format(lineItemPrice)}",
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                          CustomText(
+                            text: "x${_checkout.quantity}",
+                            fontSize: 12,
+                            color: colorTextGrey,
+                          ),
+                        ],
+                      ),
+                    ),
             ],
           ),
         ],

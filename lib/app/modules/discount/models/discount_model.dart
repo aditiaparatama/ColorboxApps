@@ -156,18 +156,42 @@ class DiscountAutomatic {
   String? typename;
   String? title;
   List<DiscountCollection>? collections;
+  MinimumRequirement? minimumRequirement;
 
-  DiscountAutomatic(this.typename, this.title, this.collections);
+  DiscountAutomatic(
+      this.typename, this.title, this.minimumRequirement, this.collections);
 
   DiscountAutomatic.fromJson(var json) {
     typename = json["__typename"];
     title = json["title"];
+    minimumRequirement =
+        MinimumRequirement.fromJson(json["minimumRequirement"]);
 
     collections = [];
     if (json["customerGets"]["items"]["collections"]["edges"].length > 0) {
       for (final x in json["customerGets"]["items"]["collections"]["edges"]) {
         collections!.add(DiscountCollection.fromJson(x["node"]));
       }
+    }
+  }
+}
+
+class MinimumRequirement {
+  String? typename;
+  String? greaterThanOrEqualToQuantity;
+  String? greaterThanOrEqualToSubtotal;
+
+  MinimumRequirement(this.typename, this.greaterThanOrEqualToQuantity,
+      this.greaterThanOrEqualToSubtotal);
+
+  MinimumRequirement.fromJson(var json) {
+    typename = json["__typename"];
+
+    if (typename == "DiscountMinimumQuantity") {
+      greaterThanOrEqualToQuantity = json["greaterThanOrEqualToQuantity"];
+    } else {
+      greaterThanOrEqualToSubtotal =
+          json["greaterThanOrEqualToSubtotal"]["amount"];
     }
   }
 }

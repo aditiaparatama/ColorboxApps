@@ -15,6 +15,8 @@ class SubSubMenu {
     subjectID = json['subject_id'];
   }
 
+  SubSubMenu.empty();
+
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['id'] = id;

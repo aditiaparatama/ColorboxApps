@@ -1,14 +1,40 @@
 import 'package:colorbox/app/modules/controlV2/controllers/controlV2_controller.dart';
 import 'package:colorbox/constance.dart';
+import 'package:colorbox/main.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 // ignore: use_key_in_widget_constructors, must_be_immutable
-class ControlV2View extends GetView<ControlV2Controller> {
+class ControlV2View extends StatefulWidget {
+  @override
+  State<ControlV2View> createState() => _ControlV2ViewState();
+}
+
+class _ControlV2ViewState extends State<ControlV2View> {
   GlobalKey globalKey = GlobalKey(debugLabel: 'btm_app_bar');
+
+  @override
+  void initState() {
+    super.initState();
+    print("test");
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print(message.notification);
+      showFlutterNotification(message);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('A new onMessageOpenedApp event was published!');
+      // Navigator.pushNamed(
+      //   context,
+      //   '/message',
+      //   arguments: MessageArguments(message, true),
+      // );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

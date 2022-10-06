@@ -102,6 +102,17 @@ class DiscountProvider extends GetConnect {
                           __typename
                           ...on DiscountAutomaticBasic{
                               title
+                              minimumRequirement{
+                                  __typename
+                                  ...on DiscountMinimumQuantity{
+                                      greaterThanOrEqualToQuantity
+                                  }
+                                  ...on DiscountMinimumSubtotal{
+                                      greaterThanOrEqualToSubtotal{
+                                          amount
+                                      }
+                                  }
+                              }
                               customerGets{
                                   appliesOnOneTimePurchase
                                   appliesOnSubscription

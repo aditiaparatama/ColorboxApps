@@ -9,18 +9,21 @@ import 'package:get/get.dart';
 
 class DiscountController extends GetxController {
   final HomeController homeController = Get.put(HomeController());
+  final SettingsController settingsController = Get.put(SettingsController());
   ValueNotifier get loading => _loading;
   final ValueNotifier<bool> _loading = ValueNotifier(false);
   List<Discount> _discount = [];
   List<Discount> get discount => _discount;
   List<DiscountAutomatic> _discountAutomatic = [];
   List<DiscountAutomatic> get discountAutomatic => _discountAutomatic;
-  final UserModel _user = Get.find<SettingsController>().userModel;
+  UserModel _user = UserModel.isEmpty();
   var listingDiscountAutomatic = [];
 
   @override
-  void onInit() {
+  void onInit() async {
     fetchingDiscount();
+    await settingsController.fetchingUser();
+    _user = settingsController.userModel;
     super.onInit();
   }
 

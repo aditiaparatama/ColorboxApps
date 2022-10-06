@@ -45,6 +45,7 @@ class ShippingWidget extends GetView<CheckoutController> {
           border: Border.all(color: colorTextBlack),
           borderRadius: const BorderRadius.all(Radius.circular(6))),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [

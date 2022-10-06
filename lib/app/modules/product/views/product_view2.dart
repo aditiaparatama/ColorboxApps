@@ -26,6 +26,12 @@ class ProductView2 extends GetView<ProductController> {
   final DiscountController discountController = Get.put(DiscountController());
 
   Future<void> initializeSettings() async {
+    await callWishlist();
+    //Simulate other services for 3 seconds
+    await Future.delayed(const Duration(milliseconds: 100));
+  }
+
+  Future<void> callWishlist() async {
     await controller.wishlistController.fetchWishlist();
     if (controller.wishlistController.wishlist.items != null &&
         controller.wishlistController.wishlist.items.isNotEmpty) {
@@ -37,8 +43,6 @@ class ProductView2 extends GetView<ProductController> {
 
     await discountController
         .groupingDiscountAutomatic([Get.arguments["idCollection"]]);
-    //Simulate other services for 3 seconds
-    await Future.delayed(const Duration(milliseconds: 100));
   }
 
   @override
@@ -62,9 +66,6 @@ class ProductView2 extends GetView<ProductController> {
           return GetBuilder<ProductController>(
               init: Get.put(ProductController()),
               builder: (control) {
-                var str1 =
-                    'https://widget.delamibrands.com/colorbox/mobile/whistlistprod.php';
-
                 return Scaffold(
                   resizeToAvoidBottomInset: false,
                   backgroundColor: Colors.white,
@@ -107,13 +108,30 @@ class ProductView2 extends GetView<ProductController> {
                                         right: 16,
                                         child: InkWell(
                                           onTap: () async {
-                                            var url = str1.toString();
-                                            await launchUrlString(url,
-                                                mode: LaunchMode.inAppWebView);
+                                            // if (controller.ukuran == "") {
+                                            //   Get.snackbar(
+                                            //     "Peringatan",
+                                            //     "Silahkan pilih ukuran!",
+                                            //     snackPosition:
+                                            //         SnackPosition.BOTTOM,
+                                            //     backgroundColor: colorTextBlack,
+                                            //     colorText: Colors.white,
+                                            //   );
+                                            //   return;
+                                            // }
+                                            await controller.wishlistController
+                                                .actionWishlist(
+                                                    controller.product.id!,
+                                                    controller.variant!.id!,
+                                                    action: (controller
+                                                                .existWishlist >=
+                                                            0)
+                                                        ? "remove"
+                                                        : "add");
+
+                                            await callWishlist();
+                                            controller.update();
                                           },
-                                          // onTap: () => Get.toNamed(Routes.CART,
-                                          //     arguments: "collection"),
-                                          // onTap: () => openBrowserTab(),
                                           child: CircleAvatar(
                                             radius: 16.0,
                                             child: SvgPicture.asset((controller
@@ -271,7 +289,7 @@ class ProductView2 extends GetView<ProductController> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8, vertical: 16),
                                             decoration: const BoxDecoration(
-                                              color: Color(0xFFEEF2F6),
+                                              color: colorBoxInfo,
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(6)),
                                             ),

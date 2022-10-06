@@ -41,9 +41,12 @@ class VoucherWidget extends GetView<CheckoutController> {
                                   : const Color(0xFFE0E0E0)),
                       borderRadius: BorderRadius.circular(6),
                     ),
-                    child: (controller.checkout.discountApplications == null)
-                        ? pilihVoucher()
-                        : voucher(),
+                    child: (controller.checkout.discountApplications != null &&
+                            controller
+                                    .checkout.discountApplications!.typename !=
+                                "AutomaticDiscountApplication")
+                        ? voucher()
+                        : pilihVoucher(),
                   ),
                 ),
               ],

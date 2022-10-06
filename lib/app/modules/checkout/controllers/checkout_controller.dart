@@ -7,6 +7,7 @@ import 'package:colorbox/app/modules/checkout/providers/draft_order_provider.dar
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:colorbox/app/widgets/widget.dart';
 import 'package:colorbox/constance.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:flutter/material.dart';
@@ -31,15 +32,18 @@ class CheckoutController extends GetxController {
   dynamic get listShipping => _listShipping;
 
   final Cart _cart = Get.find<CartController>().cart;
+  double? discountAmount;
+  bool checkoutTap = false;
 
   @override
   void onInit() async {
     await getAddress();
     await createCheckout();
     // _idCheckout =
-    //     "gid://shopify/Checkout/47b0f5b7ae2b3c2301f23caca3e469fc?key=f6274b347880b51c019e2c95b8bb84be";
+    //     "gid://shopify/Checkout/770935610a727985109ff9a937222762?key=e8139147bf3f70c3938ee4a36cb8d7a3";
     // await getCheckout();
     await getETDShipping();
+
     super.onInit();
   }
 
@@ -118,6 +122,8 @@ class CheckoutController extends GetxController {
           _cart.discountCodes![0].code != "") {
         await applyVoucher(_cart.discountCodes![0].code!, back: false);
       }
+
+      calculateLineItem();
     }
     update();
   }
@@ -125,7 +131,9 @@ class CheckoutController extends GetxController {
   Future<List<CheckoutItems>> getItems() async {
     List<CheckoutItems>? items = [];
     for (int i = 0; i < _cart.lines!.length; i++) {
-      items.add(CheckoutItems.setItems(_cart.lines![i]));
+      if (_cart.lines![i].merchandise!.inventoryQuantity! > 0) {
+        items.add(CheckoutItems.setItems(_cart.lines![i]));
+      }
     }
 
     return items;
@@ -135,12 +143,14 @@ class CheckoutController extends GetxController {
     var result = await CheckoutProvider().checkoutGetData(_idCheckout!);
     if (result != null) {
       _checkout = CheckoutModel.fromJson(result['node']);
+      calculateLineItem();
     }
     update();
   }
 
   Future<void> getETDShipping() async {
-    if (_user.defaultAddress!.address1 != null) {
+    if (_user.defaultAddress!.address1 != null &&
+        _checkout.shippingLine != null) {
       var x = _checkout.toJson();
       _listShipping = await CheckoutProvider().getShippingRates(x);
       _listShipping = _listShipping.firstWhere((e) =>
@@ -166,6 +176,11 @@ class CheckoutController extends GetxController {
     }
     _loading.value = false;
     update();
+
+    if (resultShipping == null) {
+      Get.back();
+      alertGagal("Mohon coba kembali");
+    }
     Get.back();
     Get.snackbar("Info", "Data berhasil diubah",
         snackPosition: SnackPosition.BOTTOM,
@@ -249,6 +264,7 @@ class CheckoutController extends GetxController {
     }
     _checkout = CheckoutModel.fromJson(
         result['checkoutDiscountCodeApplyV2']['checkout']);
+    calculateLineItem();
     update();
     if (back) Get.back();
     Get.snackbar("Info", "Voucher berhasil digunakan",
@@ -264,6 +280,7 @@ class CheckoutController extends GetxController {
         await CheckoutProvider().checkoutDiscountCodeRemove(id: _idCheckout!);
     _checkout = CheckoutModel.fromJson(
         result['checkoutDiscountCodeRemove']['checkout']);
+    calculateLineItem();
     _loading.value = false;
     update();
   }
@@ -271,7 +288,8 @@ class CheckoutController extends GetxController {
   Future<String?> createOrder() async {
     // String draftOrderId = await createDraftOrder();
     // dynamic order = await completeDraftOrder(draftOrderId);
-    _loading.value = true;
+    // _loading.value = true;
+    checkoutTap = true;
     update();
 
     dynamic order = await pesan();
@@ -286,7 +304,11 @@ class CheckoutController extends GetxController {
     } else {
       if (order != null &&
           order["errors"]["line_items"][0] == "Unable to reserve inventory") {
-        Get.snackbar("", "Stok produk sudah habis",
+        checkoutTap = false;
+        update();
+        return "stok-habis";
+      } else {
+        Get.snackbar("", "Pesanan Gagal dibuat",
             titleText: Row(
               children: [
                 SvgPicture.asset(
@@ -306,10 +328,9 @@ class CheckoutController extends GetxController {
             colorText: Colors.white,
             snackPosition: SnackPosition.BOTTOM);
       }
-      _loading.value = false;
-      update();
     }
-
+    checkoutTap = false;
+    update();
     return "";
   }
 
@@ -444,11 +465,24 @@ class CheckoutController extends GetxController {
     var _lineItems = [];
 
     for (final x in _checkout.lineItems!) {
-      _lineItems.add({
-        "variant_id":
-            x.variants!.id!.replaceAll("gid://shopify/ProductVariant/", ""),
-        "quantity": x.quantity
-      });
+      if (x.discountAllocations![0].discountApplication!.percentage != "0.0") {
+        _lineItems.add({
+          "variant_id":
+              x.variants!.id!.replaceAll("gid://shopify/ProductVariant/", ""),
+          "quantity": x.quantity,
+          "total_discount": x.discountAllocations![0].allocatedAmount,
+          "discount_allocations": {
+            "amount": x.discountAllocations![0].allocatedAmount,
+            "discount_application_index": 0
+          }
+        });
+      } else {
+        _lineItems.add({
+          "variant_id":
+              x.variants!.id!.replaceAll("gid://shopify/ProductVariant/", ""),
+          "quantity": x.quantity
+        });
+      }
     }
 
     var createOrder = {
@@ -509,18 +543,64 @@ class CheckoutController extends GetxController {
             _checkout.discountApplications!.code != "")
           "discount_codes": [
             {
-              "code": _checkout.discountApplications!.code,
-              "amount": (_checkout.discountApplications!.amount != null)
+              "code": (_checkout.discountApplications!.typename ==
+                      "AutomaticDiscountApplication")
+                  ? _checkout.discountApplications!.title
+                  : _checkout.discountApplications!.code,
+              "amount": (_checkout.discountApplications!.amount != "0.0")
                   ? double.parse(_checkout.discountApplications!.amount!)
                   : double.parse(_checkout.discountApplications!.percentage!),
-              "type": (_checkout.discountApplications!.amount != null)
-                  ? "FIXED_AMOUNT"
-                  : "PERCENTAGE"
+              "type": (_checkout.discountApplications!.amount != "0.0")
+                  ? "fixed_amount"
+                  : "percentage"
             }
           ]
+        // if (_checkout.discountApplications != null &&
+        //     _checkout.discountApplications!.typename ==
+        //         "AutomaticDiscountApplication")
+        //   "discount_applied": [
+        //     {
+        //       "title": _checkout.discountApplications!.title,
+        //       "description": _checkout.discountApplications!.title,
+        //       "value": (_checkout.discountApplications!.amount == null)
+        //           ? double.parse(_checkout.discountApplications!.percentage!)
+        //           : _checkout.discountApplications!.amount,
+        //       "type": (_checkout.discountApplications!.amount != null)
+        //           ? "FIXED_AMOUNT"
+        //           : "PERCENTAGE",
+        //       "target_type": _checkout.discountApplications!.targetType,
+        //       "target_selection":
+        //           _checkout.discountApplications!.targetSelection,
+        //       "allocation_method":
+        //           _checkout.discountApplications!.allocationMethod
+        //     }
+        //   ]
       }
     };
 
     return await DraftOrderProvider().orderCreate(createOrder);
+  }
+
+  void calculateLineItem() {
+    discountAmount = null;
+    for (int index = 0; index < _checkout.lineItems!.length; index++) {
+      final discountType = _checkout.discountApplications;
+
+      double lineItemPrice = double.parse(
+          _checkout.lineItems![index].variants!.price!.replaceAll(".00", ""));
+
+      if (discountType != null &&
+          _checkout.lineItems![index].discountAllocations!.isNotEmpty &&
+          _checkout.lineItems![index].discountAllocations![0]
+                  .discountApplication!.percentage !=
+              null) {
+        discountAmount = ((discountAmount == null) ? 0.0 : discountAmount!) +
+            double.parse(_checkout
+                    .lineItems![index].discountAllocations![0].allocatedAmount!
+                    .replaceAll(".0", ""))
+                .ceil();
+        lineItemPrice = lineItemPrice - discountAmount!.ceil();
+      }
+    }
   }
 }

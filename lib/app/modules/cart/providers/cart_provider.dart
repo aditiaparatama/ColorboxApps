@@ -113,6 +113,7 @@ class CartProvider extends GetConnect {
                         compareAtPrice
                         weight
                         weightUnit
+                        quantityAvailable
                         selectedOptions {
                             name
                             value
