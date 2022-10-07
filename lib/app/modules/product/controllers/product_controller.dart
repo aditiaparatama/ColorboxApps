@@ -20,6 +20,7 @@ class ProductController extends GetxController {
   String textCart = "Add Cart";
   String? sizeTemp;
   int existWishlist = -1;
+  bool wishlistAdded = false;
 
   @override
   void onInit() async {

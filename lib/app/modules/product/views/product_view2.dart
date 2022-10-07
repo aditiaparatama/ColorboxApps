@@ -32,6 +32,7 @@ class ProductView2 extends GetView<ProductController> {
   }
 
   Future<void> callWishlist() async {
+    controller.wishlistAdded = false;
     await controller.wishlistController.fetchWishlist();
     if (controller.wishlistController.wishlist.items != null &&
         controller.wishlistController.wishlist.items.isNotEmpty) {
@@ -39,6 +40,8 @@ class ProductView2 extends GetView<ProductController> {
           .indexWhere((e) =>
               e['id'] ==
               controller.product.id!.replaceAll("gid://shopify/Product/", ""));
+
+      controller.wishlistAdded = (controller.existWishlist >= 0) ? true : false;
     }
 
     await discountController
@@ -108,17 +111,9 @@ class ProductView2 extends GetView<ProductController> {
                                         right: 16,
                                         child: InkWell(
                                           onTap: () async {
-                                            // if (controller.ukuran == "") {
-                                            //   Get.snackbar(
-                                            //     "Peringatan",
-                                            //     "Silahkan pilih ukuran!",
-                                            //     snackPosition:
-                                            //         SnackPosition.BOTTOM,
-                                            //     backgroundColor: colorTextBlack,
-                                            //     colorText: Colors.white,
-                                            //   );
-                                            //   return;
-                                            // }
+                                            controller.wishlistAdded =
+                                                !controller.wishlistAdded;
+                                            controller.update();
                                             await controller.wishlistController
                                                 .actionWishlist(
                                                     controller.product.id!,
@@ -135,8 +130,7 @@ class ProductView2 extends GetView<ProductController> {
                                           child: CircleAvatar(
                                             radius: 16.0,
                                             child: SvgPicture.asset((controller
-                                                        .existWishlist >=
-                                                    0)
+                                                    .wishlistAdded)
                                                 ? "assets/icon/Heart.svg"
                                                 : "assets/icon/bx-heart.svg"),
                                           ),

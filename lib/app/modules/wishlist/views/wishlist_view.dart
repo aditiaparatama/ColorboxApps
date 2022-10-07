@@ -83,7 +83,7 @@ class WishlistView extends GetView<WishlistController> {
                                     gridDelegate:
                                         const SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 2,
-                                      mainAxisSpacing: 24,
+                                      mainAxisSpacing: 16,
                                       crossAxisSpacing: 24,
                                       childAspectRatio: 2.6 / 5,
                                     ),
@@ -131,20 +131,8 @@ class WishlistView extends GetView<WishlistController> {
                                                     progressIndicatorBuilder: (context,
                                                             url,
                                                             downloadProgress) =>
-                                                        Shimmer.fromColors(
-                                                            child: Skeleton(
-                                                              height:
-                                                                  Get.height *
-                                                                      .3,
-                                                              width:
-                                                                  (Get.height *
-                                                                          .42) /
-                                                                      2,
-                                                            ),
-                                                            baseColor:
-                                                                baseColorSkeleton,
-                                                            highlightColor:
-                                                                highlightColorSkeleton),
+                                                        Image.asset(
+                                                            "assets/images/Image.jpg"),
                                                     errorWidget: (context, url,
                                                             error) =>
                                                         const Icon(Icons.error),
