@@ -12,16 +12,18 @@ class DiscountAllocation {
 }
 
 class DiscountApplication {
+  String? typename;
   String? allocationMethod;
   String? targetSelection;
   String? targetType;
   String? value;
   String? percentage;
 
-  DiscountApplication(
-      this.allocationMethod, this.targetSelection, this.targetType, this.value);
+  DiscountApplication(this.typename, this.allocationMethod,
+      this.targetSelection, this.targetType, this.value, this.percentage);
 
   DiscountApplication.fromJson(var json) {
+    typename = json["__typename"];
     allocationMethod = json['allocationMethod'];
     targetSelection = json['targetSelection'];
     targetType = json['targetType'];

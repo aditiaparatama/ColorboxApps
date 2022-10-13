@@ -30,7 +30,7 @@ class CartController extends GetxController {
 
   @override
   void onInit() async {
-    await getCart2();
+    // await getCart2();
     await discountController.getDiscountAutomatic();
     super.onInit();
   }
@@ -45,7 +45,7 @@ class CartController extends GetxController {
   }
 
   Future<void> reCreateCart() async {
-    localStorageData.deleteCart();
+    await localStorageData.deleteCart();
     _idCart = await CartProvider().createCart();
     setCart(_idCart!);
     await getCart();
@@ -54,7 +54,9 @@ class CartController extends GetxController {
   Future<void> getCart() async {
     if (_idCart != null) {
       var result = await CartProvider().getCart(_idCart!);
-      _cart = Cart.fromJson(result["cart"]);
+      if (result != null) {
+        _cart = Cart.fromJson(result["cart"]);
+      }
       update();
     }
   }
@@ -64,7 +66,7 @@ class CartController extends GetxController {
     await getCartId();
     if (_idCart != null) {
       var result = await CartProvider().getCart(_idCart!);
-      while (result["cart"] == null) {
+      while (result == null) {
         await reCreateCart();
         result = await CartProvider().getCart(_idCart!);
       }
@@ -245,6 +247,7 @@ class CartController extends GetxController {
     double curSubtotal = 0;
     double totalDiscount = 0;
     bool applied = false;
+    List<String> collectionIds = [];
 
     for (final x in discountController.discountAutomatic) {
       applied = false;
@@ -253,6 +256,7 @@ class CartController extends GetxController {
       totalDiscount = 0;
       minQuantity = x.minimumRequirement!.greaterThanOrEqualToQuantity ?? "0";
       minSubtotal = x.minimumRequirement!.greaterThanOrEqualToSubtotal ?? "0";
+      collectionIds = x.collections!.map((e) => e.id!).toList();
       for (Line cartDiscount in _cart.lines ?? []) {
         if (x.title == cartDiscount.discountAllocations!.title &&
             cartDiscount.merchandise!.inventoryQuantity! > 0) {
@@ -281,7 +285,9 @@ class CartController extends GetxController {
           applied,
           curQuantity,
           curSubtotal,
-          totalDiscount));
+          totalDiscount,
+          collectionIds,
+          x.combineWith));
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:colorbox/app/modules/collections/models/product_model.dart';
+import 'package:colorbox/app/modules/discount/models/discount_model.dart';
 
 class Cart {
   String? id;
@@ -130,9 +131,20 @@ class DiscountRunning {
   double? totalDiscount;
 
   bool? applied;
+  List<String>? collectionIds;
 
-  DiscountRunning(this.title, this.minQuantity, this.minSubtotal, this.applied,
-      this.currentQuantity, this.currentSubtotal, this.totalDiscount);
+  CombineWith combineWith = CombineWith.isEmpty();
+
+  DiscountRunning(
+      this.title,
+      this.minQuantity,
+      this.minSubtotal,
+      this.applied,
+      this.currentQuantity,
+      this.currentSubtotal,
+      this.totalDiscount,
+      this.collectionIds,
+      this.combineWith);
 
   DiscountRunning.isEmpty();
 }

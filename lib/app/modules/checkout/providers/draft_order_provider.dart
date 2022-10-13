@@ -93,9 +93,10 @@ class DraftOrderProvider extends GetConnect {
     return result.data;
   }
 
-  Future<dynamic> orderCreate(dynamic variable) async {
+  Future<dynamic> orderCreate(dynamic variable,
+      {String path = "orders.json"}) async {
     try {
-      var response = await post(url_shopify + "orders.json", variable,
+      var response = await post(url_shopify + path, variable,
           contentType: "application/json",
           headers: {"X-Shopify-Access-Token": token, 'Retry-After': '5.0'});
 

@@ -1,14 +1,17 @@
+import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
 import 'package:colorbox/app/modules/home/controllers/homecollections_controller.dart';
 import 'package:colorbox/app/modules/home/views/widgets/item_card.dart';
+import 'package:colorbox/app/modules/home/views/widgets/item_card_ending.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 // ignore: must_be_immutable, use_key_in_widget_constructors
 class CollectionHome1 extends GetView<HomeCollectionsController> {
+  var homeCollection = Get.put(HomeController());
   final String? id;
 
-  const CollectionHome1(this.id, {Key? key}) : super(key: key);
+  CollectionHome1(this.id, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +45,22 @@ class CollectionHome1 extends GetView<HomeCollectionsController> {
                               .variants[0].compareAtPrice!
                               .replaceAll(".00", ""));
 
-                      return ItemCard(
-                        calcu1: calcu1,
-                        collection: controller.collection,
-                        i: i,
-                      );
+                      return (i == (controller.collection.products.length - 1))
+                          ? ItemCardEnding(
+                              calcu1: calcu1,
+                              collection: controller.collection,
+                              homeCollection: {
+                                "title": homeCollection.collections[0].title,
+                                "subjectid":
+                                    homeCollection.collections[0].subjectid
+                              },
+                              i: i,
+                            )
+                          : ItemCard(
+                              calcu1: calcu1,
+                              collection: controller.collection,
+                              i: i,
+                            );
                     }),
           );
         });

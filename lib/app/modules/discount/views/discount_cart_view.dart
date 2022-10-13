@@ -215,6 +215,9 @@ class DiscountCartView extends GetView<DiscountController> {
                                                     width: 16,
                                                   ),
                                                   (voucher.isNotEmpty &&
+                                                          voucher[0]
+                                                              .applicable! &&
+                                                          voucher.isNotEmpty &&
                                                           voucher[0].code ==
                                                               controller
                                                                   .discount[

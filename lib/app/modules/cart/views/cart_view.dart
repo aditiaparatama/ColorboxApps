@@ -4,6 +4,7 @@ import 'package:colorbox/app/modules/cart/views/widget/voucher_widget.dart';
 import 'package:colorbox/app/modules/collections/controllers/collections_controller.dart';
 import 'package:colorbox/app/modules/control/menu_model.dart';
 import 'package:colorbox/app/modules/control/sub_menu_model.dart';
+import 'package:colorbox/app/modules/home/views/widgets/item_card_ending.dart';
 import 'package:colorbox/app/modules/profile/views/address/address_form.dart';
 import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
@@ -24,21 +25,31 @@ class CartView extends GetView<CartController> {
   final CollectionsController collectionsController =
       Get.put(CollectionsController());
   int index = 0;
+  int indexDiscount = 0;
+  int indexCollection = 0;
 
   Future<void> initializeSettings() async {
     await controller.getCart2();
     // await controller.discountController.getDiscountAutomatic();
     if (controller.discountController.discountAutomatic.isNotEmpty) {
       var indexRandom = Random();
-      int index = (controller
-              .discountController.discountAutomatic[0].collections!.isNotEmpty)
-          ? indexRandom.nextInt(controller
-              .discountController.discountAutomatic[0].collections!.length)
+      indexDiscount = (controller
+              .discountController.discountAutomatic.isNotEmpty)
+          ? indexRandom
+              .nextInt(controller.discountController.discountAutomatic.length)
+          : 0;
+      indexCollection = (controller.discountController
+              .discountAutomatic[indexDiscount].collections!.isNotEmpty)
+          ? indexRandom.nextInt(controller.discountController
+              .discountAutomatic[indexDiscount].collections!.length)
           : 0;
 
       await collectionsController.fetchCollectionProduct(
           int.parse(controller
-              .discountController.discountAutomatic[0].collections![index].id!
+              .discountController
+              .discountAutomatic[indexDiscount]
+              .collections![indexCollection]
+              .id!
               .replaceAll('gid://shopify/Collection/', '')),
           2);
     }
@@ -125,7 +136,7 @@ class CartView extends GetView<CartController> {
                                                         title: controller
                                                             .discountController
                                                             .discountAutomatic[
-                                                                temp]
+                                                                indexDiscount]
                                                             .title,
                                                         subjectID: int.parse(
                                                             x.replaceAll(
@@ -168,7 +179,7 @@ class CartView extends GetView<CartController> {
                                                     text: controller
                                                             .discountController
                                                             .discountAutomatic[
-                                                                0]
+                                                                indexDiscount]
                                                             .title ??
                                                         "",
                                                     fontSize: 14,
@@ -222,13 +233,41 @@ class CartView extends GetView<CartController> {
                                                                     .replaceAll(
                                                                         ".00",
                                                                         ""));
-                                                            return ItemCardCart(
-                                                              calcu1: calcu1,
-                                                              collection:
-                                                                  collectionsController
-                                                                      .collection,
-                                                              i: i,
-                                                            );
+                                                            return (i ==
+                                                                    (collectionsController
+                                                                            .collection
+                                                                            .products
+                                                                            .length -
+                                                                        1))
+                                                                ? ItemCardEnding(
+                                                                    calcu1:
+                                                                        calcu1,
+                                                                    collection:
+                                                                        collectionsController
+                                                                            .collection,
+                                                                    homeCollection: {
+                                                                      "title": collectionsController
+                                                                          .collection
+                                                                          .title,
+                                                                      "subjectid": int.parse(collectionsController
+                                                                          .collection
+                                                                          .id!
+                                                                          .replaceAll(
+                                                                              "gid://shopify/Collection/",
+                                                                              ""))
+                                                                    },
+                                                                    i: i,
+                                                                    isCart:
+                                                                        true,
+                                                                  )
+                                                                : ItemCardCart(
+                                                                    calcu1:
+                                                                        calcu1,
+                                                                    collection:
+                                                                        collectionsController
+                                                                            .collection,
+                                                                    i: i,
+                                                                  );
                                                           }),
                                                 ),
                                                 const SizedBox(height: 40)
@@ -259,14 +298,26 @@ class CartView extends GetView<CartController> {
               c.cart.estimatedCost!.totalAmount!.replaceAll(".0", ""));
 
       if (controller.discountRunning.isNotEmpty) {
-        int check =
-            controller.discountRunning.indexWhere((e) => e.applied ?? false);
-        totalHarga = (check >= 0) ? 0 : totalHarga;
+        // int check =
+        //     controller.discountRunning.indexWhere((e) => e.applied ?? false);
+        // totalHarga = (check >= 0) ? 0 : totalHarga;
         totalPotongan = 0;
-        for (final x in controller.discountRunning) {
-          totalPotongan = (totalPotongan ?? 0.0) + x.totalDiscount!;
-          totalHarga = totalHarga! + x.currentSubtotal!;
+        // for (final x in controller.discountRunning) {
+        //   if (x.combineWith.productDiscounts) {
+        //     totalPotongan = (totalPotongan ?? 0.0) + x.totalDiscount!;
+        //   }
+        //   // totalHarga = totalHarga! + x.currentSubtotal!;
+        // }
+        for (Line x in _cartItems ?? []) {
+          totalPotongan = (totalPotongan ?? 0.0) +
+              double.parse(x.discountAllocations!.amount ?? "0");
         }
+        for (Line y in controller.listHabis ?? []) {
+          // if (y.merchandise!.inventoryQuantity! > 0) {
+          totalHarga = totalHarga! - double.parse(y.merchandise!.price!);
+          // }
+        }
+        totalHarga = totalHarga! + totalPotongan!;
       }
       if (controller.cart.discountCodes != null &&
           controller.cart.discountCodes!.isNotEmpty &&
@@ -281,6 +332,17 @@ class CartView extends GetView<CartController> {
             totalHarga = totalHarga! + double.parse(y.merchandise!.price!);
           }
         }
+      }
+
+      if (controller.cart.discountAllocations != null &&
+          controller.cart.discountAllocations!.isNotEmpty) {
+        totalHarga = (c.cart.estimatedCost == null ||
+                c.cart.estimatedCost!.subtotalAmount! == "0.0")
+            ? 0
+            : double.parse(
+                c.cart.estimatedCost!.subtotalAmount!.replaceAll(".0", ""));
+        totalPotongan =
+            double.parse(controller.cart.discountAllocations![0].amount!);
       }
 
       return Container(
@@ -391,6 +453,7 @@ class CartView extends GetView<CartController> {
                                 await c.getCheckoutUrl();
                                 var profile = Get.find<SettingsController>();
                                 await profile.fetchingUser();
+                                c.checkoutTap = false;
                                 (profile.userModel.displayName == null)
                                     ? Get.toNamed(Routes.PROFILE,
                                         arguments: [c, "cart"])

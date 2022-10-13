@@ -155,24 +155,47 @@ class DiscountMinimumSubtotal {
 class DiscountAutomatic {
   String? typename;
   String? title;
+  String? discountClass;
   List<DiscountCollection>? collections;
   MinimumRequirement? minimumRequirement;
+  CombineWith combineWith = CombineWith.isEmpty();
 
-  DiscountAutomatic(
-      this.typename, this.title, this.minimumRequirement, this.collections);
+  DiscountAutomatic(this.typename, this.title, this.discountClass,
+      this.minimumRequirement, this.collections, this.combineWith);
 
   DiscountAutomatic.fromJson(var json) {
     typename = json["__typename"];
     title = json["title"];
+    discountClass = json["discountClass"];
     minimumRequirement =
         MinimumRequirement.fromJson(json["minimumRequirement"]);
-
+    combineWith = CombineWith.fromJson(json['combinesWith']);
     collections = [];
-    if (json["customerGets"]["items"]["collections"]["edges"].length > 0) {
-      for (final x in json["customerGets"]["items"]["collections"]["edges"]) {
-        collections!.add(DiscountCollection.fromJson(x["node"]));
+    if (json["customerGets"]["items"].containsKey("collections")) {
+      if (json["customerGets"]["items"]["collections"]["edges"].length > 0) {
+        for (final x in json["customerGets"]["items"]["collections"]["edges"]) {
+          collections!.add(DiscountCollection.fromJson(x["node"]));
+        }
       }
     }
+  }
+}
+
+class CombineWith {
+  bool orderDiscounts = false;
+  bool productDiscounts = false;
+  bool shippingDiscounts = false;
+
+  CombineWith(
+      this.orderDiscounts, this.productDiscounts, this.shippingDiscounts);
+
+  CombineWith.isEmpty();
+
+  CombineWith.fromJson(var json) {
+    orderDiscounts =
+        (json.containsKey("orderDiscounts")) ? json["orderDiscounts"] : false;
+    productDiscounts = json["productDiscounts"];
+    shippingDiscounts = json["shippingDiscounts"];
   }
 }
 

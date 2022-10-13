@@ -95,13 +95,19 @@ class DiscountProvider extends GetConnect {
       document: gql(
         r'''
         {
-          automaticDiscountNodes(first:2, query:"status:active"){
+          automaticDiscountNodes(first:10, query:"status:active"){
               edges{
                   node{
                       automaticDiscount{
                           __typename
                           ...on DiscountAutomaticBasic{
                               title
+                              discountClass
+                              combinesWith{
+                                  orderDiscounts
+                                  productDiscounts
+                                  shippingDiscounts
+                              }
                               minimumRequirement{
                                   __typename
                                   ...on DiscountMinimumQuantity{
@@ -133,6 +139,12 @@ class DiscountProvider extends GetConnect {
                           }
                           ...on DiscountAutomaticBxgy{
                               title
+                              discountClass
+                              combinesWith{
+                                  orderDiscounts
+                                  productDiscounts
+                                  shippingDiscounts
+                              }
                               customerGets{
                                   appliesOnOneTimePurchase
                                   appliesOnSubscription

@@ -323,7 +323,7 @@ class CheckoutView extends GetView<CheckoutController> {
                                                           null)
                                                       ? CustomText(
                                                           text:
-                                                              "-Rp ${formatter.format(int.parse(controller.checkout.discountApplications!.amount!.replaceAll(".0", "")))}",
+                                                              "-Rp ${formatter.format(int.parse(controller.checkout.discountApplications![0].amount!.replaceAll(".0", "")))}",
                                                           color: colorTextBlack,
                                                           fontSize: 12,
                                                         )

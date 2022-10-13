@@ -9,7 +9,7 @@ class CheckoutModel {
   String? completedAt;
   String? createdAt;
   Attribute? customAttributes;
-  DiscountCodeApplication? discountApplications;
+  List<DiscountCodeApplication>? discountApplications;
   String? email;
   String? lineItemsSubtotalPrice;
   List<CheckoutLineItem>? lineItems;
@@ -65,9 +65,10 @@ class CheckoutModel {
     completedAt = json['completedAt'];
     createdAt = json['createdAt'];
 
-    if (json['discountApplications']['edges'].length > 0) {
-      discountApplications = DiscountCodeApplication.fromJson(
-          json['discountApplications']['edges'][0]['node']);
+    discountApplications = [];
+
+    for (final x in json['discountApplications']['edges']) {
+      discountApplications!.add(DiscountCodeApplication.fromJson(x['node']));
     }
 
     email = json['email'];

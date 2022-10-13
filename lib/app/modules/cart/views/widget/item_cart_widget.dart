@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/modules/cart/models/cart_model.dart';
 import 'package:colorbox/app/modules/control/menu_model.dart';
+import 'package:colorbox/app/modules/discount/models/discount_model.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/constance.dart';
 import 'package:colorbox/globalvar.dart';
@@ -30,6 +31,7 @@ class ItemCartWidget extends StatelessWidget {
     final _cart = controller.cart.lines![index];
     final options = _cart.merchandise!.title!.split("/");
     int indexPromo = -1;
+    int indexCollectionPromo = -1;
     DiscountRunning discountRunning = DiscountRunning.isEmpty();
     if (_cart.discountAllocations != null &&
         controller.discountRunning.isNotEmpty) {
@@ -38,6 +40,19 @@ class ItemCartWidget extends StatelessWidget {
 
       if (indexPromo >= 0) {
         discountRunning = controller.discountRunning[indexPromo];
+      }
+    }
+    for (DiscountAutomatic discount
+        in controller.discountController.discountAutomatic) {
+      for (final x in discount.collections ?? []) {
+        indexCollectionPromo =
+            _cart.merchandise!.idCollection!.indexWhere((e) => e == x.id);
+        if (indexCollectionPromo >= 0) {
+          break;
+        }
+      }
+      if (indexCollectionPromo >= 0) {
+        break;
       }
     }
 
@@ -50,7 +65,10 @@ class ItemCartWidget extends StatelessWidget {
         children: [
           Column(
             children: [
-              (controller.cart.discountCodes!.isEmpty &&
+              ((controller.cart.discountCodes!.isEmpty ||
+                          controller.cart.discountCodes![0].code == "") &&
+                      (indexCollectionPromo >= 0) &&
+                      collectionPromo!.subjectID != null &&
                       _cart.merchandise!.inventoryQuantity! > 0 &&
                       !(discountRunning.applied ?? false))
                   ? InkWell(
@@ -181,6 +199,7 @@ class ItemCartWidget extends StatelessWidget {
                         const SizedBox(height: defaultPadding),
                         //promo
                         (_cart.discountAllocations != null &&
+                                _cart.discountAllocations!.title != null &&
                                 _cart.discountAllocations!.typename ==
                                     "CartAutomaticDiscountAllocation" &&
                                 _cart.merchandise!.inventoryQuantity! > 0 &&

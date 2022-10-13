@@ -3,12 +3,10 @@ import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/appbar_custom.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/widgets/empty_page.dart';
-import 'package:colorbox/app/widgets/skeleton.dart';
 import 'package:colorbox/app/widgets/widget.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shimmer/shimmer.dart';
 
 import '../controllers/wishlist_controller.dart';
 

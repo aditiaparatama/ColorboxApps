@@ -40,8 +40,8 @@ class CheckoutController extends GetxController {
     await getAddress();
     await createCheckout();
     // _idCheckout =
-    //     "gid://shopify/Checkout/770935610a727985109ff9a937222762?key=e8139147bf3f70c3938ee4a36cb8d7a3";
-    // await getCheckout();
+    //     "gid://shopify/Checkout/00205c3b14749fcfc655535d3a9178c6?key=dea4c8ee79d214634c9bbab79e6ad0b6";
+    await getCheckout();
     await getETDShipping();
 
     super.onInit();
@@ -175,6 +175,7 @@ class CheckoutController extends GetxController {
           resultShipping['checkoutShippingLineUpdate']['checkout']);
     }
     _loading.value = false;
+    calculateLineItem();
     update();
 
     if (resultShipping == null) {
@@ -206,6 +207,7 @@ class CheckoutController extends GetxController {
 
       _loading.value = false;
     }
+    calculateLineItem();
     update();
   }
 
@@ -294,47 +296,61 @@ class CheckoutController extends GetxController {
 
     dynamic order = await pesan();
     if (order != null && order.containsKey("order")) {
-      String? urlInvoice = await paymentCheckout(order["order"]);
+      String? urlInvoice =
+          await paymentCheckout(order["order"]['name'], order["order"]['id']);
 
       updateOrderForUrlPayment(
           order['order']['admin_graphql_api_id'], urlInvoice);
       Get.find<CartController>().reCreateCart();
 
       return urlInvoice;
-    } else {
-      if (order != null &&
-          order["errors"]["line_items"][0] == "Unable to reserve inventory") {
-        checkoutTap = false;
-        update();
-        return "stok-habis";
-      } else {
-        Get.snackbar("", "Pesanan Gagal dibuat",
-            titleText: Row(
-              children: [
-                SvgPicture.asset(
-                  "assets/icon/Exclamation-Circle.svg",
-                  color: Colors.white,
-                ),
-                const SizedBox(width: 4),
-                const CustomText(
-                  text: "Gagal",
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ],
-            ),
-            backgroundColor: colorTextBlack,
-            colorText: Colors.white,
-            snackPosition: SnackPosition.BOTTOM);
-      }
+    } else if (order != null && order.containsKey("draft_order")) {
+      dynamic result = await completeDraftOrder(
+          "gid://shopify/DraftOrder/${order["draft_order"]["id"]}");
+
+      String? urlInvoice = await paymentCheckout(
+          result["name"], result["id"].replaceAll("gid://shopify/Order/", ""));
+
+      updateOrderForUrlPayment(
+          "gid://shopify/DraftOrder/${order["draft_order"]["id"]}", urlInvoice);
+      Get.find<CartController>().reCreateCart();
+
+      return urlInvoice;
     }
+
+    if (order != null &&
+        order["errors"]["line_items"][0] == "Unable to reserve inventory") {
+      checkoutTap = false;
+      update();
+      return "stok-habis";
+    } else {
+      Get.snackbar("", "Pesanan Gagal dibuat",
+          titleText: Row(
+            children: [
+              SvgPicture.asset(
+                "assets/icon/Exclamation-Circle.svg",
+                color: Colors.white,
+              ),
+              const SizedBox(width: 4),
+              const CustomText(
+                text: "Gagal",
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ],
+          ),
+          backgroundColor: colorTextBlack,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM);
+    }
+
     checkoutTap = false;
     update();
     return "";
   }
 
-  Future<String> paymentCheckout(order) async {
+  Future<String> paymentCheckout(order_no, order_id) async {
     String createdDate = DateFormat("yyyyMMddHHmmss")
         .format(DateTime.parse(_checkout.createdAt!));
     String phone = _checkout.shippingAddress!.phone!;
@@ -345,8 +361,7 @@ class CheckoutController extends GetxController {
     }
 
     var inputData = {
-      "external_id":
-          "shopifyInvoice-$createdDate-${order['name']}-${order['id']}",
+      "external_id": "shopifyInvoice-$createdDate-$order_no-$order_id",
       "amount": int.parse(_checkout.totalPriceV2!.replaceAll(".0", "")),
       "payer_email": _checkout.email,
       "description": "Invoice Customer ${_checkout.shippingAddress!.firstName}",
@@ -386,13 +401,13 @@ class CheckoutController extends GetxController {
       "input": {
         if (_checkout.discountApplications != null)
           "appliedDiscount": {
-            "amount": _checkout.discountApplications!.amount,
-            "description": _checkout.discountApplications!.code,
-            "title": _checkout.discountApplications!.code,
-            "value": (_checkout.discountApplications!.amount != null)
-                ? double.parse(_checkout.discountApplications!.amount!)
-                : double.parse(_checkout.discountApplications!.percentage!),
-            "valueType": (_checkout.discountApplications!.amount != null)
+            "amount": _checkout.discountApplications![0].amount,
+            "description": _checkout.discountApplications![0].code,
+            "title": _checkout.discountApplications![0].code,
+            "value": (_checkout.discountApplications![0].amount != null)
+                ? double.parse(_checkout.discountApplications![0].amount!)
+                : double.parse(_checkout.discountApplications![0].percentage!),
+            "valueType": (_checkout.discountApplications![0].amount != null)
                 ? "FIXED_AMOUNT"
                 : "PERCENTAGE"
           },
@@ -462,18 +477,49 @@ class CheckoutController extends GetxController {
   }
 
   Future<dynamic> pesan() async {
+    dynamic createOrder;
+    if (_checkout.discountApplications != null &&
+        _checkout.discountApplications![0].targetType == "LINE_ITEM" &&
+        _checkout.discountApplications![0].targetSelection == "ENTITLED") {
+      createOrder = pesananDenganDiscountLineItems();
+      return await DraftOrderProvider()
+          .orderCreate(createOrder, path: "draft_orders.json");
+    } else {
+      createOrder = pesananDenganDiskonCode();
+    }
+    return await DraftOrderProvider().orderCreate(createOrder);
+  }
+
+  dynamic pesananDenganDiscountLineItems() {
     var _lineItems = [];
 
     for (final x in _checkout.lineItems!) {
-      if (x.discountAllocations![0].discountApplication!.percentage != "0.0") {
+      if (x.discountAllocations != null && x.discountAllocations!.isNotEmpty) {
         _lineItems.add({
           "variant_id":
               x.variants!.id!.replaceAll("gid://shopify/ProductVariant/", ""),
           "quantity": x.quantity,
-          "total_discount": x.discountAllocations![0].allocatedAmount,
-          "discount_allocations": {
-            "amount": x.discountAllocations![0].allocatedAmount,
-            "discount_application_index": 0
+          "applied_discount": {
+            "description":
+                (x.discountAllocations![0].discountApplication!.typename ==
+                        "AutomaticDiscountApplication")
+                    ? "automatic"
+                    : "discount code",
+            "value_type": (x.discountAllocations![0].discountApplication!
+                            .percentage ==
+                        null ||
+                    x.discountAllocations![0].discountApplication!.percentage ==
+                        "0.0")
+                ? "fixed_amount"
+                : "percentage",
+            "value": (x.discountAllocations![0].discountApplication!
+                            .percentage ==
+                        null ||
+                    x.discountAllocations![0].discountApplication!.percentage ==
+                        "0.0")
+                ? x.discountAllocations![0].allocatedAmount
+                : x.discountAllocations![0].discountApplication!.percentage,
+            "title": "Group 2: Buy 2 @90k "
           }
         });
       } else {
@@ -486,13 +532,76 @@ class CheckoutController extends GetxController {
     }
 
     var createOrder = {
+      "draft_order": {
+        "email": _user.email,
+        "tags": "apps",
+        "line_items": _lineItems,
+        "shipping_line": {
+          "title": _checkout.shippingLine!.title,
+          "price": _checkout.shippingLine!.amount ?? 0,
+          "source": _checkout.shippingLine!.handle,
+        },
+        "billing_address": {
+          "first_name": _checkout.shippingAddress!.firstName,
+          "address1": _checkout.shippingAddress!.address1,
+          "phone": _checkout.shippingAddress!.phone,
+          "city": _checkout.shippingAddress!.city,
+          "zip": _checkout.shippingAddress!.zip,
+          "province": _checkout.shippingAddress!.province,
+          "country": _checkout.shippingAddress!.country,
+          "last_name": _checkout.shippingAddress!.lastName,
+          "address2": _checkout.shippingAddress!.address2,
+          "company": "",
+          "latitude": null,
+          "longitude": null,
+          "name":
+              "${_checkout.shippingAddress!.firstName} ${_checkout.shippingAddress!.lastName}",
+          "country_code": "ID",
+          "province_code": _checkout.shippingAddress!.province
+        },
+        "shipping_address": {
+          "first_name": _checkout.shippingAddress!.firstName,
+          "address1": _checkout.shippingAddress!.address1,
+          "phone": _checkout.shippingAddress!.phone,
+          "city": _checkout.shippingAddress!.city,
+          "zip": _checkout.shippingAddress!.zip,
+          "province": _checkout.shippingAddress!.province,
+          "country": _checkout.shippingAddress!.country,
+          "last_name": _checkout.shippingAddress!.lastName,
+          "address2": _checkout.shippingAddress!.address2,
+          "company": "",
+          "latitude": null,
+          "longitude": null,
+          "name":
+              "${_checkout.shippingAddress!.firstName} ${_checkout.shippingAddress!.lastName}",
+          "country_code": "ID",
+          "province_code": _checkout.shippingAddress!.province
+        }
+      }
+    };
+
+    return createOrder;
+  }
+
+  dynamic pesananDenganDiskonCode() {
+    var _lineItems = [];
+
+    for (final x in _checkout.lineItems!) {
+      _lineItems.add({
+        "variant_id":
+            x.variants!.id!.replaceAll("gid://shopify/ProductVariant/", ""),
+        "quantity": x.quantity
+      });
+    }
+
+    var createOrder = {
       "order": {
         "inventory_behaviour": "decrement_obeying_policy",
         "email": _user.email,
         "gateway": "Xendit Mobile",
         "send_receipt": true,
         "financial_status": "pending",
-        "payment_gateway_names": ["Xendit Mobile"],
+        "payment_gateway_names": ["Xendit Payment Gateway (New)"],
         "tags": "apps",
         "line_items": _lineItems,
         "shipping_lines": [
@@ -540,63 +649,39 @@ class CheckoutController extends GetxController {
           "province_code": _checkout.shippingAddress!.province
         },
         if (_checkout.discountApplications != null &&
-            _checkout.discountApplications!.code != "")
-          "discount_codes": [
-            {
-              "code": (_checkout.discountApplications!.typename ==
-                      "AutomaticDiscountApplication")
-                  ? _checkout.discountApplications!.title
-                  : _checkout.discountApplications!.code,
-              "amount": (_checkout.discountApplications!.amount != "0.0")
-                  ? double.parse(_checkout.discountApplications!.amount!)
-                  : double.parse(_checkout.discountApplications!.percentage!),
-              "type": (_checkout.discountApplications!.amount != "0.0")
-                  ? "fixed_amount"
-                  : "percentage"
-            }
+            _checkout.discountApplications![0].code != "")
+          "discount_applications": [
+            for (final x in _checkout.discountApplications ?? []) ...[
+              {
+                "title": (x.typename == "AutomaticDiscountApplication")
+                    ? x.title
+                    : x.code,
+                "value": (x.amount != "0.0")
+                    ? double.parse(x.amount!)
+                    : double.parse(x.percentage!),
+                "type": "automatic",
+                "value_type":
+                    (x.amount != "0.0") ? "fixed_amount" : "percentage"
+              }
+            ]
           ]
-        // if (_checkout.discountApplications != null &&
-        //     _checkout.discountApplications!.typename ==
-        //         "AutomaticDiscountApplication")
-        //   "discount_applied": [
-        //     {
-        //       "title": _checkout.discountApplications!.title,
-        //       "description": _checkout.discountApplications!.title,
-        //       "value": (_checkout.discountApplications!.amount == null)
-        //           ? double.parse(_checkout.discountApplications!.percentage!)
-        //           : _checkout.discountApplications!.amount,
-        //       "type": (_checkout.discountApplications!.amount != null)
-        //           ? "FIXED_AMOUNT"
-        //           : "PERCENTAGE",
-        //       "target_type": _checkout.discountApplications!.targetType,
-        //       "target_selection":
-        //           _checkout.discountApplications!.targetSelection,
-        //       "allocation_method":
-        //           _checkout.discountApplications!.allocationMethod
-        //     }
-        //   ]
       }
     };
 
-    return await DraftOrderProvider().orderCreate(createOrder);
+    return createOrder;
   }
 
   void calculateLineItem() {
     discountAmount = null;
-    for (int index = 0; index < _checkout.lineItems!.length; index++) {
+    for (CheckoutLineItem item in _checkout.lineItems ?? []) {
       final discountType = _checkout.discountApplications;
 
-      double lineItemPrice = double.parse(
-          _checkout.lineItems![index].variants!.price!.replaceAll(".00", ""));
+      double lineItemPrice =
+          double.parse(item.variants!.price!.replaceAll(".00", ""));
 
-      if (discountType != null &&
-          _checkout.lineItems![index].discountAllocations!.isNotEmpty &&
-          _checkout.lineItems![index].discountAllocations![0]
-                  .discountApplication!.percentage !=
-              null) {
+      if (discountType != null && item.discountAllocations!.isNotEmpty) {
         discountAmount = ((discountAmount == null) ? 0.0 : discountAmount!) +
-            double.parse(_checkout
-                    .lineItems![index].discountAllocations![0].allocatedAmount!
+            double.parse(item.discountAllocations![0].allocatedAmount!
                     .replaceAll(".0", ""))
                 .ceil();
         lineItemPrice = lineItemPrice - discountAmount!.ceil();

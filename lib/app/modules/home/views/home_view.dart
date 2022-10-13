@@ -89,17 +89,24 @@ class HomeView extends GetView<HomeController> {
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 24),
-                                    child: CustomText(
-                                      text: (controller.collections.isEmpty)
-                                          ? ""
-                                          : controller
-                                              .collections[0].deskripsi!,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
+                                  (controller.collections[0].deskripsi ==
+                                              null ||
+                                          controller.collections[0].deskripsi ==
+                                              "")
+                                      ? const SizedBox()
+                                      : Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 24),
+                                          child: CustomText(
+                                            text:
+                                                (controller.collections.isEmpty)
+                                                    ? ""
+                                                    : controller.collections[0]
+                                                        .deskripsi!,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
                                   SizedBox(
                                     child: Center(
                                       child: CachedNetworkImage(

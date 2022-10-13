@@ -1,5 +1,4 @@
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
-import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/constance.dart';

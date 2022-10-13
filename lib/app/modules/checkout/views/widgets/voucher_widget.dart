@@ -42,8 +42,8 @@ class VoucherWidget extends GetView<CheckoutController> {
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: (controller.checkout.discountApplications != null &&
-                            controller
-                                    .checkout.discountApplications!.typename !=
+                            controller.checkout.discountApplications![0]
+                                    .typename !=
                                 "AutomaticDiscountApplication")
                         ? voucher()
                         : pilihVoucher(),
@@ -64,7 +64,7 @@ class VoucherWidget extends GetView<CheckoutController> {
             SvgPicture.asset("assets/icon/badge-percent.svg"),
             const SizedBox(width: 16),
             CustomText(
-              text: controller.checkout.discountApplications!.code,
+              text: controller.checkout.discountApplications![0].code,
               fontSize: 14,
               fontWeight: FontWeight.w600,
             ),

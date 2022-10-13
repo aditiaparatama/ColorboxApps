@@ -28,7 +28,8 @@ class OrderDetailView extends GetView<OrdersController> {
             actions: [
               InkWell(
                 onTap: () async {
-                  const url = "https://wa.me/628111717250?text=YYYYYY";
+                  final url =
+                      "https://wa.me/628111717250?text=Halo Admin Colorbox, saya ingin bertanya tentang detail pesanan nomor ${controller.order[id].name}";
 
                   await launchUrlString(url,
                       mode: LaunchMode.externalApplication);

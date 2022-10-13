@@ -15,7 +15,8 @@ import '../controllers/discount_controller.dart';
 // ignore: use_key_in_widget_constructors, must_be_immutable
 class DiscountView extends GetView<DiscountController> {
   var formatter = DateFormat('dd MMMM yyyy');
-  var voucher = Get.find<CheckoutController>().checkout.discountApplications;
+  var voucher =
+      Get.find<CheckoutController>().checkout.discountApplications![0];
   TextEditingController searchController = TextEditingController();
 
   @override
@@ -154,22 +155,15 @@ class DiscountView extends GetView<DiscountController> {
                                           width: Get.width,
                                           height: 170,
                                           decoration: BoxDecoration(
-                                              color: (voucher != null)
-                                                  ? (_totalPrice < _minPrice)
-                                                      ? const Color(0xFF212121)
-                                                          .withOpacity(0.05)
-                                                      : Colors.transparent
+                                              color: (_totalPrice < _minPrice)
+                                                  ? const Color(0xFF212121)
+                                                      .withOpacity(0.05)
                                                   : Colors.transparent,
-                                              border: (voucher != null)
-                                                  ? (voucher!.code ==
-                                                          controller
-                                                              .discount[index]
-                                                              .title)
-                                                      ? Border.all(
-                                                          color: colorTextBlack)
-                                                      : Border.all(
-                                                          color: const Color(
-                                                              0xFFE0E0E0))
+                                              border: (voucher.code ==
+                                                      controller.discount[index]
+                                                          .title)
+                                                  ? Border.all(
+                                                      color: colorTextBlack)
                                                   : Border.all(
                                                       color: const Color(
                                                           0xFFE0E0E0)),
@@ -195,54 +189,50 @@ class DiscountView extends GetView<DiscountController> {
                                                   const SizedBox(
                                                     width: 16,
                                                   ),
-                                                  (voucher != null)
-                                                      ? (voucher!.code ==
-                                                              controller
-                                                                  .discount[
-                                                                      index]
-                                                                  .title)
-                                                          ? Container(
-                                                              padding: const EdgeInsets
+                                                  (voucher.code ==
+                                                          controller
+                                                              .discount[index]
+                                                              .title)
+                                                      ? Container(
+                                                          padding:
+                                                              const EdgeInsets
                                                                       .symmetric(
                                                                   horizontal:
                                                                       12,
                                                                   vertical: 4),
-                                                              decoration:
-                                                                  BoxDecoration(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.black,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        6),
+                                                          ),
+                                                          child: Row(
+                                                            children: const [
+                                                              Icon(
+                                                                Icons
+                                                                    .check_circle,
                                                                 color: Colors
-                                                                    .black,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            6),
+                                                                    .white,
+                                                                size: 16,
                                                               ),
-                                                              child: Row(
-                                                                children: const [
-                                                                  Icon(
-                                                                    Icons
-                                                                        .check_circle,
-                                                                    color: Colors
-                                                                        .white,
-                                                                    size: 16,
-                                                                  ),
-                                                                  SizedBox(
-                                                                    width: 8,
-                                                                  ),
-                                                                  CustomText(
-                                                                    text:
-                                                                        "Terpasang",
-                                                                    fontSize:
-                                                                        12,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    color: Colors
-                                                                        .white,
-                                                                  )
-                                                                ],
+                                                              SizedBox(
+                                                                width: 8,
                                                               ),
-                                                            )
-                                                          : const SizedBox()
+                                                              CustomText(
+                                                                text:
+                                                                    "Terpasang",
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Colors
+                                                                    .white,
+                                                              )
+                                                            ],
+                                                          ),
+                                                        )
                                                       : const SizedBox()
                                                 ],
                                               ),
@@ -330,13 +320,10 @@ class DiscountView extends GetView<DiscountController> {
                                           left: -20,
                                           child: CircleAvatar(
                                             radius: 16,
-                                            backgroundColor: (voucher != null)
-                                                ? (voucher!.code ==
-                                                        controller
-                                                            .discount[index]
-                                                            .title)
-                                                    ? colorTextBlack
-                                                    : const Color(0xFFE0E0E0)
+                                            backgroundColor: (voucher.code ==
+                                                    controller
+                                                        .discount[index].title)
+                                                ? colorTextBlack
                                                 : const Color(0xFFE0E0E0),
                                             child: const CircleAvatar(
                                               radius: 15,
@@ -347,13 +334,10 @@ class DiscountView extends GetView<DiscountController> {
                                           right: -20,
                                           child: CircleAvatar(
                                             radius: 16,
-                                            backgroundColor: (voucher != null)
-                                                ? (voucher!.code ==
-                                                        controller
-                                                            .discount[index]
-                                                            .title)
-                                                    ? colorTextBlack
-                                                    : const Color(0xFFE0E0E0)
+                                            backgroundColor: (voucher.code ==
+                                                    controller
+                                                        .discount[index].title)
+                                                ? colorTextBlack
                                                 : const Color(0xFFE0E0E0),
                                             child: const CircleAvatar(
                                               radius: 15,

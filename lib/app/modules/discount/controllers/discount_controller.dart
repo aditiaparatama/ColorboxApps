@@ -59,13 +59,15 @@ class DiscountController extends GetxController {
     _discountAutomatic = [];
     if (result != null) {
       for (final x in result['automaticDiscountNodes']['edges']) {
-        _discountAutomatic
-            .add(DiscountAutomatic.fromJson(x['node']['automaticDiscount']));
+        if (x['node']['automaticDiscount']["discountClass"] == "PRODUCT") {
+          _discountAutomatic
+              .add(DiscountAutomatic.fromJson(x['node']['automaticDiscount']));
+        }
       }
     }
   }
 
-  Future<dynamic> groupingDiscountAutomatic(List<String>? idCollection) async {
+  Future<void> groupingDiscountAutomatic(List<String>? idCollection) async {
     await homeController.fetchData();
     listingDiscountAutomatic = homeController.announcementProduct;
 
@@ -74,22 +76,32 @@ class DiscountController extends GetxController {
     int index = -1;
 
     for (final x in idCollection!) {
-      index = (_discountAutomatic[0].collections!.indexWhere((e) => e.id == x));
-      if (index >= 0) break;
+      for (final discount in _discountAutomatic) {
+        index = (discount.collections!.indexWhere((e) => e.id == x));
+        if (index >= 0) {
+          Announcement tempData = Announcement(
+              "https://widget.delamibrands.com/colorbox/mobile/icons/badge-percent.svg",
+              discount.title);
+          listingDiscountAutomatic.add(tempData);
+        }
+      }
+
+      // index = (_discountAutomatic[0].collections!.indexWhere((e) => e.id == x));
+      // if (index >= 0) break;
     }
 
-    if (_discountAutomatic.isNotEmpty && index >= 0) {
-      Announcement tempData = Announcement(
-          "https://widget.delamibrands.com/colorbox/mobile/icons/badge-percent.svg",
-          _discountAutomatic[index].title);
-      listingDiscountAutomatic.add(tempData);
-    }
+    // if (_discountAutomatic.isNotEmpty && index >= 0) {
+    //   Announcement tempData = Announcement(
+    //       "https://widget.delamibrands.com/colorbox/mobile/icons/badge-percent.svg",
+    //       _discountAutomatic[index].title);
+    //   listingDiscountAutomatic.add(tempData);
+    // }
 
-    if (index < 0) return null;
+    // if (index < 0) return null;
 
-    return {
-      "idCollection": _discountAutomatic[0].collections![index].id,
-      "titlePromo": _discountAutomatic[index].title
-    };
+    // return {
+    //   "idCollection": _discountAutomatic[0].collections![index].id,
+    //   "titlePromo": _discountAutomatic[index].title
+    // };
   }
 }

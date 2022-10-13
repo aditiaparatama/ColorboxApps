@@ -1,5 +1,7 @@
+import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
 import 'package:colorbox/app/modules/home/controllers/homecollections_controller.dart';
 import 'package:colorbox/app/modules/home/views/widgets/item_card.dart';
+import 'package:colorbox/app/modules/home/views/widgets/item_card_ending.dart';
 import 'package:colorbox/app/widgets/widget.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:get/get.dart';
 
 // ignore: must_be_immutable, use_key_in_widget_constructors
 class CollectionHome3 extends GetView<HomeCollectionsController> {
+  var homeCollection = Get.put(HomeController());
   var formatter = NumberFormat('###,000');
   final String? id;
 
@@ -68,11 +71,25 @@ class CollectionHome3 extends GetView<HomeCollectionsController> {
                                     .variants[0].compareAtPrice!
                                     .replaceAll(".00", ""));
 
-                            return ItemCard(
-                              calcu1: calcu1,
-                              collection: controller.collection3,
-                              i: i,
-                            );
+                            return (i ==
+                                    (controller.collection3.products.length -
+                                        1))
+                                ? ItemCardEnding(
+                                    calcu1: calcu1,
+                                    collection: controller.collection3,
+                                    homeCollection: {
+                                      "title":
+                                          homeCollection.collections[2].title,
+                                      "subjectid": homeCollection
+                                          .collections[2].subjectid
+                                    },
+                                    i: i,
+                                  )
+                                : ItemCard(
+                                    calcu1: calcu1,
+                                    collection: controller.collection3,
+                                    i: i,
+                                  );
                           }),
                 );
               });

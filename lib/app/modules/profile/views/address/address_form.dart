@@ -1,3 +1,4 @@
+import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/modules/profile/controllers/profile_controller.dart';
 import 'package:colorbox/app/modules/profile/views/address/city_bottomsheet.dart';
 import 'package:colorbox/app/modules/profile/views/address/kecamatan_bottomsheet.dart';
@@ -84,7 +85,9 @@ class AddressForm extends GetView<ProfileController> {
                 if (result == 1) {
                   await controller.getAddress();
                   if (checkout) {
-                    Get.offNamed(Routes.CHECKOUT);
+                    Get.find<CartController>().update();
+                    Get.back();
+                    Get.toNamed(Routes.CHECKOUT);
                   } else {
                     Get.back();
                   }

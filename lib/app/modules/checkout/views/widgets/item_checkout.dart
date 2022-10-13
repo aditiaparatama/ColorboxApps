@@ -21,7 +21,8 @@ class ItemCheckoutWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _checkout = controller.checkout.lineItems![index];
-    String? _discountType = controller.checkout.discountApplications!.typename;
+    String? _discountType =
+        controller.checkout.discountApplications![0].typename;
     final options = _checkout.variants!.title!.split("/");
 
     // final discountType = controller.checkout.discountApplications;
@@ -129,9 +130,8 @@ class ItemCheckoutWidget extends StatelessWidget {
                                 size: 12,
                                 color: colorTextBlack,
                               ),
-                              CustomText(
-                                text:
-                                    " ${controller.checkout.discountApplications!.title} [",
+                              const CustomText(
+                                text: " Potongan Harga [",
                                 color: colorTextBlack,
                                 fontSize: 10,
                                 fontWeight: FontWeight.w600,

@@ -20,7 +20,6 @@ class _ControlV2ViewState extends State<ControlV2View> {
   @override
   void initState() {
     super.initState();
-    print("test");
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print(message.notification);
       showFlutterNotification(message);

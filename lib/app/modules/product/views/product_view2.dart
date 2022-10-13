@@ -32,7 +32,7 @@ class ProductView2 extends GetView<ProductController> {
   }
 
   Future<void> callWishlist() async {
-    controller.wishlistAdded = false;
+    // controller.wishlistAdded = false;
     await controller.wishlistController.fetchWishlist();
     if (controller.wishlistController.wishlist.items != null &&
         controller.wishlistController.wishlist.items.isNotEmpty) {

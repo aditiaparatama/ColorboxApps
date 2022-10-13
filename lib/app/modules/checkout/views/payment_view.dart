@@ -32,7 +32,9 @@ class _WebPaymentViewState extends State<WebPaymentView> {
           leading: IconButton(
               padding: const EdgeInsets.all(16),
               onPressed: () {
-                Get.offAllNamed(Routes.CONTROLV2);
+                // Get.offAllNamed(Routes.CONTROLV2);
+                // Get.toNamed(Routes.ORDERS);
+                Get.until((route) => Get.currentRoute == "/controlv2");
                 Get.toNamed(Routes.ORDERS);
               },
               icon: const Icon(Icons.arrow_back)),
