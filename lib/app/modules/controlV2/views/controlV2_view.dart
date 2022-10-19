@@ -21,12 +21,10 @@ class _ControlV2ViewState extends State<ControlV2View> {
   void initState() {
     super.initState();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print(message.notification);
       showFlutterNotification(message);
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('A new onMessageOpenedApp event was published!');
       // Navigator.pushNamed(
       //   context,
       //   '/message',

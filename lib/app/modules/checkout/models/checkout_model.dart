@@ -170,8 +170,9 @@ class ShippingRates {
   String? handle;
   String? amount;
   String? title;
+  String? etd;
 
-  ShippingRates(this.handle, this.amount, this.title);
+  ShippingRates(this.handle, this.amount, this.title, this.etd);
 
   ShippingRates.fromJson(var json) {
     handle = json['handle'];
@@ -264,6 +265,8 @@ class DiscountCodeApplication {
       this.targetSelection,
       this.targetType,
       this.allocationMethod);
+
+  DiscountCodeApplication.empty();
 
   DiscountCodeApplication.fromJson(var json) {
     typename = json['__typename'];

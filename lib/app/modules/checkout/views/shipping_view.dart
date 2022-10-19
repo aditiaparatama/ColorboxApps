@@ -26,70 +26,68 @@ class ShippingView extends GetView<CheckoutController> {
               builder: (c) {
                 return Padding(
                   padding: const EdgeInsets.all(16),
-                  child: SingleChildScrollView(
-                    child: Stack(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            for (final x in controller.checkout
-                                .availableShippingRates!.shippingRates!) ...[
-                              GestureDetector(
-                                onTap: () =>
-                                    controller.updateShipping(x.handle!),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: const Color(0xFFE5E8EB)),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(6)),
-                                  ),
-                                  padding: const EdgeInsets.all(16),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          CustomText(
-                                            text: x.title,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                          const SizedBox(
-                                            height: defaultPadding,
-                                          ),
-                                          CustomText(
-                                            text: controller.etd ?? "",
-                                            fontSize: 12,
-                                            color: Colors.grey,
-                                          ),
-                                        ],
-                                      ),
-                                      CustomText(
-                                        text: (x.amount == "0.0")
-                                            ? "FREE"
-                                            : "Rp ${formatter.format(int.parse(x.amount!.replaceAll(".0", "")))}",
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ],
-                                  ),
+                  child: Stack(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          for (final x in controller.checkout
+                              .availableShippingRates!.shippingRates!) ...[
+                            GestureDetector(
+                              onTap: () => controller.updateShipping(x.handle!),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: const Color(0xFFE5E8EB)),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(6)),
+                                ),
+                                padding: const EdgeInsets.all(16),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        CustomText(
+                                          text: x.title,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        const SizedBox(
+                                          height: defaultPadding,
+                                        ),
+                                        CustomText(
+                                          text: x.etd ?? "",
+                                          fontSize: 12,
+                                          color: Colors.grey,
+                                        ),
+                                      ],
+                                    ),
+                                    CustomText(
+                                      text: (x.amount == "0.0")
+                                          ? "FREE"
+                                          : "Rp ${formatter.format(int.parse(x.amount!.replaceAll(".0", "")))}",
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ]
-                          ],
-                        ),
-                        (controller.loading.value)
-                            ? loadingCircular()
-                            : const SizedBox()
-                      ],
-                    ),
+                            ),
+                            const SizedBox(height: 16),
+                          ]
+                        ],
+                      ),
+                      (controller.loading.value)
+                          ? loadingCircular()
+                          : const SizedBox()
+                    ],
                   ),
                 );
               })),

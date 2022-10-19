@@ -86,7 +86,11 @@ class TimelineStatus extends StatelessWidget {
                 color: Color(0xFF777777),
               ),
               const SizedBox(width: 51),
-              CustomText(text: order.shippingLine!.title, fontSize: 12)
+              CustomText(
+                  text: (order.shippingLine == null)
+                      ? ""
+                      : order.shippingLine!.title,
+                  fontSize: 12)
             ],
           ),
           const SizedBox(height: 8),

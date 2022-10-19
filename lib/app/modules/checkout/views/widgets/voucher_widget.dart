@@ -42,6 +42,8 @@ class VoucherWidget extends GetView<CheckoutController> {
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: (controller.checkout.discountApplications != null &&
+                            controller
+                                .checkout.discountApplications!.isNotEmpty &&
                             controller.checkout.discountApplications![0]
                                     .typename !=
                                 "AutomaticDiscountApplication")

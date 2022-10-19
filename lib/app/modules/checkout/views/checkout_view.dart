@@ -5,6 +5,7 @@ import 'package:colorbox/app/modules/checkout/views/widgets/alert_stock.dart';
 import 'package:colorbox/app/modules/checkout/views/widgets/item_checkout.dart';
 import 'package:colorbox/app/modules/checkout/views/widgets/shipping_widget.dart';
 import 'package:colorbox/app/modules/checkout/views/widgets/voucher_widget.dart';
+import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
@@ -83,8 +84,11 @@ class CheckoutView extends GetView<CheckoutController> {
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 8),
-                          const CustomText(
-                            text: 'Pastikan pesanan kamu sudah sesuai',
+                          CustomText(
+                            text: (controller.checkout.shippingLine!.title!
+                                    .contains("COD"))
+                                ? 'Buat Pesanan? Pastikan pesanan kamu sudah sesuai'
+                                : 'Pastikan pesanan kamu sudah sesuai',
                             fontSize: 14,
                             textAlign: TextAlign.center,
                             textOverflow: TextOverflow.fade,
@@ -105,6 +109,14 @@ class CheckoutView extends GetView<CheckoutController> {
                                       alertStock(context);
                                       return;
                                     }
+
+                                    if (urlString == "COD") {
+                                      Get.until((route) =>
+                                          Get.currentRoute == "/controlv2");
+                                      Get.toNamed(Routes.ORDERS);
+                                      return;
+                                    }
+
                                     Navigator.of(context).pop(true);
                                     Get.off(WebPaymentView(
                                         title: "Pembayaran", url: urlString));
@@ -311,8 +323,12 @@ class CheckoutView extends GetView<CheckoutController> {
                                                 color: colorTextBlack,
                                               ),
                                               (controller.checkout
-                                                          .discountApplications ==
-                                                      null)
+                                                              .discountApplications ==
+                                                          null ||
+                                                      controller
+                                                          .checkout
+                                                          .discountApplications!
+                                                          .isEmpty)
                                                   ? const CustomText(
                                                       text: "Rp 0",
                                                       fontSize: 12,

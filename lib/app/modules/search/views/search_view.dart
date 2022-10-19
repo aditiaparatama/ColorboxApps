@@ -182,6 +182,7 @@ class SearchView extends GetView<SearchController> {
     return SizedBox(
       height: 36,
       child: TextField(
+        autocorrect: false,
         cursorColor: colorTextBlack,
         autofocus: true,
         controller: search,

@@ -114,7 +114,9 @@ class Order {
     totalDiscountsSet = TotalPriceSet.fromJson(json['totalDiscountsSet']);
 
     shippingAddress = MailingAddress.fromOrder(json['shippingAddress']);
-    shippingLine = ShippingLine.fromJson(json['shippingLine']);
+    if (json['shippingLine'] != null) {
+      shippingLine = ShippingLine.fromJson(json['shippingLine']);
+    }
     lineItems = LineItems.fromJson(json['lineItems']);
 
     discountApplications = [];

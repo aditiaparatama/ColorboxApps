@@ -7,7 +7,6 @@ import 'package:colorbox/app/modules/checkout/providers/draft_order_provider.dar
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
-import 'package:colorbox/app/widgets/widget.dart';
 import 'package:colorbox/constance.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:flutter/material.dart';
@@ -153,10 +152,25 @@ class CheckoutController extends GetxController {
         _checkout.shippingLine != null) {
       var x = _checkout.toJson();
       _listShipping = await CheckoutProvider().getShippingRates(x);
-      _listShipping = _listShipping.firstWhere((e) =>
-          e['service_name'].replaceAll(" ", "") ==
-          _checkout.shippingLine!.title!.replaceAll(" ", ""));
-      _etd = _listShipping['description'].split("(")[0];
+
+      for (int i = 0;
+          i < _checkout.availableShippingRates!.shippingRates!.length;
+          i++) {
+        int x = _listShipping.indexWhere((e) =>
+            e["service_name"]
+                .split("(")[0]
+                .replaceAll(" ", "")
+                .replaceAll("(", "") ==
+            _checkout.availableShippingRates!.shippingRates![i].title!
+                .split("(")[0]
+                .replaceAll(" ", "")
+                .replaceAll("(", ""));
+
+        _checkout.availableShippingRates!.shippingRates![i].etd =
+            _listShipping[x]['description'].split("(")[0];
+
+        _etd = _listShipping[x]['description'].split("(")[0];
+      }
     }
     update();
   }
@@ -180,13 +194,13 @@ class CheckoutController extends GetxController {
 
     if (resultShipping == null) {
       Get.back();
-      alertGagal("Mohon coba kembali");
+      // alertGagal("Mohon coba kembali");
     }
     Get.back();
-    Get.snackbar("Info", "Data berhasil diubah",
-        snackPosition: SnackPosition.BOTTOM,
-        colorText: Colors.white,
-        backgroundColor: colorTextBlack);
+    // Get.snackbar("Info", "Data berhasil diubah",
+    //     snackPosition: SnackPosition.BOTTOM,
+    //     colorText: Colors.white,
+    //     backgroundColor: colorTextBlack);
   }
 
   updateShippingAddress(MailingAddress address) async {
@@ -296,6 +310,11 @@ class CheckoutController extends GetxController {
 
     dynamic order = await pesan();
     if (order != null && order.containsKey("order")) {
+      if (_checkout.shippingLine!.title!.contains("COD")) {
+        Get.find<CartController>().reCreateCart();
+        return "COD";
+      }
+
       String? urlInvoice =
           await paymentCheckout(order["order"]['name'], order["order"]['id']);
 
@@ -308,11 +327,15 @@ class CheckoutController extends GetxController {
       dynamic result = await completeDraftOrder(
           "gid://shopify/DraftOrder/${order["draft_order"]["id"]}");
 
+      if (_checkout.shippingLine!.title!.contains("COD")) {
+        Get.find<CartController>().reCreateCart();
+        return "COD";
+      }
+
       String? urlInvoice = await paymentCheckout(
           result["name"], result["id"].replaceAll("gid://shopify/Order/", ""));
 
-      updateOrderForUrlPayment(
-          "gid://shopify/DraftOrder/${order["draft_order"]["id"]}", urlInvoice);
+      updateOrderForUrlPayment(result["id"], urlInvoice);
       Get.find<CartController>().reCreateCart();
 
       return urlInvoice;
@@ -350,7 +373,7 @@ class CheckoutController extends GetxController {
     return "";
   }
 
-  Future<String> paymentCheckout(order_no, order_id) async {
+  Future<String> paymentCheckout(orderNo, orderId) async {
     String createdDate = DateFormat("yyyyMMddHHmmss")
         .format(DateTime.parse(_checkout.createdAt!));
     String phone = _checkout.shippingAddress!.phone!;
@@ -361,7 +384,7 @@ class CheckoutController extends GetxController {
     }
 
     var inputData = {
-      "external_id": "shopifyInvoice-$createdDate-$order_no-$order_id",
+      "external_id": "shopifyInvoice-$createdDate-$orderNo-$orderId",
       "amount": int.parse(_checkout.totalPriceV2!.replaceAll(".0", "")),
       "payer_email": _checkout.email,
       "description": "Invoice Customer ${_checkout.shippingAddress!.firstName}",
@@ -399,7 +422,8 @@ class CheckoutController extends GetxController {
   Future<String> createDraftOrder() async {
     var variableInput = {
       "input": {
-        if (_checkout.discountApplications != null)
+        if (_checkout.discountApplications != null &&
+            _checkout.discountApplications!.isNotEmpty)
           "appliedDiscount": {
             "amount": _checkout.discountApplications![0].amount,
             "description": _checkout.discountApplications![0].code,
@@ -479,6 +503,9 @@ class CheckoutController extends GetxController {
   Future<dynamic> pesan() async {
     dynamic createOrder;
     if (_checkout.discountApplications != null &&
+        _checkout.discountApplications!.isNotEmpty &&
+        (_checkout.discountApplications![0].code != null ||
+            _checkout.discountApplications![0].code != "") &&
         _checkout.discountApplications![0].targetType == "LINE_ITEM" &&
         _checkout.discountApplications![0].targetSelection == "ENTITLED") {
       createOrder = pesananDenganDiscountLineItems();
@@ -531,10 +558,17 @@ class CheckoutController extends GetxController {
       }
     }
 
+    String? lastName = (_checkout.shippingAddress!.lastName == "" ||
+            _checkout.shippingAddress!.lastName == null)
+        ? _checkout.shippingAddress!.firstName
+        : _checkout.shippingAddress!.lastName;
+
     var createOrder = {
       "draft_order": {
         "email": _user.email,
-        "tags": "apps",
+        "tags": (_checkout.shippingLine!.title!.contains("COD"))
+            ? ["apps", "apps_cod"]
+            : "apps",
         "line_items": _lineItems,
         "shipping_line": {
           "title": _checkout.shippingLine!.title,
@@ -549,13 +583,12 @@ class CheckoutController extends GetxController {
           "zip": _checkout.shippingAddress!.zip,
           "province": _checkout.shippingAddress!.province,
           "country": _checkout.shippingAddress!.country,
-          "last_name": _checkout.shippingAddress!.lastName,
+          "last_name": lastName,
           "address2": _checkout.shippingAddress!.address2,
           "company": "",
           "latitude": null,
           "longitude": null,
-          "name":
-              "${_checkout.shippingAddress!.firstName} ${_checkout.shippingAddress!.lastName}",
+          "name": "${_checkout.shippingAddress!.firstName} $lastName",
           "country_code": "ID",
           "province_code": _checkout.shippingAddress!.province
         },
@@ -572,8 +605,7 @@ class CheckoutController extends GetxController {
           "company": "",
           "latitude": null,
           "longitude": null,
-          "name":
-              "${_checkout.shippingAddress!.firstName} ${_checkout.shippingAddress!.lastName}",
+          "name": "${_checkout.shippingAddress!.firstName} $lastName",
           "country_code": "ID",
           "province_code": _checkout.shippingAddress!.province
         }
@@ -594,6 +626,11 @@ class CheckoutController extends GetxController {
       });
     }
 
+    String? lastName = (_checkout.shippingAddress!.lastName == "" ||
+            _checkout.shippingAddress!.lastName == null)
+        ? _checkout.shippingAddress!.firstName
+        : _checkout.shippingAddress!.lastName;
+
     var createOrder = {
       "order": {
         "inventory_behaviour": "decrement_obeying_policy",
@@ -602,7 +639,9 @@ class CheckoutController extends GetxController {
         "send_receipt": true,
         "financial_status": "pending",
         "payment_gateway_names": ["Xendit Payment Gateway (New)"],
-        "tags": "apps",
+        "tags": (_checkout.shippingLine!.title!.contains("COD"))
+            ? ["apps", "apps_cod"]
+            : "apps",
         "line_items": _lineItems,
         "shipping_lines": [
           {
@@ -620,13 +659,12 @@ class CheckoutController extends GetxController {
           "zip": _checkout.shippingAddress!.zip,
           "province": _checkout.shippingAddress!.province,
           "country": _checkout.shippingAddress!.country,
-          "last_name": _checkout.shippingAddress!.lastName,
+          "last_name": lastName,
           "address2": _checkout.shippingAddress!.address2,
           "company": "",
           "latitude": null,
           "longitude": null,
-          "name":
-              "${_checkout.shippingAddress!.firstName} ${_checkout.shippingAddress!.lastName}",
+          "name": "${_checkout.shippingAddress!.firstName} $lastName",
           "country_code": "ID",
           "province_code": _checkout.shippingAddress!.province
         },
@@ -638,30 +676,28 @@ class CheckoutController extends GetxController {
           "zip": _checkout.shippingAddress!.zip,
           "province": _checkout.shippingAddress!.province,
           "country": _checkout.shippingAddress!.country,
-          "last_name": _checkout.shippingAddress!.lastName,
+          "last_name": lastName,
           "address2": _checkout.shippingAddress!.address2,
           "company": "",
           "latitude": null,
           "longitude": null,
-          "name":
-              "${_checkout.shippingAddress!.firstName} ${_checkout.shippingAddress!.lastName}",
+          "name": "${_checkout.shippingAddress!.firstName} $lastName",
           "country_code": "ID",
           "province_code": _checkout.shippingAddress!.province
         },
         if (_checkout.discountApplications != null &&
+            _checkout.discountApplications!.isNotEmpty &&
             _checkout.discountApplications![0].code != "")
-          "discount_applications": [
+          "discount_codes": [
             for (final x in _checkout.discountApplications ?? []) ...[
               {
-                "title": (x.typename == "AutomaticDiscountApplication")
+                "code": (x.typename == "AutomaticDiscountApplication")
                     ? x.title
                     : x.code,
-                "value": (x.amount != "0.0")
+                "amount": (x.amount != "0.0")
                     ? double.parse(x.amount!)
                     : double.parse(x.percentage!),
-                "type": "automatic",
-                "value_type":
-                    (x.amount != "0.0") ? "fixed_amount" : "percentage"
+                "type": (x.amount != "0.0") ? "fixed_amount" : "percentage"
               }
             ]
           ]

@@ -188,8 +188,9 @@ class OrderDetailView extends GetView<OrdersController> {
                                             color: Color(0xFF777777),
                                           ),
                                           CustomText(
-                                            text:
-                                                "Rp ${formatter.format(int.parse(_order.shippingLine!.originalPriceSet!.shopMoney!.replaceAll(".0", "")))}",
+                                            text: (_order.shippingLine == null)
+                                                ? "Rp 0"
+                                                : "Rp ${formatter.format(int.parse(_order.shippingLine!.originalPriceSet!.shopMoney!.replaceAll(".0", "")))}",
                                             fontSize: 12,
                                           ),
                                         ],

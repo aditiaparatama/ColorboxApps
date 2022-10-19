@@ -1,3 +1,4 @@
+import 'package:colorbox/app/modules/checkout/models/checkout_model.dart';
 import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:dotted_line/dotted_line.dart';
@@ -15,8 +16,11 @@ import '../controllers/discount_controller.dart';
 // ignore: use_key_in_widget_constructors, must_be_immutable
 class DiscountView extends GetView<DiscountController> {
   var formatter = DateFormat('dd MMMM yyyy');
-  var voucher =
-      Get.find<CheckoutController>().checkout.discountApplications![0];
+  var voucher = (Get.find<CheckoutController>().checkout.discountApplications ==
+              null ||
+          Get.find<CheckoutController>().checkout.discountApplications!.isEmpty)
+      ? DiscountCodeApplication.empty()
+      : Get.find<CheckoutController>().checkout.discountApplications![0];
   TextEditingController searchController = TextEditingController();
 
   @override

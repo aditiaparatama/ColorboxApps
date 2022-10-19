@@ -21,8 +21,10 @@ class ItemCheckoutWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _checkout = controller.checkout.lineItems![index];
-    String? _discountType =
-        controller.checkout.discountApplications![0].typename;
+    String? _discountType = (controller.checkout.discountApplications != null &&
+            controller.checkout.discountApplications!.isNotEmpty)
+        ? controller.checkout.discountApplications![0].typename
+        : null;
     final options = _checkout.variants!.title!.split("/");
 
     // final discountType = controller.checkout.discountApplications;
