@@ -4,6 +4,7 @@ import 'package:colorbox/app/modules/cart/views/widget/voucher_widget.dart';
 import 'package:colorbox/app/modules/collections/controllers/collections_controller.dart';
 import 'package:colorbox/app/modules/control/menu_model.dart';
 import 'package:colorbox/app/modules/control/sub_menu_model.dart';
+import 'package:colorbox/app/modules/home/views/widgets/announcement_home.dart';
 import 'package:colorbox/app/modules/home/views/widgets/item_card_ending.dart';
 import 'package:colorbox/app/modules/profile/views/address/address_form.dart';
 import 'package:colorbox/app/widgets/appbar_default.dart';
@@ -87,6 +88,12 @@ class CartView extends GetView<CartController> {
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
+                                  if (controller.homeController.maintenance)
+                                    AnnouncementHome(
+                                      controller: controller.homeController,
+                                      pTop: 24,
+                                      pBottom: 0,
+                                    ),
                                   SizedBox(
                                     child: (c.cart.lines!.isEmpty)
                                         ? Padding(
@@ -136,7 +143,7 @@ class CartView extends GetView<CartController> {
                                                         title: controller
                                                             .discountController
                                                             .discountAutomatic[
-                                                                indexDiscount]
+                                                                temp]
                                                             .title,
                                                         subjectID: int.parse(
                                                             x.replaceAll(
@@ -442,29 +449,33 @@ class CartView extends GetView<CartController> {
                     ],
                   ),
                   ElevatedButton(
-                    onPressed: (c.cart.estimatedCost!.totalAmount == "0.0" &&
-                            c.cart.estimatedCost!.subtotalAmount == "0.0")
+                    onPressed: (controller.homeController.maintenance)
                         ? null
-                        : (c.checkoutTap)
+                        : (c.cart.estimatedCost!.totalAmount == "0.0" &&
+                                c.cart.estimatedCost!.subtotalAmount == "0.0")
                             ? null
-                            : () async {
-                                c.checkoutTap = true;
-                                c.update();
-                                await c.getCheckoutUrl();
-                                var profile = Get.find<SettingsController>();
-                                await profile.fetchingUser();
-                                c.checkoutTap = false;
-                                (profile.userModel.displayName == null)
-                                    ? Get.toNamed(Routes.PROFILE,
-                                        arguments: [c, "cart"])
-                                    : (profile.userModel.addresses != null &&
-                                            profile.userModel.addresses!
-                                                .isNotEmpty)
-                                        ? (controller.listHabis.length > 0)
-                                            ? showAlert(context)
-                                            : Get.toNamed(Routes.CHECKOUT)
-                                        : Get.to(AddressForm(null, true));
-                              },
+                            : (c.checkoutTap)
+                                ? null
+                                : () async {
+                                    c.checkoutTap = true;
+                                    c.update();
+                                    await c.getCheckoutUrl();
+                                    var profile =
+                                        Get.find<SettingsController>();
+                                    await profile.fetchingUser();
+                                    c.checkoutTap = false;
+                                    (profile.userModel.displayName == null)
+                                        ? Get.toNamed(Routes.PROFILE,
+                                            arguments: [c, "cart"])
+                                        : (profile.userModel.addresses !=
+                                                    null &&
+                                                profile.userModel.addresses!
+                                                    .isNotEmpty)
+                                            ? (controller.listHabis.length > 0)
+                                                ? showAlert(context)
+                                                : Get.toNamed(Routes.CHECKOUT)
+                                            : Get.to(AddressForm(null, true));
+                                  },
                     style: ElevatedButton.styleFrom(
                         fixedSize: const Size(156, 48),
                         backgroundColor: colorTextBlack,

@@ -19,6 +19,9 @@ class HomeController extends GetxController {
   List<Announcement> _announcementProduct = [];
   List<Announcement> get announcementProduct => _announcementProduct;
 
+  bool _maintenance = false;
+  bool get maintenance => _maintenance;
+
   String currentItem = 'Home';
   int curIndex = 0;
 
@@ -40,6 +43,8 @@ class HomeController extends GetxController {
       _sliders.add(Sliders.fromJson(json['sliders']['items'][i]));
     }
 
+    _maintenance =
+        (json.containsKey("maintenance")) ? json["maintenance"] : false;
     getCollections(json['CollectionsHome']['items']);
     getAnnouncementHome(json['announcementHome']);
     getAnnouncementProduct(json['announcementProduct']);

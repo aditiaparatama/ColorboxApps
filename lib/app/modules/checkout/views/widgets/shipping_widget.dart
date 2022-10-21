@@ -42,24 +42,66 @@ class ShippingWidget extends GetView<CheckoutController> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-          border: Border.all(color: colorTextBlack),
+          border: Border.all(
+              color: (controller
+                      .checkout.availableShippingRates!.shippingRates!.isEmpty)
+                  ? colorBorderGrey
+                  : colorTextBlack),
           borderRadius: const BorderRadius.all(Radius.circular(6))),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SvgPicture.asset("assets/icon/shipping-fast.svg"),
-              const SizedBox(
-                width: 16,
+              Row(
+                children: [
+                  SvgPicture.asset("assets/icon/shipping-fast.svg"),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  const CustomText(
+                    text: "Pilih Metode Pengiriman",
+                    fontSize: 12,
+                  ),
+                ],
               ),
-              const CustomText(
-                text: "Pilih Metode Pengiriman",
-                fontSize: 12,
+              const Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
               ),
             ],
           ),
-          const Icon(Icons.arrow_back_ios),
+          if (controller
+              .checkout.availableShippingRates!.shippingRates!.isEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: Container(
+                width: Get.width - 52,
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                    color: colorBoxWarning,
+                    border: Border.all(color: colorBorderWarning),
+                    borderRadius: const BorderRadius.all(Radius.circular(2))),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SvgPicture.asset(
+                      "assets/icon/info.svg",
+                      height: 16,
+                    ),
+                    const SizedBox(width: 8),
+                    const Flexible(
+                      child: CustomText(
+                        text:
+                            "Metode pengiriman yang dipilih tidak tersedia di wilayahmu",
+                        fontSize: 12,
+                        textOverflow: TextOverflow.fade,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -69,7 +111,7 @@ class ShippingWidget extends GetView<CheckoutController> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-          border: Border.all(color: const Color(0xFFE5E8EB)),
+          border: Border.all(color: colorBorderGrey),
           borderRadius: const BorderRadius.all(Radius.circular(6))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

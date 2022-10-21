@@ -105,15 +105,19 @@ class CheckoutController extends GetxController {
         looping += 1;
       }
 
-      //update shipping rates
-      var resultShipping = await updateShippingRates(
-          result['checkoutCreate']['checkout']['id'],
-          result2['node']['availableShippingRates']['shippingRates'][0]
-              ['handle']);
+      if (result2['node']['availableShippingRates']['ready'] == true &&
+          result2['node']['availableShippingRates']['shippingRates'].length >
+              0) {
+        //update shipping rates
+        await updateShippingRates(
+            result['checkoutCreate']['checkout']['id'],
+            result2['node']['availableShippingRates']['shippingRates'][0]
+                ['handle']);
 
-      if (result2 != null) {
-        _checkout = CheckoutModel.fromJson(
-            resultShipping['checkoutShippingLineUpdate']['checkout']);
+        // if (result2 != null) {
+        //   _checkout = CheckoutModel.fromJson(
+        //       resultShipping['checkoutShippingLineUpdate']['checkout']);
+        // }
       }
 
       //update voucher dicheckout kalo sudah digunakan di cart
@@ -121,8 +125,8 @@ class CheckoutController extends GetxController {
           _cart.discountCodes![0].code != "") {
         await applyVoucher(_cart.discountCodes![0].code!, back: false);
       }
-
-      calculateLineItem();
+      getCheckout();
+      // calculateLineItem();
     }
     update();
   }
@@ -192,10 +196,10 @@ class CheckoutController extends GetxController {
     calculateLineItem();
     update();
 
-    if (resultShipping == null) {
-      Get.back();
-      // alertGagal("Mohon coba kembali");
-    }
+    // if (resultShipping == null) {
+    //   Get.back();
+    //   // alertGagal("Mohon coba kembali");
+    // }
     Get.back();
     // Get.snackbar("Info", "Data berhasil diubah",
     //     snackPosition: SnackPosition.BOTTOM,

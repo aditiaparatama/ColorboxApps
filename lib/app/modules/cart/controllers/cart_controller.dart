@@ -1,6 +1,7 @@
 import 'package:colorbox/app/modules/cart/providers/cart_provider.dart';
 import 'package:colorbox/app/modules/cart/models/cart_model.dart';
 import 'package:colorbox/app/modules/discount/controllers/discount_controller.dart';
+import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
 import 'package:colorbox/constance.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
@@ -12,6 +13,7 @@ import 'dart:async';
 class CartController extends GetxController {
   final LocalStorageData localStorageData = Get.find();
   final DiscountController discountController = Get.put(DiscountController());
+  final HomeController homeController = Get.put(HomeController());
   ValueNotifier<bool> get loading => _loading;
   final ValueNotifier<bool> _loading = ValueNotifier(false);
   Cart _cart = Cart.empty();

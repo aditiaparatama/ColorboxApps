@@ -386,9 +386,15 @@ class CheckoutView extends GetView<CheckoutController> {
                                             ],
                                           ),
                                           CustomButton(
-                                            onPressed: () async {
-                                              showAlert();
-                                            },
+                                            onPressed: (controller
+                                                    .checkout
+                                                    .availableShippingRates!
+                                                    .shippingRates!
+                                                    .isEmpty)
+                                                ? null
+                                                : () async {
+                                                    showAlert();
+                                                  },
                                             text: "Lakukan Pembayaran",
                                             color: Colors.white,
                                             backgroundColor: colorTextBlack,

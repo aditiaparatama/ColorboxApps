@@ -19,6 +19,10 @@ const Color colorTextRed = Color(0xFFDA2929);
 const Color colorTextBlue = Color(0xFF115AC8);
 const Color colorOverlay = Color(0xFF777777);
 const Color colorBoxInfo = Color(0xFFEEF2F6);
+const Color colorBoxWarning = Color(0xFFFFFAE6);
+const Color colorBorderWarning = Color(0xFFFADC8C);
+const Color colorTextWarning = Color(0xFFF2994A);
+const Color colorIconWarning = Color(0xFFFDA61B);
 
 // ignore: constant_identifier_names
 const CACHED_CART_DATA = 'CACHED_CART_DATA';

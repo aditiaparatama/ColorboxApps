@@ -41,7 +41,11 @@ class ShippingView extends GetView<CheckoutController> {
                               child: Container(
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: const Color(0xFFE5E8EB)),
+                                      color: (x.handle ==
+                                              controller.checkout.shippingLine!
+                                                  .handle)
+                                          ? colorTextBlack
+                                          : colorBorderGrey),
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(6)),
                                 ),
@@ -69,12 +73,28 @@ class ShippingView extends GetView<CheckoutController> {
                                         ),
                                       ],
                                     ),
-                                    CustomText(
-                                      text: (x.amount == "0.0")
-                                          ? "FREE"
-                                          : "Rp ${formatter.format(int.parse(x.amount!.replaceAll(".0", "")))}",
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
+                                    Row(
+                                      children: [
+                                        CustomText(
+                                          text: (x.amount == "0.0")
+                                              ? "FREE"
+                                              : "Rp ${formatter.format(int.parse(x.amount!.replaceAll(".0", "")))}",
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        if (x.handle ==
+                                            controller
+                                                .checkout.shippingLine!.handle)
+                                          Container(
+                                            padding:
+                                                const EdgeInsets.only(left: 8),
+                                            child: const Icon(
+                                              Icons.check_circle,
+                                              color: Colors.black,
+                                              size: 20,
+                                            ),
+                                          )
+                                      ],
                                     ),
                                   ],
                                 ),
