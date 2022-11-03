@@ -21,14 +21,17 @@ class ShippingWidget extends GetView<CheckoutController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () async {
-                  if (controller.checkout.availableShippingRates!.ready ==
-                      false) {
-                    await controller.getCheckout();
-                  }
-                  await controller.getETDShipping();
-                  Get.to(const ShippingView());
-                },
+                onTap: (controller.checkout.availableShippingRates!
+                        .shippingRates!.isEmpty)
+                    ? null
+                    : () async {
+                        if (controller.checkout.availableShippingRates!.ready ==
+                            false) {
+                          await controller.getCheckout();
+                        }
+                        await controller.getETDShipping();
+                        Get.to(const ShippingView());
+                      },
                 child: (controller.checkout.shippingLine == null)
                     ? pilihPengiriman()
                     : pengiriman(),

@@ -84,10 +84,24 @@ class CombinesWith {
 class CustomerGets {
   bool? appliesOnOneTimePurchase;
   bool? appliesOnSubscription;
+  Value? value;
 
   CustomerGets(this.appliesOnOneTimePurchase, this.appliesOnSubscription);
 
   CustomerGets.fromJson(var json) {
+    appliesOnOneTimePurchase = json['appliesOnOneTimePurchase'];
+    appliesOnSubscription = json['appliesOnSubscription'];
+    value = json.containsKey("value") ? Value.fromBxgY(json["value"]) : null;
+  }
+}
+
+class CustomerBuys {
+  bool? appliesOnOneTimePurchase;
+  bool? appliesOnSubscription;
+
+  CustomerBuys(this.appliesOnOneTimePurchase, this.appliesOnSubscription);
+
+  CustomerBuys.fromJson(var json) {
     appliesOnOneTimePurchase = json['appliesOnOneTimePurchase'];
     appliesOnSubscription = json['appliesOnSubscription'];
   }
@@ -158,18 +172,31 @@ class DiscountAutomatic {
   String? discountClass;
   List<DiscountCollection>? collections;
   MinimumRequirement? minimumRequirement;
+  CustomerGets? customerGets;
   CombineWith combineWith = CombineWith.isEmpty();
 
-  DiscountAutomatic(this.typename, this.title, this.discountClass,
-      this.minimumRequirement, this.collections, this.combineWith);
+  DiscountAutomatic(
+      this.typename,
+      this.title,
+      this.discountClass,
+      this.minimumRequirement,
+      this.customerGets,
+      this.collections,
+      this.combineWith);
 
   DiscountAutomatic.fromJson(var json) {
     typename = json["__typename"];
     title = json["title"];
     discountClass = json["discountClass"];
-    minimumRequirement =
-        MinimumRequirement.fromJson(json["minimumRequirement"]);
+    if (typename == "DiscountAutomaticBxgy") {
+      minimumRequirement = MinimumRequirement.fromByBxgY(json);
+    } else {
+      minimumRequirement = (json.containsKey("minimumRequirement"))
+          ? MinimumRequirement.fromJson(json["minimumRequirement"])
+          : null;
+    }
     combineWith = CombineWith.fromJson(json['combinesWith']);
+    customerGets = CustomerGets.fromJson(json["customerGets"]);
     collections = [];
     if (json["customerGets"]["items"].containsKey("collections")) {
       if (json["customerGets"]["items"]["collections"]["edges"].length > 0) {
@@ -203,9 +230,11 @@ class MinimumRequirement {
   String? typename;
   String? greaterThanOrEqualToQuantity;
   String? greaterThanOrEqualToSubtotal;
+  Value? value;
+  List<String>? collections;
 
   MinimumRequirement(this.typename, this.greaterThanOrEqualToQuantity,
-      this.greaterThanOrEqualToSubtotal);
+      this.greaterThanOrEqualToSubtotal, this.value);
 
   MinimumRequirement.fromJson(var json) {
     typename = json["__typename"];
@@ -215,6 +244,22 @@ class MinimumRequirement {
     } else {
       greaterThanOrEqualToSubtotal =
           json["greaterThanOrEqualToSubtotal"]["amount"];
+    }
+    collections = [];
+  }
+
+  MinimumRequirement.fromByBxgY(var json) {
+    typename = json["__typename"];
+    value = Value.fromBxgY(json["customerBuys"]["value"]);
+
+    if (value!.typename == "DiscountPurchaseAmount") {
+      greaterThanOrEqualToSubtotal = value!.amount;
+    } else {
+      greaterThanOrEqualToQuantity = value!.quantity!;
+    }
+    collections = [];
+    for (final x in json["customerBuys"]["items"]["collections"]["edges"]) {
+      collections!.add(x["node"]["id"]);
     }
   }
 }
@@ -230,5 +275,41 @@ class DiscountCollection {
   DiscountCollection.fromJson(var json) {
     id = json["id"];
     handle = json["handle"];
+  }
+}
+
+class Value {
+  String? typename;
+  String? amount;
+  String? quantity;
+  Effect? effect;
+
+  Value(this.typename, this.amount, this.quantity);
+
+  Value.fromBxgY(var json) {
+    typename = json["__typename"];
+    if (typename == "DiscountPurchaseAmount") {
+      amount = json["amount"];
+    } else if (typename == "DiscountAmount") {
+      amount = json["amount"]["amount"].replaceAll(".0", "");
+    } else {
+      quantity = (json["quantity"].containsKey("quantity"))
+          ? json["quantity"]["quantity"]
+          : json["quantity"];
+    }
+    effect =
+        json.containsKey("effect") ? Effect.fromJson(json["effect"]) : null;
+  }
+}
+
+class Effect {
+  String? typename;
+  double? percentage;
+
+  Effect(this.typename, this.percentage);
+
+  Effect.fromJson(var json) {
+    typename = json["__typename"];
+    percentage = json["percentage"];
   }
 }

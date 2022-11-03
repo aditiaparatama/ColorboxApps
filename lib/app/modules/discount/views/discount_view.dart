@@ -157,7 +157,7 @@ class DiscountView extends GetView<DiscountController> {
                                               horizontal: defaultPadding * 3,
                                               vertical: defaultPadding * 2),
                                           width: Get.width,
-                                          height: 170,
+                                          height: 180,
                                           decoration: BoxDecoration(
                                               color: (_totalPrice < _minPrice)
                                                   ? const Color(0xFF212121)
@@ -320,7 +320,7 @@ class DiscountView extends GetView<DiscountController> {
                                         ),
                                       ),
                                       Positioned(
-                                          top: 145 / 2,
+                                          top: 155 / 2,
                                           left: -20,
                                           child: CircleAvatar(
                                             radius: 16,
@@ -334,7 +334,7 @@ class DiscountView extends GetView<DiscountController> {
                                             ),
                                           )),
                                       Positioned(
-                                          top: 145 / 2,
+                                          top: 155 / 2,
                                           right: -20,
                                           child: CircleAvatar(
                                             radius: 16,

@@ -7,11 +7,9 @@ import 'package:flutter/material.dart';
 import 'app/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'firebase_options.dart';
 
-@pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp();
   await setupFlutterNotifications();
   showFlutterNotification(message);
   // If you're going to use other Firebase services in the background, such as Firestore,
@@ -56,6 +54,31 @@ Future<void> setupFlutterNotifications() async {
     sound: true,
   );
   isFlutterLocalNotificationsInitialized = true;
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    // print('User granted permission');
+    String? token = await (messaging.getToken());
+    // print("The token is" + token!);
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      showFlutterNotification(message);
+    });
+  } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+    // print('User granted provisional permission');
+  } else {
+    // print('User declined or has not accepted permission');
+  }
 }
 
 void showFlutterNotification(RemoteMessage message) {
@@ -83,8 +106,30 @@ late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp();
+
   // Set the background messaging handler early on, as a named top-level function
+  // FirebaseMessaging messaging = FirebaseMessaging.instance;
+  // NotificationSettings settings = await messaging.requestPermission(
+  //   alert: true,
+  //   announcement: false,
+  //   badge: true,
+  //   carPlay: false,
+  //   criticalAlert: false,
+  //   provisional: false,
+  //   sound: true,
+  // );
+
+  // if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+  //   print('User granted permission');
+  //   String? token = await (messaging.getToken());
+  //   print("The token is" + token!);
+  // } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+  //   print('User granted provisional permission');
+  // } else {
+  //   print('User declined or has not accepted permission');
+  // }
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   if (!kIsWeb) {

@@ -11,8 +11,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   dotted_line: ^3.1.0
   double_back_to_close_app: ^2.1.0
-  firebase_core: ^1.23.0
-  firebase_messaging: ^13.0.3
+  firebase_auth: ^4.0.2
+  firebase_core: ^2.1.0
+  firebase_messaging: ^14.0.2
   flutter:
     sdk: flutter
   flutter_html: ^2.2.1
@@ -21,10 +22,12 @@ dependencies:
   flutter_zoom_drawer: ^2.3.1+1
   get: 4.6.1
   getwidget: ^2.0.4
+  google_sign_in: ^5.4.2
   graphql: ^5.0.1
   intl: ^0.17.0
   introduction_screen: ^2.1.0
   lottie: ^1.4.1
+  new_version: ^0.3.1
   pull_to_refresh: ^2.0.0
   shared_preferences: ^2.0.13
   shimmer: ^2.0.0

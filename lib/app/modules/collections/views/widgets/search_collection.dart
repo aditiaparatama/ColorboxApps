@@ -38,7 +38,7 @@ class SearchCollection extends StatelessWidget {
           hintText: "Cari produk disini",
           hintStyle: const TextStyle(fontSize: 12, color: Color(0xFF9B9B9B)),
           filled: true,
-          fillColor: const Color(0xFFF5F6F8),
+          fillColor: const Color(0xFFFAFAFA),
           suffixIcon: Padding(
             padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
             child: GestureDetector(

@@ -4,6 +4,7 @@ class Order {
   PageInfo? pageInfo;
   String? id;
   String? name;
+  String? note;
   String? createdAt;
   List<String>? events;
   List<String>? tags;
@@ -23,6 +24,7 @@ class Order {
       this.pageInfo,
       this.id,
       this.name,
+      this.note,
       this.createdAt,
       this.events,
       this.tags,
@@ -39,6 +41,7 @@ class Order {
     pageInfo = PageInfo.fromJson(page);
     id = json['id'];
     name = json['name'];
+    note = json['note'];
     createdAt = json['createdAt'];
     events = [];
     for (final x in json['events']['edges']) {

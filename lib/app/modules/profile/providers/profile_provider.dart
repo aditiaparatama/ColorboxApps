@@ -74,7 +74,9 @@ class ProfileProvider extends GetConnect {
 
     if (result.data!['customerCreate']['customerUserErrors'].length > 0) {
       if (result.data!['customerCreate']['customerUserErrors'][0]["message"] !=
-          "Email sudah diambil") {
+              "Email sudah diambil" &&
+          result.data!['customerCreate']['customerUserErrors'][0]["message"] !=
+              "Email has already been taken") {
         Get.snackbar("Warning",
             result.data!['customerCreate']['customerUserErrors'][0]["message"]);
       }
@@ -195,6 +197,21 @@ class ProfileProvider extends GetConnect {
             email
             phone
             note
+            addresses(first:10){
+                id
+                firstName
+                lastName
+                address1
+                address2
+                company
+                city
+                country
+                countryCodeV2
+                phone
+                province
+                provinceCode
+                zip
+            }
             defaultAddress{
                 id
                 firstName
@@ -237,6 +254,32 @@ class ProfileProvider extends GetConnect {
     final QueryResult result = await _client.query(options);
 
     return result.data!['customer'];
+  }
+
+  Future<dynamic> checkExistUser(String email) async {
+    final GraphQLClient _client = getShopifyGraphQLClient(admin: true);
+
+    final QueryOptions options = QueryOptions(
+      document: gql(
+        '''
+        {
+          customers(first: 1, query: "email:$email") {
+            # CustomerConnection fields
+            edges{
+                node{
+                    id
+                }
+            }
+          }
+        }
+      ''',
+      ),
+      variables: {},
+    );
+
+    final QueryResult result = await _client.query(options);
+
+    return result.data;
   }
 
   Future<dynamic> customerUpdate(dynamic variables) async {
@@ -472,6 +515,133 @@ class ProfileProvider extends GetConnect {
     final QueryResult result = await _client.query(options);
 
     return result.data!['customerAddressUpdate'];
+  }
+
+  Future<dynamic> customerAddressUpdateByAdmin(dynamic variables) async {
+    final GraphQLClient _client = getShopifyGraphQLClient(admin: true);
+
+    final QueryOptions options = QueryOptions(
+      document: gql(
+        r'''
+        mutation customerUpdate($input: CustomerInput!) {
+          customerUpdate(input: $input) {
+            customer {
+              # Customer fields
+              id
+              displayName
+              firstName
+              lastName
+              email
+              phone
+              note
+              addresses(first:10){
+                  id
+                  firstName
+                  lastName
+                  address1
+                  address2
+                  company
+                  city
+                  country
+                  countryCodeV2
+                  phone
+                  province
+                  provinceCode
+                  zip
+              }
+              defaultAddress{
+                  id
+                  firstName
+                  lastName
+                  address1
+                  address2
+                  city
+                  company
+                  country
+                  countryCodeV2
+                  phone
+                  province
+                  provinceCode
+                  zip
+              }
+              orders(first:10){
+                  edges{
+                      node {
+                          id
+                          name
+                          displayFinancialStatus
+                          totalPriceSet {
+                              presentmentMoney {
+                                  amount
+                              }
+                              shopMoney {
+                                  amount
+                              }
+                          }
+                      }
+                  }
+              }
+            }
+            userErrors {
+              field
+              message
+            }
+          }
+        }
+      ''',
+      ),
+      variables: variables,
+    );
+
+    final QueryResult result = await _client.query(options);
+
+    return result.data!['customerUpdate'];
+  }
+
+  Future<dynamic> addAddressByAdmin(String id, dynamic variables) async {
+    var response = await post(
+        url_shopify + "customers/$id/addresses.json", variables,
+        headers: {"X-Shopify-Access-Token": token});
+
+    var data = response.body;
+
+    return data;
+  }
+
+  Future<bool> deleteAddressByAdmin(String id, String addressId) async {
+    var response = await delete(
+        url_shopify + "customers/$id/addresses/$addressId.json",
+        headers: {"X-Shopify-Access-Token": token});
+
+    return response.isOk;
+  }
+
+  Future<dynamic> customerUpdateDefaultAddressByAdmin(dynamic variables) async {
+    final GraphQLClient _client = getShopifyGraphQLClient(admin: true);
+
+    final QueryOptions options = QueryOptions(
+      document: gql(
+        r'''
+        mutation customerUpdateDefaultAddress($addressId: ID!, $customerId: ID!) {
+          customerUpdateDefaultAddress(addressId: $addressId, customerId: $customerId) {
+            customer {
+              # Customer fields
+              id
+            }
+            userErrors {
+              field
+              message
+            }
+          }
+        }
+      ''',
+      ),
+      variables: variables,
+    );
+
+    final QueryResult result = await _client.query(options);
+
+    return result.data;
   }
 
   Future<List<dynamic>> getProvince() async {

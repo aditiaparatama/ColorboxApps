@@ -4,6 +4,7 @@ import 'package:colorbox/app/modules/control/controllers/control_controller.dart
 import 'package:colorbox/app/modules/profile/controllers/profile_controller.dart';
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
+import 'package:colorbox/app/modules/wishlist/controllers/wishlist_controller.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:get/get.dart';
 
@@ -30,6 +31,9 @@ class Controlv2Binding extends Bindings {
     );
     Get.lazyPut<HomeController>(
       () => HomeController(),
+    );
+    Get.lazyPut<WishlistController>(
+      () => WishlistController(),
     );
   }
 }

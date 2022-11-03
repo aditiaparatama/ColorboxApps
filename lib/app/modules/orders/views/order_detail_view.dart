@@ -1,8 +1,10 @@
+import 'package:colorbox/app/modules/checkout/views/payment_view.dart';
 import 'package:colorbox/app/modules/orders/controllers/orders_controller.dart';
 import 'package:colorbox/app/modules/orders/models/order_model.dart';
 import 'package:colorbox/app/modules/orders/views/widgets/detail_product.dart';
 import 'package:colorbox/app/modules/orders/views/widgets/timeline_status.dart';
 import 'package:colorbox/app/widgets/appbar_default.dart';
+import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/constance.dart';
 import 'package:colorbox/helper/format_date.dart';
@@ -253,7 +255,26 @@ class OrderDetailView extends GetView<OrdersController> {
                           )
                         ],
                       ),
-                    )
+                    ),
+                    if (!controller.order[id].shippingLine!.title!
+                            .contains("COD") &&
+                        controller.order[id].note != null &&
+                        controller.order[id].status == "Menunggu Pembayaran")
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        child: CustomButton(
+                          onPressed: () {
+                            Get.off(WebPaymentView(
+                                title: "Pembayaran",
+                                url: controller.order[id].note));
+                          },
+                          text: "Lakukan Pembayaran",
+                          backgroundColor: colorTextBlack,
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                      ),
                   ],
                 ),
               ),

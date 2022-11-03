@@ -44,9 +44,9 @@ class AddressForm extends GetView<ProfileController> {
       }
       _namaLengkap.text = x.firstName! + " " + x.lastName!;
       _telpon.text = x.phone!.replaceAll("+62", "");
-      _address1.text = x.address1!;
-      _province.text = x.province!;
-      _city.text = x.city!;
+      _address1.text = x.address1 ?? "";
+      _province.text = x.province ?? "";
+      _city.text = x.city ?? "";
       _address2.text = x.address2 ?? "";
       _zip.text = x.zip!;
     }

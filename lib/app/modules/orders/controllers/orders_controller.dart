@@ -94,7 +94,9 @@ class OrdersController extends GetxController {
     var now = DateTime.now();
     var dateMin = now.add(const Duration(days: -90));
     var temp = [];
-
+    if (settingController.userModel.id == null) {
+      await settingController.fetchingUser();
+    }
     var result = await OrderProvider().getActiveOrders(
         settingController.userModel.id!,
         DateFormat("yyyy-MM-dd").format(dateMin),

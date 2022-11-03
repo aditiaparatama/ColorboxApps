@@ -267,7 +267,9 @@ class RegisterView extends GetView<ProfileController> {
                                               Get.offAllNamed(Routes.CONTROLV2);
                                             } else {
                                               if (result ==
-                                                  "Email sudah diambil") {
+                                                      "Email sudah diambil" ||
+                                                  result ==
+                                                      "Email has already been taken") {
                                                 _showMyDialog(context);
                                               }
                                               controller.loading.value = false;

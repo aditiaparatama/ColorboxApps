@@ -115,63 +115,94 @@ class ItemCheckoutWidget extends StatelessWidget {
               const SizedBox(height: defaultPadding),
               (_checkout.discountAllocations != null &&
                       _checkout.discountAllocations!.isNotEmpty &&
-                      _discountType == "AutomaticDiscountApplication")
+                      _discountType == "AutomaticDiscountApplication" &&
+                      _checkout.discountAllocations![0].allocatedAmount !=
+                          "0.0")
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(6),
-                          decoration: const BoxDecoration(
-                              color: colorBoxInfo,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(2))),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.discount_outlined,
-                                size: 12,
-                                color: colorTextBlack,
-                              ),
-                              const CustomText(
-                                text: " Potongan Harga [",
-                                color: colorTextBlack,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                              ),
-                              CustomText(
-                                text:
-                                    "-Rp ${formatter.format(double.parse(_checkout.discountAllocations![0].allocatedAmount!).ceil())}]",
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                              )
-                            ],
+                        if (double.parse(_checkout.discountAllocations![0]
+                                            .allocatedAmount ??
+                                        "0")
+                                    .ceil() -
+                                double.parse(_checkout.variants!.price!
+                                        .replaceAll(".00", ""))
+                                    .ceil() !=
+                            0)
+                          Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: const BoxDecoration(
+                                color: colorBoxInfo,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(2))),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.discount_outlined,
+                                  size: 12,
+                                  color: colorTextBlack,
+                                ),
+                                const CustomText(
+                                  text: " Potongan Harga [",
+                                  color: colorTextBlack,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                CustomText(
+                                  text:
+                                      "-Rp ${formatter.format(double.parse(_checkout.discountAllocations![0].allocatedAmount!).ceil())}]",
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                )
+                              ],
+                            ),
                           ),
-                        ),
                         const SizedBox(height: 4),
                         SizedBox(
                           width: Get.width * .7,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  CustomText(
-                                    text:
-                                        "Rp ${formatter.format(int.parse(_checkout.variants!.price!.replaceAll(".00", "")))}",
-                                    decoration: TextDecoration.lineThrough,
-                                    color: colorTextGrey,
-                                    fontSize: 10,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  CustomText(
-                                    text:
-                                        "Rp ${formatter.format(double.parse(_checkout.variants!.price!.replaceAll(".00", "")).ceil() - double.parse(_checkout.discountAllocations![0].allocatedAmount!).ceil())}",
-                                    fontSize: 12,
-                                    color: colorSaleRed,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ],
-                              ),
+                              if (double.parse(_checkout.discountAllocations![0]
+                                                  .allocatedAmount ??
+                                              "0")
+                                          .ceil() -
+                                      double.parse(_checkout.variants!.price!
+                                              .replaceAll(".00", ""))
+                                          .ceil() !=
+                                  0)
+                                Row(
+                                  children: [
+                                    CustomText(
+                                      text:
+                                          "Rp ${formatter.format(int.parse(_checkout.variants!.price!.replaceAll(".00", "")))}",
+                                      decoration: TextDecoration.lineThrough,
+                                      color: colorTextGrey,
+                                      fontSize: 10,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    CustomText(
+                                      text:
+                                          "Rp ${formatter.format(double.parse(_checkout.variants!.price!.replaceAll(".00", "")).ceil() - double.parse(_checkout.discountAllocations![0].allocatedAmount!).ceil())}",
+                                      fontSize: 12,
+                                      color: colorSaleRed,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ],
+                                ),
+                              if (double.parse(_checkout.discountAllocations![0]
+                                                  .allocatedAmount ??
+                                              "0")
+                                          .ceil() -
+                                      double.parse(_checkout.variants!.price!
+                                              .replaceAll(".00", ""))
+                                          .ceil() ==
+                                  0)
+                                const CustomText(
+                                  text: "FREE",
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               CustomText(
                                 text: "x${_checkout.quantity}",
                                 fontSize: 12,

@@ -4,9 +4,9 @@ import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/widgets/custom_text_form_field.dart';
+import 'package:colorbox/app/widgets/pop_up_alert.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../controllers/profile_controller.dart';
 
@@ -156,30 +156,18 @@ class ProfileView extends GetView<ProfileController> {
                                                     Get.back();
                                                   }
                                                 } else {
-                                                  Get.snackbar("", result,
-                                                      titleText: Row(
-                                                        children: [
-                                                          SvgPicture.asset(
-                                                            "assets/icon/Exclamation-Circle.svg",
-                                                            color: Colors.white,
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 4),
-                                                          const CustomText(
-                                                            text:
-                                                                "Terjadi Kesalahan",
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontSize: 16,
-                                                          ),
-                                                        ],
+                                                  await popUpAlert(
+                                                      context,
+                                                      "Terjadi Kesalahan",
+                                                      CustomText(
+                                                        text: result,
+                                                        fontSize: 12,
+                                                        textOverflow:
+                                                            TextOverflow.fade,
+                                                        textAlign:
+                                                            TextAlign.center,
                                                       ),
-                                                      backgroundColor:
-                                                          colorTextBlack,
-                                                      colorText: Colors.white,
-                                                      snackPosition:
-                                                          SnackPosition.BOTTOM);
+                                                      () => Get.back());
                                                 }
                                               } else {
                                                 controller.update();
@@ -244,7 +232,28 @@ class ProfileView extends GetView<ProfileController> {
                                         ]),
                                         const SizedBox(height: 40),
                                         CustomButton(
-                                            onPressed: () {},
+                                            onPressed: () async {
+                                              String result = await controller
+                                                  .loginWithGoogle();
+                                              if (result != "-1") {
+                                                await Get.find<
+                                                        SettingsController>()
+                                                    .fetchingUser(id: result);
+
+                                                if (globalKey == "onboard") {
+                                                  return Get.offAllNamed(
+                                                      Routes.CONTROLV2);
+                                                }
+                                                if (globalKey != null) {
+                                                  final BottomNavigationBar
+                                                      navigationBar =
+                                                      globalKey.currentWidget;
+                                                  navigationBar.onTap!(2);
+                                                } else {
+                                                  Get.back();
+                                                }
+                                              }
+                                            },
                                             borderColor: colorBorderGrey,
                                             child: Row(
                                               mainAxisAlignment:

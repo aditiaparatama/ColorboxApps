@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCD1O1NyQvXwhvR-fR2zvTWQ8-4Kjvc9TU',
-    appId: '1:541806782411:android:98263c02db90aa7bb8b84e',
+    appId: '1:541806782411:android:89382c153b1cf1c7b8b84e',
     messagingSenderId: '541806782411',
     projectId: 'colorbox-5dbf1',
     storageBucket: 'colorbox-5dbf1.appspot.com',
@@ -59,11 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAsEcL1Bd_bqu5YjJqv7de6JwKQjwQ-CyI',
-    appId: '1:541806782411:ios:4861e506887865ecb8b84e',
+    appId: '1:541806782411:ios:720a7b37bc80f2eeb8b84e',
     messagingSenderId: '541806782411',
     projectId: 'colorbox-5dbf1',
     storageBucket: 'colorbox-5dbf1.appspot.com',
-    iosClientId: '541806782411-pq4ec0nu70al9gpo3vuelu48hk037njg.apps.googleusercontent.com',
-    iosBundleId: 'id.co.colorbox',
+    iosClientId: '541806782411-aosju5egpt6ekje9mnf9l29cina7bf9q.apps.googleusercontent.com',
+    iosBundleId: 'com.delamibrands.colorbox',
   );
 }

@@ -1,4 +1,4 @@
-package id.co.colorbox
+package com.delamibrands.colorbox
 
 import io.flutter.embedding.android.FlutterActivity
 

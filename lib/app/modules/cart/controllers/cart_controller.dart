@@ -263,8 +263,13 @@ class CartController extends GetxController {
         if (x.title == cartDiscount.discountAllocations!.title &&
             cartDiscount.merchandise!.inventoryQuantity! > 0) {
           curQuantity = curQuantity + cartDiscount.quantity!;
-          curSubtotal =
-              curSubtotal + double.parse(cartDiscount.merchandise!.price!);
+          if (double.parse(cartDiscount.merchandise!.price!) -
+                  double.parse(cartDiscount.discountAllocations!.amount!) !=
+              0) {
+            curSubtotal = curSubtotal +
+                (double.parse(cartDiscount.merchandise!.price!) *
+                    cartDiscount.quantity!);
+          }
           totalDiscount = totalDiscount +
               double.parse(cartDiscount.discountAllocations!.amount!);
         }
@@ -281,6 +286,7 @@ class CartController extends GetxController {
       }
 
       discountRunning.add(DiscountRunning(
+          x.typename,
           x.title,
           int.parse(minQuantity),
           double.parse(minSubtotal),

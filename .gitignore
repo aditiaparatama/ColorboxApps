@@ -52,3 +52,4 @@ lib/globalvar.dart
 lib/globalvar_prod.dart
 ios/
 android/
+pushes/

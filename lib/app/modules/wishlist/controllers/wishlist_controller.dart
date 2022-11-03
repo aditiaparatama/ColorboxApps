@@ -34,7 +34,7 @@ class WishlistController extends GetxController {
   Future<void> fetchingData() async {
     _loading.value = true;
     update();
-    UserModel? _user = await localStorageData.getUser;
+    UserModel? _user = settingsController.userModel;
     if (_user.id != null) {
       var result = await WhistlistProvider()
           .getAllData(_user.id!.replaceAll("gid://shopify/Customer/", ""));
@@ -59,7 +59,7 @@ class WishlistController extends GetxController {
   }
 
   Future<void> fetchWishlist() async {
-    UserModel? _user = await localStorageData.getUser;
+    UserModel? _user = settingsController.userModel;
     var result = await WhistlistProvider()
         .getAllData((_user.id ?? "").replaceAll("gid://shopify/Customer/", ""));
 

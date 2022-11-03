@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="id.co.colorbox">
+    package="com.delamibrands.colorbox">
     <uses-permission android:name="android.permission.INTERNET"/>
 
    <application

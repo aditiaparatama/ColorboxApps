@@ -27,13 +27,17 @@ class InformationAccount extends StatelessWidget {
     emailTextController.text = _settingController.userModel.email!;
     birthdayTextController.text = (_settingController.userModel.note != null &&
             _settingController.userModel.note != "")
-        ? DateFormat('dd/MM/yyyy')
-            .format(DateTime.parse(_settingController.userModel.note!.trim()))
+        ? DateFormat('dd/MM/yyyy').format(DateTime.parse(_settingController
+            .userModel.note!
+            .replaceAll("Birthday: ", "")
+            .trim()))
         : "";
 
     DateTime _initialDate = (_settingController.userModel.note != null &&
             _settingController.userModel.note != "")
-        ? DateTime.parse(_settingController.userModel.note!.trim())
+        ? DateTime.parse(_settingController.userModel.note!
+            .replaceAll("Birthday: ", "")
+            .trim())
         : controller.showDateBirth!;
 
     return Scaffold(

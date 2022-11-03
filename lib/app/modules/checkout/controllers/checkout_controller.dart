@@ -6,19 +6,19 @@ import 'package:colorbox/app/modules/checkout/providers/checkout_provider.dart';
 import 'package:colorbox/app/modules/checkout/providers/draft_order_provider.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
+import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/constance.dart';
-import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class CheckoutController extends GetxController {
-  final LocalStorageData localStorageData = Get.find();
+  // final LocalStorageData localStorageData = Get.find();
   ValueNotifier get loading => _loading;
   final ValueNotifier<bool> _loading = ValueNotifier(false);
-  CustomerToken? _token = CustomerToken.isEmpty();
+  // CustomerToken? _token = CustomerToken.isEmpty();
   String? _idCheckout;
   String? get idCheckout => _idCheckout;
   String? _etd;
@@ -49,9 +49,9 @@ class CheckoutController extends GetxController {
   Future<void> getAddress() async {
     _loading.value = true;
     update();
-    _token = await localStorageData.getTokenUser;
-    var result = await ProfileProvider().getUser(_token!.accessToken!);
-    _user = UserModel.fromJson(result);
+    // _token = await localStorageData.getTokenUser;
+    // var result = await ProfileProvider().getUser(_token!.accessToken!);
+    _user = Get.find<SettingsController>().userModel;
     _loading.value = false;
     update();
   }
@@ -639,10 +639,16 @@ class CheckoutController extends GetxController {
       "order": {
         "inventory_behaviour": "decrement_obeying_policy",
         "email": _user.email,
-        "gateway": "Xendit Mobile",
+        "gateway": (_checkout.shippingLine!.title!.contains("COD"))
+            ? "Cash on Delivery (COD)"
+            : "Xendit Mobile",
         "send_receipt": true,
         "financial_status": "pending",
-        "payment_gateway_names": ["Xendit Payment Gateway (New)"],
+        "channel": "Mobile Apps",
+        "payment_gateway_names":
+            (_checkout.shippingLine!.title!.contains("COD"))
+                ? ["Cash on Delivery (COD)"]
+                : ["Xendit Payment Gateway (New)"],
         "tags": (_checkout.shippingLine!.title!.contains("COD"))
             ? ["apps", "apps_cod"]
             : "apps",
@@ -722,9 +728,8 @@ class CheckoutController extends GetxController {
       if (discountType != null && item.discountAllocations!.isNotEmpty) {
         discountAmount = ((discountAmount == null) ? 0.0 : discountAmount!) +
             double.parse(item.discountAllocations![0].allocatedAmount!
-                    .replaceAll(".0", ""))
-                .ceil();
-        lineItemPrice = lineItemPrice - discountAmount!.ceil();
+                .replaceAll(".0", ""));
+        lineItemPrice = lineItemPrice - discountAmount!;
       }
     }
   }

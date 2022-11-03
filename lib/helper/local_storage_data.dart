@@ -69,6 +69,12 @@ class LocalStorageData extends GetxController {
     await prefs.remove(CACHED_USER_DATA);
   }
 
+  void deleteToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // await prefs.clear();
+    await prefs.remove(CACHED_USER_TOKEN);
+  }
+
   Future<CustomerToken?> get getTokenUser async {
     try {
       CustomerToken data = await _getTokenUser();

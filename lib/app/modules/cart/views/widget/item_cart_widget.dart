@@ -55,6 +55,73 @@ class ItemCartWidget extends StatelessWidget {
         break;
       }
     }
+    Widget widgetDiscount() {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (double.parse(_cart.merchandise!.price!.replaceAll(".00", ""))
+                      .ceil() -
+                  double.parse(_cart.discountAllocations!.amount!).ceil() !=
+              0)
+            Container(
+              padding: const EdgeInsets.all(6),
+              decoration: const BoxDecoration(
+                  color: colorBoxInfo,
+                  borderRadius: BorderRadius.all(Radius.circular(2))),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.discount_outlined,
+                    size: 12,
+                    color: colorTextBlack,
+                  ),
+                  CustomText(
+                    text: " ${_cart.discountAllocations!.title} [",
+                    color: colorTextBlack,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  CustomText(
+                    text:
+                        "-Rp ${formatter.format(double.parse(_cart.discountAllocations!.amount!).ceil())}]",
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                  )
+                ],
+              ),
+            ),
+          const SizedBox(height: 4),
+          (double.parse(_cart.merchandise!.price!.replaceAll(".00", ""))
+                          .ceil() -
+                      double.parse(_cart.discountAllocations!.amount!).ceil() ==
+                  0)
+              ? const CustomText(
+                  text: "FREE",
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                )
+              : Row(
+                  children: [
+                    CustomText(
+                      text:
+                          "Rp ${formatter.format(int.parse(_cart.merchandise!.price!.replaceAll(".00", "")))}",
+                      decoration: TextDecoration.lineThrough,
+                      color: colorTextGrey,
+                      fontSize: 10,
+                    ),
+                    const SizedBox(width: 4),
+                    CustomText(
+                      text:
+                          "Rp ${formatter.format(double.parse(_cart.merchandise!.price!.replaceAll(".00", "")).ceil() - double.parse(_cart.discountAllocations!.amount!).ceil())}",
+                      fontSize: 14,
+                      color: colorSaleRed,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ],
+                ),
+        ],
+      );
+    }
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -70,7 +137,8 @@ class ItemCartWidget extends StatelessWidget {
                       (indexCollectionPromo >= 0) &&
                       collectionPromo!.subjectID != null &&
                       _cart.merchandise!.inventoryQuantity! > 0 &&
-                      !(discountRunning.applied ?? false))
+                      !(discountRunning.applied ?? false) &&
+                      discountRunning.typename != "DiscountAutomaticBxgy")
                   ? InkWell(
                       onTap: () {
                         Get.offNamed(Routes.COLLECTIONS, arguments: {
@@ -152,6 +220,7 @@ class ItemCartWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(
+                          width: Get.width - 132,
                           child: CustomText(
                             text: controller
                                 .cart.lines![index].merchandise!.titleProduct!,
@@ -204,66 +273,17 @@ class ItemCartWidget extends StatelessWidget {
                                     "CartAutomaticDiscountAllocation" &&
                                 _cart.merchandise!.inventoryQuantity! > 0 &&
                                 (discountRunning.applied ?? false))
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(6),
-                                    decoration: const BoxDecoration(
-                                        color: colorBoxInfo,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(2))),
-                                    child: Row(
-                                      children: [
-                                        const Icon(
-                                          Icons.discount_outlined,
-                                          size: 12,
-                                          color: colorTextBlack,
-                                        ),
-                                        CustomText(
-                                          text:
-                                              " ${_cart.discountAllocations!.title} [",
-                                          color: colorTextBlack,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        CustomText(
-                                          text:
-                                              "-Rp ${formatter.format(double.parse(_cart.discountAllocations!.amount!).ceil())}]",
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600,
-                                        )
-                                      ],
-                                    ),
+                            ? widgetDiscount()
+                            : (discountRunning.typename ==
+                                        "DiscountAutomaticBxgy" &&
+                                    _cart.discountAllocations!.amount != "0.0")
+                                ? widgetDiscount()
+                                : CustomText(
+                                    text:
+                                        "Rp ${formatter.format(int.parse(_cart.merchandise!.price!.replaceAll(".00", "")))}",
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  const SizedBox(height: 4),
-                                  Row(
-                                    children: [
-                                      CustomText(
-                                        text:
-                                            "Rp ${formatter.format(int.parse(_cart.merchandise!.price!.replaceAll(".00", "")))}",
-                                        decoration: TextDecoration.lineThrough,
-                                        color: colorTextGrey,
-                                        fontSize: 10,
-                                      ),
-                                      const SizedBox(width: 4),
-                                      CustomText(
-                                        text:
-                                            "Rp ${formatter.format(double.parse(_cart.merchandise!.price!.replaceAll(".00", "")).ceil() - double.parse(_cart.discountAllocations!.amount!).ceil())}",
-                                        fontSize: 14,
-                                        color: colorSaleRed,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )
-                            : CustomText(
-                                text:
-                                    "Rp ${formatter.format(int.parse(_cart.merchandise!.price!.replaceAll(".00", "")))}",
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
                         //control qty
                         Container(
                           padding: const EdgeInsets.only(top: 16),

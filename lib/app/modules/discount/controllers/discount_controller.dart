@@ -16,6 +16,9 @@ class DiscountController extends GetxController {
   List<Discount> get discount => _discount;
   List<DiscountAutomatic> _discountAutomatic = [];
   List<DiscountAutomatic> get discountAutomatic => _discountAutomatic;
+  List<DiscountAutomatic> _discountAutomaticTotalOrder = [];
+  List<DiscountAutomatic> get discountAutomaticTotalOrder =>
+      _discountAutomaticTotalOrder;
   UserModel _user = UserModel.isEmpty();
   var listingDiscountAutomatic = [];
 
@@ -57,10 +60,15 @@ class DiscountController extends GetxController {
   Future<void> getDiscountAutomatic() async {
     var result = await DiscountProvider().getDiscountAutomatic();
     _discountAutomatic = [];
+    _discountAutomaticTotalOrder = [];
     if (result != null) {
       for (final x in result['automaticDiscountNodes']['edges']) {
         if (x['node']['automaticDiscount']["discountClass"] == "PRODUCT") {
           _discountAutomatic
+              .add(DiscountAutomatic.fromJson(x['node']['automaticDiscount']));
+        }
+        if (x['node']['automaticDiscount']["discountClass"] == "ORDER") {
+          _discountAutomaticTotalOrder
               .add(DiscountAutomatic.fromJson(x['node']['automaticDiscount']));
         }
       }

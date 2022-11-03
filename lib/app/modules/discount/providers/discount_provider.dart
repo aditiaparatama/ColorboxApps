@@ -122,6 +122,29 @@ class DiscountProvider extends GetConnect {
                               customerGets{
                                   appliesOnOneTimePurchase
                                   appliesOnSubscription
+                                  value{
+                                      __typename 
+                                      ...on DiscountAmount{
+                                          amount{
+                                              amount
+                                          }
+                                          appliesOnEachItem
+                                      }
+                                      ...on DiscountPercentage{
+                                          percentage
+                                      }
+                                      ...on DiscountOnQuantity{
+                                          effect{
+                                              __typename
+                                              ...on DiscountPercentage{
+                                                  percentage
+                                              }
+                                          }
+                                          quantity{
+                                              quantity
+                                          }
+                                      }
+                                  }
                                   items{
                                       __typename
                                       ...on DiscountCollections{
@@ -145,13 +168,60 @@ class DiscountProvider extends GetConnect {
                                   productDiscounts
                                   shippingDiscounts
                               }
+                              customerBuys{
+                                value{
+                                    __typename 
+                                    ...on DiscountPurchaseAmount{
+                                        amount
+                                    }
+                                    ...on DiscountQuantity{
+                                        quantity
+                                    }
+                                }
+                                items{
+                                    __typename
+                                    ...on DiscountCollections{
+                                        collections(first:15){
+                                            edges{
+                                                node{
+                                                    id
+                                                    handle
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                              }
                               customerGets{
                                   appliesOnOneTimePurchase
                                   appliesOnSubscription
+                                  value{
+                                      __typename 
+                                      ...on DiscountAmount{
+                                          amount{
+                                              amount
+                                          }
+                                          appliesOnEachItem
+                                      }
+                                      ...on DiscountPercentage{
+                                          percentage
+                                      }
+                                      ...on DiscountOnQuantity{
+                                          effect{
+                                              __typename
+                                              ...on DiscountPercentage{
+                                                  percentage
+                                              }
+                                          }
+                                          quantity{
+                                              quantity
+                                          }
+                                      }
+                                  }
                                   items{
                                       __typename
                                       ...on DiscountCollections{
-                                          collections(first:15){
+                                          collections(first:5){
                                               edges{
                                                   node{
                                                       id

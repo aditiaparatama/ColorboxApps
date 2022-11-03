@@ -7,6 +7,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:541806782411:android:89382c153b1cf1c7b8b84e",
+        "android_client_info": {
+          "package_name": "com.delamibrands.colorbox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "541806782411-0063aeu2aubj4aji9530mf18j5l8ejt4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCD1O1NyQvXwhvR-fR2zvTWQ8-4Kjvc9TU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "541806782411-0063aeu2aubj4aji9530mf18j5l8ejt4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "541806782411-aosju5egpt6ekje9mnf9l29cina7bf9q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.delamibrands.colorbox"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:541806782411:android:98263c02db90aa7bb8b84e",
         "android_client_info": {
           "package_name": "id.co.colorbox"

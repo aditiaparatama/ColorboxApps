@@ -38,6 +38,7 @@ class ProductProvider extends GetConnect {
                           node {
                               id
                               price
+                              barcode
                               compareAtPrice
                               quantityAvailable
                               sku

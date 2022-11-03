@@ -122,6 +122,7 @@ class DiscountAllocations {
 }
 
 class DiscountRunning {
+  String? typename;
   String? title;
   int? minQuantity;
   double? minSubtotal;
@@ -136,6 +137,7 @@ class DiscountRunning {
   CombineWith combineWith = CombineWith.isEmpty();
 
   DiscountRunning(
+      this.typename,
       this.title,
       this.minQuantity,
       this.minSubtotal,

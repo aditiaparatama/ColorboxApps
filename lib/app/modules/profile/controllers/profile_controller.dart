@@ -1,16 +1,17 @@
 import 'package:colorbox/app/data/models/countries_model.dart';
 import 'package:colorbox/app/data/models/mailing_address.dart';
-import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
-import 'package:colorbox/app/modules/cart/providers/cart_provider.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/constance.dart';
+import 'package:colorbox/globalvar.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 
 class ProfileController extends GetxController {
@@ -47,8 +48,6 @@ class ProfileController extends GetxController {
   dynamic _kodePosTemp = [];
   dynamic get kodePos => _kodePos;
 
-  final CartController _cartController = Get.find<CartController>();
-
   @override
   void onInit() async {
     await fetchingUser();
@@ -66,18 +65,21 @@ class ProfileController extends GetxController {
       update();
       return "Alamat email atau password salah";
     } else {
-      CustomerToken token = CustomerToken.json(result["customerAccessToken"]);
-      setToken(token);
       var user = await ProfileProvider()
           .getUser(result["customerAccessToken"]['accessToken']);
       _userModel = UserModel.fromJson(user);
       _userModel.expiresAt = result["customerAccessToken"]['expiresAt'];
+
+      CustomerToken token = CustomerToken.json(result["customerAccessToken"]);
+      token.id = _userModel.id;
+      setToken(token);
+
       await getUserAdmin(user["id"]);
 
       setUser(userModel);
 
-      CartProvider().cartBuyerIdentityupdate(_cartController.idCart!,
-          result["customerAccessToken"]['accessToken'], _userModel);
+      // CartProvider().cartBuyerIdentityupdate(_cartController.idCart!,
+      //     result["customerAccessToken"]['accessToken'], _userModel);
 
       Get.find<SettingsController>().getTotalOrders();
       _loading.value = false;
@@ -87,12 +89,72 @@ class ProfileController extends GetxController {
     return "1";
   }
 
+  Future<String> loginWithGoogle() async {
+    _loading.value = true;
+    update();
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser =
+        await GoogleSignIn(scopes: <String>["email"]).signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser!.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    var result = await FirebaseAuth.instance.signInWithCredential(credential);
+
+    if (result.additionalUserInfo?.profile?["email_verified"]) {
+      var checkUser = await ProfileProvider()
+          .checkExistUser(result.additionalUserInfo?.profile?["email"]);
+
+      if (checkUser['customers']['edges'].length == 0) {
+        // checkUser['customers']['edges'][0]['node']['id']
+        await registerFromGoogle(result.additionalUserInfo?.profile);
+      }
+
+      checkUser = await ProfileProvider()
+          .checkExistUser(result.additionalUserInfo?.profile?["email"]);
+
+      _loading.value = true;
+
+      if (checkUser['customers']['edges'].length > 0) {
+        DateTime date = DateTime.now();
+        DateTime exp = date.add(const Duration(days: 31));
+        setToken(CustomerToken(checkUser['customers']['edges'][0]['node']['id'],
+            googleAuth.accessToken, exp.toString()));
+        await getUserAdmin(checkUser['customers']['edges'][0]['node']['id']);
+
+        // var resultToken = await ProfileProvider()
+        //     .login(result.additionalUserInfo?.profile?["email"], defaultPass);
+
+        // CustomerToken token =
+        //     CustomerToken.json(resultToken["customerAccessToken"]);
+        // token.id = checkUser['customers']['edges'][0]['node']['id'];
+        // setToken(token);
+
+        return checkUser['customers']['edges'][0]['node']['id'];
+      }
+    }
+    return "-1";
+  }
+
   Future<void> getUserAdmin(String id) async {
     var user = await ProfileProvider().getUserFromAdmin(id);
     _userFromAdmin = UserModel.fromAdmin(user);
     _userModel.note =
-        _userFromAdmin.note!.toLowerCase().trim().replaceAll("birthday:", "");
+        _userFromAdmin.note?.toLowerCase().trim().replaceAll("birthday:", "");
     update();
+  }
+
+  Future<void> registerFromGoogle(dynamic user) async {
+    await ProfileProvider().register(user?['email'].toLowerCase(), defaultPass,
+        user?['given_name'], user?['family_name']);
   }
 
   Future<String> register() async {
@@ -158,10 +220,10 @@ class ProfileController extends GetxController {
   Future<void> fetchingUser() async {
     _token = await localStorageData.getTokenUser;
     if (_token!.accessToken != null) {
-      var result = await ProfileProvider().getUser(_token!.accessToken!);
-      _userModel = UserModel.fromJson(result);
-      await getUserAdmin(_userModel.id!);
-      update();
+      // var result = await ProfileProvider().getUser(_token!.accessToken!);
+      // _userModel = UserModel.fromJson(result);
+      await getUserAdmin(_token!.id!);
+      _userModel = _userFromAdmin;
     }
   }
 
@@ -170,13 +232,14 @@ class ProfileController extends GetxController {
     update();
     _token = await localStorageData.getTokenUser;
     if (_token != null) {
+      // var result = await ProfileProvider()
+      //     .customerDefaultAddressUpdate(_token!.accessToken!, id);
+      dynamic variables = {"addressId": id, "customerId": _userFromAdmin.id};
       var result = await ProfileProvider()
-          .customerDefaultAddressUpdate(_token!.accessToken!, id);
+          .customerUpdateDefaultAddressByAdmin(variables);
 
-      if (result['customerDefaultAddressUpdate']['customerUserErrors'].length ==
-          0) {
-        _userModel = UserModel.fromJson(
-            result['customerDefaultAddressUpdate']['customer']);
+      if (result['customerUpdateDefaultAddress']['userErrors'].length == 0) {
+        fetchingUser();
 
         Get.snackbar("", "Alamat utama berhasil diubah",
             titleText: Row(
@@ -231,16 +294,96 @@ class ProfileController extends GetxController {
         _address!.province = _address!.province;
     }
 
-    _token = await localStorageData.getTokenUser;
+    if (_token == null || _token!.id == null) {
+      _token = await localStorageData.getTokenUser;
+    }
+    dynamic result;
+
     if (_token!.accessToken != null) {
-      var result = (id == null)
-          ? await ProfileProvider()
-              .customerAddressCreate(_token!.accessToken!, _address!)
-          : await ProfileProvider()
-              .customerAddressUpdate(_token!.accessToken!, _address!, id);
-      if (result['customerUserErrors'].length == 0) {
-        flg = 1;
+      if (id == null) {
+        dynamic address = {
+          "customer_address": {
+            "customer_id":
+                _userFromAdmin.id!.replaceAll("gid://shopify/Customer/", ""),
+            "first_name": _address!.firstName,
+            "last_name": _address!.lastName,
+            "company": "",
+            "address1": _address!.address1,
+            "address2": _address!.address2,
+            "city": _address!.city,
+            "province": _address!.province,
+            "country": "Indonesia",
+            "zip": _address!.zip,
+            "phone": _address!.phone,
+            "name": _address!.firstName! + " " + _address!.lastName!,
+            "country_code": "ID",
+            "country_name": "Indonesia"
+          }
+        };
+
+        result = await ProfileProvider().addAddressByAdmin(
+            _userFromAdmin.id!.replaceAll("gid://shopify/Customer/", ""),
+            address);
+
+        if (!result.containsKey("errors")) {
+          flg = 1;
+        }
+      } else {
+        dynamic addresses = [
+          {
+            "address1": _address!.address1,
+            "address2": _address!.address2,
+            "city": _address!.city,
+            "company": _address!.company,
+            "country": _address!.country,
+            "countryCode": "ID",
+            "firstName": _address!.firstName,
+            "id": id,
+            "lastName": _address!.lastName,
+            "phone": _address!.phone,
+            "province": _address!.province,
+            "zip": _address!.zip
+          }
+        ];
+
+        for (MailingAddress x in _userFromAdmin.addresses ?? []) {
+          if (x.id != id) {
+            addresses.add({
+              "address1": x.address1,
+              "address2": x.address2,
+              "city": x.city,
+              "company": x.company,
+              "country": x.country,
+              "countryCode": "ID",
+              "firstName": x.firstName,
+              "id": x.id,
+              "lastName": x.lastName,
+              "phone": x.phone,
+              "province": x.province,
+              "zip": x.zip
+            });
+          }
+        }
+
+        dynamic variables = {
+          "input": {"addresses": addresses, "id": _userFromAdmin.id}
+        };
+
+        result =
+            await ProfileProvider().customerAddressUpdateByAdmin(variables);
+
+        if (result['userErrors'].length == 0) {
+          flg = 1;
+        }
       }
+      // var result = (id == null)
+      //     ? await ProfileProvider()
+      //         .customerAddressCreate(_token!.accessToken!, _address!)
+      //     : await ProfileProvider()
+      //         .customerAddressUpdate(_token!.accessToken!, _address!, id);
+      // if (result['customerUserErrors'].length == 0) {
+      //   flg = 1;
+      // }
       _loading.value = false;
       update();
     }
@@ -253,10 +396,15 @@ class ProfileController extends GetxController {
     update();
     _token = await localStorageData.getTokenUser;
     if (_token!.accessToken != null) {
-      var result = await ProfileProvider()
-          .customerAddressDelete(_token!.accessToken!, id);
+      // var result = await ProfileProvider()
+      //     .customerAddressDelete(_token!.accessToken!, id);
+      var idAddress = id.split("?");
+      var result = await ProfileProvider().deleteAddressByAdmin(
+          _userFromAdmin.id!.replaceAll("gid://shopify/Customer/", ""),
+          idAddress[0].replaceAll("gid://shopify/MailingAddress/", ""));
 
-      if (result['customerAddressDelete']['customerUserErrors'].length == 0) {
+      if (result) {
+        // if (result['customerAddressDelete']['customerUserErrors'].length == 0) {
         _userModel.addresses!.removeWhere((e) => e.id == id);
 
         Get.snackbar("", "Alamat berhasil dihapus",
@@ -313,8 +461,10 @@ class ProfileController extends GetxController {
     _loading.value = true;
     update();
     _token = await localStorageData.getTokenUser;
-    var result = await ProfileProvider().getUser(_token!.accessToken!);
-    _userModel = UserModel.fromJson(result);
+    // var result = await ProfileProvider().getUser(_token!.accessToken!);
+    // _userModel = UserModel.fromJson(result);
+    await getUserAdmin(_token!.id!);
+    _userModel = _userFromAdmin;
     _loading.value = false;
     update();
   }

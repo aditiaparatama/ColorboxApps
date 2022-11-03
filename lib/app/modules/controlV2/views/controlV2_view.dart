@@ -7,6 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:new_version/new_version.dart';
 
 // ignore: use_key_in_widget_constructors, must_be_immutable
 class ControlV2View extends StatefulWidget {
@@ -17,8 +18,36 @@ class ControlV2View extends StatefulWidget {
 class _ControlV2ViewState extends State<ControlV2View> {
   GlobalKey globalKey = GlobalKey(debugLabel: 'btm_app_bar');
 
+  void _checkVersion() async {
+    // Instantiate NewVersion manager object (Using GCP Console app as example)
+    final newVersion = NewVersion(
+      iOSId: 'com.apple.Pages',
+      androidId: 'com.snapchat.android',
+    );
+
+    final status = await newVersion.getVersionStatus();
+    if (status != null) {
+      debugPrint(status.releaseNotes);
+      debugPrint(status.appStoreLink);
+      debugPrint(status.localVersion);
+      debugPrint(status.storeVersion);
+      debugPrint(status.canUpdate.toString());
+
+      if (status.canUpdate) {
+        newVersion.showUpdateDialog(
+          context: context,
+          versionStatus: status,
+          dialogTitle: 'Update Available',
+          dialogText:
+              'Aplikasi COLORBOX versi terbaru sudah tersedia. Silahkan unduh untuk mendapatkannya',
+        );
+      }
+    }
+  }
+
   @override
   void initState() {
+    _checkVersion();
     super.initState();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       showFlutterNotification(message);

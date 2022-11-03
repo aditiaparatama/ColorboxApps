@@ -22,6 +22,7 @@ class OrderProvider extends GetConnect {
                         id
                         createdAt
                         name
+                        note
                         fulfillments{
                             status
                         }
@@ -245,6 +246,7 @@ class OrderProvider extends GetConnect {
                         id
                         createdAt
                         name
+                        note
                         fulfillments{
                             status
                         }

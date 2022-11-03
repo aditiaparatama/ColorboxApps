@@ -14,6 +14,7 @@ import 'package:colorbox/app/widgets/item_card_cart.dart';
 import 'package:colorbox/app/widgets/widget.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:colorbox/app/modules/cart/views/widget/item_cart_widget.dart';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
@@ -28,6 +29,7 @@ class CartView extends GetView<CartController> {
   int index = 0;
   int indexDiscount = 0;
   int indexCollection = 0;
+  int selisihOrder = 0;
 
   Future<void> initializeSettings() async {
     await controller.getCart2();
@@ -71,6 +73,17 @@ class CartView extends GetView<CartController> {
           return GetBuilder<CartController>(
               init: Get.put(CartController()),
               builder: (c) {
+                selisihOrder = (controller.discountController
+                        .discountAutomaticTotalOrder.isNotEmpty)
+                    ? int.parse(controller
+                            .discountController
+                            .discountAutomaticTotalOrder[0]
+                            .minimumRequirement!
+                            .greaterThanOrEqualToSubtotal!
+                            .replaceAll('.0', '')) -
+                        int.parse(controller.cart.estimatedCost!.totalAmount!
+                            .replaceAll(".0", ""))
+                    : 0;
                 return Scaffold(
                     resizeToAvoidBottomInset: false,
                     appBar: const PreferredSize(
@@ -93,6 +106,71 @@ class CartView extends GetView<CartController> {
                                       controller: controller.homeController,
                                       pTop: 24,
                                       pBottom: 0,
+                                    ),
+                                  if (controller
+                                          .discountController
+                                          .discountAutomaticTotalOrder
+                                          .isNotEmpty &&
+                                      controller.cart.lines!.isNotEmpty &&
+                                      controller.discountController
+                                          .discountAutomatic.isEmpty)
+                                    Container(
+                                      width: Get.width,
+                                      color: (selisihOrder > 0)
+                                          ? colorBoxInfo
+                                          : colorBoxSuccess,
+                                      padding: const EdgeInsets.all(16),
+                                      child: Row(
+                                        children: [
+                                          SvgPicture.asset((selisihOrder > 0)
+                                              ? "assets/icon/bag-illustration.svg"
+                                              : "assets/icon/popper.svg"),
+                                          const SizedBox(width: 8),
+                                          Flexible(
+                                            child: (selisihOrder > 0)
+                                                ? GestureDetector(
+                                                    onTap: () => Get.until(
+                                                        (route) =>
+                                                            Get.currentRoute ==
+                                                            "/controlv2"),
+                                                    child: RichText(
+                                                      text: TextSpan(
+                                                          text:
+                                                              "Tambah Rp ${formatter.format(selisihOrder)} untuk mendapatkan potongan Rp ${formatter.format(int.parse(controller.discountController.discountAutomaticTotalOrder[0].customerGets!.value!.amount!))}. ",
+                                                          style: const TextStyle(
+                                                              fontSize: 12,
+                                                              color:
+                                                                  colorTextBlack,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
+                                                          children: const [
+                                                            TextSpan(
+                                                                text:
+                                                                    "Tambah produk",
+                                                                style: TextStyle(
+                                                                    color:
+                                                                        colorTextBlack,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    decoration:
+                                                                        TextDecoration
+                                                                            .underline))
+                                                          ]),
+                                                    ),
+                                                  )
+                                                : CustomText(
+                                                    text:
+                                                        "Yaay kamu mendapatkan potongan Rp ${formatter.format(int.parse(controller.discountController.discountAutomaticTotalOrder[0].customerGets!.value!.amount!))} karena telah memenuhi minimum order",
+                                                    fontSize: 12,
+                                                    color: colorTextSuccess,
+                                                    textOverflow:
+                                                        TextOverflow.fade,
+                                                  ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   SizedBox(
                                     child: (c.cart.lines!.isEmpty)
@@ -140,13 +218,11 @@ class CartView extends GetView<CartController> {
                                                     collectionPromo = Menu(
                                                         subMenu: List<
                                                             SubMenu>.empty(),
-                                                        title: controller
-                                                            .discountController
-                                                            .discountAutomatic[
-                                                                temp]
-                                                            .title,
-                                                        subjectID: int.parse(
-                                                            x.replaceAll(
+                                                        title: y.title,
+                                                        subjectID: int.parse(y
+                                                            .collections![temp]
+                                                            .id!
+                                                            .replaceAll(
                                                                 "gid://shopify/Collection/",
                                                                 "")));
 
@@ -165,8 +241,168 @@ class CartView extends GetView<CartController> {
                                               );
                                             }),
                                   ),
+                                  if (controller.discountController
+                                          .discountAutomatic.isNotEmpty &&
+                                      controller
+                                              .discountController
+                                              .discountAutomatic[indexDiscount]
+                                              .typename ==
+                                          "DiscountAutomaticBxgy" &&
+                                      double.parse(controller
+                                                  .cart
+                                                  .estimatedCost!
+                                                  .subtotalAmount ??
+                                              "0") >=
+                                          double.parse(controller
+                                                  .discountController
+                                                  .discountAutomatic[
+                                                      indexDiscount]
+                                                  .minimumRequirement!
+                                                  .greaterThanOrEqualToSubtotal ??
+                                              "0"))
+                                    GetBuilder<CollectionsController>(
+                                        init: Get.put(CollectionsController()),
+                                        builder: (_) {
+                                          return Column(
+                                            children: [
+                                              Container(
+                                                color: colorDiver,
+                                                height: 8,
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 16,
+                                                    top: 24,
+                                                    bottom: 16),
+                                                child: Column(
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        SvgPicture.asset(
+                                                            "assets/icon/Gift.svg"),
+                                                        const SizedBox(
+                                                            width: 4),
+                                                        CustomText(
+                                                          text: controller
+                                                                  .discountController
+                                                                  .discountAutomatic[
+                                                                      indexDiscount]
+                                                                  .title ??
+                                                              "",
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 8),
+                                                    CustomText(
+                                                      text:
+                                                          "Selamat ! Setiap pembelanjaan min. Rp ${formatter.format(int.parse(controller.discountController.discountAutomatic[indexDiscount].minimumRequirement!.greaterThanOrEqualToSubtotal!.replaceAll(".0", "")))} berhak mendapatkan Free Collection dibawah ini:",
+                                                      fontSize: 12,
+                                                      textOverflow:
+                                                          TextOverflow.fade,
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 16),
+                                                height: 200,
+                                                child: (collectionsController
+                                                        .collection
+                                                        .products
+                                                        .isEmpty)
+                                                    ? const Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      )
+                                                    : GridView.builder(
+                                                        itemCount:
+                                                            collectionsController
+                                                                .collection
+                                                                .products
+                                                                .length,
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        gridDelegate:
+                                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                          crossAxisCount: 1,
+                                                          mainAxisSpacing: 12,
+                                                          crossAxisSpacing: 12,
+                                                          childAspectRatio:
+                                                              3 / 1.3,
+                                                        ),
+                                                        itemBuilder: (_, i) {
+                                                          var calcu1 = int.parse(
+                                                                  collectionsController
+                                                                      .collection
+                                                                      .products[
+                                                                          i]
+                                                                      .variants[
+                                                                          0]
+                                                                      .price!
+                                                                      .replaceAll(
+                                                                          ".00",
+                                                                          "")) /
+                                                              int.parse(collectionsController
+                                                                  .collection
+                                                                  .products[i]
+                                                                  .variants[0]
+                                                                  .compareAtPrice!
+                                                                  .replaceAll(
+                                                                      ".00",
+                                                                      ""));
+                                                          return (i ==
+                                                                      (collectionsController
+                                                                              .collection
+                                                                              .products
+                                                                              .length -
+                                                                          1) &&
+                                                                  i != 0)
+                                                              ? ItemCardEnding(
+                                                                  calcu1:
+                                                                      calcu1,
+                                                                  collection:
+                                                                      collectionsController
+                                                                          .collection,
+                                                                  homeCollection: {
+                                                                    "title": collectionsController
+                                                                        .collection
+                                                                        .title,
+                                                                    "subjectid": int.parse(collectionsController
+                                                                        .collection
+                                                                        .id!
+                                                                        .replaceAll(
+                                                                            "gid://shopify/Collection/",
+                                                                            ""))
+                                                                  },
+                                                                  i: i,
+                                                                  isCart: true,
+                                                                )
+                                                              : ItemCardCart(
+                                                                  calcu1:
+                                                                      calcu1,
+                                                                  collection:
+                                                                      collectionsController
+                                                                          .collection,
+                                                                  i: i,
+                                                                );
+                                                        }),
+                                              ),
+                                              const SizedBox(height: 40)
+                                            ],
+                                          );
+                                        }),
                                   (controller.discountController
-                                          .discountAutomatic.isEmpty)
+                                              .discountAutomatic.isEmpty ||
+                                          controller
+                                                  .discountController
+                                                  .discountAutomatic[
+                                                      indexDiscount]
+                                                  .typename ==
+                                              "DiscountAutomaticBxgy")
                                       ? const SizedBox()
                                       : GetBuilder<CollectionsController>(
                                           init:
@@ -241,11 +477,9 @@ class CartView extends GetView<CartController> {
                                                                         ".00",
                                                                         ""));
                                                             return (i ==
-                                                                    (collectionsController
-                                                                            .collection
-                                                                            .products
-                                                                            .length -
-                                                                        1))
+                                                                        (collectionsController.collection.products.length -
+                                                                            1) &&
+                                                                    i != 0)
                                                                 ? ItemCardEnding(
                                                                     calcu1:
                                                                         calcu1,
@@ -305,16 +539,8 @@ class CartView extends GetView<CartController> {
               c.cart.estimatedCost!.totalAmount!.replaceAll(".0", ""));
 
       if (controller.discountRunning.isNotEmpty) {
-        // int check =
-        //     controller.discountRunning.indexWhere((e) => e.applied ?? false);
-        // totalHarga = (check >= 0) ? 0 : totalHarga;
         totalPotongan = 0;
-        // for (final x in controller.discountRunning) {
-        //   if (x.combineWith.productDiscounts) {
-        //     totalPotongan = (totalPotongan ?? 0.0) + x.totalDiscount!;
-        //   }
-        //   // totalHarga = totalHarga! + x.currentSubtotal!;
-        // }
+
         for (Line x in _cartItems ?? []) {
           totalPotongan = (totalPotongan ?? 0.0) +
               double.parse(x.discountAllocations!.amount ?? "0");
@@ -350,6 +576,19 @@ class CartView extends GetView<CartController> {
                 c.cart.estimatedCost!.subtotalAmount!.replaceAll(".0", ""));
         totalPotongan =
             double.parse(controller.cart.discountAllocations![0].amount!);
+      }
+
+      if (controller
+              .discountController.discountAutomaticTotalOrder.isNotEmpty &&
+          controller.discountController.discountAutomatic.isEmpty &&
+          selisihOrder <= 0) {
+        totalHarga = (c.cart.estimatedCost == null ||
+                c.cart.estimatedCost!.subtotalAmount! == "0.0")
+            ? 0
+            : double.parse(
+                c.cart.estimatedCost!.subtotalAmount!.replaceAll(".0", ""));
+        totalPotongan = double.parse(controller.discountController
+            .discountAutomaticTotalOrder[0].customerGets!.value!.amount!);
       }
 
       return Container(
@@ -475,6 +714,8 @@ class CartView extends GetView<CartController> {
                                                 ? showAlert(context)
                                                 : Get.toNamed(Routes.CHECKOUT)
                                             : Get.to(AddressForm(null, true));
+
+                                    c.update();
                                   },
                     style: ElevatedButton.styleFrom(
                         fixedSize: const Size(156, 48),

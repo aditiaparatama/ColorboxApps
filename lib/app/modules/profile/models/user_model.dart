@@ -49,6 +49,10 @@ class UserModel {
     phone = json['phone'];
     note = json['note'] ?? "";
     defaultAddress = Address.fromJson(json['defaultAddress']);
+    addresses = [];
+    for (int i = 0; i < json['addresses'].length; i++) {
+      addresses!.add(MailingAddress.fromJson(json['addresses'][i]));
+    }
   }
 
   UserModel.isEmpty();
@@ -129,12 +133,14 @@ class Address {
 }
 
 class CustomerToken {
+  String? id;
   String? accessToken;
   String? expiresAt;
 
-  CustomerToken(this.accessToken, this.expiresAt);
+  CustomerToken(this.id, this.accessToken, this.expiresAt);
 
   CustomerToken.json(var json) {
+    id = json['id'];
     accessToken = json['accessToken'];
     expiresAt = json['expiresAt'];
   }
@@ -143,6 +149,7 @@ class CustomerToken {
 
   toJson() {
     return {
+      'id': id,
       'accessToken': accessToken,
       'expiresAt': expiresAt,
     };
