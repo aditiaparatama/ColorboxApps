@@ -59,6 +59,7 @@ class Product {
     title = json['edges'][index]['node']['title'];
     totalInventory = json['edges'][index]['node']['totalInventory'];
     description = json['edges'][index]['node']['descriptionHtml'];
+    handle = json['edges'][index]['node']['handle'];
     image = [];
     for (var i = 0;
         i < json['edges'][index]['node']['images']['edges'].length;
@@ -84,8 +85,10 @@ class Product {
       if (hasNextPage!) cursor = json['edges'][index]['cursor'];
     }
 
-    idCollection =
-        json['edges'][index]['node']['collections']['edges'][0]['node']['id'];
+    if (json['edges'][index]['node']['collections']['edges'].isNotEmpty) {
+      idCollection =
+          json['edges'][index]['node']['collections']['edges'][0]['node']['id'];
+    }
   }
 
   Product.fromWishlist(var json, String variantId) {
@@ -93,6 +96,8 @@ class Product {
     idCollection = json['collections']['edges'][0]['node']['id'];
     title = json['title'];
     description = json['description'];
+    handle = json['handle'];
+    totalInventory = json["totalInventory"];
     image = [];
     for (var i = 0; i < json['images']['edges'].length; i++) {
       image.add(json['images']['edges'][i]['node']['src']);

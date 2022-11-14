@@ -20,10 +20,7 @@ class _ControlV2ViewState extends State<ControlV2View> {
 
   void _checkVersion() async {
     // Instantiate NewVersion manager object (Using GCP Console app as example)
-    final newVersion = NewVersion(
-      iOSId: 'com.apple.Pages',
-      androidId: 'com.snapchat.android',
-    );
+    final newVersion = NewVersion();
 
     final status = await newVersion.getVersionStatus();
     if (status != null) {

@@ -15,6 +15,8 @@ class ProductProvider extends GetConnect {
                       id
                       title
                       description
+                      handle
+                      totalInventory
                       options {
                       name
                       values
@@ -52,6 +54,58 @@ class ProductProvider extends GetConnect {
                   }
               }
       }
+      ''',
+      ),
+    );
+
+    final QueryResult result = await _client.query(options);
+
+    return result.data;
+  }
+
+  Future<dynamic> getProductByHandle(dynamic handle) async {
+    final GraphQLClient _client = getShopifyGraphQLClient();
+
+    final QueryOptions options = QueryOptions(
+      document: gql(
+        '''
+        {
+          product(handle:"$handle") {
+              id
+                  title
+                  handle
+                  description
+                  descriptionHtml
+                  productType
+                  options {
+                      name
+                      values
+                  }
+                  images(first: 5){
+                      edges {
+                          node {
+                              src
+                          }
+                      }
+                  }
+                  variants(first: 10){
+                      edges {
+                          node {
+                              id
+                              price
+                              barcode
+                              compareAtPrice
+                              quantityAvailable
+                              sku
+                              selectedOptions{
+                                  name
+                                  value
+                              }
+                          }
+                      }
+                  }
+          }
+        }
       ''',
       ),
     );

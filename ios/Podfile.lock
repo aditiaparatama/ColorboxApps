@@ -17,7 +17,7 @@ PODS:
     - Firebase/Auth (= 10.0.0)
     - firebase_core
     - Flutter
-  - firebase_core (2.1.0):
+  - firebase_core (2.1.1):
     - Firebase/CoreOnly (= 10.0.0)
     - Flutter
   - firebase_messaging (14.0.2):
@@ -33,9 +33,9 @@ PODS:
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/Logger (~> 7.8)
-  - FirebaseCoreInternal (10.0.0):
+  - FirebaseCoreInternal (10.1.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
-  - FirebaseInstallations (10.0.0):
+  - FirebaseInstallations (10.1.0):
     - FirebaseCore (~> 10.0)
     - GoogleUtilities/Environment (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
@@ -86,7 +86,13 @@ PODS:
   - GTMAppAuth (1.3.1):
     - AppAuth/Core (~> 1.6)
     - GTMSessionFetcher/Core (< 3.0, >= 1.5)
-  - GTMSessionFetcher/Core (2.1.0)
+  - GTMSessionFetcher/Core (2.3.0)
+  - Mixpanel-swift (4.0.1):
+    - Mixpanel-swift/Complete (= 4.0.1)
+  - Mixpanel-swift/Complete (4.0.1)
+  - mixpanel_flutter (2.0.0):
+    - Flutter
+    - Mixpanel-swift (= 4.0.1)
   - nanopb (2.30909.0):
     - nanopb/decode (= 2.30909.0)
     - nanopb/encode (= 2.30909.0)
@@ -119,6 +125,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
+  - mixpanel_flutter (from `.symlinks/plugins/mixpanel_flutter/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
@@ -143,6 +150,7 @@ SPEC REPOS:
     - GoogleUtilities
     - GTMAppAuth
     - GTMSessionFetcher
+    - Mixpanel-swift
     - nanopb
     - PromisesObjC
 
@@ -159,6 +167,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   google_sign_in_ios:
     :path: ".symlinks/plugins/google_sign_in_ios/ios"
+  mixpanel_flutter:
+    :path: ".symlinks/plugins/mixpanel_flutter/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_ios:
@@ -180,12 +190,12 @@ SPEC CHECKSUMS:
   AppAuth: 8fca6b5563a5baef2c04bee27538025e4ceb2add
   Firebase: 1b810f3d0c0532e27a48f1961f8c0400a668a2cf
   firebase_auth: 043e4d6b834491bb64ddc34b22910ab854c337df
-  firebase_core: 9f457751caed72a30d23be90eb72de6ccbd1f9b0
+  firebase_core: 5c0bb0ca7d0e70480a68a6e9ad9bf55d1edd5305
   firebase_messaging: 169ae56e5d64013d605b954b43e1b928a9170471
   FirebaseAuth: 493382cf533cc45e2862b00e9aa4cfe4c98daf71
   FirebaseCore: 97f48a3a567a72b8d4daa0f03c3aadb78df4e995
-  FirebaseCoreInternal: 5eb3960335da5ea30115d57d39db6988c4ad06f3
-  FirebaseInstallations: 7f1c9ae6bd9df6abe9c74124b38fa8740aba5df4
+  FirebaseCoreInternal: 96d75228e10fd369564da51bd898414eb0f54df5
+  FirebaseInstallations: 99d24bac0243cf8b0e96cf5426340d211f0bcc80
   FirebaseMessaging: 8916bf5edb1dbfac74665a181e4d1ab3a78a08a2
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
@@ -195,7 +205,9 @@ SPEC CHECKSUMS:
   GoogleSignIn: 5651ce3a61e56ca864160e79b484cd9ed3f49b7a
   GoogleUtilities: 1d20a6ad97ef46f67bbdec158ce00563a671ebb7
   GTMAppAuth: 0ff230db599948a9ad7470ca667337803b3fc4dd
-  GTMSessionFetcher: ffbb25ec00ebcb5201adab0a56d808f6f1902d9f
+  GTMSessionFetcher: 3a63d75eecd6aa32c2fc79f578064e1214dfdec2
+  Mixpanel-swift: 6e970d16daf10283cd30a3e6e1a08f4410b25183
+  mixpanel_flutter: b10020fd7e671b28dca0a3a426a5b10662cc0697
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
@@ -207,6 +219,6 @@ SPEC CHECKSUMS:
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
   webview_flutter_wkwebview: 005fbd90c888a42c5690919a1527ecc6649e1162
 
-PODFILE CHECKSUM: dbd6a2ef0921a1950dc57b46734c0c36bcc2f045
+PODFILE CHECKSUM: 428d88325551eab135df51f34830f11da910301b
 
 COCOAPODS: 1.11.3

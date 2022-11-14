@@ -1,4 +1,5 @@
 import 'package:colorbox/app/services/shopify_graphql.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:graphql/client.dart';
 
@@ -36,6 +37,7 @@ class SearchProvider extends GetConnect {
             title
             description
             descriptionHtml
+            handle
             options {
                 name
                 values
@@ -74,8 +76,7 @@ class SearchProvider extends GetConnect {
       final QueryResult result = await _client.query(options);
       return await result.data!['products'];
     } catch (e) {
-      // ignore: avoid_print
-      print(e.toString());
+      debugPrint('SearchProvider postSearch - ' + e.toString());
     }
   }
 
@@ -103,6 +104,7 @@ class SearchProvider extends GetConnect {
             title
             description
             descriptionHtml
+            handle
             options {
                 name
                 values
@@ -140,7 +142,7 @@ class SearchProvider extends GetConnect {
       return await result.data!['products'];
     } catch (e) {
       // ignore: avoid_print
-      print(e.toString());
+      debugPrint('SearchProvider postSearchNext - ' + e.toString());
     }
   }
 }

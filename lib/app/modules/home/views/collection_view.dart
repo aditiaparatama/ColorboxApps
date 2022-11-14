@@ -14,7 +14,7 @@ class CollectionsHomeView extends GetView<CollectionsController> {
   @override
   Widget build(BuildContext context) {
     var control = Get.put(CollectionsController());
-    control.fetchCollectionProduct(NewArrival, defaultSortBy);
+    control.fetchCollectionProduct(newArrival, defaultSortBy);
     return GetBuilder<CollectionsController>(
         init: Get.put(CollectionsController()),
         builder: (controller) {
@@ -38,7 +38,8 @@ class CollectionsHomeView extends GetView<CollectionsController> {
                       return GestureDetector(
                         onTap: () => Get.toNamed(Routes.PRODUCT, arguments: {
                           "product": controller.collection.products[i],
-                          "idCollection": controller.collection.id
+                          "idCollection": controller.collection.id,
+                          "handle": controller.collection.products[i].handle
                         }),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

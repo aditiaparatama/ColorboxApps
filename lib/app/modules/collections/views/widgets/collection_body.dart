@@ -36,7 +36,8 @@ class CollectionBody extends StatelessWidget {
                   return GestureDetector(
                     onTap: () => Get.toNamed(Routes.PRODUCT, arguments: {
                       "product": controller.collection.products[i],
-                      "idCollection": controller.collection.id
+                      "idCollection": controller.collection.id,
+                      "handle": controller.collection.products[i].handle
                     }),
                     child: ItemCard(
                       title: controller.collection.products[i].title!,

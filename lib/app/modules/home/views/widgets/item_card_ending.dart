@@ -61,16 +61,14 @@ class ItemCardEnding extends StatelessWidget {
                     child: SizedBox(
                       height: 220,
                       child: Center(
-                        child: Expanded(
-                          child: CustomText(
-                            text: (isCart)
-                                ? "Lihat \nLebih Banyak"
-                                : "Lihat Lebih Banyak",
-                            color: Colors.white,
-                            fontSize: (isCart) ? 12 : 14,
-                            fontWeight: FontWeight.bold,
-                            textAlign: TextAlign.center,
-                          ),
+                        child: CustomText(
+                          text: (isCart)
+                              ? "Lihat \nLebih Banyak"
+                              : "Lihat Lebih Banyak",
+                          color: Colors.white,
+                          fontSize: (isCart) ? 12 : 14,
+                          fontWeight: FontWeight.bold,
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     )),

@@ -28,7 +28,7 @@ class ProfileController extends GetxController {
   final DateTime? _showDateBirth = DateTime.now();
   DateTime? get showDateBirth => _showDateBirth;
 
-  String? email, password, firstName, firstN, lastN, tglLahir;
+  String? email, password, firstName, firstN, lastN, tglLahir, noTelp;
 
   //Update Address
   final MailingAddress? _address = MailingAddress.isEmpty();
@@ -176,6 +176,7 @@ class ProfileController extends GetxController {
       var variables = {
         "input": {
           "email": email!.toLowerCase(),
+          "phone": noTelp,
           "firstName": firstN,
           "id": result['id'],
           "lastName": lastN,
@@ -566,6 +567,7 @@ class ProfileController extends GetxController {
       var variables = {
         "input": {
           "email": email,
+          "phone": noTelp,
           "firstName": firstN,
           "id": userModel.id,
           "lastName": lastN,

@@ -4,7 +4,9 @@ import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart' as p;
 
 // ignore: must_be_immutable, use_key_in_widget_constructors
 class CategoryHomeView extends GetView<HomeController> {
@@ -41,15 +43,21 @@ class CategoryHomeView extends GetView<HomeController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Center(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(50.0),
-                                child: CachedNetworkImage(
-                                  imageUrl: controller.category[i].image!,
-                                  fit: BoxFit.cover,
-                                  height: 50.0,
-                                  width: 50.0,
-                                ),
-                              ),
+                              child: (p.extension(controller.category[i].image!
+                                          .split("?")[0]) ==
+                                      ".svg")
+                                  ? SvgPicture.network(
+                                      controller.category[i].image!,
+                                    )
+                                  : ClipRRect(
+                                      borderRadius: BorderRadius.circular(50.0),
+                                      child: CachedNetworkImage(
+                                        imageUrl: controller.category[i].image!,
+                                        fit: BoxFit.cover,
+                                        height: 50.0,
+                                        width: 50.0,
+                                      ),
+                                    ),
                             ),
                             Center(
                               child: Padding(

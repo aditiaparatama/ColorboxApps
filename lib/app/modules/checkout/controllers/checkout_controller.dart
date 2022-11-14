@@ -5,7 +5,6 @@ import 'package:colorbox/app/modules/checkout/models/checkout_model.dart';
 import 'package:colorbox/app/modules/checkout/providers/checkout_provider.dart';
 import 'package:colorbox/app/modules/checkout/providers/draft_order_provider.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
-import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/constance.dart';
@@ -40,7 +39,7 @@ class CheckoutController extends GetxController {
     await createCheckout();
     // _idCheckout =
     //     "gid://shopify/Checkout/00205c3b14749fcfc655535d3a9178c6?key=dea4c8ee79d214634c9bbab79e6ad0b6";
-    await getCheckout();
+    // await getCheckout();
     await getETDShipping();
 
     super.onInit();
@@ -312,6 +311,16 @@ class CheckoutController extends GetxController {
     checkoutTap = true;
     update();
 
+    await getCheckout();
+
+    for (CheckoutLineItem x in _checkout.lineItems ?? []) {
+      if ((x.variants!.inventoryQuantity ?? 1) <= 0) {
+        checkoutTap = false;
+        update();
+        return "stok-habis";
+      }
+    }
+
     dynamic order = await pesan();
     if (order != null && order.containsKey("order")) {
       if (_checkout.shippingLine!.title!.contains("COD")) {
@@ -412,9 +421,12 @@ class CheckoutController extends GetxController {
         "mobile_number": phone
       },
       'customer_notification_preference': {
-        'invoice_created': ['whatsapp', 'email'],
-        'invoice_reminder': ['whatsapp', 'email'],
-        'invoice_paid': ['whatsapp', 'email']
+        'invoice_created':
+            (_user.phone == null) ? ['email'] : ['whatsapp', 'email'],
+        'invoice_reminder':
+            (_user.phone == null) ? ['email'] : ['whatsapp', 'email'],
+        'invoice_paid':
+            (_user.phone == null) ? ['email'] : ['whatsapp', 'email']
       }
     };
 
@@ -571,7 +583,7 @@ class CheckoutController extends GetxController {
       "draft_order": {
         "email": _user.email,
         "tags": (_checkout.shippingLine!.title!.contains("COD"))
-            ? ["apps", "apps_cod"]
+            ? "apps_cod"
             : "apps",
         "line_items": _lineItems,
         "shipping_line": {
@@ -725,7 +737,9 @@ class CheckoutController extends GetxController {
       double lineItemPrice =
           double.parse(item.variants!.price!.replaceAll(".00", ""));
 
-      if (discountType != null && item.discountAllocations!.isNotEmpty) {
+      if (discountType != null &&
+          item.discountAllocations!.isNotEmpty &&
+          discountType[0].targetSelection != "ALL") {
         discountAmount = ((discountAmount == null) ? 0.0 : discountAmount!) +
             double.parse(item.discountAllocations![0].allocatedAmount!
                 .replaceAll(".0", ""));

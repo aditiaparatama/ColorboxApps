@@ -22,7 +22,8 @@ class ItemCardCart extends StatelessWidget {
     return GestureDetector(
       onTap: () => Get.toNamed(Routes.PRODUCT, arguments: {
         "product": collection.products[i],
-        "idCollection": collection.id
+        "idCollection": collection.id,
+        "handle": collection.products[i].handle
       }),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

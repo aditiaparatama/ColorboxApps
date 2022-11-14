@@ -15,11 +15,12 @@ import '../controllers/profile_controller.dart';
 class RegisterView extends GetView<ProfileController> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController birthday = TextEditingController();
+  final TextEditingController _telpon = TextEditingController();
   FocusNode emailFocus = FocusNode();
 
   static const str = 'date: 2019:04:01';
   final valuestest = str.split(': ');
-  bool emailAlert = false, namaAlert = false;
+  bool emailAlert = false, namaAlert = false, telpAlert = false;
 
   Future<void> _showMyDialog(context) async {
     return showDialog<void>(
@@ -178,6 +179,43 @@ class RegisterView extends GetView<ProfileController> {
                                         namaAlert = false;
                                         return null;
                                       },
+                                    ),
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                    CustomTextFormField(
+                                      textEditingController: _telpon,
+                                      showAlert: telpAlert,
+                                      textInputType: TextInputType.phone,
+                                      onSave: (value) {
+                                        controller.noTelp = "+62" + value!;
+                                      },
+                                      onChange: (_) => controller.update(),
+                                      validator: (input) {
+                                        if (input == null || input.length < 8) {
+                                          telpAlert = true;
+                                          return "This field requires a minimum of 8 numbers";
+                                        }
+                                        telpAlert = false;
+                                        return null;
+                                      },
+                                      hint: "Nomor Telepon",
+                                      prefix: const CustomText(
+                                        text: "+62",
+                                        fontSize: 14,
+                                      ),
+                                      suffixIcon: (_telpon.text.isNotEmpty)
+                                          ? IconButton(
+                                              onPressed: () {
+                                                _telpon.text = "";
+                                                controller.update();
+                                              },
+                                              icon: const Icon(
+                                                Icons.cancel_sharp,
+                                                color: colorTextBlack,
+                                                size: 18,
+                                              ))
+                                          : const SizedBox(),
                                     ),
                                     const SizedBox(
                                       height: 16,

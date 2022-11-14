@@ -26,6 +26,7 @@ class ProductView2 extends GetView<ProductController> {
   final DiscountController discountController = Get.put(DiscountController());
 
   Future<void> initializeSettings() async {
+    await controller.getProductByHandle(Get.arguments["handle"]);
     await callWishlist();
     //Simulate other services for 3 seconds
     await Future.delayed(const Duration(milliseconds: 100));
@@ -33,7 +34,10 @@ class ProductView2 extends GetView<ProductController> {
 
   Future<void> callWishlist() async {
     // controller.wishlistAdded = false;
-    await controller.wishlistController.fetchWishlist();
+    if (controller.wishlistController.wishlist.items == null ||
+        controller.wishlistController.wishlist.items.isEmpty) {
+      await controller.wishlistController.fetchWishlist();
+    }
     if (controller.wishlistController.wishlist.items != null &&
         controller.wishlistController.wishlist.items.isNotEmpty) {
       controller.existWishlist = controller.wishlistController.wishlist.items
@@ -50,13 +54,8 @@ class ProductView2 extends GetView<ProductController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.product = Get.arguments["product"];
-    controller.variant = controller.product.variants[0];
-
-    var collection = Get.arguments["idCollection"]
-        .replaceAll('gid://shopify/Collection/', '');
-    var calcu1 = int.parse(controller.variant!.price!.replaceAll(".00", "")) /
-        int.parse(controller.variant!.compareAtPrice!.replaceAll(".00", ""));
+    // controller.product = Get.arguments["product"];
+    // controller.variant = controller.product.variants[0];
 
     // ignore: avoid_print
     return FutureBuilder(
@@ -69,6 +68,13 @@ class ProductView2 extends GetView<ProductController> {
           return GetBuilder<ProductController>(
               init: Get.put(ProductController()),
               builder: (control) {
+                var collection = Get.arguments["idCollection"]
+                    .replaceAll('gid://shopify/Collection/', '');
+                var calcu1 = int.parse(
+                        controller.variant!.price!.replaceAll(".00", "")) /
+                    int.parse(controller.variant!.compareAtPrice!
+                        .replaceAll(".00", ""));
+
                 return Scaffold(
                   resizeToAvoidBottomInset: false,
                   backgroundColor: Colors.white,
@@ -157,9 +163,11 @@ class ProductView2 extends GetView<ProductController> {
                                         Row(
                                           children: [
                                             CustomText(
-                                              text: control.variant!.sku! +
+                                              text: (control.variant!.sku ??
+                                                      "") +
                                                   " | " +
-                                                  control.variant!.barcode!,
+                                                  (control.variant!.barcode ??
+                                                      ""),
                                               fontSize: 10,
                                               fontWeight: FontWeight.w400,
                                               color: const Color.fromRGBO(
@@ -337,15 +345,8 @@ class ProductView2 extends GetView<ProductController> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               CustomText(
-                                                text: control
-                                                    .product.options[1].name!
-                                                    .replaceAll(
-                                                  control
-                                                      .product.options[1].name!,
-                                                  "Pilih Warna : " +
-                                                      control.product.options[1]
-                                                          .values[0],
-                                                ),
+                                                text: "Pilih Warna : " +
+                                                    controller.warna,
                                                 fontSize: 14,
                                                 color: colorTextBlack,
                                                 fontWeight: FontWeight.w600,
@@ -375,12 +376,8 @@ class ProductView2 extends GetView<ProductController> {
                                       children: [
                                         const SizedBox(height: 16),
                                         CustomText(
-                                          text: control.product.options[0].name!
-                                              .replaceAll(
-                                                  control
-                                                      .product.options[0].name!,
-                                                  "Pilih Ukuran : " +
-                                                      control.ukuran),
+                                          text: "Pilih Ukuran : " +
+                                              control.ukuran,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600,
                                         ),

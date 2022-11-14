@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'app/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -14,7 +15,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   showFlutterNotification(message);
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
-  print('Handling a background message ${message.messageId}');
+  debugPrint('Handling a background message ${message.messageId}');
 }
 
 /// Create a [AndroidNotificationChannel] for heads up notifications
@@ -23,7 +24,7 @@ late AndroidNotificationChannel channel;
 bool isFlutterLocalNotificationsInitialized = false;
 
 Future<void> setupFlutterNotifications() async {
-  print("setup notification");
+  debugPrint("setup notification");
   if (isFlutterLocalNotificationsInitialized) {
     return;
   }
@@ -69,7 +70,7 @@ Future<void> setupFlutterNotifications() async {
 
   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
     // print('User granted permission');
-    String? token = await (messaging.getToken());
+    // String? token = await (messaging.getToken());
     // print("The token is" + token!);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       showFlutterNotification(message);
@@ -104,10 +105,22 @@ void showFlutterNotification(RemoteMessage message) {
 /// Initialize the [FlutterLocalNotificationsPlugin] package.
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
+Future<void> initMixpanel() async {
+  Mixpanel mixpanel;
+
+  mixpanel = await Mixpanel.init("afaf7826fa8313c8bcbd0fa22e8cd1e8",
+      trackAutomaticEvents: true);
+
+  // Track with event-name
+  mixpanel.track('Sent Message');
+// Track with event-name and property
+  mixpanel.track('Plan Selected', properties: {'Plan': 'Premium'});
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+  initMixpanel();
   // Set the background messaging handler early on, as a named top-level function
   // FirebaseMessaging messaging = FirebaseMessaging.instance;
   // NotificationSettings settings = await messaging.requestPermission(

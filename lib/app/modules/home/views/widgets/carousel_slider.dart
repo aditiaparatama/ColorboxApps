@@ -53,25 +53,28 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicator> {
               }),
           carouselController: _controller,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: widget.controller.sliders.asMap().entries.map((entry) {
-            return GestureDetector(
-              onTap: () => _controller.animateToPage(entry.key),
-              child: Container(
-                width: 8.0,
-                height: 8.0,
-                margin:
-                    const EdgeInsets.symmetric(vertical: 12.0, horizontal: 4.0),
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: (_current == entry.key)
-                        ? colorTextBlack
-                        : const Color(0xFFE5E8EB)),
-              ),
-            );
-          }).toList(),
-        ),
+        (widget.controller.sliders.length > 2)
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:
+                    widget.controller.sliders.asMap().entries.map((entry) {
+                  return GestureDetector(
+                    onTap: () => _controller.animateToPage(entry.key),
+                    child: Container(
+                      width: 8.0,
+                      height: 8.0,
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 12.0, horizontal: 4.0),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: (_current == entry.key)
+                              ? colorTextBlack
+                              : const Color(0xFFE5E8EB)),
+                    ),
+                  );
+                }).toList(),
+              )
+            : const SizedBox(height: 12),
       ],
     );
   }

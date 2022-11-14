@@ -120,6 +120,8 @@ Color customColors(String color) {
       return const Color(0xFF7391B5);
     case "lt.blue":
       return const Color(0xFFC2D9E7);
+    case "ltblue":
+      return const Color(0xFFC2D9E7);
     case "lightblue":
       return const Color(0xFFC2D9E7);
     case "spr.lt.blue":

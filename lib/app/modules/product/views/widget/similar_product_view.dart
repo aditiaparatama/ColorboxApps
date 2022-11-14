@@ -3,12 +3,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/constance.dart';
-import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 // ignore: must_be_immutable, use_key_in_widget_constructors
-class CollectionsProductView extends GetView<CollectionsController> {
+class CollectionsProductView extends StatelessWidget {
   final String? id;
 
   // ignore: prefer_const_constructors_in_immutables
@@ -16,11 +15,11 @@ class CollectionsProductView extends GetView<CollectionsController> {
 
   @override
   Widget build(BuildContext context) {
-    var control = Get.put(CollectionsController());
+    var control = Get.put(CollectionsController(), tag: "similiar");
 
-    control.fetchCollectionProduct(int.parse(id!), defaultSortBy);
+    control.fetchCollectionProduct(int.parse(id!), 4);
     return GetBuilder<CollectionsController>(
-        init: Get.put(CollectionsController()),
+        init: Get.put(CollectionsController(), tag: "similiar"),
         builder: (controller) {
           return (controller.collection.products.isEmpty)
               ? const Center(
@@ -48,11 +47,14 @@ class CollectionsProductView extends GetView<CollectionsController> {
 
                     return GestureDetector(
                       onTap: () {
-                        Get.back();
-                        Get.toNamed(Routes.PRODUCT, arguments: {
-                          "product": controller.collection.products[i],
-                          "idCollection": controller.collection.id
-                        });
+                        // Get.back();
+                        Get.offNamed(Routes.PRODUCT,
+                            arguments: {
+                              "product": controller.collection.products[i],
+                              "idCollection": controller.collection.id,
+                              "handle": controller.collection.products[i].handle
+                            },
+                            preventDuplicates: false);
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

@@ -19,7 +19,7 @@ class ProductView extends GetView<ProductController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.product = Get.arguments;
+    // controller.product = Get.arguments;
     controller.variant = controller.product.variants[0];
 
     return GetBuilder<ProductController>(

@@ -84,6 +84,12 @@ class CartView extends GetView<CartController> {
                         int.parse(controller.cart.estimatedCost!.totalAmount!
                             .replaceAll(".0", ""))
                     : 0;
+                if (controller.listHabis.isNotEmpty) {
+                  for (final x in controller.listHabis) {
+                    selisihOrder = selisihOrder +
+                        int.parse(x.merchandise!.price!.replaceAll(".00", ""));
+                  }
+                }
                 return Scaffold(
                     resizeToAvoidBottomInset: false,
                     appBar: const PreferredSize(
@@ -568,7 +574,8 @@ class CartView extends GetView<CartController> {
       }
 
       if (controller.cart.discountAllocations != null &&
-          controller.cart.discountAllocations!.isNotEmpty) {
+          controller.cart.discountAllocations!.isNotEmpty &&
+          controller.discountController.discountAutomaticTotalOrder.isEmpty) {
         totalHarga = (c.cart.estimatedCost == null ||
                 c.cart.estimatedCost!.subtotalAmount! == "0.0")
             ? 0
@@ -589,6 +596,12 @@ class CartView extends GetView<CartController> {
                 c.cart.estimatedCost!.subtotalAmount!.replaceAll(".0", ""));
         totalPotongan = double.parse(controller.discountController
             .discountAutomaticTotalOrder[0].customerGets!.value!.amount!);
+
+        if (controller.listHabis.length > 0) {
+          for (final x in controller.listHabis) {
+            totalHarga = totalHarga! - double.parse(x.merchandise!.price!);
+          }
+        }
       }
 
       return Container(

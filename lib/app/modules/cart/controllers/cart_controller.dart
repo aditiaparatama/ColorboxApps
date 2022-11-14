@@ -70,6 +70,7 @@ class CartController extends GetxController {
       var result = await CartProvider().getCart(_idCart!);
       while (result == null) {
         await reCreateCart();
+        Future.delayed(const Duration(seconds: 1));
         result = await CartProvider().getCart(_idCart!);
       }
       _cart = Cart.fromJson(result["cart"]);

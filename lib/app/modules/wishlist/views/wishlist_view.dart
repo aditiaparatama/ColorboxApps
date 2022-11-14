@@ -118,7 +118,10 @@ class WishlistView extends GetView<WishlistController> {
                                                     "product":
                                                         controller.product[i],
                                                     "idCollection": controller
-                                                        .product[i].idCollection
+                                                        .product[i]
+                                                        .idCollection,
+                                                    "handle": controller
+                                                        .product[i].handle
                                                   }),
                                               child: SizedBox(
                                                 child: Column(
@@ -159,41 +162,49 @@ class WishlistView extends GetView<WishlistController> {
                                                               const Icon(
                                                                   Icons.error),
                                                         ),
-                                                        (controller
-                                                                        .product[
-                                                                            i]
-                                                                        .variantSelected!
-                                                                        .inventoryQuantity ==
+                                                        (controller.product[i]
+                                                                        .totalInventory ==
                                                                     null ||
                                                                 controller
                                                                         .product[
                                                                             i]
-                                                                        .variantSelected!
-                                                                        .inventoryQuantity ==
+                                                                        .totalInventory ==
                                                                     0)
-                                                            ? SizedBox(
-                                                                height: 220,
-                                                                child: Center(
+                                                            ? AspectRatio(
+                                                                aspectRatio:
+                                                                    2.08 / 3,
+                                                                child:
+                                                                    Container(
+                                                                  color: colorOverlay
+                                                                      .withOpacity(
+                                                                          0.5),
                                                                   child:
                                                                       SizedBox(
-                                                                    width: 60,
-                                                                    height: 60,
+                                                                    height: 220,
                                                                     child:
-                                                                        CircleAvatar(
-                                                                      backgroundColor: const Color(
-                                                                              0xFF212121)
-                                                                          .withOpacity(
-                                                                              0.75),
+                                                                        Center(
                                                                       child:
-                                                                          const CustomText(
-                                                                        text:
-                                                                            "Habis",
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontSize:
-                                                                            14,
-                                                                        fontWeight:
-                                                                            FontWeight.w600,
+                                                                          SizedBox(
+                                                                        width:
+                                                                            60,
+                                                                        height:
+                                                                            60,
+                                                                        child:
+                                                                            CircleAvatar(
+                                                                          backgroundColor:
+                                                                              const Color(0xFF212121).withOpacity(0.75),
+                                                                          child:
+                                                                              const CustomText(
+                                                                            text:
+                                                                                "Habis",
+                                                                            color:
+                                                                                Colors.white,
+                                                                            fontSize:
+                                                                                14,
+                                                                            fontWeight:
+                                                                                FontWeight.w600,
+                                                                          ),
+                                                                        ),
                                                                       ),
                                                                     ),
                                                                   ),

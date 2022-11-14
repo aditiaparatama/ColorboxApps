@@ -83,7 +83,7 @@ class WishlistController extends GetxController {
     if (index == 1) {
       _product = [];
       for (final x in _tempProduct) {
-        if (x.variantSelected!.inventoryQuantity! > 0) {
+        if (x.totalInventory! > 0) {
           _product.add(x);
         }
       }
@@ -92,7 +92,7 @@ class WishlistController extends GetxController {
     if (index == 2) {
       _product = [];
       for (final x in _tempProduct) {
-        if (x.variantSelected!.inventoryQuantity! == 0) {
+        if (x.totalInventory! == 0) {
           _product.add(x);
         }
       }

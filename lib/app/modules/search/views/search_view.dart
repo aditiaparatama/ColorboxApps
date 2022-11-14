@@ -132,7 +132,9 @@ class SearchView extends GetView<SearchController> {
                                                           control.product[i],
                                                       "idCollection": control
                                                           .product[i]
-                                                          .idCollection
+                                                          .idCollection,
+                                                      "handle": control
+                                                          .product[i].handle
                                                     }),
                                                 child: ItemCard(
                                                   title:

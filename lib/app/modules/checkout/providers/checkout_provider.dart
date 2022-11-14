@@ -294,6 +294,7 @@ class CheckoutProvider extends GetConnect {
                               title
                               sku
                               price
+                              quantityAvailable
                               compareAtPrice
                               weight
                               weightUnit

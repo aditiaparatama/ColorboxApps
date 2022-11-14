@@ -1,5 +1,6 @@
 import 'package:colorbox/app/modules/collections/models/product_model.dart';
 import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
+import 'package:colorbox/app/modules/product/providers/product_providers.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/wishlist/controllers/wishlist_controller.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
@@ -9,14 +10,15 @@ class ProductController extends GetxController {
   final LocalStorageData localStorageData = Get.find();
   final HomeController homeController = Get.put(HomeController());
   final WishlistController wishlistController = Get.put(WishlistController());
-  Product product = Product.isEmpty();
+  Product _product = Product.isEmpty();
+  Product get product => _product;
   UserModel _userModel = UserModel.isEmpty();
   UserModel get userModel => _userModel;
   CustomerToken? _token = CustomerToken.isEmpty();
   CustomerToken? get token => _token;
 
   Variants? variant;
-  String ukuran = "";
+  String ukuran = "", warna = "";
   String textCart = "Add Cart";
   String? sizeTemp;
   int existWishlist = -1;
@@ -28,7 +30,18 @@ class ProductController extends GetxController {
     super.onInit();
   }
 
-  void getSelectedValue(String size, String color) {
+  void getSelectedValue(String size, String color,
+      {bool fromColor = false}) async {
+    if (fromColor && _product.options[1].values.length > 1) {
+      String handle = product.handle!
+          .replaceAll(warna.toLowerCase().replaceAll(" ", "-"), "");
+
+      handle = handle.replaceAll(
+          "--", "-" + color.toLowerCase().replaceAll(" ", "-") + "-");
+
+      await getProductByHandle(handle);
+    }
+    warna = color;
     for (int i = 0; i < product.variants.length; i++) {
       if (product.variants[i].options.length > 1) {
         if (product.variants[i].options[0].value == size &&
@@ -98,6 +111,14 @@ class ProductController extends GetxController {
     });
 
     await localStorageData.getTokenUser.then((value) => _token = value);
+    update();
+  }
+
+  Future<void> getProductByHandle(String handle) async {
+    var result = await ProductProvider().getProductByHandle(handle);
+    _product = Product.fromJson(result["product"]);
+    variant = _product.variants[0];
+    warna = _product.options[1].values[0];
     update();
   }
 }

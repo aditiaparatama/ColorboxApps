@@ -38,7 +38,8 @@ class CustomRadioColorState extends State<CustomRadioColor> {
           onTap: () {
             _productController.getSelectedValue(
                 _productController.variant!.options[0].value!,
-                radioData[index].buttonText);
+                radioData[index].buttonText,
+                fromColor: true);
             setState(() {
               // ignore: avoid_function_literals_in_foreach_calls
               radioData.forEach((element) => element.isSelected = false);
