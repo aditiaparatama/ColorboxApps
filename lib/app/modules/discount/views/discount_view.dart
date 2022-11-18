@@ -47,7 +47,7 @@ class DiscountView extends GetView<DiscountController> {
                         ),
                         textHeader: "Belum Ada Voucher",
                         textContent:
-                            "Saat ini belum ada voucher yang dapat digunakan",
+                            "Belum ada voucher yang dapat kamu gunakan",
                       )
                     : SingleChildScrollView(
                         child: Column(
@@ -157,7 +157,7 @@ class DiscountView extends GetView<DiscountController> {
                                               horizontal: defaultPadding * 3,
                                               vertical: defaultPadding * 2),
                                           width: Get.width,
-                                          height: 180,
+                                          height: 195,
                                           decoration: BoxDecoration(
                                               color: (_totalPrice < _minPrice)
                                                   ? const Color(0xFF212121)

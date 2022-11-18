@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mixpanel_flutter/mixpanel_flutter.dart';
+import 'package:flutter/services.dart';
 import 'app/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -105,49 +105,19 @@ void showFlutterNotification(RemoteMessage message) {
 /// Initialize the [FlutterLocalNotificationsPlugin] package.
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-Future<void> initMixpanel() async {
-  Mixpanel mixpanel;
-
-  mixpanel = await Mixpanel.init("afaf7826fa8313c8bcbd0fa22e8cd1e8",
-      trackAutomaticEvents: true);
-
-  // Track with event-name
-  mixpanel.track('Sent Message');
-// Track with event-name and property
-  mixpanel.track('Plan Selected', properties: {'Plan': 'Premium'});
-}
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  initMixpanel();
-  // Set the background messaging handler early on, as a named top-level function
-  // FirebaseMessaging messaging = FirebaseMessaging.instance;
-  // NotificationSettings settings = await messaging.requestPermission(
-  //   alert: true,
-  //   announcement: false,
-  //   badge: true,
-  //   carPlay: false,
-  //   criticalAlert: false,
-  //   provisional: false,
-  //   sound: true,
-  // );
-
-  // if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-  //   print('User granted permission');
-  //   String? token = await (messaging.getToken());
-  //   print("The token is" + token!);
-  // } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
-  //   print('User granted provisional permission');
-  // } else {
-  //   print('User declined or has not accepted permission');
-  // }
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   if (!kIsWeb) {
     await setupFlutterNotifications();
   }
+
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   runApp(
     GetMaterialApp(

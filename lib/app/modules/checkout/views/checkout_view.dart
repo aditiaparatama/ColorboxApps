@@ -77,8 +77,11 @@ class CheckoutView extends GetView<CheckoutController> {
                     children: [
                       Column(
                         children: [
-                          const CustomText(
-                            text: 'Lakukan pembayaran?',
+                          CustomText(
+                            text: (controller.checkout.shippingLine!.title!
+                                    .contains("COD"))
+                                ? 'Konfirmasi Pesanan'
+                                : 'Lakukan pembayaran?',
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                             textAlign: TextAlign.center,
@@ -122,7 +125,10 @@ class CheckoutView extends GetView<CheckoutController> {
                                         title: "Pembayaran", url: urlString));
                                   },
                             //return true when click on "Yes"
-                            text: 'Lanjut Bayar',
+                            text: (controller.checkout.shippingLine!.title!
+                                    .contains("COD"))
+                                ? 'Ya, Buat Pesanan'
+                                : 'Lanjut Bayar',
                             fontSize: 14,
                             width: Get.width,
                             height: 45,
@@ -395,7 +401,11 @@ class CheckoutView extends GetView<CheckoutController> {
                                                 : () async {
                                                     showAlert();
                                                   },
-                                            text: "Lakukan Pembayaran",
+                                            text: (controller.checkout
+                                                    .shippingLine!.title!
+                                                    .contains("COD"))
+                                                ? "Buat Pesanan"
+                                                : "Lakukan Pembayaran",
                                             color: Colors.white,
                                             backgroundColor: colorTextBlack,
                                             width: 200,

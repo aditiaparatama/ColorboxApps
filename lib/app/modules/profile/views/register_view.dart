@@ -159,6 +159,9 @@ class RegisterView extends GetView<ProfileController> {
                                         if (value == "" || value == null) {
                                           return "Password wajib diisi";
                                         }
+                                        if (value.length < 6) {
+                                          return "Password minimal 6 karakter";
+                                        }
                                         return null;
                                       },
                                     ),

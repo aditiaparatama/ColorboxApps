@@ -36,46 +36,57 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicator> {
             ))
         .toList();
 
-    return Column(
-      children: [
-        CarouselSlider(
-          items: imageSliders,
-          options: CarouselOptions(
-              autoPlay: true,
-              autoPlayInterval: const Duration(seconds: 5),
-              aspectRatio: 1 / 1,
-              viewportFraction: 1,
-              enlargeCenterPage: true,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  _current = index;
-                });
-              }),
-          carouselController: _controller,
-        ),
-        (widget.controller.sliders.length > 2)
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children:
-                    widget.controller.sliders.asMap().entries.map((entry) {
-                  return GestureDetector(
-                    onTap: () => _controller.animateToPage(entry.key),
-                    child: Container(
-                      width: 8.0,
-                      height: 8.0,
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 12.0, horizontal: 4.0),
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: (_current == entry.key)
-                              ? colorTextBlack
-                              : const Color(0xFFE5E8EB)),
-                    ),
-                  );
-                }).toList(),
-              )
-            : const SizedBox(height: 12),
-      ],
-    );
+    return (widget.controller.sliders.length > 2)
+        ? Column(
+            children: [
+              CarouselSlider(
+                items: imageSliders,
+                options: CarouselOptions(
+                    autoPlay:
+                        (widget.controller.sliders.length > 2) ? true : false,
+                    autoPlayInterval: const Duration(seconds: 5),
+                    aspectRatio: 1 / 1,
+                    viewportFraction: 1,
+                    enlargeCenterPage: true,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _current = index;
+                      });
+                    }),
+                carouselController: _controller,
+              ),
+              (widget.controller.sliders.length > 2)
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: widget.controller.sliders
+                          .asMap()
+                          .entries
+                          .map((entry) {
+                        return GestureDetector(
+                          onTap: () => _controller.animateToPage(entry.key),
+                          child: Container(
+                            width: 8.0,
+                            height: 8.0,
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 12.0, horizontal: 4.0),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: (_current == entry.key)
+                                    ? colorTextBlack
+                                    : const Color(0xFFE5E8EB)),
+                          ),
+                        );
+                      }).toList(),
+                    )
+                  : const SizedBox(height: 12),
+            ],
+          )
+        : Container(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: CachedNetworkImage(
+              imageUrl: widget.controller.sliders[0].images!,
+              width: MediaQuery.of(context).size.width,
+            ),
+          );
   }
 }

@@ -430,7 +430,7 @@ class ProductView2 extends GetView<ProductController> {
                                         children: [
                                           CachedNetworkImage(
                                             imageUrl:
-                                                "https://cdn.shopify.com/s/files/1/0423/9120/8086/files/size-guide.png?v=1662956296",
+                                                "https://widget.delamibrands.com/colorbox/mobile/Size-Guidline.png",
                                             fit: BoxFit.fitWidth,
                                             width: Get.width,
                                           ),

@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
-import 'package:colorbox/app/modules/home/controllers/homecollections_controller.dart';
 import 'package:colorbox/app/modules/home/views/sections/collection1_home.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/constance.dart';

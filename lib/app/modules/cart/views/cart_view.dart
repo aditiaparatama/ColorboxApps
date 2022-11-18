@@ -81,7 +81,7 @@ class CartView extends GetView<CartController> {
                             .minimumRequirement!
                             .greaterThanOrEqualToSubtotal!
                             .replaceAll('.0', '')) -
-                        int.parse(controller.cart.estimatedCost!.totalAmount!
+                        int.parse(controller.cart.estimatedCost!.subtotalAmount!
                             .replaceAll(".0", ""))
                     : 0;
                 if (controller.listHabis.isNotEmpty) {
@@ -119,7 +119,13 @@ class CartView extends GetView<CartController> {
                                           .isNotEmpty &&
                                       controller.cart.lines!.isNotEmpty &&
                                       controller.discountController
-                                          .discountAutomatic.isEmpty)
+                                          .discountAutomatic.isEmpty &&
+                                      (controller.cart.discountCodes == null ||
+                                          controller
+                                              .cart.discountCodes!.isEmpty ||
+                                          controller.cart.discountCodes![0]
+                                                  .code ==
+                                              ""))
                                     Container(
                                       width: Get.width,
                                       color: (selisihOrder > 0)
@@ -588,7 +594,10 @@ class CartView extends GetView<CartController> {
       if (controller
               .discountController.discountAutomaticTotalOrder.isNotEmpty &&
           controller.discountController.discountAutomatic.isEmpty &&
-          selisihOrder <= 0) {
+          selisihOrder <= 0 &&
+          (controller.cart.discountCodes == null ||
+              controller.cart.discountCodes!.isEmpty ||
+              controller.cart.discountCodes![0].code == "")) {
         totalHarga = (c.cart.estimatedCost == null ||
                 c.cart.estimatedCost!.subtotalAmount! == "0.0")
             ? 0

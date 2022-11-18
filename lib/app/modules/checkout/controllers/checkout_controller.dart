@@ -95,7 +95,8 @@ class CheckoutController extends GetxController {
           .checkoutGetData(result['checkoutCreate']['checkout']['id']);
 
       //check kalo shipping rates nya masih null akan looping
-      while (result2['node']['availableShippingRates']['ready'] == false) {
+      while (result2['node']['availableShippingRates']['ready'] == false ||
+          result2['node']['availableShippingRates']['shippingRates'] == null) {
         result2 = await Future.delayed(
             const Duration(milliseconds: 1000),
             () => CheckoutProvider()
@@ -105,12 +106,19 @@ class CheckoutController extends GetxController {
       }
 
       if (result2['node']['availableShippingRates']['ready'] == true &&
+          result2['node']['availableShippingRates']['shippingRates'] != null &&
           result2['node']['availableShippingRates']['shippingRates'].length >
               0) {
+        int i = 0;
+        if (result2['node']['availableShippingRates']['shippingRates'][0]
+                ['handle']
+            .contains("COD")) {
+          i = 1;
+        }
         //update shipping rates
         await updateShippingRates(
             result['checkoutCreate']['checkout']['id'],
-            result2['node']['availableShippingRates']['shippingRates'][0]
+            result2['node']['availableShippingRates']['shippingRates'][i]
                 ['handle']);
 
         // if (result2 != null) {
@@ -142,10 +150,23 @@ class CheckoutController extends GetxController {
   }
 
   Future<void> getCheckout() async {
+    int looping = 0;
     var result = await CheckoutProvider().checkoutGetData(_idCheckout!);
     if (result != null) {
+      //check kalo shipping rates nya masih null akan looping
+      while (result['node']['availableShippingRates']['ready'] == false ||
+          result['node']['availableShippingRates']['shippingRates'] == null) {
+        result = await Future.delayed(const Duration(milliseconds: 1000),
+            () => CheckoutProvider().checkoutGetData(_idCheckout!));
+        if (looping >= 5) break;
+        looping += 1;
+      }
       _checkout = CheckoutModel.fromJson(result['node']);
       calculateLineItem();
+    }
+
+    if (_etd == null) {
+      await getETDShipping();
     }
     update();
   }
