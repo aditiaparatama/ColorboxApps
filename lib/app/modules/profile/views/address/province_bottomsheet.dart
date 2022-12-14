@@ -18,6 +18,7 @@ void bottomSheetProvince(_province, _city) {
     _debounce = Timer(const Duration(milliseconds: 500), () {
       // do something with query
       controller.searchProvince(query);
+      controller.update();
     });
   }
 

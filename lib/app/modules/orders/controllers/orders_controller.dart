@@ -33,6 +33,7 @@ class OrdersController extends GetxController {
         ? ", query:\"financial_status:expired OR status:cancelled\""
         : ", query:\"(NOT financial_status:expired) AND NOT status:cancelled\"";
     _ordersFilter = [];
+    _orders = [];
     var result = await OrderProvider()
         .getOrders(settingController.userModel.id!, query: query);
 
@@ -47,7 +48,7 @@ class OrdersController extends GetxController {
     if (result['customer'] != null &&
         result['customer']['orders']['edges'].length > 0) {
       _pageInfo = PageInfo.fromJson(result['customer']['orders']['pageInfo']);
-      _orders = [];
+
       for (final x in result['customer']['orders']['edges']) {
         _orders.add(Order.fromJson(
             x['node'], result['customer']['orders']['pageInfo']));

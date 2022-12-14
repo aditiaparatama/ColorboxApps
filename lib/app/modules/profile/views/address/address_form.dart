@@ -37,6 +37,7 @@ class AddressForm extends GetView<ProfileController> {
 
       if (x.province != null && x.province != "") {
         controller.searchProvince(x.province!);
+        // controller.update();
       }
 
       if (x.phone!.substring(0, 2) == "08") {
@@ -52,7 +53,7 @@ class AddressForm extends GetView<ProfileController> {
     }
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(56),
           child: AppBarDefault(
@@ -60,92 +61,6 @@ class AddressForm extends GetView<ProfileController> {
             icon: const Icon(Icons.close),
           )),
       backgroundColor: Colors.white,
-      bottomSheet: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.05),
-                spreadRadius: 1,
-                blurRadius: 6,
-                offset: const Offset(0, -5), // changes position of shadow
-              ),
-            ],
-          ),
-          width: Get.width,
-          child: CustomButton(
-            onPressed: () async {
-              _formKey.currentState!.save();
-
-              if (_formKey.currentState!.validate()) {
-                int result = await controller.saveAddress(id);
-
-                if (result == 1) {
-                  await controller.getAddress();
-                  if (checkout) {
-                    Get.find<CartController>().update();
-                    Get.back();
-                    Get.toNamed(Routes.CHECKOUT);
-                  } else {
-                    Get.back();
-                  }
-                  Get.snackbar(
-                      "",
-                      "Alamat berhasil " +
-                          ((id == null) ? "disimpan" : "diubah"),
-                      titleText: Row(
-                        children: [
-                          SvgPicture.asset(
-                            "assets/icon/Check-Circle.svg",
-                            color: Colors.white,
-                          ),
-                          const SizedBox(width: 4),
-                          const CustomText(
-                            text: "Berhasil",
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ],
-                      ),
-                      backgroundColor: colorTextBlack,
-                      colorText: Colors.white,
-                      snackPosition: SnackPosition.BOTTOM);
-                } else {
-                  Get.snackbar("", "Mohon Coba Lagi",
-                      titleText: Row(
-                        children: [
-                          SvgPicture.asset(
-                            "assets/icon/Exclamation-Circle.svg",
-                            color: Colors.white,
-                          ),
-                          const SizedBox(width: 4),
-                          const CustomText(
-                            text: "Gagal",
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ],
-                      ),
-                      backgroundColor: colorTextBlack,
-                      colorText: Colors.white,
-                      snackPosition: SnackPosition.BOTTOM);
-                }
-              } else {
-                controller.update();
-              }
-            },
-            text: "Simpan",
-            width: Get.width,
-            height: 60,
-            color: Colors.white,
-            backgroundColor: colorTextBlack,
-          ),
-        ),
-      ),
       body: SafeArea(
           child: SingleChildScrollView(
         child: GetBuilder(
@@ -170,6 +85,7 @@ class AddressForm extends GetView<ProfileController> {
                             height: 16,
                           ),
                           CustomTextFormField(
+                            autoFocus: true,
                             textEditingController: _namaLengkap,
                             showAlert: namaAlert,
                             onSave: (value) {
@@ -210,9 +126,9 @@ class AddressForm extends GetView<ProfileController> {
                             },
                             onChange: (_) => controller.update(),
                             validator: (input) {
-                              if (input == null || input.length < 4) {
+                              if (input == null || input.length < 8) {
                                 telpAlert = true;
-                                return "This field requires a minimum of 4 numbers";
+                                return "Minimum karakter 8";
                               }
                               telpAlert = false;
                               return null;
@@ -260,6 +176,7 @@ class AddressForm extends GetView<ProfileController> {
                             textEditingController: _address1,
                             showAlert: address1Alert,
                             textInputType: TextInputType.multiline,
+                            textInputAction: TextInputAction.done,
                             onSave: (value) {
                               controller.address!.address1 = value;
                             },
@@ -290,7 +207,11 @@ class AddressForm extends GetView<ProfileController> {
                             height: 16,
                           ),
                           InkWell(
-                            onTap: () => bottomSheetProvince(_province, _city),
+                            onTap: () {
+                              // FocusScope.of(context).requestFocus(FocusNode());
+                              // TextInputAction.done;
+                              bottomSheetProvince(_province, _city);
+                            },
                             child: TextFormField(
                               controller: _province,
                               onSaved: (value) {
@@ -312,7 +233,7 @@ class AddressForm extends GetView<ProfileController> {
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(6)),
                                     borderSide: BorderSide(
-                                      color: (_zip.text.isNotEmpty)
+                                      color: (_province.text.isNotEmpty)
                                           ? colorTextBlack
                                           : const Color(0xFFE5E8EB),
                                       width: 1.0,
@@ -352,7 +273,7 @@ class AddressForm extends GetView<ProfileController> {
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(6)),
                                     borderSide: BorderSide(
-                                      color: (_zip.text.isNotEmpty)
+                                      color: (_city.text.isNotEmpty)
                                           ? colorTextBlack
                                           : const Color(0xFFE5E8EB),
                                       width: 1.0,
@@ -392,7 +313,7 @@ class AddressForm extends GetView<ProfileController> {
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(6)),
                                     borderSide: BorderSide(
-                                      color: (_zip.text.isNotEmpty)
+                                      color: (_address2.text.isNotEmpty)
                                           ? colorTextBlack
                                           : const Color(0xFFE5E8EB),
                                       width: 1.0,
@@ -442,6 +363,95 @@ class AddressForm extends GetView<ProfileController> {
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    Container(
+                      height: 8,
+                      color: const Color(0xFFF9F8F8),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.05),
+                            spreadRadius: 1,
+                            blurRadius: 6,
+                            offset: const Offset(
+                                0, -5), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      width: Get.width,
+                      child: CustomButton(
+                        onPressed: () async {
+                          _formKey.currentState!.save();
+
+                          if (_formKey.currentState!.validate()) {
+                            int result = await controller.saveAddress(id);
+
+                            if (result == 1) {
+                              await controller.getAddress();
+                              if (checkout) {
+                                Get.find<CartController>().update();
+                                Get.back();
+                                Get.toNamed(Routes.CHECKOUT);
+                              } else {
+                                Get.back();
+                              }
+                              Get.snackbar(
+                                  "",
+                                  "Alamat berhasil " +
+                                      ((id == null) ? "disimpan" : "diubah"),
+                                  titleText: Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        "assets/icon/Check-Circle.svg",
+                                        color: Colors.white,
+                                      ),
+                                      const SizedBox(width: 4),
+                                      const CustomText(
+                                        text: "Berhasil",
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ],
+                                  ),
+                                  backgroundColor: colorTextBlack,
+                                  colorText: Colors.white,
+                                  snackPosition: SnackPosition.BOTTOM);
+                            } else {
+                              Get.snackbar("", "Mohon Coba Lagi",
+                                  titleText: Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        "assets/icon/Exclamation-Circle.svg",
+                                        color: Colors.white,
+                                      ),
+                                      const SizedBox(width: 4),
+                                      const CustomText(
+                                        text: "Gagal",
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ],
+                                  ),
+                                  backgroundColor: colorTextBlack,
+                                  colorText: Colors.white,
+                                  snackPosition: SnackPosition.BOTTOM);
+                            }
+                          } else {
+                            controller.update();
+                          }
+                        },
+                        text: "Simpan",
+                        width: Get.width,
+                        height: 60,
+                        color: Colors.white,
+                        backgroundColor: colorTextBlack,
                       ),
                     ),
                   ],

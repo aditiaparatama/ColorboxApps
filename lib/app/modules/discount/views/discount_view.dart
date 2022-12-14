@@ -240,10 +240,17 @@ class DiscountView extends GetView<DiscountController> {
                                                       : const SizedBox()
                                                 ],
                                               ),
-                                              const Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 12),
-                                                child: DottedLine(),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 12),
+                                                child: DottedLine(
+                                                    dashColor: (voucher.code ==
+                                                            controller
+                                                                .discount[index]
+                                                                .title)
+                                                        ? colorTextBlack
+                                                        : colorOverlay),
                                               ),
                                               for (final x in controller
                                                   .discount[index].summary!

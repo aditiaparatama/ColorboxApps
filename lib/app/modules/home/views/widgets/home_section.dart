@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:colorbox/app/modules/control/menu_model.dart';
+import 'package:colorbox/app/modules/control/sub_menu_model.dart';
 import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
 import 'package:colorbox/app/modules/home/views/sections/collection1_home.dart';
+import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +29,7 @@ class HomeSectionWidget extends GetView<HomeController> {
             itemBuilder: (context, index) {
               return Column(children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 24, bottom: 8),
+                  padding: const EdgeInsets.only(top: 16, bottom: 8),
                   child: CustomText(
                     text: (controller.collections.isEmpty)
                         ? ""
@@ -51,12 +54,26 @@ class HomeSectionWidget extends GetView<HomeController> {
                 (controller.collections[index].images == null ||
                         controller.collections[index].images == "")
                     ? const SizedBox()
-                    : SizedBox(
-                        child: Center(
-                          child: CachedNetworkImage(
-                            imageUrl: controller.collections[index].images!,
-                            fit: BoxFit.cover,
-                            width: Get.width,
+                    : GestureDetector(
+                        onTap: () {
+                          var menu = Menu(
+                              subMenu: List<SubMenu>.empty(),
+                              title: controller.collections[index].title,
+                              subjectID:
+                                  controller.collections[index].subjectid!);
+                          Get.toNamed(Routes.COLLECTIONS, arguments: {
+                            "menu": menu,
+                            "indexMenu": null,
+                            "sortBy": 2
+                          });
+                        },
+                        child: SizedBox(
+                          child: Center(
+                            child: CachedNetworkImage(
+                              imageUrl: controller.collections[index].images!,
+                              fit: BoxFit.cover,
+                              width: Get.width,
+                            ),
                           ),
                         ),
                       ),

@@ -22,7 +22,7 @@ class CustomRadioColorState extends State<CustomRadioColor> {
   void initState() {
     super.initState();
     for (int i = 0; i < widget.listData!.length; i++) {
-      radioData.add(RadioModel(false, widget.listData![i]));
+      radioData.add(RadioModel((i == 0) ? true : false, widget.listData![i]));
     }
   }
 
@@ -68,10 +68,12 @@ class RadioItem extends StatelessWidget {
             height: 24.0,
             width: 24.0,
             decoration: BoxDecoration(
-              border: Border.all(
-                color: colorTextBlack,
-                width: 1.0,
-              ),
+              border: _item.isSelected
+                  ? Border.all(
+                      color: colorTextBlack,
+                      width: 1.0,
+                    )
+                  : null,
               borderRadius: const BorderRadius.all(
                 Radius.circular(50),
               ),

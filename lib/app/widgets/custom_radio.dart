@@ -76,7 +76,7 @@ class RadioItem extends StatelessWidget {
             margin: const EdgeInsets.only(top: 5),
             padding: const EdgeInsets.symmetric(horizontal: 5),
             height: 30.0,
-            width: 50.0,
+            width: (_item.buttonText.length > 6) ? 85.0 : 50.0,
             child: Center(
               child: Text(_item.buttonText,
                   style: TextStyle(

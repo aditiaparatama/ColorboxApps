@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:colorbox/app/data/models/mailing_address.dart';
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/modules/cart/models/cart_model.dart';
@@ -8,7 +10,9 @@ import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/constance.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -33,8 +37,17 @@ class CheckoutController extends GetxController {
   double? discountAmount;
   bool checkoutTap = false;
 
+  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
   @override
   void onInit() async {
+    initConnectivity();
+
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+
     await getAddress();
     await createCheckout();
     // _idCheckout =
@@ -43,6 +56,31 @@ class CheckoutController extends GetxController {
     await getETDShipping();
 
     super.onInit();
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
+
+  Future<void> initConnectivity() async {
+    late ConnectivityResult result;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      debugPrint('Couldn\'t check connectivity status $e');
+      return;
+    }
+
+    debugPrint(result.name);
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    _connectionStatus = result;
   }
 
   Future<void> getAddress() async {
@@ -56,6 +94,7 @@ class CheckoutController extends GetxController {
   }
 
   createCheckout() async {
+    debugPrint(_connectionStatus.name);
     List<CheckoutItems>? items = await getItems();
 
     int looping = 0;
@@ -98,10 +137,17 @@ class CheckoutController extends GetxController {
       while (result2['node']['availableShippingRates']['ready'] == false ||
           result2['node']['availableShippingRates']['shippingRates'] == null) {
         result2 = await Future.delayed(
-            const Duration(milliseconds: 1000),
+            const Duration(milliseconds: 500),
             () => CheckoutProvider()
                 .checkoutGetData(result['checkoutCreate']['checkout']['id']));
-        if (looping >= 5) break;
+        if (looping >= 5) {
+          Get.snackbar(
+              "Peringatan", "Terjadi kesalahan server, mohon coba kembali",
+              backgroundColor: colorTextBlack,
+              colorText: Colors.white,
+              snackPosition: SnackPosition.BOTTOM);
+          break;
+        }
         looping += 1;
       }
 
@@ -120,11 +166,6 @@ class CheckoutController extends GetxController {
             result['checkoutCreate']['checkout']['id'],
             result2['node']['availableShippingRates']['shippingRates'][i]
                 ['handle']);
-
-        // if (result2 != null) {
-        //   _checkout = CheckoutModel.fromJson(
-        //       resultShipping['checkoutShippingLineUpdate']['checkout']);
-        // }
       }
 
       //update voucher dicheckout kalo sudah digunakan di cart
@@ -134,6 +175,15 @@ class CheckoutController extends GetxController {
       }
       getCheckout();
       // calculateLineItem();
+    }
+
+    if (result == null) {
+      Get.back();
+      Get.snackbar("Peringatan", "Terjadi kesalahan server, mohon coba kembali",
+          backgroundColor: colorTextBlack,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM);
+      return;
     }
     update();
   }
@@ -250,14 +300,14 @@ class CheckoutController extends GetxController {
   }
 
   Future<void> reloadShippingRates(String id) async {
-    var result2 = await Future.delayed(const Duration(milliseconds: 1000),
+    var result2 = await Future.delayed(const Duration(milliseconds: 300),
         () => CheckoutProvider().checkoutGetData(id));
 
     for (int x = 0; x < 3; x++) {
       if (result2['node']['availableShippingRates']['ready'] == false ||
           result2['node']['availableShippingRates']['shippingRates'].length ==
               0) {
-        result2 = await Future.delayed(const Duration(milliseconds: 1000),
+        result2 = await Future.delayed(const Duration(milliseconds: 300),
             () => CheckoutProvider().checkoutGetData(id));
       }
     }
@@ -293,10 +343,14 @@ class CheckoutController extends GetxController {
         id: _idCheckout!, discountCode: discountCode);
     if (result['checkoutDiscountCodeApplyV2']['checkoutUserErrors'].length >
         0) {
-      Get.snackbar(
-          "Alert",
-          result['checkoutDiscountCodeApplyV2']['checkoutUserErrors'][0]
-              ['message'],
+      String msg = result['checkoutDiscountCodeApplyV2']['checkoutUserErrors']
+          [0]['message'];
+
+      msg = (msg == "This discount has reached its usage limit")
+          ? "Voucher sudah pernah digunakan"
+          : msg;
+
+      Get.snackbar("Peringatan", msg,
           backgroundColor: colorTextBlack,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM);
@@ -306,11 +360,13 @@ class CheckoutController extends GetxController {
         result['checkoutDiscountCodeApplyV2']['checkout']);
     calculateLineItem();
     update();
-    if (back) Get.back();
-    Get.snackbar("Info", "Voucher berhasil digunakan",
-        backgroundColor: colorTextBlack,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM);
+    if (back) {
+      Get.back();
+      Get.snackbar("Info", "Voucher berhasil digunakan",
+          backgroundColor: colorTextBlack,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM);
+    }
   }
 
   removeVoucher() async {
@@ -556,13 +612,17 @@ class CheckoutController extends GetxController {
 
   dynamic pesananDenganDiscountLineItems() {
     var _lineItems = [];
+    double totalWeight = 0;
 
     for (final x in _checkout.lineItems!) {
+      totalWeight += x.variants!.weight ?? 0;
       if (x.discountAllocations != null && x.discountAllocations!.isNotEmpty) {
         _lineItems.add({
           "variant_id":
               x.variants!.id!.replaceAll("gid://shopify/ProductVariant/", ""),
           "quantity": x.quantity,
+          "grams": x.variants!.weight! *
+              (x.variants!.weightUnit == "KILOGRAMS" ? 1000 : 1),
           "applied_discount": {
             "description":
                 (x.discountAllocations![0].discountApplication!.typename ==
@@ -590,7 +650,9 @@ class CheckoutController extends GetxController {
         _lineItems.add({
           "variant_id":
               x.variants!.id!.replaceAll("gid://shopify/ProductVariant/", ""),
-          "quantity": x.quantity
+          "quantity": x.quantity,
+          "grams": x.variants!.weight! *
+              (x.variants!.weightUnit == "KILOGRAMS" ? 1000 : 1)
         });
       }
     }
@@ -607,6 +669,7 @@ class CheckoutController extends GetxController {
             ? "apps_cod"
             : "apps",
         "line_items": _lineItems,
+        "total_weight": totalWeight,
         "shipping_line": {
           "title": _checkout.shippingLine!.title,
           "price": _checkout.shippingLine!.amount ?? 0,
@@ -655,12 +718,17 @@ class CheckoutController extends GetxController {
   dynamic pesananDenganDiskonCode() {
     var _lineItems = [];
 
+    double totalWeight = 0;
+
     for (final x in _checkout.lineItems!) {
       _lineItems.add({
         "variant_id":
             x.variants!.id!.replaceAll("gid://shopify/ProductVariant/", ""),
-        "quantity": x.quantity
+        "quantity": x.quantity,
+        "grams": x.variants!.weight! *
+            (x.variants!.weightUnit == "KILOGRAMS" ? 1000 : 1)
       });
+      totalWeight += x.variants!.weight ?? 0;
     }
 
     String? lastName = (_checkout.shippingAddress!.lastName == "" ||
@@ -685,6 +753,7 @@ class CheckoutController extends GetxController {
         "tags": (_checkout.shippingLine!.title!.contains("COD"))
             ? ["apps", "apps_cod"]
             : "apps",
+        "total_weight": totalWeight,
         "line_items": _lineItems,
         "shipping_lines": [
           {
@@ -763,8 +832,18 @@ class CheckoutController extends GetxController {
           discountType[0].targetSelection != "ALL") {
         discountAmount = ((discountAmount == null) ? 0.0 : discountAmount!) +
             double.parse(item.discountAllocations![0].allocatedAmount!
-                .replaceAll(".0", ""));
+                    .replaceAll(".0", ""))
+                .round();
         lineItemPrice = lineItemPrice - discountAmount!;
+      }
+
+      if (discountType != null &&
+          item.discountAllocations!.isNotEmpty &&
+          discountType[0].targetSelection == "ALL") {
+        discountAmount = ((discountAmount == null) ? 0.0 : discountAmount!) +
+            double.parse(item.discountAllocations![0].allocatedAmount!
+                    .replaceAll(".0", ""))
+                .round();
       }
     }
   }

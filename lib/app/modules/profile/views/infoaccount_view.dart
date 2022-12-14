@@ -131,7 +131,7 @@ class InformationAccount extends StatelessWidget {
                                 validator: (input) {
                                   if (input == null || input.length < 8) {
                                     telpAlert = true;
-                                    return "This field requires a minimum of 8 numbers";
+                                    return "Minimum karakter 8";
                                   }
                                   telpAlert = false;
                                   return null;
@@ -158,42 +158,46 @@ class InformationAccount extends StatelessWidget {
                                 height: 24,
                               ),
                               InkWell(
-                                onTap: () => showDatePicker(
-                                  helpText: "Pilih Tanggal",
-                                  confirmText: "Pilih",
-                                  cancelText: "Batal",
-                                  context: context,
-                                  initialDate: _initialDate,
-                                  firstDate: DateTime(1900),
-                                  lastDate: DateTime(2025),
-                                  builder: (context, child) {
-                                    return Theme(
-                                      data: Theme.of(context).copyWith(
-                                        colorScheme: const ColorScheme.light(
-                                          primary:
-                                              colorTextBlack, // <-- SEE HERE
-                                          onPrimary:
-                                              Colors.white, // <-- SEE HERE
-                                          onSurface:
-                                              colorTextBlack, // <-- SEE HERE
+                                onTap: () {
+                                  FocusManager.instance.primaryFocus?.unfocus();
+                                  showDatePicker(
+                                    helpText: "Pilih Tanggal",
+                                    confirmText: "Pilih",
+                                    cancelText: "Batal",
+                                    context: context,
+                                    initialDate: _initialDate,
+                                    firstDate: DateTime(1900),
+                                    lastDate: DateTime(2025),
+                                    builder: (context, child) {
+                                      return Theme(
+                                        data: Theme.of(context).copyWith(
+                                          colorScheme: const ColorScheme.light(
+                                            primary:
+                                                colorTextBlack, // <-- SEE HERE
+                                            onPrimary:
+                                                Colors.white, // <-- SEE HERE
+                                            onSurface:
+                                                colorTextBlack, // <-- SEE HERE
+                                          ),
+                                          textButtonTheme: TextButtonThemeData(
+                                            style: TextButton.styleFrom(
+                                                foregroundColor: Colors
+                                                    .white, // button text color
+                                                side: const BorderSide(
+                                                    color: colorTextBlack,
+                                                    width: 1),
+                                                backgroundColor:
+                                                    colorTextBlack),
+                                          ),
                                         ),
-                                        textButtonTheme: TextButtonThemeData(
-                                          style: TextButton.styleFrom(
-                                              foregroundColor: Colors
-                                                  .white, // button text color
-                                              side: const BorderSide(
-                                                  color: colorTextBlack,
-                                                  width: 1),
-                                              backgroundColor: colorTextBlack),
-                                        ),
-                                      ),
-                                      child: child!,
-                                    );
-                                  },
-                                ).then((value) {
-                                  return birthdayTextController.text =
-                                      DateFormat('dd/MM/yyyy').format(value!);
-                                }),
+                                        child: child!,
+                                      );
+                                    },
+                                  ).then((value) {
+                                    return birthdayTextController.text =
+                                        DateFormat('dd/MM/yyyy').format(value!);
+                                  });
+                                },
                                 child: TextFormField(
                                   cursorColor: colorTextBlack,
                                   enabled: false,

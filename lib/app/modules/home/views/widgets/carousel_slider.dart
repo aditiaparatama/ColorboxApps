@@ -1,8 +1,12 @@
+import 'package:colorbox/app/modules/control/menu_model.dart';
+import 'package:colorbox/app/modules/control/sub_menu_model.dart';
 import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CarouselWithIndicator extends StatefulWidget {
   const CarouselWithIndicator({
@@ -23,13 +27,27 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicator> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> imageSliders = widget.controller.sliders
-        .map((item) => Container(
-              decoration: const BoxDecoration(shape: BoxShape.circle),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(0)),
-                child: Center(
-                  child: CachedNetworkImage(
-                    imageUrl: item.images!,
+        .map((item) => GestureDetector(
+              onTap: (item.subjectId == null)
+                  ? null
+                  : () {
+                      Get.toNamed(Routes.COLLECTIONS, arguments: {
+                        "menu": Menu(
+                            subMenu: List<SubMenu>.empty(),
+                            title: item.title,
+                            subjectID: item.subjectId!),
+                        "indexMenu": null,
+                        "sortBy": 2
+                      });
+                    },
+              child: Container(
+                decoration: const BoxDecoration(shape: BoxShape.circle),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(0)),
+                  child: Center(
+                    child: CachedNetworkImage(
+                      imageUrl: item.images!,
+                    ),
                   ),
                 ),
               ),
@@ -81,8 +99,19 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicator> {
                   : const SizedBox(height: 12),
             ],
           )
-        : Container(
-            padding: const EdgeInsets.only(bottom: 12),
+        : GestureDetector(
+            onTap: (widget.controller.sliders[0].subjectId == null)
+                ? null
+                : () {
+                    Get.toNamed(Routes.COLLECTIONS, arguments: {
+                      "menu": Menu(
+                          subMenu: List<SubMenu>.empty(),
+                          title: widget.controller.sliders[0].title,
+                          subjectID: widget.controller.sliders[0].subjectId!),
+                      "indexMenu": null,
+                      "sortBy": 2
+                    });
+                  },
             child: CachedNetworkImage(
               imageUrl: widget.controller.sliders[0].images!,
               width: MediaQuery.of(context).size.width,

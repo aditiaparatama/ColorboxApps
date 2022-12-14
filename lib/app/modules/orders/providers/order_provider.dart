@@ -25,6 +25,10 @@ class OrderProvider extends GetConnect {
                         note
                         fulfillments{
                             status
+                            trackingInfo{
+                                number
+                                url
+                            }
                         }
                         discountApplications(first: 2){
                             edges{
@@ -249,6 +253,10 @@ class OrderProvider extends GetConnect {
                         note
                         fulfillments{
                             status
+                            trackingInfo{
+                                number
+                                url
+                            }
                         }
                         discountApplications(first: 2){
                             edges{

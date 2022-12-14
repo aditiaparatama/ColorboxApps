@@ -169,6 +169,8 @@ class DiscountMinimumSubtotal {
 class DiscountAutomatic {
   String? typename;
   String? title;
+  String? summary;
+  String? endsAt;
   String? discountClass;
   List<DiscountCollection>? collections;
   MinimumRequirement? minimumRequirement;
@@ -178,6 +180,8 @@ class DiscountAutomatic {
   DiscountAutomatic(
       this.typename,
       this.title,
+      this.summary,
+      this.endsAt,
       this.discountClass,
       this.minimumRequirement,
       this.customerGets,
@@ -187,6 +191,8 @@ class DiscountAutomatic {
   DiscountAutomatic.fromJson(var json) {
     typename = json["__typename"];
     title = json["title"];
+    summary = (json.containsKey("summary")) ? json["summary"] : null;
+    endsAt = json["endsAt"];
     discountClass = json["discountClass"];
     if (typename == "DiscountAutomaticBxgy") {
       minimumRequirement = MinimumRequirement.fromByBxgY(json);

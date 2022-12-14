@@ -22,6 +22,9 @@ class HomeController extends GetxController {
   bool _maintenance = false;
   bool get maintenance => _maintenance;
 
+  List<String> _excludeVoucher = [];
+  List<String> get excludeVoucher => _excludeVoucher;
+
   String currentItem = 'Home';
   int curIndex = 0;
 
@@ -45,6 +48,10 @@ class HomeController extends GetxController {
 
     _maintenance =
         (json.containsKey("maintenance")) ? json["maintenance"] : false;
+    _excludeVoucher = [];
+    for (final x in json["excludeVoucher"]) {
+      _excludeVoucher.add(x);
+    }
     getCollections(json['CollectionsHome']['items']);
     getAnnouncementHome(json['announcementHome']);
     getAnnouncementProduct(json['announcementProduct']);

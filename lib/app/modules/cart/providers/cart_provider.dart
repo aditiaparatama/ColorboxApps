@@ -93,6 +93,12 @@ class CartProvider extends GetConnect {
                             currencyCode
                         }
                     }
+                    ... on CartCodeDiscountAllocation {
+                        discountedAmount {
+                            amount
+                            currencyCode
+                        }
+                      }
                     }
                     merchandise {
                     ... on ProductVariant {

@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:math';
 import 'package:colorbox/app/data/models/countries_model.dart';
 import 'package:colorbox/app/data/models/mailing_address.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
@@ -7,22 +9,25 @@ import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/constance.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
+import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class ProfileController extends GetxController {
   final LocalStorageData localStorageData = Get.find();
   final ValueNotifier _loading = ValueNotifier(false);
+  late FirebaseAuth _firebaseAuth;
   ValueNotifier get loading => _loading;
   UserModel _userModel = UserModel.isEmpty();
   UserModel get userModel => _userModel;
   UserModel _userFromAdmin = UserModel.isEmpty();
   UserModel get userFromAdmin => _userFromAdmin;
-  bool? _showPassword = true;
+  bool? _showPassword = true, emailExist = false, emailAlert = false;
   bool? get showPassword => _showPassword;
 
   final DateTime? _showDateBirth = DateTime.now();
@@ -96,9 +101,11 @@ class ProfileController extends GetxController {
     final GoogleSignInAccount? googleUser =
         await GoogleSignIn(scopes: <String>["email"]).signIn();
 
+    if (googleUser == null) return "-1";
+
     // Obtain the auth details from the request
     final GoogleSignInAuthentication googleAuth =
-        await googleUser!.authentication;
+        await googleUser.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
@@ -144,6 +151,87 @@ class ProfileController extends GetxController {
     return "-1";
   }
 
+  /// Generates a cryptographically secure random nonce, to be included in a
+  /// credential request.
+  String generateNonce([int length = 32]) {
+    const charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
+        .join();
+  }
+
+  /// Returns the sha256 hash of [input] in hex notation.
+  String sha256ofString(String input) {
+    final bytes = utf8.encode(input);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
+  }
+
+  Future<String> loginWithApple() async {
+    _loading.value = true;
+    update();
+    final rawNonce = generateNonce();
+    final nonce = sha256ofString(rawNonce);
+
+    // // Request credential for the currently signed in Apple account.
+    final appleCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+      nonce: nonce,
+    );
+
+    // Create an `OAuthCredential` from the credential returned by Apple.
+    final oauthCredential = OAuthProvider("apple.com").credential(
+      idToken: appleCredential.identityToken,
+      rawNonce: rawNonce,
+    );
+
+    // Sign in the user with Firebase. If the nonce we generated earlier does
+    // not match the nonce in `appleCredential.identityToken`, sign in will fail.
+    final result =
+        await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+
+    if (result.user != null && result.user!.email != null) {
+      var checkUser =
+          await ProfileProvider().checkExistUser(result.user!.email!);
+
+      if (checkUser['customers']['edges'].length == 0) {
+        await registerFromGoogle({
+          "email": result.user!.email,
+          "given_name": (result.user!.displayName == null)
+              ? result.user!.email
+              : (appleCredential.givenName == null)
+                  ? result.user!.email
+                  : appleCredential.givenName,
+          "family_name": (result.user!.displayName == null)
+              ? ""
+              : (appleCredential.familyName == null)
+                  ? ""
+                  : appleCredential.familyName
+        });
+      }
+      checkUser = await ProfileProvider().checkExistUser(result.user!.email!);
+
+      if (checkUser['customers']['edges'].length > 0) {
+        DateTime date = DateTime.now();
+        DateTime exp = date.add(const Duration(days: 2000));
+        setToken(CustomerToken(checkUser['customers']['edges'][0]['node']['id'],
+            appleCredential.identityToken, exp.toString()));
+        await getUserAdmin(checkUser['customers']['edges'][0]['node']['id']);
+
+        _loading.value = false;
+        update();
+        return checkUser['customers']['edges'][0]['node']['id'];
+      }
+    }
+    _loading.value = false;
+    update();
+    return "-1";
+  }
+
   Future<void> getUserAdmin(String id) async {
     var user = await ProfileProvider().getUserFromAdmin(id);
     _userFromAdmin = UserModel.fromAdmin(user);
@@ -171,8 +259,10 @@ class ProfileController extends GetxController {
         .register(email!.toLowerCase(), password!, firstN!, lastN!);
 
     if (result["msg"] == "success") {
-      tglLahir = DateFormat('yyyy-MM-dd')
-          .format(DateFormat('dd/MM/yyyy').parse(tglLahir!.trim()));
+      if (tglLahir != null && tglLahir != "") {
+        tglLahir = DateFormat('yyyy-MM-dd')
+            .format(DateFormat('dd/MM/yyyy').parse(tglLahir!.trim()));
+      }
       var variables = {
         "input": {
           "email": email!.toLowerCase(),
@@ -180,7 +270,8 @@ class ProfileController extends GetxController {
           "firstName": firstN,
           "id": result['id'],
           "lastName": lastN,
-          "note": "Birthday: $tglLahir",
+          "note":
+              (tglLahir != null && tglLahir != "") ? "" : "Birthday: $tglLahir",
         }
       };
       await ProfileProvider().customerUpdate(variables);
@@ -448,7 +539,7 @@ class ProfileController extends GetxController {
         .where((e) => e.name!.toLowerCase().contains(value.toLowerCase()))
         .toList();
 
-    update();
+    // update();
   }
 
   resetProvince() {
@@ -474,7 +565,7 @@ class ProfileController extends GetxController {
     var result = await ProfileProvider().getCity(province);
     _wilayah = [];
     String? kota = "";
-    for (final x in result) {
+    for (final x in result ?? []) {
       if (x['kota'] != kota) {
         _wilayah.add({"kota": x['kota'], "kecamatan": []});
 
@@ -615,5 +706,12 @@ class ProfileController extends GetxController {
     }
     loading.value = false;
     update();
+  }
+
+  Future<int> checkEmail(String email) async {
+    var result = await ProfileProvider().checkExistUser(email);
+    emailExist = (result['customers']['edges'].length > 0) ? true : false;
+    update();
+    return result['customers']['edges'].length;
   }
 }

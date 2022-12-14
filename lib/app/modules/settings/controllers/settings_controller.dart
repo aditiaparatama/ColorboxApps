@@ -2,6 +2,7 @@ import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/modules/orders/controllers/orders_controller.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
+import 'package:colorbox/app/modules/settings/providers/settings_provider.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -75,5 +76,9 @@ class SettingsController extends GetxController {
       _userModel = UserModel.fromAdmin(result);
     }
     update();
+  }
+
+  void deleteAccount(dynamic data) async {
+    await SettingsProvider().deleteAccount(data);
   }
 }

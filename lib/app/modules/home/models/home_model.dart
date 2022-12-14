@@ -2,6 +2,7 @@ class Sliders {
   int? id;
   String? title;
   String? images;
+  int? subjectId;
 
   Sliders({
     this.id,
@@ -13,6 +14,7 @@ class Sliders {
     id = json['id'];
     title = json['title'];
     images = json['images'];
+    subjectId = json['subjectid'];
   }
 }
 

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/appbar_default.dart';
@@ -7,6 +8,7 @@ import 'package:colorbox/app/widgets/custom_text_form_field.dart';
 import 'package:colorbox/app/widgets/pop_up_alert.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../controllers/profile_controller.dart';
 
@@ -131,48 +133,58 @@ class ProfileView extends GetView<ProfileController> {
                                           child: CustomButton(
                                             backgroundColor: colorTextBlack,
                                             color: secondColor,
-                                            onPressed: () async {
-                                              _formKey.currentState!.save();
+                                            onPressed: (controller
+                                                    .loading.value)
+                                                ? null
+                                                : () async {
+                                                    _formKey.currentState!
+                                                        .save();
 
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                var result =
-                                                    await controller.login();
-                                                if (result == "1") {
-                                                  await Get.find<
-                                                          SettingsController>()
-                                                      .fetchingUser();
+                                                    if (_formKey.currentState!
+                                                        .validate()) {
+                                                      var result =
+                                                          await controller
+                                                              .login();
+                                                      if (result == "1") {
+                                                        await Get.find<
+                                                                SettingsController>()
+                                                            .fetchingUser();
 
-                                                  if (globalKey == "onboard") {
-                                                    return Get.offAllNamed(
-                                                        Routes.CONTROLV2);
-                                                  }
-                                                  if (globalKey != null) {
-                                                    final BottomNavigationBar
-                                                        navigationBar =
-                                                        globalKey.currentWidget;
-                                                    navigationBar.onTap!(2);
-                                                  } else {
-                                                    Get.back();
-                                                  }
-                                                } else {
-                                                  await popUpAlert(
-                                                      context,
-                                                      "Terjadi Kesalahan",
-                                                      CustomText(
-                                                        text: result,
-                                                        fontSize: 12,
-                                                        textOverflow:
-                                                            TextOverflow.fade,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                      () => Get.back());
-                                                }
-                                              } else {
-                                                controller.update();
-                                              }
-                                            },
+                                                        if (globalKey ==
+                                                            "onboard") {
+                                                          return Get.offAllNamed(
+                                                              Routes.CONTROLV2);
+                                                        }
+                                                        if (globalKey != null) {
+                                                          final BottomNavigationBar
+                                                              navigationBar =
+                                                              globalKey
+                                                                  .currentWidget;
+                                                          navigationBar
+                                                              .onTap!(2);
+                                                        } else {
+                                                          Get.back();
+                                                        }
+                                                      } else {
+                                                        await popUpAlert(
+                                                            context,
+                                                            "Terjadi Kesalahan",
+                                                            CustomText(
+                                                              text: result,
+                                                              fontSize: 12,
+                                                              textOverflow:
+                                                                  TextOverflow
+                                                                      .fade,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                            ),
+                                                            () => Get.back());
+                                                      }
+                                                    } else {
+                                                      controller.update();
+                                                    }
+                                                  },
                                             text: "Masuk",
                                           ),
                                         ),
@@ -231,10 +243,61 @@ class ProfileView extends GetView<ProfileController> {
                                           ]),
                                         ]),
                                         const SizedBox(height: 40),
+                                        if (Platform.isIOS)
+                                          CustomButton(
+                                              onPressed: () async {
+                                                String result = await controller
+                                                    .loginWithApple();
+                                                if (result != "-1") {
+                                                  await Get.find<
+                                                          SettingsController>()
+                                                      .fetchingUser(id: result);
+
+                                                  if (globalKey == "onboard") {
+                                                    return Get.offAllNamed(
+                                                        Routes.CONTROLV2);
+                                                  }
+                                                  if (globalKey != null) {
+                                                    final BottomNavigationBar
+                                                        navigationBar =
+                                                        globalKey.currentWidget;
+                                                    navigationBar.onTap!(2);
+                                                  } else {
+                                                    Get.back();
+                                                  }
+                                                }
+                                              },
+                                              borderColor: colorBorderGrey,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 5),
+                                                    child: SvgPicture.asset(
+                                                      "assets/icon/login/icon-apple.svg",
+                                                    ),
+                                                  ),
+                                                  const CustomText(
+                                                    text:
+                                                        "Lanjutkan dengan Apple",
+                                                    color: colorTextBlack,
+                                                  ),
+                                                ],
+                                              )),
+                                        const SizedBox(height: 16),
                                         CustomButton(
                                             onPressed: () async {
                                               String result = await controller
                                                   .loginWithGoogle();
+
+                                              if (result == "-1") {
+                                                controller.loading.value =
+                                                    false;
+                                                controller.update();
+                                              }
                                               if (result != "-1") {
                                                 await Get.find<
                                                         SettingsController>()

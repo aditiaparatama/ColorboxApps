@@ -10,11 +10,13 @@ import 'package:get/get.dart';
 
 import '../controllers/wishlist_controller.dart';
 
-class WishlistView extends GetView<WishlistController> {
-  const WishlistView({Key? key}) : super(key: key);
+class WishlistView extends StatelessWidget {
+  WishlistView({Key? key}) : super(key: key);
+
+  final WishlistController controller = Get.put(WishlistController());
 
   Future<void> initializeSettings() async {
-    await controller.fetchWishlist();
+    await controller.fetchingData();
     //Simulate other services for 3 seconds
     await Future.delayed(const Duration(milliseconds: 100));
   }

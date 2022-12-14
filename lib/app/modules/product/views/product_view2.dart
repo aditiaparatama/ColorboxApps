@@ -5,51 +5,66 @@ import 'package:colorbox/app/modules/product/views/widget/similar_product_view.d
 import 'package:colorbox/app/modules/product/views/widget/share_social_media.dart';
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:colorbox/app/widgets/bottomsheet_widget.dart';
 import 'package:colorbox/app/widgets/custom_radio_color.dart';
 import 'package:colorbox/app/widgets/custom_radio.dart';
 import 'package:colorbox/app/widgets/widget.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
+import 'package:colorbox/helper/item_creator_analytics.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../controllers/product_controller.dart';
 
 // ignore: must_be_immutable, use_key_in_widget_constructors
-class ProductView2 extends GetView<ProductController> {
+class ProductView2 extends StatelessWidget {
   // var tempAnnouncement = [];
+  final ProductController controller = Get.put(ProductController());
   final DiscountController discountController = Get.put(DiscountController());
 
+  final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  final List<String> _idCollection = [Get.arguments["idCollection"]];
   Future<void> initializeSettings() async {
     await controller.getProductByHandle(Get.arguments["handle"]);
-    await callWishlist();
+    await callWishlist(controller);
+
     //Simulate other services for 3 seconds
     await Future.delayed(const Duration(milliseconds: 100));
   }
 
-  Future<void> callWishlist() async {
+  Future<void> callWishlist(ProductController control) async {
     // controller.wishlistAdded = false;
-    if (controller.wishlistController.wishlist.items == null ||
-        controller.wishlistController.wishlist.items.isEmpty) {
-      await controller.wishlistController.fetchWishlist();
-    }
-    if (controller.wishlistController.wishlist.items != null &&
-        controller.wishlistController.wishlist.items.isNotEmpty) {
-      controller.existWishlist = controller.wishlistController.wishlist.items
+    // if (control.wishlistController.wishlist.items == null ||
+    //     control.wishlistController.wishlist.items.isEmpty) {
+
+    // }
+    await control.wishlistController.fetchWishlist();
+    if (control.wishlistController.wishlist.items != null &&
+        control.wishlistController.wishlist.items.isNotEmpty) {
+      control.existWishlist = control.wishlistController.wishlist.items
           .indexWhere((e) =>
               e['id'] ==
-              controller.product.id!.replaceAll("gid://shopify/Product/", ""));
+              control.product.id!.replaceAll("gid://shopify/Product/", ""));
 
-      controller.wishlistAdded = (controller.existWishlist >= 0) ? true : false;
+      control.wishlistAdded = (control.existWishlist >= 0) ? true : false;
     }
 
-    await discountController
-        .groupingDiscountAutomatic([Get.arguments["idCollection"]]);
+    await discountController.groupingDiscountAutomatic(_idCollection);
+  }
+
+  Future<void> openWA() async {
+    String message =
+        "Halo Admin Colorbox, saya ingin bertanya tentang produk ini: https://colorbox.co.id/products/${controller.product.handle!}";
+
+    String url = "https://wa.me/628111717250?text=${Uri.encodeFull(message)}";
+    await launchUrlString(url, mode: LaunchMode.externalApplication);
   }
 
   @override
@@ -65,6 +80,11 @@ class ProductView2 extends GetView<ProductController> {
             return Scaffold(
                 backgroundColor: Colors.white, body: loadingCircular());
           }
+          analytics.logViewItem(
+            currency: "IDR",
+            value: double.parse(controller.product.variants[0].price!),
+            items: [itemCreator(controller.product)],
+          );
           return GetBuilder<ProductController>(
               init: Get.put(ProductController()),
               builder: (control) {
@@ -130,8 +150,8 @@ class ProductView2 extends GetView<ProductController> {
                                                         ? "remove"
                                                         : "add");
 
-                                            await callWishlist();
-                                            controller.update();
+                                            await callWishlist(control);
+                                            // controller.update();
                                           },
                                           child: CircleAvatar(
                                             radius: 16.0,
@@ -276,7 +296,7 @@ class ProductView2 extends GetView<ProductController> {
                                   const SizedBox(height: 16),
                                   Container(
                                     constraints:
-                                        const BoxConstraints(maxHeight: 90),
+                                        const BoxConstraints(maxHeight: 110),
                                     child: ListView.separated(
                                         shrinkWrap: true,
                                         separatorBuilder: (context, index) =>
@@ -287,6 +307,11 @@ class ProductView2 extends GetView<ProductController> {
                                         itemCount: discountController
                                             .listingDiscountAutomatic.length,
                                         itemBuilder: (_, i) {
+                                          String desc = discountController
+                                              .listingDiscountAutomatic[i]
+                                              .deskripsi
+                                              .replaceAll(" •", ",");
+
                                           return Container(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8, vertical: 16),
@@ -296,6 +321,8 @@ class ProductView2 extends GetView<ProductController> {
                                                   Radius.circular(6)),
                                             ),
                                             child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: <Widget>[
                                                 CircleAvatar(
                                                   radius: 16.0,
@@ -316,16 +343,67 @@ class ProductView2 extends GetView<ProductController> {
                                                               1)
                                                           ? .7
                                                           : .78),
-                                                  child: CustomText(
-                                                    text: discountController
-                                                            .listingDiscountAutomatic[
-                                                                i]
-                                                            .deskripsi ??
-                                                        "",
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w400,
-                                                    textOverflow:
-                                                        TextOverflow.fade,
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      CustomText(
+                                                        text: discountController
+                                                                .listingDiscountAutomatic[
+                                                                    i]
+                                                                .title ??
+                                                            "",
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        textOverflow:
+                                                            TextOverflow.fade,
+                                                      ),
+                                                      const SizedBox(height: 6),
+                                                      CustomText(
+                                                        text: (desc.length > 80)
+                                                            ? desc.substring(
+                                                                    0, 80) +
+                                                                "..."
+                                                            : desc,
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        textOverflow:
+                                                            TextOverflow.fade,
+                                                      ),
+                                                      const SizedBox(height: 6),
+                                                      if (desc.length > 80)
+                                                        InkWell(
+                                                          onTap: () {
+                                                            bottomSheetWidget(
+                                                                "Detail Promo",
+                                                                discountController
+                                                                    .listingDiscountAutomatic[
+                                                                        i]
+                                                                    .title,
+                                                                discountController
+                                                                    .listingDiscountAutomatic[
+                                                                        i]
+                                                                    .deskripsi);
+                                                          },
+                                                          child:
+                                                              const CustomText(
+                                                            text:
+                                                                "Lihat Detail",
+                                                            fontSize: 12,
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .underline,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color: Colors.black,
+                                                          ),
+                                                        )
+                                                    ],
                                                   ),
                                                 ),
                                               ],
@@ -436,8 +514,14 @@ class ProductView2 extends GetView<ProductController> {
                                           ),
                                         ],
                                       ),
-                                      collapsedIcon: const Icon(Icons.add),
-                                      expandedIcon: const Icon(Icons.minimize),
+                                      collapsedIcon: const CustomText(
+                                        text: "+",
+                                        fontSize: 28,
+                                      ),
+                                      expandedIcon: const CustomText(
+                                        text: "-",
+                                        fontSize: 28,
+                                      ),
                                       collapsedTitleBackgroundColor:
                                           Colors.white,
                                       expandedTitleBackgroundColor:
@@ -466,8 +550,14 @@ class ProductView2 extends GetView<ProductController> {
                                       titlePadding: EdgeInsets.zero,
                                       contentChild: Html(
                                           data: control.product.description),
-                                      collapsedIcon: const Icon(Icons.add),
-                                      expandedIcon: const Icon(Icons.minimize),
+                                      collapsedIcon: const CustomText(
+                                        text: "+",
+                                        fontSize: 28,
+                                      ),
+                                      expandedIcon: const CustomText(
+                                        text: "-",
+                                        fontSize: 28,
+                                      ),
                                       collapsedTitleBackgroundColor:
                                           Colors.white,
                                       expandedTitleBackgroundColor:
@@ -490,12 +580,7 @@ class ProductView2 extends GetView<ProductController> {
                                       Expanded(
                                         child: InkWell(
                                           onTap: () async {
-                                            var url =
-                                                'https://wa.me/628111717250?text=Halo Admin Colorbox, saya ingin bertanya tentang produk ini: https://colorbox.co.id/products/' +
-                                                    control.product.handle!;
-                                            await launchUrlString(url,
-                                                mode: LaunchMode
-                                                    .externalApplication);
+                                            await openWA();
                                           },
                                           child: Container(
                                             height: 64,
@@ -617,15 +702,19 @@ class ProductView2 extends GetView<ProductController> {
                                 fixedSize: Size(Get.width, 48),
                                 backgroundColor: colorTextBlack,
                                 disabledBackgroundColor: colorTextGrey),
-                            onPressed: control.variant!.inventoryQuantity == 0
-                                ? null
-                                : () {
-                                    Get.find<CartController>().addCart(
-                                        control.variant!.id!,
-                                        context,
-                                        control.ukuran);
-                                  },
-                            child: control.variant!.inventoryQuantity == 0
+                            onPressed:
+                                control.variant!.inventoryQuantity == 0 &&
+                                        control.ukuran != ''
+                                    ? null
+                                    : () {
+                                        Get.find<CartController>().addCart(
+                                            control.variant!.id!,
+                                            context,
+                                            control.ukuran,
+                                            variants: control.variant);
+                                      },
+                            child: control.variant!.inventoryQuantity == 0 &&
+                                    control.ukuran != ''
                                 ? const CustomText(
                                     text: "Produk Habis",
                                     color: Colors.white,

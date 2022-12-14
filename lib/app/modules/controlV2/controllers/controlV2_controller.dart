@@ -7,6 +7,7 @@ import 'package:colorbox/app/modules/profile/views/profile_view.dart';
 import 'package:colorbox/app/modules/cart/models/cart_model.dart';
 import 'package:colorbox/app/modules/settings/views/settings_view.dart';
 import 'package:colorbox/app/modules/wishlist/views/wishlist_view.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -27,6 +28,10 @@ class ControlV2Controller extends GetxController {
 
   @override
   void onInit() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+
+    debugPrint(connectivityResult.name);
+
     _cart = await Get.find<CartController>().getCart2();
 
     _user = Get.find<SettingsController>().userModel;
@@ -58,7 +63,7 @@ class ControlV2Controller extends GetxController {
         {
           _currentScreen =
               (Get.find<SettingsController>().userModel.displayName != null)
-                  ? const WishlistView()
+                  ? WishlistView()
                   : ProfileView(globalKey);
           break;
         }

@@ -3,6 +3,7 @@ import Flutter
 import Firebase
 import FirebaseCore
 import FirebaseMessaging
+import FirebaseAuth
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -14,7 +15,7 @@ import FirebaseMessaging
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
-  
+
   override func application(_ application: UIApplication, 
   didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
 

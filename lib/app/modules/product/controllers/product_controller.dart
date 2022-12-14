@@ -35,9 +35,11 @@ class ProductController extends GetxController {
     if (fromColor && _product.options[1].values.length > 1) {
       String handle = product.handle!
           .replaceAll(warna.toLowerCase().replaceAll(" ", "-"), "");
-
-      handle = handle.replaceAll(
-          "--", "-" + color.toLowerCase().replaceAll(" ", "-") + "-");
+      var check = handle.split("-");
+      handle = (check[check.length - 1] == "")
+          ? (handle + color.toLowerCase())
+          : handle.replaceAll(
+              "--", "-" + color.toLowerCase().replaceAll(" ", "-") + "-");
 
       await getProductByHandle(handle);
     }

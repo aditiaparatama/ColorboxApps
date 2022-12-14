@@ -102,6 +102,8 @@ class DiscountProvider extends GetConnect {
                           __typename
                           ...on DiscountAutomaticBasic{
                               title
+                              summary
+                              endsAt
                               discountClass
                               combinesWith{
                                   orderDiscounts
@@ -162,6 +164,8 @@ class DiscountProvider extends GetConnect {
                           }
                           ...on DiscountAutomaticBxgy{
                               title
+                              summary
+                              endsAt
                               discountClass
                               combinesWith{
                                   orderDiscounts

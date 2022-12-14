@@ -66,7 +66,7 @@ void bottomSheet(handle) {
           TextButton(
             style: TextButton.styleFrom(alignment: Alignment.centerLeft),
             onPressed: () async {
-              var url = 'https://twitter.com/intent/tweet?original_referer=' +
+              var url = 'https://twitter.com/intent/tweet?text=' +
                   urlprod +
                   '%3Futm_source%3DTwitter&amp;text=Check+out+this+product%21+Product+ini+mungkin+menarik+buat+kamu%3A%0D%0A%0D%0A';
               await launchUrlString(url, mode: LaunchMode.externalApplication);

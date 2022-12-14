@@ -1,16 +1,19 @@
 import 'package:colorbox/app/modules/cart/providers/cart_provider.dart';
 import 'package:colorbox/app/modules/cart/models/cart_model.dart';
+import 'package:colorbox/app/modules/collections/models/product_model.dart';
 import 'package:colorbox/app/modules/discount/controllers/discount_controller.dart';
 import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
 import 'package:colorbox/constance.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:async';
 
 class CartController extends GetxController {
+  final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   final LocalStorageData localStorageData = Get.find();
   final DiscountController discountController = Get.put(DiscountController());
   final HomeController homeController = Get.put(HomeController());
@@ -50,7 +53,7 @@ class CartController extends GetxController {
     await localStorageData.deleteCart();
     _idCart = await CartProvider().createCart();
     setCart(_idCart!);
-    await getCart();
+    // await getCart();
   }
 
   Future<void> getCart() async {
@@ -68,7 +71,7 @@ class CartController extends GetxController {
     await getCartId();
     if (_idCart != null) {
       var result = await CartProvider().getCart(_idCart!);
-      while (result == null) {
+      while (result == null || result["cart"] == null) {
         await reCreateCart();
         Future.delayed(const Duration(seconds: 1));
         result = await CartProvider().getCart(_idCart!);
@@ -104,7 +107,8 @@ class CartController extends GetxController {
     await localStorageData.setCart(id);
   }
 
-  void addCart(String variantId, dynamic context, String ukuran) async {
+  void addCart(String variantId, dynamic context, String ukuran,
+      {Variants? variants}) async {
     if (ukuran == '') {
       Get.snackbar(
         "Peringatan",
@@ -122,13 +126,27 @@ class CartController extends GetxController {
             content: SvgPicture.asset("assets/icon/bx-addproduct.svg"),
           ),
         );
+
+        await analytics.logAddToCart(
+            currency: 'IDR',
+            value: double.parse(variants!.price!),
+            items: [setAnalyticsEventItem(variants)]);
+
+        await FirebaseAnalytics.instance.logEvent(
+          name: "PDP",
+          parameters: {
+            "value": double.parse(variants.price!),
+            'items': [setAnalyticsEventItem(variants)]
+          },
+        );
+
         Future.delayed(const Duration(seconds: 1), () {
           Get.back();
         });
       } else {
         Get.snackbar(
           "Peringatan",
-          "Silahkan pilih warna produk!",
+          result["cartLinesAdd"]["userErrors"]["message"],
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: colorTextBlack,
           colorText: Colors.white,
@@ -297,6 +315,20 @@ class CartController extends GetxController {
           totalDiscount,
           collectionIds,
           x.combineWith));
+    }
+  }
+
+  AnalyticsEventItem setAnalyticsEventItem(Variants variants) {
+    {
+      return AnalyticsEventItem(
+        itemId: variants.id,
+        itemListName: variants.titleProduct,
+        itemName: variants.titleProduct,
+        itemVariant: variants.title,
+        price: double.parse(variants.price!),
+        currency: 'IDR',
+        quantity: 1,
+      );
     }
   }
 

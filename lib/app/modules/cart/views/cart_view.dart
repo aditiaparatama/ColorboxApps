@@ -559,7 +559,8 @@ class CartView extends GetView<CartController> {
         }
         for (Line y in controller.listHabis ?? []) {
           // if (y.merchandise!.inventoryQuantity! > 0) {
-          totalHarga = totalHarga! - double.parse(y.merchandise!.price!);
+          totalHarga = totalHarga! -
+              (double.parse(y.merchandise!.price!) * y.quantity!.toDouble());
           // }
         }
         totalHarga = totalHarga! + totalPotongan!;
@@ -569,12 +570,24 @@ class CartView extends GetView<CartController> {
           controller.cart.discountCodes![0].code != "") {
         totalHarga = 0;
         totalPotongan = 0;
-        for (final x in controller.cart.discountAllocations ?? []) {
-          totalPotongan = (totalPotongan ?? 0.0) + double.parse(x.amount!);
+
+        if (controller.cart.discountAllocations == null ||
+            controller.cart.discountAllocations!.isEmpty) {
+          for (final x in _cartItems ?? []) {
+            totalPotongan = totalPotongan! +
+                double.parse(x.discountAllocations!.amount ?? "0");
+          }
+          totalHarga = totalHarga - totalPotongan!;
+        } else {
+          for (final x in controller.cart.discountAllocations ?? []) {
+            totalPotongan = (totalPotongan ?? 0.0) + double.parse(x.amount!);
+          }
         }
+
         for (Line y in _cartItems ?? []) {
           if (y.merchandise!.inventoryQuantity! > 0) {
-            totalHarga = totalHarga! + double.parse(y.merchandise!.price!);
+            totalHarga = totalHarga! +
+                (double.parse(y.merchandise!.price!) * y.quantity!.toDouble());
           }
         }
       }
@@ -608,7 +621,8 @@ class CartView extends GetView<CartController> {
 
         if (controller.listHabis.length > 0) {
           for (final x in controller.listHabis) {
-            totalHarga = totalHarga! - double.parse(x.merchandise!.price!);
+            totalHarga = totalHarga! -
+                (double.parse(x.merchandise!.price!) * x.quantity!.toDouble());
           }
         }
       }
@@ -645,7 +659,7 @@ class CartView extends GetView<CartController> {
                           ),
                           CustomText(
                             text:
-                                "Rp  ${formatter.format((totalHarga!).ceil())}",
+                                "Rp  ${formatter.format((totalHarga!).round())}",
                             fontSize: 12,
                           )
                         ],
@@ -662,7 +676,7 @@ class CartView extends GetView<CartController> {
                           (totalPotongan != null && totalPotongan != 0)
                               ? CustomText(
                                   text:
-                                      "-Rp ${formatter.format(totalPotongan.ceil())}",
+                                      "-Rp ${formatter.format(totalPotongan.round())}",
                                   fontSize: 12,
                                 )
                               : const CustomText(
@@ -697,7 +711,7 @@ class CartView extends GetView<CartController> {
                         children: [
                           CustomText(
                             text:
-                                "Rp ${(c.cart.estimatedCost == null || c.cart.estimatedCost!.totalAmount! == "0.0") ? "0" : formatter.format((totalHarga! - (totalPotongan ?? 0)).ceil())}",
+                                "Rp ${(c.cart.estimatedCost == null || c.cart.estimatedCost!.totalAmount! == "0.0") ? "0" : formatter.format((totalHarga! - (totalPotongan ?? 0)).round())}",
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),

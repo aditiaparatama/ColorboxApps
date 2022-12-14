@@ -85,96 +85,102 @@ class SearchView extends GetView<SearchController> {
                           : Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(height: 24),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: 'Hasil pencarian ',
-                                      style: const TextStyle(
-                                          fontSize: 14, color: Colors.black),
-                                      children: <TextSpan>[
-                                        const TextSpan(
-                                          text: '"',
-                                        ),
-                                        TextSpan(
-                                            text: search.text,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14)),
-                                        const TextSpan(
-                                          text: '"',
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 24),
-                                  Flexible(
-                                    child: SizedBox(
-                                        child: GridView.builder(
-                                            shrinkWrap: true,
-                                            itemCount: control.product.length,
-                                            controller: _sControl,
-                                            gridDelegate:
-                                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2,
-                                              mainAxisSpacing: 24,
-                                              crossAxisSpacing: 24,
-                                              childAspectRatio: 2.6 / 5,
-                                            ),
-                                            itemBuilder: (_, i) {
-                                              return GestureDetector(
-                                                onTap: () => Get.toNamed(
-                                                    Routes.PRODUCT,
-                                                    arguments: {
-                                                      "product":
-                                                          control.product[i],
-                                                      "idCollection": control
-                                                          .product[i]
-                                                          .idCollection,
-                                                      "handle": control
-                                                          .product[i].handle
-                                                    }),
-                                                child: ItemCard(
-                                                  title:
-                                                      control.product[i].title!,
-                                                  image: control
-                                                      .product[i].image[0],
-                                                  price: control.product[i]
-                                                      .variants[0].price!
-                                                      .replaceAll(".00", ""),
-                                                  compareAtPrice: (control
-                                                              .product[i]
-                                                              .variants[0]
-                                                              .compareAtPrice ==
-                                                          null)
-                                                      ? "0"
-                                                      : control
-                                                          .product[i]
-                                                          .variants[0]
-                                                          .compareAtPrice!
-                                                          .replaceAll(
-                                                              ".00", ""),
-                                                  totalInventory: control
-                                                      .product[i]
-                                                      .totalInventory,
-                                                  onPress: () {},
-                                                ),
-                                              );
-                                            })),
-                                  ),
-                                  controller.nextLoad.value
-                                      ? Container(
-                                          padding: const EdgeInsets.all(12),
-                                          child: const Center(
-                                            child: CircularProgressIndicator(
-                                              color: colorTextBlack,
-                                            ),
+                              child: SingleChildScrollView(
+                                controller: _sControl,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 24),
+                                    RichText(
+                                      text: TextSpan(
+                                        text: 'Hasil pencarian ',
+                                        style: const TextStyle(
+                                            fontSize: 14, color: Colors.black),
+                                        children: <TextSpan>[
+                                          const TextSpan(
+                                            text: '"',
                                           ),
-                                        )
-                                      : const SizedBox(),
-                                ],
+                                          TextSpan(
+                                              text: search.text,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14)),
+                                          const TextSpan(
+                                            text: '"',
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 24),
+                                    Flexible(
+                                      child: SizedBox(
+                                          child: GridView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              itemCount: control.product.length,
+                                              // controller: _sControl,
+                                              gridDelegate:
+                                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 2,
+                                                mainAxisSpacing: 24,
+                                                crossAxisSpacing: 24,
+                                                childAspectRatio: 2.6 / 5,
+                                              ),
+                                              itemBuilder: (_, i) {
+                                                return GestureDetector(
+                                                  onTap: () => Get.toNamed(
+                                                      Routes.PRODUCT,
+                                                      arguments: {
+                                                        "product":
+                                                            control.product[i],
+                                                        "idCollection": control
+                                                            .product[i]
+                                                            .idCollection,
+                                                        "handle": control
+                                                            .product[i].handle
+                                                      }),
+                                                  child: ItemCard(
+                                                    title: control
+                                                        .product[i].title!,
+                                                    image: control
+                                                        .product[i].image[0],
+                                                    price: control.product[i]
+                                                        .variants[0].price!
+                                                        .replaceAll(".00", ""),
+                                                    compareAtPrice: (control
+                                                                .product[i]
+                                                                .variants[0]
+                                                                .compareAtPrice ==
+                                                            null)
+                                                        ? "0"
+                                                        : control
+                                                            .product[i]
+                                                            .variants[0]
+                                                            .compareAtPrice!
+                                                            .replaceAll(
+                                                                ".00", ""),
+                                                    totalInventory: control
+                                                        .product[i]
+                                                        .totalInventory,
+                                                    onPress: () {},
+                                                  ),
+                                                );
+                                              })),
+                                    ),
+                                    controller.nextLoad.value
+                                        ? Container(
+                                            padding: const EdgeInsets.all(12),
+                                            child: const Center(
+                                              child: CircularProgressIndicator(
+                                                color: colorTextBlack,
+                                              ),
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                  ],
+                                ),
                               ),
                             );
             }));

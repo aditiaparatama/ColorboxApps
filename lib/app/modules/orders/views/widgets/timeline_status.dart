@@ -1,15 +1,30 @@
 import 'package:colorbox/app/modules/orders/models/order_model.dart';
+import 'package:colorbox/app/modules/settings/views/web_view.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:flutter/services.dart';
 
 class TimelineStatus extends StatelessWidget {
   final Order order;
   final String? filter;
   const TimelineStatus({Key? key, required this.order, this.filter})
       : super(key: key);
+
+// This function is triggered when the copy icon is pressed
+  Future<void> _copyToClipboard(String text) async {
+    await Clipboard.setData(ClipboardData(text: text));
+
+    await Fluttertoast.showToast(
+        msg: "Nomor Resi sudah tersalin",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        fontSize: 16.0);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,10 +86,32 @@ class TimelineStatus extends StatelessWidget {
               ],
             ),
           if (filter == null) const SizedBox(height: 28),
-          const CustomText(
-            text: "Detail Pengiriman",
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const CustomText(
+                text: "Detail Pengiriman",
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+              if (order.fulfillments != null)
+                InkWell(
+                  onTap: () {
+                    Get.to(WebViewPage(
+                        title: "Lacak Pengiriman",
+                        url: (order.fulfillments!.trackingInfo!.url!
+                                .contains("jne"))
+                            ? "https://www.jne.co.id/id/beranda"
+                            : order.fulfillments!.trackingInfo!.url));
+                  },
+                  child: const CustomText(
+                    text: "Lacak Pengiriman",
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: colorTextBlue,
+                  ),
+                ),
+            ],
           ),
           const SizedBox(height: 12),
           Row(
@@ -93,7 +130,46 @@ class TimelineStatus extends StatelessWidget {
                   fontSize: 12)
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const CustomText(
+                text: "No Resi",
+                fontSize: 12,
+                color: Color(0xFF777777),
+              ),
+              const SizedBox(width: 33),
+              if (order.fulfillments != null)
+                Row(
+                  children: [
+                    CustomText(
+                        text: order.fulfillments!.trackingInfo!.number!,
+                        fontSize: 12),
+                    const SizedBox(width: 8),
+                    InkWell(
+                      onTap: () => _copyToClipboard(
+                          order.fulfillments!.trackingInfo!.number!),
+                      child: Row(
+                        children: const [
+                          Icon(
+                            Icons.copy_rounded,
+                            size: 18,
+                            color: colorTextBlue,
+                          ),
+                          CustomText(
+                            text: "Salin",
+                            fontSize: 12,
+                            color: colorTextBlue,
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                )
+            ],
+          ),
+          const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,

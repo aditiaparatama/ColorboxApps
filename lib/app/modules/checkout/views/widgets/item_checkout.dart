@@ -159,7 +159,7 @@ class ItemCheckoutWidget extends StatelessWidget {
                           ),
                         const SizedBox(height: 4),
                         SizedBox(
-                          width: Get.width * .7,
+                          width: Get.width * .65,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -214,7 +214,7 @@ class ItemCheckoutWidget extends StatelessWidget {
                       ],
                     )
                   : SizedBox(
-                      width: Get.width * .7,
+                      width: Get.width * .67,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

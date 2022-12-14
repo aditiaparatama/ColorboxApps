@@ -15,12 +15,13 @@ class CollectionsProductView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var control = Get.put(CollectionsController(), tag: "similiar");
+    var controller = Get.put(CollectionsController(), tag: "similiar");
 
-    control.fetchCollectionProduct(int.parse(id!), 4);
+    controller.fetchCollectionProduct(int.parse(id!), 4);
     return GetBuilder<CollectionsController>(
-        init: Get.put(CollectionsController(), tag: "similiar"),
-        builder: (controller) {
+        tag: "similiar",
+        init: controller,
+        builder: (_) {
           return (controller.collection.products.isEmpty)
               ? const Center(
                   child: CircularProgressIndicator(),
@@ -126,7 +127,7 @@ class CollectionsProductView extends StatelessWidget {
                                           decoration:
                                               TextDecoration.lineThrough,
                                         ),
-                                        const SizedBox(width: 8),
+                                        const SizedBox(width: 5),
                                         Container(
                                           width: 30.0,
                                           height: 15.0,

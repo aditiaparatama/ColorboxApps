@@ -3,38 +3,34 @@ import 'package:flutter/material.dart';
 
 Color customColors(String color) {
   switch (color.toLowerCase().replaceAll(" ", "")) {
-    case "grey":
-      return Colors.grey;
-    case "black":
-      return colorTextBlack;
     case "brown":
       return Colors.brown;
     case "yellow":
       return Colors.yellow;
+    case "softyellow":
+      return const Color(0xFFFDFD96);
+    case "brightyellow":
+      return const Color(0xFFFFE900);
+    case "lemon":
+      return const Color(0xFFFAFA33);
+    case "neonyellow":
+      return const Color(0xFFFAFA33);
     case "gold":
       return const Color(0xFFFFD700);
     case "banana":
       return const Color(0xFFFFE135);
     case "honey":
       return const Color(0xFFF9C901);
-    case "lightgrey":
-      return const Color(0xFFD3D3D3);
-    case "lt.grey":
-      return const Color(0xFFD3D3D3);
-    case "ash":
-      return const Color(0xFF696969);
     case "ochre":
       return const Color(0xFFCC7722);
-    case "charcoal":
-      return const Color(0xFF36454f);
     case "lime":
       return const Color(0xFF27D507);
-    case "darkgrey":
-      return const Color(0xFF6B6B6B);
     case "citrus":
       return const Color(0xFF9FB70A);
     case "camel":
       return const Color(0xFFC19A6B);
+    case "mustard":
+      return const Color(0xFFFFDB58);
     //color red
     case "red":
       return Colors.red;
@@ -64,6 +60,8 @@ Color customColors(String color) {
       return const Color(0xFFE88291);
     case "wine":
       return const Color(0xFF74282D);
+    case "cherry":
+      return const Color(0xFF9C222C);
     case "cranberry":
       return const Color(0xFFAE5150);
     case "richred":
@@ -206,6 +204,8 @@ Color customColors(String color) {
       return const Color(0xFFFFA300);
     case "coral":
       return const Color(0xFFFF6358);
+    case "peach":
+      return const Color(0xFFEBB19A);
     case "papaya":
       return const Color(0xFFFF9C60);
     case "mango":
@@ -222,6 +222,12 @@ Color customColors(String color) {
       return const Color(0xFFFF8B00);
     case "neonorange":
       return const Color(0xFFFFAA00);
+    case "tangerine":
+      return const Color(0xFFFF8949);
+    case "pumpkin":
+      return const Color(0xFFFFA870);
+    case "sunset":
+      return const Color(0xFFFF6100);
     //color purple
     case "purple":
       return Colors.purple;
@@ -313,6 +319,51 @@ Color customColors(String color) {
       return const Color(0xFF7D3424);
     case "tobacco":
       return const Color(0xFF917357);
+    //black
+    case "black":
+      return colorTextBlack;
+    case "jetblack":
+      return const Color(0xFF000000);
+    case "gothic":
+      return const Color(0xFF030303);
+    case "onyx":
+      return const Color(0xFF2B282C);
+    case "ink":
+      return const Color(0xFF44413D);
+    case "ebony":
+      return const Color(0xFF414249);
+    case "grey":
+      return const Color(0xFFB7B7B7);
+    case "darkgrey":
+      return const Color(0xFF616467);
+    case "mediumgrey":
+      return const Color(0xFF797B78);
+    case "ltgrey":
+      return const Color(0xFFEAEAEA);
+    case "lt.grey":
+      return const Color(0xFFEAEAEA);
+    case "lightgrey":
+      return const Color(0xFFD3D3D3);
+    case "softgrey":
+      return const Color(0xFFD2D2CF);
+    case "charcoal":
+      return const Color(0xFF6A6A6A);
+    case "steel":
+      return const Color(0xFF6C7277);
+    case "chrome":
+      return const Color(0xFF88888A);
+    case "metal":
+      return const Color(0xFFAAA9AD);
+    case "silver":
+      return const Color(0xFFC0C0C0);
+    case "heathergrey":
+      return const Color(0xFF9AA297);
+    case "mistygrey":
+      return const Color(0xFFBCC2C2);
+    case "ash":
+      return const Color(0xFF696969);
+    case "platinum":
+      return const Color(0xFFE5E4E2);
     default:
       return Colors.grey;
   }

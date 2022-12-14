@@ -122,7 +122,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.WISHLIST,
-      page: () => const WishlistView(),
+      page: () => WishlistView(),
       binding: WishlistBinding(),
     ),
     GetPage(

@@ -22,7 +22,8 @@ class ShippingWidget extends GetView<CheckoutController> {
             children: [
               InkWell(
                 onTap: (controller.checkout.availableShippingRates!
-                        .shippingRates!.isEmpty)
+                            .shippingRates!.isEmpty &&
+                        controller.checkout.shippingLine == null)
                     ? null
                     : () async {
                         if (controller.checkout.availableShippingRates!.ready ==

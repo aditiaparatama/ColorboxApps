@@ -1,6 +1,8 @@
 import 'package:colorbox/app/data/models/mailing_address.dart';
 import 'package:colorbox/app/services/shopify_graphql.dart';
+import 'package:colorbox/constance.dart';
 import 'package:colorbox/globalvar.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:graphql/client.dart';
 
@@ -612,7 +614,14 @@ class ProfileProvider extends GetConnect {
     var response = await delete(
         url_shopify + "customers/$id/addresses/$addressId.json",
         headers: {"X-Shopify-Access-Token": token});
-
+    if (response.body.contains("errors") &&
+        response.body["errors"]["base"][0] ==
+            "Cannot delete the customer’s default address") {
+      Get.snackbar("Error", "Alamat utama tidak dapat dihapus",
+          backgroundColor: colorTextBlack,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM);
+    }
     return response.isOk;
   }
 

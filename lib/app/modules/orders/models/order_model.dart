@@ -8,6 +8,7 @@ class Order {
   String? createdAt;
   List<String>? events;
   List<String>? tags;
+  Fulfillments? fulfillments;
   String? cancelReason;
   String? displayFinancialStatus;
   String? status;
@@ -28,6 +29,7 @@ class Order {
       this.createdAt,
       this.events,
       this.tags,
+      this.fulfillments,
       this.cancelReason,
       this.displayFinancialStatus,
       this.status,
@@ -111,6 +113,15 @@ class Order {
           "Mohon maaf, pesanan kamu dibatalkan karena ada kesalahan pada sistem. Silahkan menghubungi customer service.";
     }
 
+    if (json['cancelReason'] == "CUSTOMER") {
+      status = "Dibatalkan";
+      cancelReason =
+          "Kamu membatalkan pesanan ini. Hubungi customer service untuk info lebih lanjut.";
+    }
+
+    fulfillments = (json["fulfillments"].isEmpty)
+        ? null
+        : Fulfillments.fromJson(json["fulfillments"][0]);
     subtotalLineItemsQuantity = json['subtotalLineItemsQuantity'];
     subtotalPriceSet = TotalPriceSet.fromJson(json['subtotalPriceSet']);
     totalPriceSet = TotalPriceSet.fromJson(json['totalPriceSet']);
@@ -276,5 +287,29 @@ class DiscountApplication {
     if (json['value']['__typename'] == "PricingPercentageValue") {
       percentage = json['value']['percentage'].toString();
     }
+  }
+}
+
+class Fulfillments {
+  String? status;
+  TrackingInfo? trackingInfo;
+
+  Fulfillments(this.status, this.trackingInfo);
+
+  Fulfillments.fromJson(var json) {
+    status = json["status"];
+    trackingInfo = TrackingInfo.fromJson(json["trackingInfo"][0]);
+  }
+}
+
+class TrackingInfo {
+  String? number;
+  String? url;
+
+  TrackingInfo(this.number, this.url);
+
+  TrackingInfo.fromJson(var json) {
+    number = json["number"];
+    url = json["url"];
   }
 }

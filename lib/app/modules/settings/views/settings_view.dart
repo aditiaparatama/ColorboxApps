@@ -1,6 +1,7 @@
 import 'package:colorbox/app/modules/orders/views/orders_view.dart';
 import 'package:colorbox/app/modules/profile/views/address/address_view.dart';
 import 'package:colorbox/app/modules/profile/views/infoaccount_view.dart';
+import 'package:colorbox/app/modules/settings/views/hapus_akun_view.dart';
 import 'package:colorbox/app/modules/settings/views/web_view.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
@@ -181,6 +182,12 @@ class SettingsView extends GetView<SettingsController> {
                                 title: "FAQ",
                                 url: "https://colorbox.co.id/pages/faqs")),
                             SvgPicture.asset("assets/icon/comment-alt.svg")),
+                        (c.userModel.displayName == null)
+                            ? null
+                            : Items(
+                                "Ajukan Hapus Akun",
+                                () => Get.to(HapusAkunView()),
+                                SvgPicture.asset("assets/icon/Trash-Alt.svg")),
                         (c.userModel.displayName == null)
                             ? null
                             : Items("Keluar Akun", () => c.logout(),
