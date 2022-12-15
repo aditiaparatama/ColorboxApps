@@ -1,11 +1,13 @@
 import 'package:colorbox/app/modules/product/controllers/product_controller.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class CustomRadio extends StatefulWidget {
   final List<String>? listData;
-  const CustomRadio({Key? key, required this.listData}) : super(key: key);
+  final ProductController controller;
+  const CustomRadio(
+      {Key? key, required this.listData, required this.controller})
+      : super(key: key);
 
   @override
   createState() {
@@ -15,7 +17,7 @@ class CustomRadio extends StatefulWidget {
 
 class CustomRadioState extends State<CustomRadio> {
   List<RadioModel> radioData = [];
-  final ProductController _productController = Get.put(ProductController());
+  // final ProductController _productController = Get.put(ProductController());
 
   @override
   void initState() {
@@ -24,10 +26,10 @@ class CustomRadioState extends State<CustomRadio> {
       radioData.add(RadioModel(
           false,
           widget.listData![i],
-          _productController.getStock(
+          widget.controller.getStock(
               widget.listData![i],
-              (_productController.variant!.options.length > 1)
-                  ? _productController.variant!.options[1].value!
+              (widget.controller.variant!.options.length > 1)
+                  ? widget.controller.variant!.options[1].value!
                   : "")));
     }
   }
@@ -42,11 +44,11 @@ class CustomRadioState extends State<CustomRadio> {
           //highlightColor: Colors.red,
           splashColor: Colors.blueAccent,
           onTap: () {
-            _productController.sizeTemp = radioData[index].buttonText;
-            _productController.getSelectedValue(
+            widget.controller.sizeTemp = radioData[index].buttonText;
+            widget.controller.getSelectedValue(
                 radioData[index].buttonText,
-                (_productController.variant!.options.length > 1)
-                    ? _productController.variant!.options[1].value!
+                (widget.controller.variant!.options.length > 1)
+                    ? widget.controller.variant!.options[1].value!
                     : "");
             setState(() {
               // ignore: avoid_function_literals_in_foreach_calls

@@ -6,7 +6,11 @@ import 'package:get/get.dart';
 
 class CustomRadioColor extends StatefulWidget {
   final List<String>? listData;
-  const CustomRadioColor({Key? key, required this.listData}) : super(key: key);
+  final ProductController controller;
+
+  const CustomRadioColor(
+      {Key? key, required this.listData, required this.controller})
+      : super(key: key);
 
   @override
   createState() {
@@ -16,7 +20,7 @@ class CustomRadioColor extends StatefulWidget {
 
 class CustomRadioColorState extends State<CustomRadioColor> {
   List<RadioModel> radioData = [];
-  final ProductController _productController = Get.put(ProductController());
+  // final ProductController _productController = Get.put(ProductController());
 
   @override
   void initState() {
@@ -36,8 +40,8 @@ class CustomRadioColorState extends State<CustomRadioColor> {
           //highlightColor: Colors.red,
           splashColor: Colors.blueAccent,
           onTap: () {
-            _productController.getSelectedValue(
-                _productController.variant!.options[0].value!,
+            widget.controller.getSelectedValue(
+                widget.controller.variant!.options[0].value!,
                 radioData[index].buttonText,
                 fromColor: true);
             setState(() {

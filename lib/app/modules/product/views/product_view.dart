@@ -200,6 +200,7 @@ class ProductView extends GetView<ProductController> {
                           width: Get.width,
                           height: 50,
                           child: CustomRadio(
+                            controller: controller,
                             listData:
                                 controller.product.options[0].values.toList(),
                           ),
@@ -217,6 +218,7 @@ class ProductView extends GetView<ProductController> {
                                     width: Get.width,
                                     height: 50,
                                     child: CustomRadioColor(
+                                      controller: controller,
                                       listData: controller
                                           .product.options[1].values
                                           .toList(),

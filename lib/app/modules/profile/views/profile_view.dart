@@ -7,6 +7,7 @@ import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/widgets/custom_text_form_field.dart';
 import 'package:colorbox/app/widgets/pop_up_alert.dart';
 import 'package:colorbox/constance.dart';
+import 'package:colorbox/utilities/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -21,6 +22,22 @@ class ProfileView extends GetView<ProfileController> {
   final TextEditingController passwordController = TextEditingController();
   FocusNode emailFocus = FocusNode();
   bool emailAlert = false;
+  AutovalidateMode emailValidate = AutovalidateMode.disabled;
+  AutovalidateMode passwordValidate = AutovalidateMode.disabled;
+
+  void _triggerValidator(String name) {
+    switch (name) {
+      case "email":
+        emailValidate = AutovalidateMode.always;
+        break;
+      case "pass":
+        passwordValidate = AutovalidateMode.always;
+        break;
+      default:
+        break;
+    }
+    controller.update();
+  }
 
   ProfileView(this.globalKey, {Key? key}) : super(key: key);
   @override
@@ -62,20 +79,39 @@ class ProfileView extends GetView<ProfileController> {
                                           textEditingController:
                                               emailController,
                                           hint: "Email",
+                                          autoFocus: true,
+                                          autovalidateMode: emailValidate,
+                                          textInputAction: TextInputAction.next,
                                           showAlert: emailAlert,
                                           onSave: (value) {
                                             controller.email = value;
                                           },
-                                          onChange: (_) => controller.update(),
+                                          onChange: (value) async {
+                                            if (EmailValidator(value)
+                                                .isValidEmail()) {
+                                              await controller
+                                                  .checkEmail(value);
+                                            }
+                                            controller.update();
+                                          },
                                           validator: (value) {
-                                            if (RegExp(
-                                                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                                                .hasMatch(value!)) {
+                                            if (EmailValidator(value)
+                                                .isValidEmail()) {
+                                              if (!controller.emailExist!) {
+                                                emailAlert = true;
+                                                return "Email belum terdaftar";
+                                              }
                                               emailAlert = false;
                                               return null;
                                             }
                                             emailAlert = true;
                                             return "Format email salah";
+                                          },
+                                          onFieldSubmitted: (value) {
+                                            if (!controller.emailExist!) {
+                                              emailAlert = true;
+                                            }
+                                            _triggerValidator("email");
                                           },
                                         ),
                                         const SizedBox(
@@ -94,6 +130,8 @@ class ProfileView extends GetView<ProfileController> {
                                             ),
                                           ),
                                           hint: "Password",
+                                          autovalidateMode: passwordValidate,
+                                          textInputAction: TextInputAction.go,
                                           textEditingController:
                                               passwordController,
                                           obscureText: controller.showPassword!,
@@ -107,6 +145,14 @@ class ProfileView extends GetView<ProfileController> {
                                             }
                                             return null;
                                           },
+                                          onTap: () {
+                                            if (!controller.emailExist!) {
+                                              emailAlert = true;
+                                            }
+                                            _triggerValidator("email");
+                                          },
+                                          onFieldSubmitted: (value) =>
+                                              _triggerValidator("pass"),
                                         ),
                                         const SizedBox(
                                           height: 16,
@@ -349,10 +395,15 @@ class ProfileView extends GetView<ProfileController> {
                     ),
                   ),
                   controller.loading.value
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                          color: Colors.grey,
-                        ))
+                      ? Container(
+                          color: colorOverlay.withOpacity(0.2),
+                          height: Get.height,
+                          width: Get.width,
+                          child: const Center(
+                              child: CircularProgressIndicator(
+                            color: Colors.grey,
+                          )),
+                        )
                       : const SizedBox()
                 ],
               );

@@ -21,7 +21,6 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 class ProfileController extends GetxController {
   final LocalStorageData localStorageData = Get.find();
   final ValueNotifier _loading = ValueNotifier(false);
-  late FirebaseAuth _firebaseAuth;
   ValueNotifier get loading => _loading;
   UserModel _userModel = UserModel.isEmpty();
   UserModel get userModel => _userModel;
@@ -710,6 +709,10 @@ class ProfileController extends GetxController {
 
   Future<int> checkEmail(String email) async {
     var result = await ProfileProvider().checkExistUser(email);
+    while (result == null) {
+      Future.delayed(const Duration(milliseconds: 500),
+          () async => result = await ProfileProvider().checkExistUser(email));
+    }
     emailExist = (result['customers']['edges'].length > 0) ? true : false;
     update();
     return result['customers']['edges'].length;

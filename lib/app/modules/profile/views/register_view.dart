@@ -6,6 +6,7 @@ import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/widgets/custom_text_form_field.dart';
 import 'package:colorbox/constance.dart';
+import 'package:colorbox/utilities/extension.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -155,12 +156,14 @@ class RegisterView extends GetView<ProfileController> {
                                           controller.email = value;
                                         },
                                         onFieldSubmitted: (value) {
+                                          if (controller.emailExist!) {
+                                            emailAlert = true;
+                                          }
                                           _triggerValidator("email");
                                         },
                                         onChange: (value) async {
-                                          if (RegExp(
-                                                  r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                                              .hasMatch(value!)) {
+                                          if (EmailValidator(value)
+                                              .isValidEmail()) {
                                             await controller.checkEmail(value);
                                           }
                                         },
@@ -543,10 +546,15 @@ class RegisterView extends GetView<ProfileController> {
                   ),
                 ),
                 controller.loading.value
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                        color: Colors.grey,
-                      ))
+                    ? Container(
+                        color: colorOverlay.withOpacity(0.2),
+                        height: Get.height,
+                        width: Get.width,
+                        child: const Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.grey,
+                        )),
+                      )
                     : const SizedBox()
               ],
             );

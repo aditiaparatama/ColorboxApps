@@ -1,6 +1,7 @@
 import 'package:colorbox/app/modules/discount/controllers/discount_controller.dart';
 import 'package:colorbox/app/modules/product/views/widget/carousel_slider_product.dart';
 import 'package:colorbox/app/modules/collections/views/widgets/search_collection.dart';
+import 'package:colorbox/app/modules/product/views/widget/footer_widget.dart';
 import 'package:colorbox/app/modules/product/views/widget/similar_product_view.dart';
 import 'package:colorbox/app/modules/product/views/widget/share_social_media.dart';
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
@@ -31,8 +32,12 @@ class ProductView2 extends StatelessWidget {
 
   final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   final List<String> _idCollection = [Get.arguments["idCollection"]];
+  dynamic collection =
+      Get.arguments["idCollection"].replaceAll('gid://shopify/Collection/', '');
+  final String _handle = Get.arguments["handle"];
+
   Future<void> initializeSettings() async {
-    await controller.getProductByHandle(Get.arguments["handle"]);
+    await controller.getProductByHandle(_handle);
     await callWishlist(controller);
 
     //Simulate other services for 3 seconds
@@ -88,8 +93,6 @@ class ProductView2 extends StatelessWidget {
           return GetBuilder<ProductController>(
               init: Get.put(ProductController()),
               builder: (control) {
-                var collection = Get.arguments["idCollection"]
-                    .replaceAll('gid://shopify/Collection/', '');
                 var calcu1 = int.parse(
                         controller.variant!.price!.replaceAll(".00", "")) /
                     int.parse(controller.variant!.compareAtPrice!
@@ -434,6 +437,7 @@ class ProductView2 extends StatelessWidget {
                                                 width: Get.width,
                                                 height: 25,
                                                 child: CustomRadioColor(
+                                                  controller: controller,
                                                   listData: control
                                                       .product.options[1].values
                                                       .toList(),
@@ -482,6 +486,7 @@ class ProductView2 extends StatelessWidget {
                                           width: Get.width,
                                           height: 40,
                                           child: CustomRadio(
+                                            controller: controller,
                                             listData: control
                                                 .product.options[0].values
                                                 .toList(),
@@ -682,53 +687,7 @@ class ProductView2 extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Container(
-                          height: 80,
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.05),
-                                spreadRadius: 1,
-                                blurRadius: 6,
-                                offset: const Offset(
-                                    0, -5), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                fixedSize: Size(Get.width, 48),
-                                backgroundColor: colorTextBlack,
-                                disabledBackgroundColor: colorTextGrey),
-                            onPressed:
-                                control.variant!.inventoryQuantity == 0 &&
-                                        control.ukuran != ''
-                                    ? null
-                                    : () {
-                                        Get.find<CartController>().addCart(
-                                            control.variant!.id!,
-                                            context,
-                                            control.ukuran,
-                                            variants: control.variant);
-                                      },
-                            child: control.variant!.inventoryQuantity == 0 &&
-                                    control.ukuran != ''
-                                ? const CustomText(
-                                    text: "Produk Habis",
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  )
-                                : const CustomText(
-                                    text: "Tambahkan ke keranjang",
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                          ),
-                        ),
+                        FooterWidget(_handle),
                       ],
                     ),
                   ),
