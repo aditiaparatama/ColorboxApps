@@ -39,14 +39,6 @@ class OnBoardView extends GetView<OnBoardController> {
                 children: [
                   const VideoApp(),
                   Container(
-                    decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                          Colors.white.withOpacity(0.25),
-                          colorTextBlack.withOpacity(0.25)
-                        ])),
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,

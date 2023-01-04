@@ -55,7 +55,7 @@ class ProductView2 extends StatelessWidget {
         control.wishlistController.wishlist.items.isNotEmpty) {
       control.existWishlist = control.wishlistController.wishlist.items
           .indexWhere((e) =>
-              e['id'] ==
+              e['product_id'] ==
               control.product.id!.replaceAll("gid://shopify/Product/", ""));
 
       control.wishlistAdded = (control.existWishlist >= 0) ? true : false;

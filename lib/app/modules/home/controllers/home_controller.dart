@@ -1,6 +1,10 @@
 import 'package:colorbox/app/modules/home/models/announcement_model.dart';
+import 'package:colorbox/app/modules/home/models/newsletter_model.dart';
 import 'package:colorbox/app/modules/home/providers/home_provider.dart';
 import 'package:colorbox/app/modules/home/models/home_model.dart';
+import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
+import 'package:colorbox/constance.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
@@ -19,6 +23,9 @@ class HomeController extends GetxController {
   List<Announcement> _announcementProduct = [];
   List<Announcement> get announcementProduct => _announcementProduct;
 
+  Newsletter _newsletter = Newsletter.isEmpty();
+  Newsletter get newsletter => _newsletter;
+
   bool _maintenance = false;
   bool get maintenance => _maintenance;
 
@@ -27,6 +34,8 @@ class HomeController extends GetxController {
 
   String currentItem = 'Home';
   int curIndex = 0;
+
+  bool firstBuild = true, subscribe = false;
 
   @override
   void onInit() async {
@@ -52,6 +61,7 @@ class HomeController extends GetxController {
     for (final x in json["excludeVoucher"]) {
       _excludeVoucher.add(x);
     }
+    _newsletter = Newsletter.fromJson(json["newsletter"]);
     getCollections(json['CollectionsHome']['items']);
     getAnnouncementHome(json['announcementHome']);
     getAnnouncementProduct(json['announcementProduct']);
@@ -90,6 +100,44 @@ class HomeController extends GetxController {
     for (int i = 0; i < json.length; i++) {
       _announcementProduct.add(Announcement.fromJson(json[i]));
     }
+    update();
+  }
+
+  customerSubscribe(String email) async {
+    var customer = await ProfileProvider().checkExistUser(email);
+    while (customer == null) {
+      Future.delayed(const Duration(milliseconds: 500),
+          () async => customer = await ProfileProvider().checkExistUser(email));
+    }
+    var variables = {
+      "input": {
+        "customerId": customer['customers']['edges'][0]['node']['id'],
+        "emailMarketingConsent": {
+          "consentUpdatedAt": DateTime.now().toIso8601String(),
+          "marketingOptInLevel": "CONFIRMED_OPT_IN",
+          "marketingState": "SUBSCRIBED"
+        }
+      }
+    };
+
+    var result = await HomeProvider().customerSubscribe(variables);
+
+    if (result['customerEmailMarketingConsentUpdate']['userErrors'].length >
+        0) {
+      Get.snackbar(
+          "Error",
+          result['customerEmailMarketingConsentUpdate']['userErrors'][0]
+              ["message"],
+          backgroundColor: colorTextBlack,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM);
+
+      subscribe = false;
+      update();
+      return;
+    }
+
+    subscribe = true;
     update();
   }
 }

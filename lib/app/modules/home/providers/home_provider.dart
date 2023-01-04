@@ -1,5 +1,7 @@
+import 'package:colorbox/app/services/shopify_graphql.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:get/get.dart';
+import 'package:graphql/client.dart';
 
 class HomeProvider extends GetConnect {
   Future<dynamic> getHomeSettings() async {
@@ -40,5 +42,34 @@ class HomeProvider extends GetConnect {
 
     var data = response.body['CollectionsHome']['items'];
     return data;
+  }
+
+  Future<dynamic> customerSubscribe(variables) async {
+    final GraphQLClient _client = getShopifyGraphQLClient(admin: true);
+
+    final QueryOptions options = QueryOptions(
+      document: gql(
+        r'''
+        mutation customerEmailMarketingConsentUpdate($input: CustomerEmailMarketingConsentUpdateInput!) {
+          customerEmailMarketingConsentUpdate(input: $input) {
+            customer {
+              # Customer fields
+              id
+              displayName
+            }
+            userErrors {
+              field
+              message
+            }
+          }
+        }
+      ''',
+      ),
+      variables: variables,
+    );
+
+    final QueryResult result = await _client.query(options);
+
+    return result.data;
   }
 }

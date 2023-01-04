@@ -16,7 +16,7 @@ class WishlistView extends StatelessWidget {
   final WishlistController controller = Get.put(WishlistController());
 
   Future<void> initializeSettings() async {
-    await controller.fetchingData();
+    await controller.fetchingNewData();
     //Simulate other services for 3 seconds
     await Future.delayed(const Duration(milliseconds: 100));
   }

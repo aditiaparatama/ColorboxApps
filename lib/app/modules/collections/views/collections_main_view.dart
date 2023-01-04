@@ -32,7 +32,7 @@ class CollectionsMainView extends GetView<CollectionsController> {
     }
 
     double showoffset =
-        500.0; //Back to top botton will show on scroll offset 10.0
+        100.0; //Back to top botton will show on scroll offset 10.0
 
     if (_sControl.offset > showoffset) {
       showBtn = true;

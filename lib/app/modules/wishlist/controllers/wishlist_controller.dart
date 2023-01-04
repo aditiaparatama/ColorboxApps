@@ -4,8 +4,6 @@ import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
 import 'package:colorbox/app/modules/wishlist/models/wishlist_model.dart';
 import 'package:colorbox/app/modules/wishlist/providers/wishlist_provider.dart';
-import 'package:colorbox/app/widgets/widget.dart';
-import 'package:colorbox/globalvar.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -26,7 +24,7 @@ class WishlistController extends GetxController {
 
   @override
   void onInit() async {
-    await fetchingData();
+    // await fetchingData();
     await settingsController.getUser();
     super.onInit();
   }
@@ -58,10 +56,37 @@ class WishlistController extends GetxController {
     update();
   }
 
+  Future<void> fetchingNewData() async {
+    _loading.value = true;
+    update();
+    UserModel? _user = settingsController.userModel;
+    if (_user.id != null) {
+      var result = await WhistlistProvider()
+          .getAllDataNew(_user.id!.replaceAll("gid://shopify/Customer/", ""));
+      if (result != null && result.containsKey("items")) {
+        _wishlist = Wishlist.fromJson(result);
+
+        if (_wishlist.items.length > 0) {
+          _product = [];
+          var ids = [];
+          var variantIds = [];
+          for (final x in _wishlist.items) {
+            ids.add('"gid://shopify/Product/${x['product_id']}"');
+            variantIds.add(x['variant_id']);
+          }
+          await fetchingProduct({"ids": ids, "variantIds": variantIds});
+        }
+      }
+    }
+    _loading.value = false;
+    _tempProduct = _product;
+    update();
+  }
+
   Future<void> fetchWishlist() async {
     UserModel? _user = settingsController.userModel;
-    var result = await WhistlistProvider()
-        .getAllData((_user.id ?? "").replaceAll("gid://shopify/Customer/", ""));
+    var result = await WhistlistProvider().getAllDataNew(
+        (_user.id ?? "").replaceAll("gid://shopify/Customer/", ""));
 
     if (result != null && result.containsKey("items")) {
       _wishlist = Wishlist.fromJson(result);
@@ -103,19 +128,26 @@ class WishlistController extends GetxController {
   Future<void> actionWishlist(String productId, String variantId,
       {String action = "add"}) async {
     if (settingsController.userModel.displayName == null) return;
-    var variables = {
-      "productid": productId.replaceAll("gid://shopify/Product/", ""),
-      "variantid": variantId.replaceAll("gid://shopify/ProductVariant/", ""),
-      "customerid": settingsController.userModel.id!
-          .replaceAll("gid://shopify/Customer/", ""),
-      "action": action,
-      "apikey": apiKeyWishlist,
-      "version": "1"
-    };
-    var result = await WhistlistProvider().getAction(variables);
+    // var variables = {
+    //   "productid": productId.replaceAll("gid://shopify/Product/", ""),
+    //   "variantid": variantId.replaceAll("gid://shopify/ProductVariant/", ""),
+    //   "customerid": settingsController.userModel.id!
+    //       .replaceAll("gid://shopify/Customer/", ""),
+    //   "action": action,
+    //   "apikey": apiKeyWishlist,
+    //   "version": "1"
+    // };
 
-    if (result != null && result["type"] == "error") {
-      alertGagal(result["message"]);
-    }
+    var variables = {
+      "customerId": settingsController.userModel.id!
+          .replaceAll("gid://shopify/Customer/", ""),
+      "productId": productId.replaceAll("gid://shopify/Product/", ""),
+      "variantId": variantId.replaceAll("gid://shopify/ProductVariant/", "")
+    };
+    var result = await WhistlistProvider().getActionNew(variables, action);
+
+    // if (result != null && result["type"] == "error") {
+    //   alertGagal(result["message"]);
+    // }
   }
 }
