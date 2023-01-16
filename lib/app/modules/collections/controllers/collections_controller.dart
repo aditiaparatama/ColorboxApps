@@ -1,5 +1,7 @@
+import 'package:colorbox/app/modules/collections/models/product_model.dart';
 import 'package:colorbox/app/modules/collections/providers/collection_provider.dart';
 import 'package:colorbox/app/modules/collections/models/collection_model.dart';
+import 'package:colorbox/app/modules/product/providers/product_providers.dart';
 import 'package:colorbox/constance.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +36,8 @@ class CollectionsController extends GetxController {
   String filterColor = "";
   String filterSize = "";
   String filterPrice = "";
+  String _tempColor = "";
+  String _tempHandle = "";
   List<dynamic> filterList = [
     {"available": true}
   ];
@@ -138,7 +142,7 @@ class CollectionsController extends GetxController {
     if (parent) {
       listTabs.add(Tab(
         child: Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             color: colorTextBlack,
             child: Text(
               menu.title ?? "",
@@ -150,7 +154,7 @@ class CollectionsController extends GetxController {
       for (int i = 0; i < argMenu.length; i++) {
         listTabs.add(Tab(
             child: Container(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
               color: (index == i) ? colorTextBlack : null,
               border: Border.all(
@@ -262,6 +266,33 @@ class CollectionsController extends GetxController {
     _collection = Collection.empty();
     _collection = Collection.fromJson(data);
     _loading.value = false;
+    update();
+  }
+
+  changeColorProduct(int index, String color, String curHandle) async {
+    Product temp = _collection.products[index];
+    String colorBefore = (_tempColor == "")
+        ? temp.options[1].values[0]
+        : (_tempHandle != "" &&
+                _tempHandle.substring(0, 10) == curHandle.substring(0, 10))
+            ? _tempColor
+            : temp.options[1].values[0];
+
+    String handle = (temp.handle!)
+        .replaceAll(colorBefore.toLowerCase().replaceAll(" ", "-"), "");
+    var check = handle.split("-");
+    handle = (check[check.length - 1] == "")
+        ? (handle + color.toLowerCase())
+        : handle.replaceAll(
+            "--", "-" + color.toLowerCase().replaceAll(" ", "-") + "-");
+
+    var result = await ProductProvider().getProductByHandle(handle);
+    Product _product = Product.fromJson(result["product"]);
+    _tempHandle = curHandle;
+    _tempColor = color;
+    _collection.products[index].handle = _product.handle;
+    _collection.products[index].totalInventory = _product.totalInventory;
+    _collection.products[index].image[0] = _product.image[0];
     update();
   }
 }

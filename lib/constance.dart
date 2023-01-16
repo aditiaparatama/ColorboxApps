@@ -26,6 +26,14 @@ const Color colorTextWarning = Color(0xFFF2994A);
 const Color colorTextSuccess = Color(0xFF018C01);
 const Color colorIconWarning = Color(0xFFFDA61B);
 
+const Color colorDangerSurface = Color(0xFFFFF4F2);
+const Color colorDangerHover = Color(0xFFBD251C);
+const Color colorDangerMain = Color(0xFFCB3A31);
+const Color colorNeutral60 = Color(0xFFC2C2C2);
+const Color colorNeutral70 = Color(0xFFA5A5A5);
+const Color colorNeutral90 = Color(0xFF565656);
+const Color colorNeutral100 = Color(0xFF212121);
+
 // ignore: constant_identifier_names
 const CACHED_CART_DATA = 'CACHED_CART_DATA';
 // ignore: constant_identifier_names

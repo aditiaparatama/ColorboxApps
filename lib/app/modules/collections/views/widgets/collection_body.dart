@@ -28,9 +28,9 @@ class CollectionBody extends StatelessWidget {
                 itemCount: controller.collection.products.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 24,
-                  childAspectRatio: 2.6 / 5,
+                  mainAxisSpacing: 0,
+                  crossAxisSpacing: 16,
+                  childAspectRatio: 4.1 / 9,
                 ),
                 itemBuilder: (_, i) {
                   return GestureDetector(
@@ -40,6 +40,9 @@ class CollectionBody extends StatelessWidget {
                       "handle": controller.collection.products[i].handle
                     }),
                     child: ItemCard(
+                      index: i,
+                      controller: controller,
+                      product: controller.collection.products[i],
                       title: controller.collection.products[i].title!,
                       image: controller.collection.products[i].image[0],
                       price: controller

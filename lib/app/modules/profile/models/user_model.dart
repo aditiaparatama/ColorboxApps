@@ -8,6 +8,7 @@ class UserModel {
   String? email;
   String? phone;
   String? note;
+  EmailMarketingaconsent? emailMarketing;
   Address? defaultAddress;
   List<MailingAddress>? addresses;
   String? expiresAt;
@@ -20,6 +21,7 @@ class UserModel {
       this.email,
       this.phone,
       this.note,
+      this.emailMarketing,
       this.defaultAddress,
       this.addresses,
       this.expiresAt);
@@ -48,6 +50,9 @@ class UserModel {
     email = json['email'];
     phone = json['phone'];
     note = json['note'] ?? "";
+    emailMarketing = json.containsKey("emailMarketingConsent")
+        ? EmailMarketingaconsent.fromJson(json["emailMarketingConsent"])
+        : null;
     defaultAddress = Address.fromJson(json['defaultAddress']);
     addresses = [];
     for (int i = 0; i < json['addresses'].length; i++) {
@@ -153,5 +158,15 @@ class CustomerToken {
       'accessToken': accessToken,
       'expiresAt': expiresAt,
     };
+  }
+}
+
+class EmailMarketingaconsent {
+  String? marketingState;
+
+  EmailMarketingaconsent(this.marketingState);
+
+  EmailMarketingaconsent.fromJson(var json) {
+    marketingState = json["marketingState"];
   }
 }

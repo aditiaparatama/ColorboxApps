@@ -124,9 +124,9 @@ class SearchView extends GetView<SearchController> {
                                               gridDelegate:
                                                   const SliverGridDelegateWithFixedCrossAxisCount(
                                                 crossAxisCount: 2,
-                                                mainAxisSpacing: 24,
-                                                crossAxisSpacing: 24,
-                                                childAspectRatio: 2.6 / 5,
+                                                mainAxisSpacing: 0,
+                                                crossAxisSpacing: 16,
+                                                childAspectRatio: 4.1 / 9,
                                               ),
                                               itemBuilder: (_, i) {
                                                 return GestureDetector(
@@ -142,10 +142,17 @@ class SearchView extends GetView<SearchController> {
                                                             .product[i].handle
                                                       }),
                                                   child: ItemCard(
+                                                    index: i,
+                                                    controller: controller,
+                                                    product:
+                                                        controller.product[i],
                                                     title: control
                                                         .product[i].title!,
-                                                    image: control
-                                                        .product[i].image[0],
+                                                    image: (control.product[i]
+                                                            .image.isEmpty)
+                                                        ? "https://cdn.shopify.com/s/files/1/0423/9120/8086/files/Image.jpg?v=1661922597"
+                                                        : control.product[i]
+                                                            .image[0],
                                                     price: control.product[i]
                                                         .variants[0].price!
                                                         .replaceAll(".00", ""),
@@ -237,7 +244,7 @@ class SearchView extends GetView<SearchController> {
                       right: 16,
                     ),
                     child: SvgPicture.asset(
-                      "assets/icon/Handbag.svg",
+                      "assets/icon/shopping-bag.svg",
                     ),
                   ),
                   cartController.cart.lines!.isNotEmpty

@@ -1,7 +1,8 @@
 import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
 import 'package:colorbox/app/modules/home/controllers/homecollections_controller.dart';
-import 'package:colorbox/app/modules/home/views/widgets/item_card.dart';
 import 'package:colorbox/app/modules/home/views/widgets/item_card_ending.dart';
+import 'package:colorbox/app/routes/app_pages.dart';
+import 'package:colorbox/app/widgets/item_card.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,8 +20,8 @@ class CollectionHome1 extends GetView<HomeController> {
         Get.put(HomeCollectionsController(), tag: index.toString());
     homeCollectionController.fetchCollectionProduct(id, defaultSortBy);
     return GetBuilder<HomeCollectionsController>(
-        global: false,
         init: homeCollectionController,
+        tag: index.toString(),
         builder: (_) {
           return Container(
             color: Colors.white,
@@ -64,10 +65,38 @@ class CollectionHome1 extends GetView<HomeController> {
                                 },
                                 i: i,
                               )
-                            : ItemCard(
-                                calcu1: calcu1,
-                                collection: homeCollectionController.collection,
-                                i: i,
+                            : GestureDetector(
+                                onTap: () =>
+                                    Get.toNamed(Routes.PRODUCT, arguments: {
+                                  "product": homeCollectionController
+                                      .collection.products[i],
+                                  "idCollection":
+                                      homeCollectionController.collection.id,
+                                  "handle": homeCollectionController
+                                      .collection.products[i].handle
+                                }),
+                                child: ItemCard(
+                                  onPress: () {},
+                                  controller: homeCollectionController,
+                                  product: homeCollectionController
+                                      .collection.products[i],
+                                  index: i,
+                                  compareAtPrice: homeCollectionController
+                                      .collection
+                                      .products[i]
+                                      .variants[0]
+                                      .compareAtPrice!
+                                      .replaceAll(".00", ""),
+                                  price: homeCollectionController
+                                      .collection.products[i].variants[0].price!
+                                      .replaceAll(".00", ""),
+                                  image: homeCollectionController
+                                      .collection.products[i].image[0],
+                                  title: homeCollectionController
+                                      .collection.products[i].title,
+                                  totalInventory: homeCollectionController
+                                      .collection.products[i].totalInventory,
+                                ),
                               );
                       }),
             ),

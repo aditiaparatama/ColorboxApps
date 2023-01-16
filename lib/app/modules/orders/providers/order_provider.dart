@@ -1,4 +1,5 @@
 import 'package:colorbox/app/services/shopify_graphql.dart';
+import 'package:colorbox/globalvar.dart';
 import 'package:get/get.dart';
 import 'package:graphql/client.dart';
 
@@ -510,5 +511,22 @@ class OrderProvider extends GetConnect {
     if (result.data == null) return null;
 
     return result.data!['customer'];
+  }
+
+  Future<dynamic> trackingLogistik(String noResi) async {
+    try {
+      dynamic body = {
+        "username": "COLORBOX",
+        "api_key": "394bd2a3d041c107a3f11b7e2501b76f"
+      };
+      String url = "$urlJneTracking/$noResi";
+
+      dynamic response = await post(url, body,
+          contentType: "application/x-www-form-urlencoded",
+          headers: {"accept": "application/x-www-form-urlencoded"});
+      return response.body;
+    } catch (e) {
+      return {"message": e.toString()};
+    }
   }
 }

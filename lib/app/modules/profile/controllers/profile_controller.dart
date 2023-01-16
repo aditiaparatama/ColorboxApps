@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:colorbox/app/data/models/countries_model.dart';
 import 'package:colorbox/app/data/models/mailing_address.dart';
+import 'package:colorbox/app/modules/home/providers/home_provider.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
@@ -28,6 +29,7 @@ class ProfileController extends GetxController {
   UserModel get userFromAdmin => _userFromAdmin;
   bool? _showPassword = true, emailExist = false, emailAlert = false;
   bool? get showPassword => _showPassword;
+  bool subscribe = true;
 
   final DateTime? _showDateBirth = DateTime.now();
   DateTime? get showDateBirth => _showDateBirth;
@@ -254,8 +256,9 @@ class ProfileController extends GetxController {
     firstN = inputname2[0].toString();
     lastN = inputname2.length > 1 ? inputname2[1].toString() : '';
 
-    var result = await ProfileProvider()
-        .register(email!.toLowerCase(), password!, firstN!, lastN!);
+    var result = await ProfileProvider().register(
+        email!.toLowerCase(), password!, firstN!, lastN!,
+        subscribe: subscribe);
 
     if (result["msg"] == "success") {
       if (tglLahir != null && tglLahir != "") {
@@ -270,10 +273,24 @@ class ProfileController extends GetxController {
           "id": result['id'],
           "lastName": lastN,
           "note":
-              (tglLahir != null && tglLahir != "") ? "" : "Birthday: $tglLahir",
+              (tglLahir != null && tglLahir != "") ? "Birthday: $tglLahir" : "",
         }
       };
       await ProfileProvider().customerUpdate(variables);
+
+      if (subscribe) {
+        var variables = {
+          "input": {
+            "customerId": result['id'],
+            "emailMarketingConsent": {
+              "consentUpdatedAt": DateTime.now().toIso8601String(),
+              "marketingOptInLevel": "SINGLE_OPT_IN",
+              "marketingState": "SUBSCRIBED"
+            }
+          }
+        };
+        await HomeProvider().customerSubscribe(variables);
+      }
       await login();
     }
     _loading.value = false;

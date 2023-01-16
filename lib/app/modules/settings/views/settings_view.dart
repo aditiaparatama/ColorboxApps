@@ -22,7 +22,7 @@ class SettingsView extends GetView<SettingsController> {
     return Scaffold(
       appBar: AppBar(
         title: const CustomText(
-          text: "Akun Saya",
+          text: "AKUN SAYA",
           fontSize: 18,
           fontWeight: FontWeight.bold,
           // color: Colors.white,

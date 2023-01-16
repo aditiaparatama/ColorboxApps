@@ -31,7 +31,10 @@ class InformationAccount extends StatelessWidget {
     _telpon.text =
         (_settingController.userModel.phone ?? "").replaceAll("+62", "");
     birthdayTextController.text = (_settingController.userModel.note != null &&
-            _settingController.userModel.note != "")
+            _settingController.userModel.note!
+                    .replaceAll("Birthday: ", "")
+                    .trim() !=
+                "")
         ? DateFormat('dd/MM/yyyy').format(DateTime.parse(_settingController
             .userModel.note!
             .replaceAll("Birthday: ", "")
@@ -39,7 +42,10 @@ class InformationAccount extends StatelessWidget {
         : "";
 
     DateTime _initialDate = (_settingController.userModel.note != null &&
-            _settingController.userModel.note != "")
+            _settingController.userModel.note!
+                    .replaceAll("Birthday: ", "")
+                    .trim() !=
+                "")
         ? DateTime.parse(_settingController.userModel.note!
             .replaceAll("Birthday: ", "")
             .trim())

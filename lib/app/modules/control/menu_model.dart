@@ -27,6 +27,9 @@ class Menu {
 
     if (json['items'].length >= 1 && subjectID != null) {
       json['title'] = "Semua";
+      if (title == "Special Collections") {
+        json['images'] = json['items'][0]['images'];
+      }
       subMenu.add(SubMenu.fromJson(json));
     }
 

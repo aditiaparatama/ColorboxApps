@@ -1,11 +1,11 @@
 import 'package:colorbox/app/modules/discount/controllers/discount_controller.dart';
 import 'package:colorbox/app/modules/product/views/widget/carousel_slider_product.dart';
-import 'package:colorbox/app/modules/collections/views/widgets/search_collection.dart';
 import 'package:colorbox/app/modules/product/views/widget/footer_widget.dart';
+import 'package:colorbox/app/modules/product/views/widget/section_cs.dart';
 import 'package:colorbox/app/modules/product/views/widget/similar_product_view.dart';
-import 'package:colorbox/app/modules/product/views/widget/share_social_media.dart';
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:colorbox/app/widgets/appbar_new.dart';
 import 'package:colorbox/app/widgets/bottomsheet_widget.dart';
 import 'package:colorbox/app/widgets/custom_radio_color.dart';
 import 'package:colorbox/app/widgets/custom_radio.dart';
@@ -20,7 +20,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:path/path.dart' as p;
 
 import '../controllers/product_controller.dart';
 
@@ -64,14 +64,6 @@ class ProductView2 extends StatelessWidget {
     await discountController.groupingDiscountAutomatic(_idCollection);
   }
 
-  Future<void> openWA() async {
-    String message =
-        "Halo Admin Colorbox, saya ingin bertanya tentang produk ini: https://colorbox.co.id/products/${controller.product.handle!}";
-
-    String url = "https://wa.me/628111717250?text=${Uri.encodeFull(message)}";
-    await launchUrlString(url, mode: LaunchMode.externalApplication);
-  }
-
   @override
   Widget build(BuildContext context) {
     // controller.product = Get.arguments["product"];
@@ -93,30 +85,20 @@ class ProductView2 extends StatelessWidget {
           return GetBuilder<ProductController>(
               init: Get.put(ProductController()),
               builder: (control) {
-                var calcu1 = int.parse(
-                        controller.variant!.price!.replaceAll(".00", "")) /
-                    int.parse(controller.variant!.compareAtPrice!
-                        .replaceAll(".00", ""));
+                // var calcu1 = int.parse(
+                //         controller.variant!.price!.replaceAll(".00", "")) /
+                //     int.parse(controller.variant!.compareAtPrice!
+                //         .replaceAll(".00", ""));
+
+                var compareAtPrice = control.product.variants[0].compareAtPrice;
+                var price = control.product.variants[0].price;
 
                 return Scaffold(
                   resizeToAvoidBottomInset: false,
                   backgroundColor: Colors.white,
-                  appBar: PreferredSize(
-                    preferredSize: const Size.fromHeight(56),
-                    child: AppBar(
-                      title: const SearchCollection(),
-                      centerTitle: false,
-                      elevation: 3,
-                      shadowColor: Colors.grey.withOpacity(0.3),
-                      leadingWidth: 36,
-                      leading: IconButton(
-                          padding: const EdgeInsets.all(16),
-                          onPressed: () => Get.back(),
-                          icon: const Icon(Icons.arrow_back)),
-                      actions: [
-                        bagWidget(),
-                      ],
-                    ),
+                  appBar: const PreferredSize(
+                    preferredSize: Size.fromHeight(56),
+                    child: AppBarNew(title: ""),
                   ),
                   body: SafeArea(
                     child: Column(
@@ -157,6 +139,8 @@ class ProductView2 extends StatelessWidget {
                                             // controller.update();
                                           },
                                           child: CircleAvatar(
+                                            backgroundColor:
+                                                Colors.white.withOpacity(0.5),
                                             radius: 16.0,
                                             child: SvgPicture.asset((controller
                                                     .wishlistAdded)
@@ -175,15 +159,34 @@ class ProductView2 extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         const SizedBox(height: 16),
-                                        CustomText(
-                                          text: control.product.title!,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                          color: const Color.fromRGBO(
-                                              33, 33, 33, 1),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            CustomText(
+                                              text: control.product.title!,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              color: colorNeutral100,
+                                            ),
+                                            CustomText(
+                                              text: "Rp " +
+                                                  formatter.format(int.parse(
+                                                      price!.replaceAll(
+                                                          ".00", ""))),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w800,
+                                              color: (compareAtPrice == "0" ||
+                                                      compareAtPrice == price)
+                                                  ? colorNeutral100
+                                                  : colorDangerMain,
+                                            ),
+                                          ],
                                         ),
                                         const SizedBox(height: 6),
                                         Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             CustomText(
                                               text: (control.variant!.sku ??
@@ -191,231 +194,179 @@ class ProductView2 extends StatelessWidget {
                                                   " | " +
                                                   (control.variant!.barcode ??
                                                       ""),
-                                              fontSize: 10,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.w400,
-                                              color: const Color.fromRGBO(
-                                                  155, 155, 155, 1),
+                                              color: colorNeutral70,
                                             ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 6),
-                                        (control.product.variants[0]
-                                                        .compareAtPrice ==
-                                                    "0" ||
-                                                control.product.variants[0]
-                                                        .compareAtPrice ==
-                                                    control.product.variants[0]
-                                                        .price)
-                                            ? CustomText(
+                                            if (compareAtPrice != "0" &&
+                                                compareAtPrice != "")
+                                              CustomText(
                                                 text: "Rp " +
                                                     formatter.format(int.parse(
-                                                        control.variant!.price!
+                                                        compareAtPrice!
                                                             .replaceAll(
                                                                 ".00", ""))),
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w700,
-                                              )
-                                            : Column(
-                                                children: [
-                                                  const SizedBox(height: 6),
-                                                  Row(
-                                                    children: [
-                                                      CustomText(
-                                                        text: "Rp " +
-                                                            formatter.format(int
-                                                                .parse(control
-                                                                    .variant!
-                                                                    .compareAtPrice!
-                                                                    .replaceAll(
-                                                                        ".00",
-                                                                        ""))) +
-                                                            "  ",
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        color: colorTextBlack,
-                                                        decoration:
-                                                            TextDecoration
-                                                                .lineThrough,
-                                                      ),
-                                                      const SizedBox(width: 2),
-                                                      Container(
-                                                        width: 30.0,
-                                                        height: 15.0,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(2),
-                                                          color: colorSaleRed,
-                                                        ),
-                                                        child: Center(
-                                                          child: Text(
-                                                            (100 - calcu1 * 100)
-                                                                    .ceil()
-                                                                    .toString() +
-                                                                '%',
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 10,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              color:
-                                                                  Colors.white,
-                                                              height: 1,
-                                                            ),
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(width: 9),
-                                                      CustomText(
-                                                        text: "Rp " +
-                                                            formatter.format(int
-                                                                .parse(control
-                                                                    .variant!
-                                                                    .price!
-                                                                    .replaceAll(
-                                                                        ".00",
-                                                                        ""))),
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        color: const Color
-                                                                .fromRGBO(
-                                                            187, 9, 21, 1),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                                color: colorNeutral70,
+                                                decoration:
+                                                    TextDecoration.lineThrough,
                                               ),
+                                          ],
+                                        ),
                                       ],
                                     ),
                                   ),
                                   const SizedBox(height: 16),
-                                  Container(color: colorDiver, height: 8),
-                                  const SizedBox(height: 16),
-                                  Container(
-                                    constraints:
-                                        const BoxConstraints(maxHeight: 110),
-                                    child: ListView.separated(
-                                        shrinkWrap: true,
-                                        separatorBuilder: (context, index) =>
-                                            const SizedBox(width: 16),
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 16),
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: discountController
-                                            .listingDiscountAutomatic.length,
-                                        itemBuilder: (_, i) {
-                                          String desc = discountController
-                                              .listingDiscountAutomatic[i]
-                                              .deskripsi
-                                              .replaceAll(" •", ",");
-
-                                          return Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8, vertical: 16),
-                                            decoration: const BoxDecoration(
-                                              color: colorBoxInfo,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(6)),
-                                            ),
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                CircleAvatar(
-                                                  radius: 16.0,
-                                                  child: SvgPicture.network(
-                                                      discountController
-                                                          .listingDiscountAutomatic[
-                                                              i]
-                                                          .icon!),
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                ),
-                                                const SizedBox(width: 8),
-                                                SizedBox(
-                                                  width: Get.width *
-                                                      ((discountController
-                                                                  .listingDiscountAutomatic
-                                                                  .length >
-                                                              1)
-                                                          ? .7
-                                                          : .78),
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                  Container(color: colorDiver, height: 4),
+                                  if (discountController
+                                      .listingDiscountAutomatic.isNotEmpty) ...[
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16, vertical: 8),
+                                      child: const CustomText(
+                                        text: "Promo",
+                                        fontWeight: FontWeight.w500,
+                                        color: colorNeutral100,
+                                      ),
+                                    ),
+                                    Container(
+                                      constraints:
+                                          const BoxConstraints(maxHeight: 52),
+                                      child: ListView.separated(
+                                          shrinkWrap: true,
+                                          separatorBuilder: (context, index) =>
+                                              const SizedBox(width: 16),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: discountController
+                                              .listingDiscountAutomatic.length,
+                                          itemBuilder: (_, i) {
+                                            // String desc = discountController
+                                            //     .listingDiscountAutomatic[i]
+                                            //     .deskripsi
+                                            //     .replaceAll(" •", ",");
+                                            Color colorBorder = (discountController
+                                                        .listingDiscountAutomatic[
+                                                            i]
+                                                        .type ==
+                                                    "code")
+                                                ? const Color(0xFFFFADD7)
+                                                : const Color(0xFFB896E8);
+                                            return GestureDetector(
+                                              onTap: () {
+                                                bottomSheetWidget(
+                                                    "Detail Promo",
+                                                    discountController
+                                                        .listingDiscountAutomatic[
+                                                            i]
+                                                        .title,
+                                                    discountController
+                                                        .listingDiscountAutomatic[
+                                                            i]
+                                                        .deskripsi);
+                                              },
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  (p.extension(discountController
+                                                              .listingDiscountAutomatic[
+                                                                  i]
+                                                              .icon!
+                                                              .split("?")[0]) ==
+                                                          ".svg")
+                                                      ? SvgPicture.network(
+                                                          discountController
+                                                              .listingDiscountAutomatic[
+                                                                  i]
+                                                              .icon!)
+                                                      : CachedNetworkImage(
+                                                          imageUrl:
+                                                              discountController
+                                                                  .listingDiscountAutomatic[
+                                                                      i]
+                                                                  .icon!),
+                                                  Stack(
                                                     children: [
-                                                      CustomText(
-                                                        text: discountController
-                                                                .listingDiscountAutomatic[
-                                                                    i]
-                                                                .title ??
-                                                            "",
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        textOverflow:
-                                                            TextOverflow.fade,
+                                                      Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .fromLTRB(
+                                                                8, 8, 12, 8),
+                                                        decoration: BoxDecoration(
+                                                            border: Border.all(
+                                                                color:
+                                                                    colorBorder),
+                                                            borderRadius: const BorderRadius
+                                                                    .only(
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        8),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        8))),
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            CustomText(
+                                                              text: discountController
+                                                                      .listingDiscountAutomatic[
+                                                                          i]
+                                                                      .title ??
+                                                                  "",
+                                                              color:
+                                                                  colorNeutral100,
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              textOverflow:
+                                                                  TextOverflow
+                                                                      .fade,
+                                                            ),
+                                                            const SizedBox(
+                                                                height: 4),
+                                                            const CustomText(
+                                                              text:
+                                                                  "Lihat Detail",
+                                                              fontSize: 12,
+                                                              color:
+                                                                  colorNeutral90,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                            )
+                                                          ],
+                                                        ),
                                                       ),
-                                                      const SizedBox(height: 6),
-                                                      CustomText(
-                                                        text: (desc.length > 80)
-                                                            ? desc.substring(
-                                                                    0, 80) +
-                                                                "..."
-                                                            : desc,
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        textOverflow:
-                                                            TextOverflow.fade,
-                                                      ),
-                                                      const SizedBox(height: 6),
-                                                      if (desc.length > 80)
-                                                        InkWell(
-                                                          onTap: () {
-                                                            bottomSheetWidget(
-                                                                "Detail Promo",
-                                                                discountController
-                                                                    .listingDiscountAutomatic[
-                                                                        i]
-                                                                    .title,
-                                                                discountController
-                                                                    .listingDiscountAutomatic[
-                                                                        i]
-                                                                    .deskripsi);
-                                                          },
-                                                          child:
-                                                              const CustomText(
-                                                            text:
-                                                                "Lihat Detail",
-                                                            fontSize: 12,
-                                                            decoration:
-                                                                TextDecoration
-                                                                    .underline,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            color: Colors.black,
-                                                          ),
-                                                        )
+                                                      Positioned(
+                                                          top: 12,
+                                                          right: -4,
+                                                          child: customCircle(
+                                                              colorBorder)),
+                                                      Positioned(
+                                                          bottom: 12,
+                                                          right: -4,
+                                                          child: customCircle(
+                                                              colorBorder))
                                                     ],
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        }),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Container(color: colorDiver, height: 8),
+                                                ],
+                                              ),
+                                            );
+                                          }),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Container(color: colorDiver, height: 4),
+                                  ],
                                   const SizedBox(height: 16),
                                   (control.product.options.length > 1)
                                       ? Container(
@@ -448,7 +399,7 @@ class ProductView2 extends StatelessWidget {
                                         )
                                       : const SizedBox(),
                                   const SizedBox(height: 16),
-                                  Container(color: colorDiver, height: 8),
+                                  Container(color: colorDiver, height: 4),
                                   Container(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16),
@@ -496,7 +447,7 @@ class ProductView2 extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(height: 16),
-                                  Container(color: colorDiver, height: 8),
+                                  Container(color: colorDiver, height: 4),
                                   const SizedBox(height: 16),
                                   Container(
                                     padding: const EdgeInsets.only(
@@ -578,83 +529,9 @@ class ProductView2 extends StatelessWidget {
                                       color: colorBorderGrey,
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        16, 24, 16, 16),
-                                    child: Row(children: [
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () async {
-                                            await openWA();
-                                          },
-                                          child: Container(
-                                            height: 64,
-                                            padding: const EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(6)),
-                                              border: Border.all(
-                                                  color: colorBorderGrey),
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                SvgPicture.asset(
-                                                    "assets/icon/bx-hubungi-kami.svg"),
-                                                const SizedBox(height: 10),
-                                                const CustomText(
-                                                  text: 'Hubungi Kami',
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () {
-                                            bottomSheet(
-                                                control.product.handle!);
-                                          },
-                                          child: Container(
-                                            height: 64,
-                                            padding: const EdgeInsets.all(8),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(6)),
-                                              border: Border.all(
-                                                  color: colorBorderGrey),
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                SvgPicture.asset(
-                                                    "assets/icon/bx-berbagi.svg"),
-                                                const SizedBox(height: 10),
-                                                const CustomText(
-                                                  text: 'Berbagi',
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ]),
-                                  ),
-                                  const Divider(
-                                    height: 30,
-                                    thickness: 10,
-                                    color: Color.fromRGBO(249, 248, 248, 1),
-                                  ),
+                                  //Customer Service
+                                  const SectionCS(),
+                                  Container(color: colorDiver, height: 4),
                                   const SizedBox(),
                                   const SizedBox(height: 5),
                                   const Padding(
@@ -696,6 +573,20 @@ class ProductView2 extends StatelessWidget {
         });
   }
 
+  Container customCircle(Color colorBorder) {
+    return Container(
+      height: 8,
+      width: 8,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(
+            width: 1,
+            color: colorBorder,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(10))),
+    );
+  }
+
   Widget bagWidget() {
     return GetBuilder<CartController>(
         init: Get.put(CartController()),
@@ -710,7 +601,7 @@ class ProductView2 extends StatelessWidget {
                       right: 16,
                     ),
                     child: SvgPicture.asset(
-                      "assets/icon/Handbag.svg",
+                      "assets/icon/shopping-bag.svg",
                     ),
                   ),
                   cartController.cart.lines!.isNotEmpty

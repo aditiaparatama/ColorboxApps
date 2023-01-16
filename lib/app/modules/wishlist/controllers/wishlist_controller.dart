@@ -21,6 +21,8 @@ class WishlistController extends GetxController {
   List<Product> get product => _product;
   int _selected = 0;
   int get selected => _selected;
+  String _tempColor = "";
+  String _tempHandle = "";
 
   @override
   void onInit() async {
@@ -85,11 +87,13 @@ class WishlistController extends GetxController {
 
   Future<void> fetchWishlist() async {
     UserModel? _user = settingsController.userModel;
-    var result = await WhistlistProvider().getAllDataNew(
-        (_user.id ?? "").replaceAll("gid://shopify/Customer/", ""));
+    if (_user.id != null) {
+      var result = await WhistlistProvider().getAllDataNew(
+          (_user.id ?? "").replaceAll("gid://shopify/Customer/", ""));
 
-    if (result != null && result.containsKey("items")) {
-      _wishlist = Wishlist.fromJson(result);
+      if (result != null && result.containsKey("items")) {
+        _wishlist = Wishlist.fromJson(result);
+      }
     }
   }
 
@@ -139,15 +143,43 @@ class WishlistController extends GetxController {
     // };
 
     var variables = {
+      "action": action,
       "customerId": settingsController.userModel.id!
           .replaceAll("gid://shopify/Customer/", ""),
       "productId": productId.replaceAll("gid://shopify/Product/", ""),
       "variantId": variantId.replaceAll("gid://shopify/ProductVariant/", "")
     };
-    var result = await WhistlistProvider().getActionNew(variables, action);
+    await WhistlistProvider().getActionNew(variables, action);
 
     // if (result != null && result["type"] == "error") {
     //   alertGagal(result["message"]);
     // }
+  }
+
+  changeColorProduct(int index, String color, String curHandle) async {
+    Product temp = product[index];
+    String colorBefore = (_tempColor == "")
+        ? temp.options[1].values[0]
+        : (_tempHandle != "" &&
+                _tempHandle.substring(0, 10) == curHandle.substring(0, 10))
+            ? _tempColor
+            : temp.options[1].values[0];
+
+    String handle = (temp.handle!)
+        .replaceAll(colorBefore.toLowerCase().replaceAll(" ", "-"), "");
+    var check = handle.split("-");
+    handle = (check[check.length - 1] == "")
+        ? (handle + color.toLowerCase())
+        : handle.replaceAll(
+            "--", "-" + color.toLowerCase().replaceAll(" ", "-") + "-");
+
+    var result = await ProductProvider().getProductByHandle(handle);
+    Product _product = Product.fromJson(result["product"]);
+    _tempHandle = curHandle;
+    _tempColor = color;
+    product[index].handle = _product.handle;
+    product[index].totalInventory = _product.totalInventory;
+    product[index].image[0] = _product.image[0];
+    update();
   }
 }

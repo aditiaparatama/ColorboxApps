@@ -1,11 +1,9 @@
 import 'package:colorbox/app/modules/collections/controllers/collections_controller.dart';
 import 'package:colorbox/app/modules/collections/views/widgets/collection_body.dart';
-import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/modules/collections/views/widgets/filter_bottomsheet.dart';
-import 'package:colorbox/app/modules/collections/views/widgets/search_collection.dart';
 import 'package:colorbox/app/modules/collections/views/widgets/sort_bottomsheet.dart';
+import 'package:colorbox/app/widgets/appbar_new.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
-import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/empty_page.dart';
 import 'package:colorbox/app/widgets/widget.dart';
 import 'package:colorbox/constance.dart';
@@ -88,22 +86,12 @@ class CollectionsMainView extends GetView<CollectionsController> {
                 resizeToAvoidBottomInset: false,
                 backgroundColor: Colors.white,
                 appBar: PreferredSize(
-                  preferredSize: const Size.fromHeight(56),
-                  child: AppBar(
-                    title: const SearchCollection(),
-                    centerTitle: false,
-                    elevation: 3,
-                    shadowColor: Colors.grey.withOpacity(0.3),
-                    leadingWidth: 36,
-                    leading: IconButton(
-                        padding: const EdgeInsets.all(16),
-                        onPressed: () => Get.back(),
-                        icon: const Icon(Icons.arrow_back)),
-                    actions: [
-                      bagWidget(),
-                    ],
-                  ),
-                ),
+                    preferredSize: const Size.fromHeight(56),
+                    child: AppBarNew(
+                      title: (indexMenu == null)
+                          ? _menu.title.toUpperCase()
+                          : _menu[0].subject.toUpperCase(),
+                    )),
                 body: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -112,40 +100,42 @@ class CollectionsMainView extends GetView<CollectionsController> {
                           const EdgeInsets.only(left: 16, right: 16, top: 16),
                       child: Row(
                         children: [
-                          Expanded(
-                            child: SizedBox(
-                              child: TabBar(
-                                isScrollable: true,
-                                tabs: control.listTabs,
-                                controller: tabController,
-                                labelColor: colorTextBlack,
-                                labelPadding:
-                                    const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                                labelStyle: textStyle.copyWith(
-                                    fontSize: 14.0,
-                                    color: colorTextBlack,
-                                    fontWeight: FontWeight.w600),
-                                unselectedLabelStyle: textStyle.copyWith(
-                                    fontSize: 14.0,
-                                    color: const Color(0xFF9B9B9B)),
-                                onTap: (index) {
-                                  controller.setTabBar(_menu,
-                                      parent:
-                                          (indexMenu == null) ? true : false,
-                                      index: index);
-                                  _pControl.jumpToPage(index);
-                                },
+                          if (control.listTabs.length > 1) ...[
+                            Expanded(
+                              child: SizedBox(
+                                child: TabBar(
+                                  isScrollable: true,
+                                  tabs: control.listTabs,
+                                  controller: tabController,
+                                  labelColor: colorTextBlack,
+                                  labelPadding:
+                                      const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                                  labelStyle: textStyle.copyWith(
+                                      fontSize: 14.0,
+                                      color: colorTextBlack,
+                                      fontWeight: FontWeight.w600),
+                                  unselectedLabelStyle: textStyle.copyWith(
+                                      fontSize: 14.0,
+                                      color: const Color(0xFF9B9B9B)),
+                                  onTap: (index) {
+                                    controller.setTabBar(_menu,
+                                        parent:
+                                            (indexMenu == null) ? true : false,
+                                        index: index);
+                                    _pControl.jumpToPage(index);
+                                  },
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 8),
+                            const SizedBox(width: 8),
+                          ],
                           InkWell(
                             onTap: (controller.loading.value)
                                 ? null
                                 : () => sortBottomSheet(control.collection.id!),
                             child: Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 11, vertical: 8),
+                                  horizontal: 8.5, vertical: 6.2),
                               decoration: const BoxDecoration(
                                 border: Border(
                                     left: BorderSide(color: Color(0xFFE5E8EB)),
@@ -153,8 +143,20 @@ class CollectionsMainView extends GetView<CollectionsController> {
                                     bottom:
                                         BorderSide(color: Color(0xFFE5E8EB))),
                               ),
-                              child: SvgPicture.asset(
-                                  "assets/icon/ArrowsDownUp.svg"),
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                      "assets/icon/arrows-up-down.svg"),
+                                  if (control.listTabs.length == 1) ...[
+                                    const SizedBox(width: 8),
+                                    const CustomText(
+                                      text: "Filter",
+                                      color: colorNeutral100,
+                                      fontWeight: FontWeight.w400,
+                                    )
+                                  ]
+                                ],
+                              ),
                             ),
                           ),
                           InkWell(
@@ -163,12 +165,24 @@ class CollectionsMainView extends GetView<CollectionsController> {
                                 : () => filterBottomSheet(),
                             child: Container(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 11, vertical: 8),
+                                  horizontal: 8.5, vertical: 6.2),
                               decoration: BoxDecoration(
                                   border: Border.all(
                                       color: const Color(0xFFE5E8EB))),
-                              child: SvgPicture.asset(
-                                  "assets/icon/SlidersHorizontal.svg"),
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                      "assets/icon/adjustments-horizontal.svg"),
+                                  if (control.listTabs.length == 1) ...[
+                                    const SizedBox(width: 8),
+                                    const CustomText(
+                                      text: "Sortir",
+                                      color: colorNeutral100,
+                                      fontWeight: FontWeight.w400,
+                                    )
+                                  ]
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -200,8 +214,8 @@ class CollectionsMainView extends GetView<CollectionsController> {
                                           gridDelegate:
                                               const SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 2,
-                                            mainAxisSpacing: 24,
-                                            crossAxisSpacing: 24,
+                                            mainAxisSpacing: 16,
+                                            crossAxisSpacing: 16,
                                             childAspectRatio: 9 / 16,
                                           ),
                                           itemBuilder: (_, i) {
@@ -242,50 +256,6 @@ class CollectionsMainView extends GetView<CollectionsController> {
                     )),
               );
             }),
-          );
-        });
-  }
-
-  Widget bagWidget() {
-    return GetBuilder<CartController>(
-        init: Get.put(CartController()),
-        builder: (cartController) {
-          return Center(
-            child: InkWell(
-              onTap: () => Get.toNamed(Routes.CART),
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      right: 16,
-                    ),
-                    child: SvgPicture.asset(
-                      "assets/icon/Handbag.svg",
-                    ),
-                  ),
-                  cartController.cart.lines!.isNotEmpty
-                      ? Positioned(
-                          top: 0,
-                          right: 10,
-                          child: Container(
-                            width: 15,
-                            height: 15,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: Colors.red),
-                            child: CustomText(
-                              text:
-                                  cartController.cart.totalQuantity.toString(),
-                              fontSize: 10,
-                              color: Colors.white,
-                            ),
-                          ),
-                        )
-                      : const SizedBox()
-                ],
-              ),
-            ),
           );
         });
   }

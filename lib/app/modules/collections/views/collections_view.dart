@@ -128,6 +128,10 @@ class CollectionsView extends GetView<CollectionsController> {
                                                         .collection
                                                         .products[i]),
                                                 child: ItemCard(
+                                                  index: i,
+                                                  controller: controller,
+                                                  product: controller
+                                                      .collection.products[i],
                                                   title: control.collection
                                                       .products[i].title!,
                                                   image: control.collection

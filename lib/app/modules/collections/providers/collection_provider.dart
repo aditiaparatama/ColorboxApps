@@ -34,6 +34,7 @@ class CollectionProvider extends GetConnect {
                   handle
                   description
                   descriptionHtml
+                  tags
                   productType
                   options {
                       name
@@ -104,6 +105,7 @@ class CollectionProvider extends GetConnect {
                   description
                   descriptionHtml
                   productType
+                  tags
                   options {
                       name
                       values
@@ -189,6 +191,7 @@ class CollectionProvider extends GetConnect {
                   handle
                   description
                   descriptionHtml
+                  tags
                   productType
                   options {
                       name

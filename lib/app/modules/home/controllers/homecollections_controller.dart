@@ -1,5 +1,7 @@
+import 'package:colorbox/app/modules/collections/models/product_model.dart';
 import 'package:colorbox/app/modules/collections/providers/collection_provider.dart';
 import 'package:colorbox/app/modules/home/models/homecollection_model.dart';
+import 'package:colorbox/app/modules/product/providers/product_providers.dart';
 import 'package:colorbox/constance.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +44,8 @@ class HomeCollectionsController extends GetxController {
   int selectedIndex = 0;
   int subjectID = 0;
   int orderBy = 2;
+  String _tempColor = "";
+  String _tempHandle = "";
   String _filtersDefault = "";
   List<dynamic> filterList = [
     {"available": true}
@@ -262,6 +266,33 @@ class HomeCollectionsController extends GetxController {
       subjectID = menu[index].subjectID!;
       fetchCollectionProduct(menu[index].subjectID!, defaultSortBy);
     }
+    update();
+  }
+
+  changeColorProduct(int index, String color, String curHandle) async {
+    Product temp = _collection.products[index];
+    String colorBefore = (_tempColor == "")
+        ? temp.options[1].values[0]
+        : (_tempHandle != "" &&
+                _tempHandle.substring(0, 10) == curHandle.substring(0, 10))
+            ? _tempColor
+            : temp.options[1].values[0];
+
+    String handle = (temp.handle!)
+        .replaceAll(colorBefore.toLowerCase().replaceAll(" ", "-"), "");
+    var check = handle.split("-");
+    handle = (check[check.length - 1] == "")
+        ? (handle + color.toLowerCase())
+        : handle.replaceAll(
+            "--", "-" + color.toLowerCase().replaceAll(" ", "-") + "-");
+
+    var result = await ProductProvider().getProductByHandle(handle);
+    Product _product = Product.fromJson(result["product"]);
+    _tempHandle = curHandle;
+    _tempColor = color;
+    _collection.products[index].handle = _product.handle;
+    _collection.products[index].totalInventory = _product.totalInventory;
+    _collection.products[index].image[0] = _product.image[0];
     update();
   }
 }

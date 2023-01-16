@@ -1,3 +1,4 @@
+import 'package:colorbox/app/data/models/history_model.dart';
 import 'package:colorbox/app/modules/orders/models/order_model.dart';
 import 'package:colorbox/app/modules/orders/providers/order_provider.dart';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
@@ -11,6 +12,8 @@ class OrdersController extends GetxController {
   List<Order> get order => _orders;
   List<Order> _ordersFilter = [];
   List<Order> get ordersFilter => _ordersFilter;
+  List<History> _history = [];
+  List<History> get history => _history;
   final ValueNotifier _loading = ValueNotifier(true);
   ValueNotifier get loading => _loading;
   final ValueNotifier _loadingMore = ValueNotifier(false);
@@ -128,5 +131,19 @@ class OrdersController extends GetxController {
     countPesanan = temp.reduce((a, b) => a + b);
     update();
     return countPesanan;
+  }
+
+  Future<void> lacakPengiriman(String noResi) async {
+    _history = [];
+    var result = await OrderProvider().trackingLogistik(noResi);
+
+    if (!result.containsKey("error")) {
+      for (int i = 0; i < result["history"].length; i++) {
+        _history.add(History.fromJson(result["history"][i], i));
+      }
+
+      _history.sort((a, b) => b.no!.compareTo(a.no!));
+    }
+    update();
   }
 }

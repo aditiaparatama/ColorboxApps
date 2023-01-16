@@ -47,18 +47,23 @@ class WhistlistProvider extends GetConnect {
   Future<dynamic> getActionNew(dynamic variables, String action) async {
     try {
       dynamic response;
-      if (action == "add") {
-        response = await post(urlWishlistNew, variables, headers: {
-          "Authorization": apiKeyWishlist,
-          "Content-Type": "application/json"
-        });
-      } else if (action == "remove") {
-        String productId = variables["productId"];
-        response = await delete("$urlWishlistNew/$productId", headers: {
-          "Authorization": apiKeyWishlist,
-          "Content-Type": "application/json"
-        });
-      }
+      // if (action == "add") {
+      //   response = await post(urlWishlistNew, variables, headers: {
+      //     "Authorization": apiKeyWishlist,
+      //     "Content-Type": "application/json"
+      //   });
+      // } else if (action == "remove") {
+      //   String productId = variables["productId"];
+      //   response = await delete("$urlWishlistNew/$productId", headers: {
+      //     "Authorization": apiKeyWishlist,
+      //     "Content-Type": "application/json"
+      //   });
+      // }
+
+      response = await post(urlWishlistNew, variables, headers: {
+        "Authorization": apiKeyWishlist,
+        "Content-Type": "application/json"
+      });
 
       return response.body;
     } catch (e) {

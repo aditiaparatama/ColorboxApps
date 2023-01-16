@@ -1,8 +1,7 @@
-import 'package:colorbox/app/modules/collections/views/widgets/search_collection.dart';
 import 'package:colorbox/app/modules/control/controllers/control_controller.dart';
 import 'package:colorbox/app/modules/control/views/submenu_v2_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:colorbox/app/widgets/appbar_custom.dart';
+import 'package:colorbox/app/widgets/appbar_new.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/constance.dart';
@@ -21,11 +20,8 @@ class CollectionList extends StatelessWidget {
           return Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: const PreferredSize(
-              preferredSize: Size.fromHeight(56),
-              child: AppBarCustom(
-                widget: SearchCollection(),
-              ),
-            ),
+                preferredSize: Size.fromHeight(56),
+                child: AppBarNew(title: "KATEGORI")),
             backgroundColor: Colors.white,
             body: Column(
               children: [

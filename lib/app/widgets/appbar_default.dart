@@ -13,7 +13,7 @@ class AppBarDefault extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBar(
         title: CustomText(
-          text: text,
+          text: text.toUpperCase(),
           fontSize: 18,
           fontWeight: FontWeight.bold,
         ),

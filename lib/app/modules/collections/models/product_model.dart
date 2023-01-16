@@ -4,6 +4,7 @@ class Product {
   String? title;
   int? totalInventory;
   String? type;
+  List<String>? tags;
   String? description;
   String? handle;
   List<Options> options = List<Options>.empty();
@@ -35,6 +36,11 @@ class Product {
     description = json['descriptionHtml'];
     handle = json['handle'];
 
+    tags = [];
+    for (final x in json["tags"]) {
+      tags!.add(x);
+    }
+
     image = [];
     for (var i = 0; i < json['images']['edges'].length; i++) {
       image.add(json['images']['edges'][i]['node']['src']);
@@ -60,6 +66,10 @@ class Product {
     totalInventory = json['edges'][index]['node']['totalInventory'];
     description = json['edges'][index]['node']['descriptionHtml'];
     handle = json['edges'][index]['node']['handle'];
+    tags = [];
+    for (final x in json['edges'][index]['node']["tags"]) {
+      tags!.add(x);
+    }
     image = [];
     for (var i = 0;
         i < json['edges'][index]['node']['images']['edges'].length;
@@ -98,6 +108,11 @@ class Product {
     description = json['description'];
     handle = json['handle'];
     totalInventory = json["totalInventory"];
+    tags = [];
+    for (final x in json["tags"]) {
+      tags!.add(x);
+    }
+
     image = [];
     for (var i = 0; i < json['images']['edges'].length; i++) {
       image.add(json['images']['edges'][i]['node']['src']);

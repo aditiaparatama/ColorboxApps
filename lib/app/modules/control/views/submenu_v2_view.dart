@@ -1,7 +1,7 @@
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
-import 'package:colorbox/app/modules/collections/views/widgets/search_collection.dart';
 import 'package:colorbox/app/modules/control/controllers/control_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:colorbox/app/widgets/appbar_new.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/constance.dart';
@@ -22,22 +22,8 @@ class SubmenuV2View extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(56),
-        child: AppBar(
-          title: const SearchCollection(),
-          centerTitle: false,
-          elevation: 3,
-          shadowColor: Colors.grey.withOpacity(0.3),
-          leadingWidth: 36,
-          leading: IconButton(
-              padding: const EdgeInsets.all(16),
-              onPressed: () => Get.back(),
-              icon: const Icon(Icons.arrow_back)),
-          actions: [
-            bagWidget(),
-          ],
-        ),
-      ),
+          preferredSize: const Size.fromHeight(56),
+          child: AppBarNew(title: c[curIndex].title!.toUpperCase())),
       body: Column(
         children: [
           const SizedBox(height: 12),
@@ -122,7 +108,7 @@ class SubmenuV2View extends StatelessWidget {
                       right: 16,
                     ),
                     child: SvgPicture.asset(
-                      "assets/icon/Handbag.svg",
+                      "assets/icon/shopping-bag.svg",
                     ),
                   ),
                   cartController.cart.lines!.isNotEmpty

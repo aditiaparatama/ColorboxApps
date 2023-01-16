@@ -16,6 +16,8 @@ class ProductProvider extends GetConnect {
                       title
                       description
                       handle
+                      tags
+                      productType
                       totalInventory
                       options {
                       name
@@ -76,6 +78,7 @@ class ProductProvider extends GetConnect {
                   handle
                   description
                   descriptionHtml
+                  tags
                   productType
                   options {
                       name

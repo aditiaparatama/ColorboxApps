@@ -17,14 +17,19 @@ class CustomRadio extends StatefulWidget {
 
 class CustomRadioState extends State<CustomRadio> {
   List<RadioModel> radioData = [];
+  int? lastIndex;
   // final ProductController _productController = Get.put(ProductController());
 
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<void> initializeSettings() async {
+    radioData = [];
     for (int i = 0; i < widget.listData!.length; i++) {
       radioData.add(RadioModel(
-          false,
+          (lastIndex != null && lastIndex == i) ? true : false,
           widget.listData![i],
           widget.controller.getStock(
               widget.listData![i],
@@ -36,30 +41,35 @@ class CustomRadioState extends State<CustomRadio> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemCount: widget.listData!.length,
-      itemBuilder: (BuildContext context, int index) {
-        return InkWell(
-          //highlightColor: Colors.red,
-          splashColor: Colors.blueAccent,
-          onTap: () {
-            widget.controller.sizeTemp = radioData[index].buttonText;
-            widget.controller.getSelectedValue(
-                radioData[index].buttonText,
-                (widget.controller.variant!.options.length > 1)
-                    ? widget.controller.variant!.options[1].value!
-                    : "");
-            setState(() {
-              // ignore: avoid_function_literals_in_foreach_calls
-              radioData.forEach((element) => element.isSelected = false);
-              radioData[index].isSelected = true;
-            });
-          },
-          child: RadioItem(radioData[index]),
-        );
-      },
-    );
+    return FutureBuilder(
+        initialData: initializeSettings(),
+        builder: (context, snapshot) {
+          return ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: widget.listData!.length,
+            itemBuilder: (BuildContext context, int index) {
+              return InkWell(
+                //highlightColor: Colors.red,
+                splashColor: Colors.blueAccent,
+                onTap: () {
+                  lastIndex = index;
+                  widget.controller.sizeTemp = radioData[index].buttonText;
+                  widget.controller.getSelectedValue(
+                      radioData[index].buttonText,
+                      (widget.controller.variant!.options.length > 1)
+                          ? widget.controller.variant!.options[1].value!
+                          : "");
+                  setState(() {
+                    // ignore: avoid_function_literals_in_foreach_calls
+                    radioData.forEach((element) => element.isSelected = false);
+                    radioData[index].isSelected = true;
+                  });
+                },
+                child: RadioItem(radioData[index]),
+              );
+            },
+          );
+        });
   }
 }
 

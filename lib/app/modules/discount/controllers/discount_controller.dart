@@ -82,9 +82,8 @@ class DiscountController extends GetxController {
   }
 
   Future<void> groupingDiscountAutomatic(List<String>? idCollection) async {
-    await homeController.fetchData();
-    listingDiscountAutomatic = homeController.announcementProduct;
-
+    // await homeController.fetchData();
+    listingDiscountAutomatic = [];
     await getDiscountAutomatic();
 
     var formatter = DateFormat('dd MMMM yyyy');
@@ -93,19 +92,21 @@ class DiscountController extends GetxController {
 
     for (final x in idCollection!) {
       for (final discount in _discountAutomatic) {
-        index = (discount.collections!.indexWhere((e) => e.id == x));
+        index =
+            (discount.customerBuys!.collections!.indexWhere((e) => e.id == x));
         if (index >= 0) {
           var expired = (discount.endsAt == null)
               ? null
               : DateTime.parse(discount.endsAt!);
 
           Announcement tempData = Announcement(
-              "https://widget.delamibrands.com/colorbox/mobile/icons/ic_outline-discount.svg",
+              "https://widget.delamibrands.com/colorbox/mobile/icons/icon-automatic.png",
               discount.title,
               discount.summary! +
                   ((expired != null)
                       ? "#Berlaku s.d ${formatter.format(expired)}"
-                      : ""));
+                      : ""),
+              "automatic");
           if (homeController.excludeVoucher.isEmpty ||
               !homeController.excludeVoucher.contains(discount.title)) {
             listingDiscountAutomatic.add(tempData);
@@ -117,12 +118,13 @@ class DiscountController extends GetxController {
         var expired = (x.endsAt == null) ? null : DateTime.parse(x.endsAt!);
 
         Announcement tempData = Announcement(
-            "https://widget.delamibrands.com/colorbox/mobile/icons/ic_outline-discount.svg",
+            "https://widget.delamibrands.com/colorbox/mobile/icons/icon-code.png",
             x.title,
             x.summary! +
                 ((expired != null)
                     ? "#Berlaku s.d ${formatter.format(expired)}"
-                    : ""));
+                    : ""),
+            "code");
         listingDiscountAutomatic.add(tempData);
       }
 

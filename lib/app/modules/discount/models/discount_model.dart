@@ -85,25 +85,60 @@ class CustomerGets {
   bool? appliesOnOneTimePurchase;
   bool? appliesOnSubscription;
   Value? value;
+  String? type;
+  List<DiscountCollection>? collections;
+  List<DiscountCollection>? products;
 
-  CustomerGets(this.appliesOnOneTimePurchase, this.appliesOnSubscription);
+  CustomerGets(this.appliesOnOneTimePurchase, this.appliesOnSubscription,
+      this.value, this.type, this.collections, this.products);
 
   CustomerGets.fromJson(var json) {
     appliesOnOneTimePurchase = json['appliesOnOneTimePurchase'];
     appliesOnSubscription = json['appliesOnSubscription'];
     value = json.containsKey("value") ? Value.fromBxgY(json["value"]) : null;
+    type = json.containsKey("items") ? json["items"]["__typename"] : null;
+
+    collections = [];
+    if (json.containsKey("items") && json["items"].containsKey("collections")) {
+      for (final x in json["items"]["collections"]["edges"]) {
+        collections!.add(DiscountCollection.fromJson(x["node"]));
+      }
+    }
+    products = [];
+    if (json.containsKey("items") && json["items"].containsKey("products")) {
+      for (final x in json["items"]["products"]["edges"]) {
+        products!.add(DiscountCollection.fromJson(x["node"]));
+      }
+    }
   }
 }
 
 class CustomerBuys {
   bool? appliesOnOneTimePurchase;
   bool? appliesOnSubscription;
+  String? type;
+  List<DiscountCollection>? collections;
+  List<DiscountCollection>? products;
 
-  CustomerBuys(this.appliesOnOneTimePurchase, this.appliesOnSubscription);
+  CustomerBuys(this.appliesOnOneTimePurchase, this.appliesOnSubscription,
+      this.type, this.collections, this.products);
 
   CustomerBuys.fromJson(var json) {
     appliesOnOneTimePurchase = json['appliesOnOneTimePurchase'];
     appliesOnSubscription = json['appliesOnSubscription'];
+    type = json.containsKey("items") ? json["items"]["__typename"] : null;
+    collections = [];
+    if (json.containsKey("items") && json["items"].containsKey("collections")) {
+      for (final x in json["items"]["collections"]["edges"]) {
+        collections!.add(DiscountCollection.fromJson(x["node"]));
+      }
+    }
+    products = [];
+    if (json.containsKey("items") && json["items"].containsKey("products")) {
+      for (final x in json["items"]["products"]["edges"]) {
+        products!.add(DiscountCollection.fromJson(x["node"]));
+      }
+    }
   }
 }
 
@@ -175,6 +210,7 @@ class DiscountAutomatic {
   List<DiscountCollection>? collections;
   MinimumRequirement? minimumRequirement;
   CustomerGets? customerGets;
+  CustomerBuys? customerBuys;
   CombineWith combineWith = CombineWith.isEmpty();
 
   DiscountAutomatic(
@@ -185,6 +221,7 @@ class DiscountAutomatic {
       this.discountClass,
       this.minimumRequirement,
       this.customerGets,
+      this.customerBuys,
       this.collections,
       this.combineWith);
 
@@ -203,6 +240,7 @@ class DiscountAutomatic {
     }
     combineWith = CombineWith.fromJson(json['combinesWith']);
     customerGets = CustomerGets.fromJson(json["customerGets"]);
+    customerBuys = CustomerBuys.fromJson(json["customerBuys"]);
     collections = [];
     if (json["customerGets"]["items"].containsKey("collections")) {
       if (json["customerGets"]["items"]["collections"]["edges"].length > 0) {

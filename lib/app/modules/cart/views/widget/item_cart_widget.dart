@@ -132,52 +132,53 @@ class ItemCartWidget extends StatelessWidget {
         children: [
           Column(
             children: [
-              ((controller.cart.discountCodes!.isEmpty ||
-                          controller.cart.discountCodes![0].code == "") &&
-                      (indexCollectionPromo >= 0) &&
-                      collectionPromo!.subjectID != null &&
-                      _cart.merchandise!.inventoryQuantity! > 0 &&
-                      !(discountRunning.applied ?? false) &&
-                      discountRunning.typename != "DiscountAutomaticBxgy")
-                  ? InkWell(
-                      onTap: () {
-                        Get.offNamed(Routes.COLLECTIONS, arguments: {
-                          "menu": collectionPromo,
-                          "indexMenu": null,
-                          "sortBy": defaultSortBy
-                        });
-                      },
-                      child: Container(
-                        width: Get.width - 32,
-                        margin: const EdgeInsets.only(bottom: 14),
-                        color: colorBoxInfo,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 4, vertical: 8),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.discount,
-                              size: 14,
-                            ),
-                            const SizedBox(width: 6),
-                            CustomText(
-                              text: (collectionPromo!.title ?? "") + ". ",
-                              textAlign: TextAlign.center,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            const CustomText(
-                              text: "Tambah Lagi",
-                              textAlign: TextAlign.center,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ],
+              if (discountRunning.typename != "DiscountAutomaticBxgy")
+                ((controller.cart.discountCodes!.isEmpty ||
+                            controller.cart.discountCodes![0].code == "") &&
+                        (indexCollectionPromo >= 0) &&
+                        collectionPromo!.subjectID != null &&
+                        _cart.merchandise!.inventoryQuantity! > 0 &&
+                        !(discountRunning.applied ?? false) &&
+                        discountRunning.typename != "DiscountAutomaticBxgy")
+                    ? InkWell(
+                        onTap: () {
+                          Get.offNamed(Routes.COLLECTIONS, arguments: {
+                            "menu": collectionPromo,
+                            "indexMenu": null,
+                            "sortBy": defaultSortBy
+                          });
+                        },
+                        child: Container(
+                          width: Get.width - 32,
+                          margin: const EdgeInsets.only(bottom: 14),
+                          color: colorBoxInfo,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 4, vertical: 8),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.discount,
+                                size: 14,
+                              ),
+                              const SizedBox(width: 6),
+                              CustomText(
+                                text: (collectionPromo!.title ?? "") + ". ",
+                                textAlign: TextAlign.center,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              const CustomText(
+                                text: "Tambah Lagi",
+                                textAlign: TextAlign.center,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    )
-                  : const SizedBox(),
+                      )
+                    : const SizedBox(),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 // mainAxisSize: MainAxisSize.min,

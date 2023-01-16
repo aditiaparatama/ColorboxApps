@@ -1,5 +1,6 @@
 import 'package:colorbox/app/modules/collections/controllers/collections_controller.dart';
 import 'package:colorbox/app/modules/collections/models/product_model.dart';
+import 'package:colorbox/app/modules/product/providers/product_providers.dart';
 import 'package:colorbox/app/modules/search/providers/search_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,6 +21,8 @@ class SearchController extends GetxController {
 
   final int _limit = 10;
   bool firstView = true;
+  String _tempColor = "";
+  String _tempHandle = "";
 
   void fetchSearchProduct(String search) async {
     _loading.value = true;
@@ -66,6 +69,33 @@ class SearchController extends GetxController {
       _product.add(_productTemp[i]);
     }
     _nextLoad.value = false;
+    update();
+  }
+
+  changeColorProduct(int index, String color, String curHandle) async {
+    Product temp = product[index];
+    String colorBefore = (_tempColor == "")
+        ? temp.options[1].values[0]
+        : (_tempHandle != "" &&
+                _tempHandle.substring(0, 10) == curHandle.substring(0, 10))
+            ? _tempColor
+            : temp.options[1].values[0];
+
+    String handle = (temp.handle!)
+        .replaceAll(colorBefore.toLowerCase().replaceAll(" ", "-"), "");
+    var check = handle.split("-");
+    handle = (check[check.length - 1] == "")
+        ? (handle + color.toLowerCase())
+        : handle.replaceAll(
+            "--", "-" + color.toLowerCase().replaceAll(" ", "-") + "-");
+
+    var result = await ProductProvider().getProductByHandle(handle);
+    Product _product = Product.fromJson(result["product"]);
+    _tempHandle = curHandle;
+    _tempColor = color;
+    product[index].handle = _product.handle;
+    product[index].totalInventory = _product.totalInventory;
+    product[index].image[0] = _product.image[0];
     update();
   }
 }

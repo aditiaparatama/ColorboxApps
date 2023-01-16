@@ -66,7 +66,7 @@ class HomeView extends GetView<HomeController> {
                                   ? controller.newsletter.title
                                   : "Terimakasih Telah Berlangganan Colorbox",
                               fontSize: 20,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w800,
                               textOverflow: TextOverflow.fade,
                               textAlign: TextAlign.center,
                             ),
@@ -202,9 +202,15 @@ class HomeView extends GetView<HomeController> {
       body: GetBuilder(
           init: Get.put(HomeController()),
           builder: (_) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              await _profileController.fetchingUser();
               if (controller.firstBuild &&
-                  controller.newsletter.image != null) {
+                  controller.newsletter.image != null &&
+                  // ignore: unrelated_type_equality_checks
+                  (_profileController.userModel.emailMarketing != null &&
+                      _profileController
+                              .userModel.emailMarketing!.marketingState !=
+                          "SUBSCRIBED")) {
                 controller.firstBuild = false;
                 _showPopUp(context);
               }

@@ -75,8 +75,8 @@ class HomeSearch extends StatelessWidget {
                         Center(
                           child: CircleAvatar(
                             radius: 16.0,
-                            child:
-                                SvgPicture.asset("assets/icon/bx-handbag.svg"),
+                            child: SvgPicture.asset(
+                                "assets/icon/shopping-bag.svg"),
                           ),
                         ),
                         cartController.cart.lines!.isNotEmpty

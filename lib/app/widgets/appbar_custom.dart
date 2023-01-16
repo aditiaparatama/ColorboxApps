@@ -41,7 +41,7 @@ class AppBarCustom extends StatelessWidget {
                           right: 16,
                         ),
                         child: SvgPicture.asset(
-                          "assets/icon/Handbag.svg",
+                          "assets/icon/shopping-bag.svg",
                         ),
                       ),
                       cartController.cart.lines!.isNotEmpty

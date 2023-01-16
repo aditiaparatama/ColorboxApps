@@ -38,6 +38,7 @@ class SearchProvider extends GetConnect {
             description
             descriptionHtml
             handle
+            tags
             options {
                 name
                 values
@@ -105,6 +106,7 @@ class SearchProvider extends GetConnect {
             description
             descriptionHtml
             handle
+            tags
             options {
                 name
                 values

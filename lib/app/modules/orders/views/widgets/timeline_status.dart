@@ -1,4 +1,6 @@
+import 'package:colorbox/app/modules/orders/controllers/orders_controller.dart';
 import 'package:colorbox/app/modules/orders/models/order_model.dart';
+import 'package:colorbox/app/modules/orders/views/detail_status_view.dart';
 import 'package:colorbox/app/modules/settings/views/web_view.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/constance.dart';
@@ -8,7 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 
-class TimelineStatus extends StatelessWidget {
+class TimelineStatus extends GetView<OrdersController> {
   final Order order;
   final String? filter;
   const TimelineStatus({Key? key, required this.order, this.filter})
@@ -97,6 +99,11 @@ class TimelineStatus extends StatelessWidget {
               if (order.fulfillments != null)
                 InkWell(
                   onTap: () {
+                    if (controller.history.isNotEmpty) {
+                      Get.to(DetailStatusView(
+                          order.fulfillments!.trackingInfo!.number!));
+                      return;
+                    }
                     Get.to(WebViewPage(
                         title: "Lacak Pengiriman",
                         url: (order.fulfillments!.trackingInfo!.url!
@@ -169,6 +176,73 @@ class TimelineStatus extends StatelessWidget {
                 )
             ],
           ),
+          if (controller.history.isNotEmpty)
+            GestureDetector(
+              onTap: () => Get.to(
+                  DetailStatusView(order.fulfillments!.trackingInfo!.number!)),
+              child: Container(
+                margin: const EdgeInsets.only(top: 12, left: 79),
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xFF115AC8)),
+                    borderRadius: const BorderRadius.all(Radius.circular(6))),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 16,
+                      child: Center(
+                        child: Stack(
+                          children: [
+                            Center(
+                              child: Container(
+                                color: const Color(0xFFE5E8EB),
+                                width: 1,
+                                constraints:
+                                    const BoxConstraints(minHeight: 50),
+                              ),
+                            ),
+                            Center(
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                    color: Color(0xFF115AC8),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(100))),
+                                height: 10,
+                                width: 10,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Flexible(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomText(
+                            text: controller.history[0].desc,
+                            textOverflow: TextOverflow.fade,
+                            color: const Color(0xFF115AC8),
+                            fontSize: 12,
+                          ),
+                          const SizedBox(height: 2),
+                          CustomText(
+                            text: controller.history[0].date,
+                            color: const Color(0xFF777777),
+                            fontSize: 10,
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,

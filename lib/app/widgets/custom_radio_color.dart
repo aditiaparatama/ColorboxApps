@@ -2,7 +2,6 @@ import 'package:colorbox/app/modules/product/controllers/product_controller.dart
 import 'package:colorbox/constance.dart';
 import 'package:colorbox/helper/custom_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class CustomRadioColor extends StatefulWidget {
   final List<String>? listData;
@@ -72,12 +71,10 @@ class RadioItem extends StatelessWidget {
             height: 24.0,
             width: 24.0,
             decoration: BoxDecoration(
-              border: _item.isSelected
-                  ? Border.all(
-                      color: colorTextBlack,
-                      width: 1.0,
-                    )
-                  : null,
+              border: Border.all(
+                color: _item.isSelected ? colorNeutral100 : colorNeutral60,
+                width: 1.0,
+              ),
               borderRadius: const BorderRadius.all(
                 Radius.circular(50),
               ),
@@ -89,11 +86,6 @@ class RadioItem extends StatelessWidget {
                 child: const Center(),
                 decoration: BoxDecoration(
                   color: customColors(_item.buttonText),
-                  border: Border.all(
-                      width: _item.isSelected ? 1.0 : 1.0,
-                      color: _item.isSelected
-                          ? customColors(_item.buttonText)
-                          : Colors.grey),
                   borderRadius: const BorderRadius.all(Radius.circular(50.0)),
                 ),
               ),

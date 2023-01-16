@@ -39,7 +39,8 @@ class ProfileProvider extends GetConnect {
   }
 
   Future<dynamic> register(
-      String email, String password, String firstN, String lastN) async {
+      String email, String password, String firstN, String lastN,
+      {bool subscribe = false}) async {
     final GraphQLClient _client = getShopifyGraphQLClient();
 
     final QueryOptions options = QueryOptions(
@@ -61,7 +62,7 @@ class ProfileProvider extends GetConnect {
       ),
       variables: {
         "input": {
-          "acceptsMarketing": false,
+          "acceptsMarketing": subscribe,
           "email": email.toLowerCase(),
           "firstName": firstN,
           "lastName": lastN,
@@ -199,6 +200,9 @@ class ProfileProvider extends GetConnect {
             email
             phone
             note
+            emailMarketingConsent{
+                marketingState
+            }
             addresses(first:10){
                 id
                 firstName
