@@ -36,6 +36,7 @@ class CollectionProvider extends GetConnect {
                   descriptionHtml
                   tags
                   productType
+                  totalInventory
                   options {
                       name
                       values
@@ -105,6 +106,7 @@ class CollectionProvider extends GetConnect {
                   description
                   descriptionHtml
                   productType
+                  totalInventory
                   tags
                   options {
                       name
@@ -192,6 +194,7 @@ class CollectionProvider extends GetConnect {
                   description
                   descriptionHtml
                   tags
+                  totalInventory
                   productType
                   options {
                       name

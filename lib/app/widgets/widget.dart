@@ -128,3 +128,23 @@ void alertGagal(String text) {
       colorText: Colors.white,
       snackPosition: SnackPosition.BOTTOM);
 }
+
+Future<bool> modalAlert(
+    BuildContext context, String title, Widget content, actions) async {
+  return await showDialog(
+        //show confirm dialogue
+        //the return value will be from "Yes" or "No" options
+        context: context,
+        builder: (context) => AlertDialog(
+          title: CustomText(
+            text: title,
+            fontSize: 16,
+            textAlign: TextAlign.center,
+            fontWeight: FontWeight.w700,
+          ),
+          content: content,
+          actions: actions,
+        ),
+      ) ??
+      false; //if showDialouge had returned null, then return false
+}

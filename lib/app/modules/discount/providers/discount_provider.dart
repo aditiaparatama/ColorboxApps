@@ -10,7 +10,7 @@ class DiscountProvider extends GetConnect {
       document: gql(
         r'''
         {
-          discountNodes(first: 10, query: "status:active") {
+          discountNodes(first: 20, query: "status:active") {
             # DiscountNodeConnection fields
             edges{
                 node{

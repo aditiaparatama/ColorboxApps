@@ -61,7 +61,8 @@ class AppBarNew extends StatelessWidget {
                       "assets/icon/shopping-bag.svg",
                     ),
                   ),
-                  cartController.cart.lines!.isNotEmpty
+                  cartController.cart.lines!.isNotEmpty &&
+                          cartController.cart.totalQuantity != 0
                       ? Positioned(
                           top: 0,
                           right: 10,

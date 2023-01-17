@@ -7,6 +7,7 @@ import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/widgets/appbar_new.dart';
 import 'package:colorbox/app/widgets/bottomsheet_widget.dart';
+import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/custom_radio_color.dart';
 import 'package:colorbox/app/widgets/custom_radio.dart';
 import 'package:colorbox/app/widgets/widget.dart';
@@ -122,6 +123,62 @@ class ProductView2 extends StatelessWidget {
                                         right: 16,
                                         child: InkWell(
                                           onTap: () async {
+                                            if (controller.userModel.email ==
+                                                null) {
+                                              await modalAlert(
+                                                  context,
+                                                  "Masuk Akun",
+                                                  const CustomText(
+                                                    text:
+                                                        "Masuk akun untuk menambahkan produk ke wishlist",
+                                                    fontSize: 14,
+                                                    textAlign: TextAlign.center,
+                                                    textOverflow:
+                                                        TextOverflow.fade,
+                                                  ),
+                                                  [
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 12),
+                                                      child: CustomButton(
+                                                        backgroundColor:
+                                                            colorTextBlack,
+                                                        color: Colors.white,
+                                                        onPressed: () {
+                                                          Get.toNamed(
+                                                              Routes.PROFILE);
+                                                        },
+                                                        //return false when click on "No"
+                                                        text: 'Masuk Akun',
+                                                        fontSize: 14,
+                                                        height: 48,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 12),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 12),
+                                                      child: CustomButton(
+                                                        backgroundColor:
+                                                            Colors.white,
+                                                        color: colorNeutral100,
+
+                                                        onPressed: () =>
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop(false),
+                                                        //return false when click on "No"
+                                                        text: 'Kembali',
+                                                        fontSize: 14,
+                                                        height: 48,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 24)
+                                                  ]);
+                                              return;
+                                            }
                                             controller.wishlistAdded =
                                                 !controller.wishlistAdded;
                                             controller.update();

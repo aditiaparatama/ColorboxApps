@@ -4,6 +4,7 @@ import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
 import 'package:colorbox/app/modules/home/models/announcement_model.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
+import 'package:colorbox/utilities/extension.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -39,10 +40,15 @@ class DiscountController extends GetxController {
     _discount = [];
     if (result != null) {
       for (final x in result['discountNodes']['edges']) {
-        if (homeController.excludeVoucher.isEmpty ||
-            !homeController.excludeVoucher
-                .contains(x['node']['discount']['title'])) {
-          if (x['node']['discount']['__typename'] == 'DiscountCodeBasic') {
+        if (x['node']['discount']['__typename'] == 'DiscountCodeBasic') {
+          if (EmailValidator(x['node']['discount']['title']).lastChars(2) ==
+              "10") {
+            continue;
+          }
+
+          if (homeController.excludeVoucher.isEmpty ||
+              !homeController.excludeVoucher
+                  .contains(x['node']['discount']['title'])) {
             if (x['node']['discount']['customerSelection']['__typename'] ==
                 'DiscountCustomers') {
               var check = x['node']['discount']['customerSelection']
@@ -92,8 +98,10 @@ class DiscountController extends GetxController {
 
     for (final x in idCollection!) {
       for (final discount in _discountAutomatic) {
-        index =
-            (discount.customerBuys!.collections!.indexWhere((e) => e.id == x));
+        index = (discount.customerBuys == null)
+            ? (discount.collections!.indexWhere((e) => e.id == x))
+            : (discount.customerBuys!.collections!
+                .indexWhere((e) => e.id == x));
         if (index >= 0) {
           var expired = (discount.endsAt == null)
               ? null

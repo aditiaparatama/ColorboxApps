@@ -25,22 +25,37 @@ import '../controllers/cart_controller.dart';
 // ignore: use_key_in_widget_constructors, must_be_immutable
 class CartView extends GetView<CartController> {
   final CollectionsController collectionsController =
-      Get.put(CollectionsController());
+      Get.put(CollectionsController(), tag: "cart");
   int index = 0;
-  int indexDiscount = 0;
+  int indexDiscount = 0, indexBxGy = -1;
   int indexCollection = 0;
   int selisihOrder = 0;
+  double totalPotongan = 0;
+  bool freeGift = false;
 
   Future<void> initializeSettings() async {
+    totalPotongan = 0;
+    freeGift = false;
     await controller.getCart2();
     // await controller.discountController.getDiscountAutomatic();
     if (controller.discountController.discountAutomatic.isNotEmpty) {
       var indexRandom = Random();
+      // var temp = controller.discountController.discountAutomatic
+      //     .indexWhere((element) => element.typename == "DiscountAutomaticBxgy");
+      indexBxGy = controller.discountController.discountAutomatic
+          .indexWhere((element) => element.typename == "DiscountAutomaticBxgy");
       indexDiscount = (controller
               .discountController.discountAutomatic.isNotEmpty)
           ? indexRandom
               .nextInt(controller.discountController.discountAutomatic.length)
           : 0;
+
+      while (controller.discountController.discountAutomatic.isNotEmpty &&
+          indexDiscount == indexBxGy) {
+        indexDiscount = indexRandom
+            .nextInt(controller.discountController.discountAutomatic.length);
+      }
+
       indexCollection = (controller.discountController
               .discountAutomatic[indexDiscount].collections!.isNotEmpty)
           ? indexRandom.nextInt(controller.discountController
@@ -55,6 +70,15 @@ class CartView extends GetView<CartController> {
               .id!
               .replaceAll('gid://shopify/Collection/', '')),
           2);
+
+      for (final x in controller.cart.lines ?? []) {
+        if (double.parse(x.merchandise!.price!.replaceAll(".00", "")).ceil() -
+                double.parse(x.discountAllocations!.amount ?? "0.0").ceil() ==
+            0) {
+          freeGift = true;
+          break;
+        }
+      }
     }
 
     //Simulate other services for 3 seconds
@@ -88,6 +112,17 @@ class CartView extends GetView<CartController> {
                   for (final x in controller.listHabis) {
                     selisihOrder = selisihOrder +
                         int.parse(x.merchandise!.price!.replaceAll(".00", ""));
+                  }
+                }
+                for (final x in controller.cart.lines ?? []) {
+                  freeGift = false;
+                  if (double.parse(x.merchandise!.price!.replaceAll(".00", ""))
+                              .ceil() -
+                          double.parse(x.discountAllocations!.amount ?? "0.0")
+                              .ceil() ==
+                      0) {
+                    freeGift = true;
+                    break;
                   }
                 }
                 return Scaffold(
@@ -255,11 +290,7 @@ class CartView extends GetView<CartController> {
                                   ),
                                   if (controller.discountController
                                           .discountAutomatic.isNotEmpty &&
-                                      controller
-                                              .discountController
-                                              .discountAutomatic[indexDiscount]
-                                              .typename ==
-                                          "DiscountAutomaticBxgy" &&
+                                      indexBxGy >= 0 &&
                                       double.parse(controller
                                                   .cart
                                                   .estimatedCost!
@@ -267,14 +298,26 @@ class CartView extends GetView<CartController> {
                                               "0") >=
                                           double.parse(controller
                                                   .discountController
-                                                  .discountAutomatic[
-                                                      indexDiscount]
+                                                  .discountAutomatic[indexBxGy]
                                                   .minimumRequirement!
                                                   .greaterThanOrEqualToSubtotal ??
-                                              "0"))
+                                              "0") &&
+                                      !freeGift)
                                     GetBuilder<CollectionsController>(
-                                        init: Get.put(CollectionsController()),
-                                        builder: (_) {
+                                        init: Get.put(CollectionsController(),
+                                            tag: "BxGy"),
+                                        tag: "BxGy",
+                                        builder: (controllerBxgy) {
+                                          controllerBxgy.fetchCollectionProduct(
+                                              int.parse(controller
+                                                  .discountController
+                                                  .discountAutomatic[indexBxGy]
+                                                  .collections![0]
+                                                  .id!
+                                                  .replaceAll(
+                                                      'gid://shopify/Collection/',
+                                                      '')),
+                                              2);
                                           return Column(
                                             children: [
                                               Container(
@@ -298,7 +341,7 @@ class CartView extends GetView<CartController> {
                                                           text: controller
                                                                   .discountController
                                                                   .discountAutomatic[
-                                                                      indexDiscount]
+                                                                      indexBxGy]
                                                                   .title ??
                                                               "",
                                                           fontSize: 14,
@@ -310,12 +353,132 @@ class CartView extends GetView<CartController> {
                                                     const SizedBox(height: 8),
                                                     CustomText(
                                                       text:
-                                                          "Selamat ! Setiap pembelanjaan min. Rp ${formatter.format(int.parse(controller.discountController.discountAutomatic[indexDiscount].minimumRequirement!.greaterThanOrEqualToSubtotal!.replaceAll(".0", "")))} berhak mendapatkan Free Collection dibawah ini:",
+                                                          "Selamat ! Setiap pembelanjaan min. Rp ${formatter.format(int.parse(controller.discountController.discountAutomatic[indexBxGy].minimumRequirement!.greaterThanOrEqualToSubtotal!.replaceAll(".0", "")))} berhak mendapatkan Free Collection dibawah ini:",
                                                       fontSize: 12,
                                                       textOverflow:
                                                           TextOverflow.fade,
                                                     )
                                                   ],
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.only(
+                                                    left: 16),
+                                                height: 200,
+                                                child: (controllerBxgy
+                                                        .collection
+                                                        .products
+                                                        .isEmpty)
+                                                    ? const Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      )
+                                                    : GridView.builder(
+                                                        itemCount:
+                                                            controllerBxgy
+                                                                .collection
+                                                                .products
+                                                                .length,
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        gridDelegate:
+                                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                          crossAxisCount: 1,
+                                                          mainAxisSpacing: 12,
+                                                          crossAxisSpacing: 12,
+                                                          childAspectRatio:
+                                                              3 / 1.3,
+                                                        ),
+                                                        itemBuilder: (_, i) {
+                                                          var calcu1 = int.parse(
+                                                                  controllerBxgy
+                                                                      .collection
+                                                                      .products[
+                                                                          i]
+                                                                      .variants[
+                                                                          0]
+                                                                      .price!
+                                                                      .replaceAll(
+                                                                          ".00",
+                                                                          "")) /
+                                                              int.parse(controllerBxgy
+                                                                  .collection
+                                                                  .products[i]
+                                                                  .variants[0]
+                                                                  .compareAtPrice!
+                                                                  .replaceAll(
+                                                                      ".00",
+                                                                      ""));
+                                                          return (i ==
+                                                                      (controllerBxgy
+                                                                              .collection
+                                                                              .products
+                                                                              .length -
+                                                                          1) &&
+                                                                  i != 0)
+                                                              ? ItemCardEnding(
+                                                                  calcu1:
+                                                                      calcu1,
+                                                                  collection:
+                                                                      controllerBxgy
+                                                                          .collection,
+                                                                  homeCollection: {
+                                                                    "title": controllerBxgy
+                                                                        .collection
+                                                                        .title,
+                                                                    "subjectid": int.parse(controllerBxgy
+                                                                        .collection
+                                                                        .id!
+                                                                        .replaceAll(
+                                                                            "gid://shopify/Collection/",
+                                                                            ""))
+                                                                  },
+                                                                  i: i,
+                                                                  isCart: true,
+                                                                )
+                                                              : ItemCardCart(
+                                                                  calcu1:
+                                                                      calcu1,
+                                                                  collection:
+                                                                      controllerBxgy
+                                                                          .collection,
+                                                                  i: i,
+                                                                );
+                                                        }),
+                                              ),
+                                              const SizedBox(height: 40)
+                                            ],
+                                          );
+                                        }),
+                                  if (controller.discountController
+                                          .discountAutomatic.isEmpty ||
+                                      controller
+                                              .discountController
+                                              .discountAutomatic[indexDiscount]
+                                              .typename !=
+                                          "DiscountAutomaticBxgy")
+                                    GetBuilder<CollectionsController>(
+                                        init: Get.put(CollectionsController()),
+                                        tag: "cart",
+                                        builder: (_) {
+                                          return Column(
+                                            children: [
+                                              Container(
+                                                color: colorDiver,
+                                                height: 8,
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.only(
+                                                    top: 24, bottom: 16),
+                                                child: CustomText(
+                                                  text: controller
+                                                          .discountController
+                                                          .discountAutomatic[
+                                                              indexDiscount]
+                                                          .title ??
+                                                      "",
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
                                                 ),
                                               ),
                                               Container(
@@ -407,126 +570,6 @@ class CartView extends GetView<CartController> {
                                             ],
                                           );
                                         }),
-                                  (controller.discountController
-                                              .discountAutomatic.isEmpty ||
-                                          controller
-                                                  .discountController
-                                                  .discountAutomatic[
-                                                      indexDiscount]
-                                                  .typename ==
-                                              "DiscountAutomaticBxgy")
-                                      ? const SizedBox()
-                                      : GetBuilder<CollectionsController>(
-                                          init:
-                                              Get.put(CollectionsController()),
-                                          builder: (_) {
-                                            return Column(
-                                              children: [
-                                                Container(
-                                                  color: colorDiver,
-                                                  height: 8,
-                                                ),
-                                                Container(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 24, bottom: 16),
-                                                  child: CustomText(
-                                                    text: controller
-                                                            .discountController
-                                                            .discountAutomatic[
-                                                                indexDiscount]
-                                                            .title ??
-                                                        "",
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 16),
-                                                  height: 200,
-                                                  child: (collectionsController
-                                                          .collection
-                                                          .products
-                                                          .isEmpty)
-                                                      ? const Center(
-                                                          child:
-                                                              CircularProgressIndicator(),
-                                                        )
-                                                      : GridView.builder(
-                                                          itemCount:
-                                                              collectionsController
-                                                                  .collection
-                                                                  .products
-                                                                  .length,
-                                                          scrollDirection:
-                                                              Axis.horizontal,
-                                                          gridDelegate:
-                                                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                                            crossAxisCount: 1,
-                                                            mainAxisSpacing: 12,
-                                                            crossAxisSpacing:
-                                                                12,
-                                                            childAspectRatio:
-                                                                3 / 1.3,
-                                                          ),
-                                                          itemBuilder: (_, i) {
-                                                            var calcu1 = int.parse(collectionsController
-                                                                    .collection
-                                                                    .products[i]
-                                                                    .variants[0]
-                                                                    .price!
-                                                                    .replaceAll(
-                                                                        ".00",
-                                                                        "")) /
-                                                                int.parse(collectionsController
-                                                                    .collection
-                                                                    .products[i]
-                                                                    .variants[0]
-                                                                    .compareAtPrice!
-                                                                    .replaceAll(
-                                                                        ".00",
-                                                                        ""));
-                                                            return (i ==
-                                                                        (collectionsController.collection.products.length -
-                                                                            1) &&
-                                                                    i != 0)
-                                                                ? ItemCardEnding(
-                                                                    calcu1:
-                                                                        calcu1,
-                                                                    collection:
-                                                                        collectionsController
-                                                                            .collection,
-                                                                    homeCollection: {
-                                                                      "title": collectionsController
-                                                                          .collection
-                                                                          .title,
-                                                                      "subjectid": int.parse(collectionsController
-                                                                          .collection
-                                                                          .id!
-                                                                          .replaceAll(
-                                                                              "gid://shopify/Collection/",
-                                                                              ""))
-                                                                    },
-                                                                    i: i,
-                                                                    isCart:
-                                                                        true,
-                                                                  )
-                                                                : ItemCardCart(
-                                                                    calcu1:
-                                                                        calcu1,
-                                                                    collection:
-                                                                        collectionsController
-                                                                            .collection,
-                                                                    i: i,
-                                                                  );
-                                                          }),
-                                                ),
-                                                const SizedBox(height: 40)
-                                              ],
-                                            );
-                                          }),
                                 ],
                               ),
                             ),
@@ -543,63 +586,69 @@ class CartView extends GetView<CartController> {
   Widget bottomCart(BuildContext context) {
     return GetBuilder<CartController>(builder: (c) {
       final _cartItems = controller.cart.lines;
-      double? totalPotongan;
-      double? totalHarga = (c.cart.estimatedCost == null ||
-              c.cart.estimatedCost!.totalAmount! == "0.0")
-          ? 0
-          : double.parse(
-              c.cart.estimatedCost!.totalAmount!.replaceAll(".0", ""));
+      // double? totalPotongan;
+      double? totalHarga = 0;
+      // double? totalHarga = (c.cart.estimatedCost == null ||
+      //         c.cart.estimatedCost!.totalAmount! == "0.0")
+      //     ? 0
+      //     : double.parse(
+      //         c.cart.estimatedCost!.totalAmount!.replaceAll(".0", ""));
+      for (Line y in _cartItems ?? []) {
+        if (y.merchandise!.inventoryQuantity! > 0) {
+          totalHarga = totalHarga! +
+              (double.parse(y.merchandise!.price!) * y.quantity!.toDouble());
+        }
+      }
 
       if (controller.discountRunning.isNotEmpty) {
         totalPotongan = 0;
 
         for (Line x in _cartItems ?? []) {
-          totalPotongan = (totalPotongan ?? 0.0) +
+          totalPotongan = totalPotongan +
               double.parse(x.discountAllocations!.amount ?? "0");
         }
-        for (Line y in controller.listHabis ?? []) {
-          // if (y.merchandise!.inventoryQuantity! > 0) {
-          totalHarga = totalHarga! -
-              (double.parse(y.merchandise!.price!) * y.quantity!.toDouble());
-          // }
-        }
-        totalHarga = totalHarga! + totalPotongan!;
+        // for (Line y in controller.listHabis ?? []) {
+        //   // if (y.merchandise!.inventoryQuantity! > 0) {
+        //   totalHarga = totalHarga! -
+        //       (double.parse(y.merchandise!.price!) * y.quantity!.toDouble());
+        //   // }
+        // }
+        // totalHarga = totalHarga! - totalPotongan!;
       }
       if (controller.cart.discountCodes != null &&
           controller.cart.discountCodes!.isNotEmpty &&
           controller.cart.discountCodes![0].code != "") {
-        totalHarga = 0;
         totalPotongan = 0;
 
         if (controller.cart.discountAllocations == null ||
             controller.cart.discountAllocations!.isEmpty) {
           for (final x in _cartItems ?? []) {
-            totalPotongan = totalPotongan! +
+            totalPotongan = totalPotongan +
                 double.parse(x.discountAllocations!.amount ?? "0");
           }
-          totalHarga = totalHarga - totalPotongan!;
+          // totalHarga = totalHarga! - totalPotongan!;
         } else {
           for (final x in controller.cart.discountAllocations ?? []) {
-            totalPotongan = (totalPotongan ?? 0.0) + double.parse(x.amount!);
+            totalPotongan = totalPotongan + double.parse(x.amount!);
           }
         }
 
-        for (Line y in _cartItems ?? []) {
-          if (y.merchandise!.inventoryQuantity! > 0) {
-            totalHarga = totalHarga! +
-                (double.parse(y.merchandise!.price!) * y.quantity!.toDouble());
-          }
-        }
+        // for (Line y in _cartItems ?? []) {
+        //   if (y.merchandise!.inventoryQuantity! > 0) {
+        //     totalHarga = totalHarga! +
+        //         (double.parse(y.merchandise!.price!) * y.quantity!.toDouble());
+        //   }
+        // }
       }
 
       if (controller.cart.discountAllocations != null &&
           controller.cart.discountAllocations!.isNotEmpty &&
           controller.discountController.discountAutomaticTotalOrder.isEmpty) {
-        totalHarga = (c.cart.estimatedCost == null ||
-                c.cart.estimatedCost!.subtotalAmount! == "0.0")
-            ? 0
-            : double.parse(
-                c.cart.estimatedCost!.subtotalAmount!.replaceAll(".0", ""));
+        // totalHarga = (c.cart.estimatedCost == null ||
+        //         c.cart.estimatedCost!.subtotalAmount! == "0.0")
+        //     ? 0
+        //     : double.parse(
+        //         c.cart.estimatedCost!.subtotalAmount!.replaceAll(".0", ""));
         totalPotongan =
             double.parse(controller.cart.discountAllocations![0].amount!);
       }
@@ -611,21 +660,23 @@ class CartView extends GetView<CartController> {
           (controller.cart.discountCodes == null ||
               controller.cart.discountCodes!.isEmpty ||
               controller.cart.discountCodes![0].code == "")) {
-        totalHarga = (c.cart.estimatedCost == null ||
-                c.cart.estimatedCost!.subtotalAmount! == "0.0")
-            ? 0
-            : double.parse(
-                c.cart.estimatedCost!.subtotalAmount!.replaceAll(".0", ""));
+        // totalHarga = (c.cart.estimatedCost == null ||
+        //         c.cart.estimatedCost!.subtotalAmount! == "0.0")
+        //     ? 0
+        //     : double.parse(
+        //         c.cart.estimatedCost!.subtotalAmount!.replaceAll(".0", ""));
         totalPotongan = double.parse(controller.discountController
             .discountAutomaticTotalOrder[0].customerGets!.value!.amount!);
 
-        if (controller.listHabis.length > 0) {
-          for (final x in controller.listHabis) {
-            totalHarga = totalHarga! -
-                (double.parse(x.merchandise!.price!) * x.quantity!.toDouble());
-          }
-        }
+        // if (controller.listHabis.length > 0) {
+        //   for (final x in controller.listHabis) {
+        //     totalHarga = totalHarga! -
+        //         (double.parse(x.merchandise!.price!) * x.quantity!.toDouble());
+        //   }
+        // }
       }
+
+      totalHarga = totalHarga! - totalPotongan;
 
       return Container(
         height: (controller.show.value) ? 218 : 160,
@@ -659,7 +710,7 @@ class CartView extends GetView<CartController> {
                           ),
                           CustomText(
                             text:
-                                "Rp  ${formatter.format((totalHarga!).round())}",
+                                "Rp  ${formatter.format((totalHarga + totalPotongan).round())}",
                             fontSize: 12,
                           )
                         ],
@@ -673,7 +724,7 @@ class CartView extends GetView<CartController> {
                             fontSize: 12,
                             color: colorTextGrey,
                           ),
-                          (totalPotongan != null && totalPotongan != 0)
+                          (totalPotongan != 0)
                               ? CustomText(
                                   text:
                                       "-Rp ${formatter.format(totalPotongan.round())}",
@@ -711,7 +762,7 @@ class CartView extends GetView<CartController> {
                         children: [
                           CustomText(
                             text:
-                                "Rp ${(c.cart.estimatedCost == null || c.cart.estimatedCost!.totalAmount! == "0.0") ? "0" : formatter.format((totalHarga! - (totalPotongan ?? 0)).round())}",
+                                "Rp ${(c.cart.estimatedCost == null || c.cart.estimatedCost!.totalAmount! == "0.0") ? "0" : formatter.format((totalHarga).round())}",
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),

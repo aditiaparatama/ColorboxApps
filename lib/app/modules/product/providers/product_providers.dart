@@ -80,6 +80,7 @@ class ProductProvider extends GetConnect {
                   descriptionHtml
                   tags
                   productType
+                  totalInventory
                   options {
                       name
                       values

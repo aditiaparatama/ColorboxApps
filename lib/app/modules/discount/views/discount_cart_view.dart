@@ -1,4 +1,5 @@
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
+import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
@@ -34,16 +35,12 @@ class DiscountCartView extends GetView<DiscountController> {
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        title: const CustomText(
-          text: 'Voucher',
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-        centerTitle: false,
-        elevation: 3,
-        shadowColor: Colors.grey.withOpacity(0.3),
-      ),
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(56),
+          child: AppBarDefault(
+            text: "Voucher",
+            icon: Icon(Icons.close),
+          )),
       body: GetBuilder(
           init: Get.put(DiscountController()),
           builder: (_) {

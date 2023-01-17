@@ -85,6 +85,7 @@ class ProductController extends GetxController {
         }
       }
     }
+    if (fromColor) ukuran = '';
     update();
   }
 
@@ -117,6 +118,7 @@ class ProductController extends GetxController {
   }
 
   Future<void> getProductByHandle(String handle) async {
+    ukuran = '';
     var result = await ProductProvider().getProductByHandle(handle);
     _product = Product.fromJson(result["product"]);
     variant = _product.variants[0];

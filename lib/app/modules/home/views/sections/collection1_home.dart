@@ -39,9 +39,9 @@ class CollectionHome1 extends GetView<HomeController> {
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 1,
-                        mainAxisSpacing: 24,
+                        mainAxisSpacing: 16,
                         crossAxisSpacing: 24,
-                        childAspectRatio: 5 / 2.6,
+                        childAspectRatio: 8.15 / 4,
                       ),
                       itemBuilder: (_, i) {
                         var calcu1 = int.parse(homeCollectionController

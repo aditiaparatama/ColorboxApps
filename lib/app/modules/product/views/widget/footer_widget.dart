@@ -37,10 +37,10 @@ class FooterWidget extends GetView<ProductController> {
                   fixedSize: Size(Get.width, 48),
                   backgroundColor: colorTextBlack,
                   disabledBackgroundColor: colorTextGrey),
-              onPressed: controller.variant!.inventoryQuantity == 0 &&
-                      controller.ukuran != ''
-                  ? null
-                  : () {
+              onPressed: (controller.ukuran == '' &&
+                          controller.product.totalInventory! > 0) ||
+                      controller.variant!.inventoryQuantity! > 0
+                  ? () {
                       if (controller.ukuran == "") {
                         selectVariantBottomSheet(handle);
                         return;
@@ -48,20 +48,22 @@ class FooterWidget extends GetView<ProductController> {
                       Get.find<CartController>().addCart(
                           controller.variant!.id!, context, controller.ukuran,
                           variants: controller.variant);
-                    },
-              child: controller.variant!.inventoryQuantity == 0 &&
-                      controller.ukuran != ''
+                    }
+                  : null,
+              child: (controller.ukuran == '' &&
+                          controller.product.totalInventory! > 0) ||
+                      controller.variant!.inventoryQuantity! > 0
                   ? const CustomText(
-                      text: "Produk Habis",
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    )
-                  : const CustomText(
                       text: "Tambahkan ke keranjang",
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
+                    )
+                  : const CustomText(
+                      text: "Produk Habis",
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
                     ),
             ),
           );

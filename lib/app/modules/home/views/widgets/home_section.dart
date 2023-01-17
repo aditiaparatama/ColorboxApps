@@ -21,15 +21,18 @@ class HomeSectionWidget extends GetView<HomeController> {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: controller.collections.length,
             separatorBuilder: (context, index) {
-              return const Divider(
-                thickness: 10,
-                color: colorDiver,
-              );
+              return Container(color: colorDiver, height: 4);
             },
             itemBuilder: (context, index) {
               return Column(children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 16, bottom: 8),
+                  padding: EdgeInsets.only(
+                      top: 24,
+                      bottom:
+                          (controller.collections[index].deskripsi == null ||
+                                  controller.collections[index].deskripsi == "")
+                              ? 16
+                              : 8),
                   child: CustomText(
                     text: (controller.collections.isEmpty)
                         ? ""
@@ -42,7 +45,7 @@ class HomeSectionWidget extends GetView<HomeController> {
                         controller.collections[index].deskripsi == "")
                     ? const SizedBox()
                     : Padding(
-                        padding: const EdgeInsets.only(bottom: 24),
+                        padding: const EdgeInsets.only(bottom: 16),
                         child: CustomText(
                           text: (controller.collections.isEmpty)
                               ? ""

@@ -240,7 +240,9 @@ class DiscountAutomatic {
     }
     combineWith = CombineWith.fromJson(json['combinesWith']);
     customerGets = CustomerGets.fromJson(json["customerGets"]);
-    customerBuys = CustomerBuys.fromJson(json["customerBuys"]);
+    customerBuys = (json.containsKey("customerBuys"))
+        ? CustomerBuys.fromJson(json["customerBuys"])
+        : null;
     collections = [];
     if (json["customerGets"]["items"].containsKey("collections")) {
       if (json["customerGets"]["items"]["collections"]["edges"].length > 0) {
@@ -326,6 +328,7 @@ class Value {
   String? typename;
   String? amount;
   String? quantity;
+  double? percentage;
   Effect? effect;
 
   Value(this.typename, this.amount, this.quantity);
@@ -336,6 +339,8 @@ class Value {
       amount = json["amount"];
     } else if (typename == "DiscountAmount") {
       amount = json["amount"]["amount"].replaceAll(".0", "");
+    } else if (typename == "DiscountPercentage") {
+      percentage = json["percentage"];
     } else {
       quantity = (json["quantity"].containsKey("quantity"))
           ? json["quantity"]["quantity"]

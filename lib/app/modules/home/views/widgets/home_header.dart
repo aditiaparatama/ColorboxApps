@@ -79,7 +79,8 @@ class HomeSearch extends StatelessWidget {
                                 "assets/icon/shopping-bag.svg"),
                           ),
                         ),
-                        cartController.cart.lines!.isNotEmpty
+                        cartController.cart.lines!.isNotEmpty &&
+                                cartController.cart.totalQuantity != 0
                             ? Container(
                                 alignment: Alignment.centerRight,
                                 padding:

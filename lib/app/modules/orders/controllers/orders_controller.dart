@@ -26,11 +26,12 @@ class OrdersController extends GetxController {
 
   // @override
   // void onInit() async {
-  //   fetchingDataOrders();
+  //   _history = [];
   //   super.onInit();
   // }
 
   filterFetchingData(String? filter) async {
+    _history = [];
     _loading.value = true;
     String query = (filter == "riwayat")
         ? ", query:\"financial_status:expired OR status:cancelled\""

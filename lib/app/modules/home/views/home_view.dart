@@ -41,148 +41,152 @@ class HomeView extends GetView<HomeController> {
                 decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(12))),
                 child: GetBuilder<HomeController>(builder: (_) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Stack(
-                        children: [
-                          CachedNetworkImage(
-                              imageUrl: controller.newsletter.image!),
-                          Positioned(
-                              right: 0,
-                              child: GestureDetector(
-                                  onTap: () => Get.back(),
-                                  child: SvgPicture.asset(
-                                      "assets/icon/x-circle.svg")))
-                        ],
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(
-                            left: 16, right: 16, top: 16, bottom: 24),
-                        child: Column(
+                  return SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Stack(
                           children: [
-                            CustomText(
-                              text: (!controller.subscribe)
-                                  ? controller.newsletter.title
-                                  : "Terimakasih Telah Berlangganan Colorbox",
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800,
-                              textOverflow: TextOverflow.fade,
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 12),
-                            CustomText(
-                              text: (!controller.subscribe)
-                                  ? controller.newsletter.subtitle
-                                  : "Cek Emailmu Sekarang",
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              textOverflow: TextOverflow.fade,
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 4),
-                            CustomText(
-                              text: (!controller.subscribe)
-                                  ? controller.newsletter.deskripsi
-                                  : "Special voucher 20% telah dikirim ke emailmu. Belanja sekarang dan gunakan vouchernya 🥳",
-                              fontSize: 12,
-                              textOverflow: TextOverflow.fade,
-                              textAlign: TextAlign.center,
-                            ),
-                            if (!controller.subscribe) ...[
-                              const SizedBox(height: 16),
-                              Form(
-                                key: _formKey,
-                                child: CustomTextFormField(
-                                  hint: "Email",
-                                  textEditingController: emailController,
-                                  onSave: (value) {},
-                                  validator: (value) {
-                                    if (EmailValidator(value).isValidEmail()) {
-                                      if (!_profileController.emailExist!) {
-                                        emailAlert = true;
-                                        return "Email belum terdaftar";
+                            CachedNetworkImage(
+                                imageUrl: controller.newsletter.image!),
+                            Positioned(
+                                right: 0,
+                                child: GestureDetector(
+                                    onTap: () => Get.back(),
+                                    child: SvgPicture.asset(
+                                        "assets/icon/x-circle.svg")))
+                          ],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(
+                              left: 16, right: 16, top: 16, bottom: 24),
+                          child: Column(
+                            children: [
+                              CustomText(
+                                text: (!controller.subscribe)
+                                    ? controller.newsletter.title
+                                    : "Terimakasih Telah Berlangganan Colorbox",
+                                fontSize: 20,
+                                fontWeight: FontWeight.w800,
+                                textOverflow: TextOverflow.fade,
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 12),
+                              CustomText(
+                                text: (!controller.subscribe)
+                                    ? controller.newsletter.subtitle
+                                    : "Cek Emailmu Sekarang",
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                textOverflow: TextOverflow.fade,
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 4),
+                              CustomText(
+                                text: (!controller.subscribe)
+                                    ? controller.newsletter.deskripsi
+                                    : "Special voucher 20% telah dikirim ke emailmu. Belanja sekarang dan gunakan vouchernya 🥳",
+                                fontSize: 12,
+                                textOverflow: TextOverflow.fade,
+                                textAlign: TextAlign.center,
+                              ),
+                              if (!controller.subscribe) ...[
+                                const SizedBox(height: 16),
+                                Form(
+                                  key: _formKey,
+                                  child: CustomTextFormField(
+                                    hint: "Email",
+                                    textEditingController: emailController,
+                                    onSave: (value) {},
+                                    validator: (value) {
+                                      if (EmailValidator(value)
+                                          .isValidEmail()) {
+                                        if (!_profileController.emailExist!) {
+                                          emailAlert = true;
+                                          return "Email belum terdaftar";
+                                        }
+                                        emailAlert = false;
+                                        return null;
                                       }
-                                      emailAlert = false;
-                                      return null;
-                                    }
-                                    emailAlert = true;
-                                    return "Format email salah";
-                                  },
+                                      emailAlert = true;
+                                      return "Format email salah";
+                                    },
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 12),
-                              CustomButton(
-                                onPressed: () async {
-                                  await _profileController
-                                      .checkEmail(emailController.text);
+                                const SizedBox(height: 12),
+                                CustomButton(
+                                  onPressed: () async {
+                                    await _profileController
+                                        .checkEmail(emailController.text);
 
-                                  _formKey.currentState!.save();
-                                  if (_formKey.currentState!.validate()) {
-                                    await controller.customerSubscribe(
-                                        emailController.text);
-                                  }
-                                },
-                                backgroundColor: colorTextBlack,
-                                color: Colors.white,
-                                height: 45,
-                                text: "Berlangganan",
-                              ),
-                              const SizedBox(height: 12),
-                              RichText(
-                                  text: TextSpan(
-                                text:
-                                    'Dengan berlangganan kamu setuju terhadap ',
-                                style: const TextStyle(
-                                    color: colorTextBlack,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w300),
-                                children: [
-                                  TextSpan(
-                                    text: 'Privacy Policy',
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        decoration: TextDecoration.underline),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () async {
-                                        await launchUrlString(
-                                            "https://colorbox.co.id/pages/privacy-policy",
-                                            mode:
-                                                LaunchMode.externalApplication);
-                                      },
-                                  ),
-                                  const TextSpan(
-                                    text: ' dan ',
-                                  ),
-                                  TextSpan(
-                                      text: 'Terms & Condition',
+                                    _formKey.currentState!.save();
+                                    if (_formKey.currentState!.validate()) {
+                                      await controller.customerSubscribe(
+                                          emailController.text);
+                                    }
+                                  },
+                                  backgroundColor: colorTextBlack,
+                                  color: Colors.white,
+                                  height: 45,
+                                  text: "Berlangganan",
+                                ),
+                                const SizedBox(height: 12),
+                                RichText(
+                                    text: TextSpan(
+                                  text:
+                                      'Dengan berlangganan kamu setuju terhadap ',
+                                  style: const TextStyle(
+                                      color: colorTextBlack,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w300),
+                                  children: [
+                                    TextSpan(
+                                      text: 'Privacy Policy',
                                       style: const TextStyle(
                                           fontWeight: FontWeight.w500,
                                           decoration: TextDecoration.underline),
                                       recognizer: TapGestureRecognizer()
                                         ..onTap = () async {
                                           await launchUrlString(
-                                              "https://colorbox.co.id/policies/terms-of-service",
+                                              "https://colorbox.co.id/pages/privacy-policy",
                                               mode: LaunchMode
                                                   .externalApplication);
-                                        })
-                                ],
-                              )),
+                                        },
+                                    ),
+                                    const TextSpan(
+                                      text: ' dan ',
+                                    ),
+                                    TextSpan(
+                                        text: 'Terms & Condition',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            decoration:
+                                                TextDecoration.underline),
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () async {
+                                            await launchUrlString(
+                                                "https://colorbox.co.id/policies/terms-of-service",
+                                                mode: LaunchMode
+                                                    .externalApplication);
+                                          })
+                                  ],
+                                )),
+                              ],
+                              if (controller.subscribe) ...[
+                                const SizedBox(height: 16),
+                                CustomButton(
+                                  onPressed: () => Get.back(),
+                                  backgroundColor: colorTextBlack,
+                                  color: Colors.white,
+                                  height: 45,
+                                  text: "Belanja Sekarang",
+                                ),
+                              ]
                             ],
-                            if (controller.subscribe) ...[
-                              const SizedBox(height: 16),
-                              CustomButton(
-                                onPressed: () => Get.back(),
-                                backgroundColor: colorTextBlack,
-                                color: Colors.white,
-                                height: 45,
-                                text: "Belanja Sekarang",
-                              ),
-                            ]
-                          ],
-                        ),
-                      )
-                    ],
+                          ),
+                        )
+                      ],
+                    ),
                   );
                 })),
           ),
@@ -207,7 +211,7 @@ class HomeView extends GetView<HomeController> {
               if (controller.firstBuild &&
                   controller.newsletter.image != null &&
                   // ignore: unrelated_type_equality_checks
-                  (_profileController.userModel.emailMarketing != null &&
+                  (_profileController.userModel.emailMarketing == null ||
                       _profileController
                               .userModel.emailMarketing!.marketingState !=
                           "SUBSCRIBED")) {
@@ -231,11 +235,7 @@ class HomeView extends GetView<HomeController> {
                             if (controller.announcementHome.isNotEmpty)
                               AnnouncementHome(controller: controller),
 
-                            Container(
-                              color: const Color(0xFFF5F5F5),
-                              height: 8,
-                              width: Get.width,
-                            ),
+                            Container(color: colorDiver, height: 4),
                             const SizedBox(height: 24),
                             SizedBox(
                               child: Column(
@@ -252,10 +252,7 @@ class HomeView extends GetView<HomeController> {
                               ),
                             ),
 
-                            const Divider(
-                              thickness: 10,
-                              color: colorDiver,
-                            ),
+                            Container(color: colorDiver, height: 4),
 
                             const HomeSectionWidget()
                           ],

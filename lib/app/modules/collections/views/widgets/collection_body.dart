@@ -45,6 +45,8 @@ class CollectionBody extends StatelessWidget {
                       product: controller.collection.products[i],
                       title: controller.collection.products[i].title!,
                       image: controller.collection.products[i].image[0],
+                      totalInventory:
+                          controller.collection.products[i].totalInventory,
                       price: controller
                           .collection.products[i].variants[0].price!
                           .replaceAll(".00", ""),
