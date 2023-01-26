@@ -5,6 +5,7 @@ import 'package:colorbox/app/modules/home/models/home_model.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smartlook/flutter_smartlook.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
@@ -41,6 +42,8 @@ class HomeController extends GetxController {
   void onInit() async {
     await fetchData();
     await getCategory();
+
+    Smartlook.instance.trackEvent('Homepage');
 
     super.onInit();
   }

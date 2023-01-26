@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:colorbox/app/data/models/mailing_address.dart';
 import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/modules/cart/models/cart_model.dart';
@@ -7,21 +6,23 @@ import 'package:colorbox/app/modules/checkout/models/checkout_model.dart';
 import 'package:colorbox/app/modules/checkout/providers/checkout_provider.dart';
 import 'package:colorbox/app/modules/checkout/providers/draft_order_provider.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
-import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
+import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/constance.dart';
+import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_smartlook/flutter_smartlook.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class CheckoutController extends GetxController {
-  // final LocalStorageData localStorageData = Get.find();
+  final LocalStorageData localStorageData = Get.find();
   ValueNotifier get loading => _loading;
   final ValueNotifier<bool> _loading = ValueNotifier(false);
-  // CustomerToken? _token = CustomerToken.isEmpty();
+  CustomerToken? _token = CustomerToken.isEmpty();
   String? _idCheckout;
   String? get idCheckout => _idCheckout;
   String? _etd;
@@ -49,7 +50,10 @@ class CheckoutController extends GetxController {
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
 
     await getAddress();
+
     await createCheckout();
+    Smartlook.instance.trackEvent('CheckOut');
+
     // _idCheckout =
     //     "gid://shopify/Checkout/00205c3b14749fcfc655535d3a9178c6?key=dea4c8ee79d214634c9bbab79e6ad0b6";
     // await getCheckout();
@@ -86,15 +90,19 @@ class CheckoutController extends GetxController {
   Future<void> getAddress() async {
     _loading.value = true;
     update();
-    // _token = await localStorageData.getTokenUser;
-    // var result = await ProfileProvider().getUser(_token!.accessToken!);
-    _user = Get.find<SettingsController>().userModel;
+    _token = await localStorageData.getTokenUser;
+    var result = await ProfileProvider().getUserFromAdmin(_token!.id!);
+    _user = UserModel.fromAdmin(result);
+
+    // _user = Get.find<SettingsController>().userModel;
     _loading.value = false;
     update();
   }
 
   createCheckout() async {
-    debugPrint(_connectionStatus.name);
+    while (_user.addresses!.isEmpty) {
+      await getAddress();
+    }
     List<CheckoutItems>? items = await getItems();
 
     int looping = 0;
@@ -137,7 +145,7 @@ class CheckoutController extends GetxController {
       while (result2['node']['availableShippingRates']['ready'] == false ||
           result2['node']['availableShippingRates']['shippingRates'] == null) {
         result2 = await Future.delayed(
-            const Duration(milliseconds: 500),
+            const Duration(milliseconds: 800),
             () => CheckoutProvider()
                 .checkoutGetData(result['checkoutCreate']['checkout']['id']));
         if (looping >= 5) {
@@ -170,7 +178,8 @@ class CheckoutController extends GetxController {
 
       //update voucher dicheckout kalo sudah digunakan di cart
       if (_cart.discountCodes!.isNotEmpty &&
-          _cart.discountCodes![0].code != "") {
+          _cart.discountCodes![0].code != "" &&
+          _cart.discountCodes![0].applicable!) {
         await applyVoucher(_cart.discountCodes![0].code!, back: false);
       }
       getCheckout();
@@ -265,16 +274,7 @@ class CheckoutController extends GetxController {
     _loading.value = false;
     calculateLineItem();
     update();
-
-    // if (resultShipping == null) {
-    //   Get.back();
-    //   // alertGagal("Mohon coba kembali");
-    // }
     Get.back();
-    // Get.snackbar("Info", "Data berhasil diubah",
-    //     snackPosition: SnackPosition.BOTTOM,
-    //     colorText: Colors.white,
-    //     backgroundColor: colorTextBlack);
   }
 
   updateShippingAddress(MailingAddress address) async {
@@ -346,9 +346,14 @@ class CheckoutController extends GetxController {
       String msg = result['checkoutDiscountCodeApplyV2']['checkoutUserErrors']
           [0]['message'];
 
-      msg = (msg == "This discount has reached its usage limit")
-          ? "Voucher sudah pernah digunakan"
-          : msg;
+      if (result['checkoutDiscountCodeApplyV2']['checkoutUserErrors'][0]
+              ["code"] ==
+          "HIGHER_VALUE_DISCOUNT_APPLIED") {
+        msg =
+            "Discount yang berjalan lebih besar nilanya dari voucher yang dipilih";
+      } else if (msg == "This discount has reached its usage limit") {
+        msg = "Voucher sudah pernah digunakan";
+      }
 
       Get.snackbar("Peringatan", msg,
           backgroundColor: colorTextBlack,
@@ -411,6 +416,7 @@ class CheckoutController extends GetxController {
       updateOrderForUrlPayment(
           order['order']['admin_graphql_api_id'], urlInvoice);
       Get.find<CartController>().reCreateCart();
+      Get.find<CartController>().getCart2();
 
       return urlInvoice;
     } else if (order != null && order.containsKey("draft_order")) {
@@ -475,7 +481,7 @@ class CheckoutController extends GetxController {
 
     var inputData = {
       "external_id": "shopifyInvoice-$createdDate-$orderNo-$orderId",
-      "amount": int.parse(_checkout.totalPriceV2!.replaceAll(".0", "")),
+      "amount": double.parse(_checkout.totalPriceV2!).round(),
       "payer_email": _checkout.email,
       "description": "Invoice Customer ${_checkout.shippingAddress!.firstName}",
       "items": [
@@ -493,7 +499,10 @@ class CheckoutController extends GetxController {
       ],
       "customer": {
         "given_names": _checkout.shippingAddress!.firstName,
-        "surname": _checkout.shippingAddress!.lastName,
+        "surname": (_checkout.shippingAddress!.lastName == null ||
+                _checkout.shippingAddress!.lastName == "")
+            ? _checkout.shippingAddress!.firstName
+            : _checkout.shippingAddress!.lastName,
         "email": _checkout.email,
         "mobile_number": phone
       },
@@ -595,6 +604,16 @@ class CheckoutController extends GetxController {
 
   Future<dynamic> pesan() async {
     dynamic createOrder;
+
+    if (_checkout.discountApplications != null &&
+        _checkout.discountApplications!.isNotEmpty &&
+        (_checkout.discountApplications![0].code != null ||
+            _checkout.discountApplications![0].code != "") &&
+        _checkout.discountApplications![0].typename ==
+            "DiscountCodeApplication") {
+      createOrder = pesananDenganDiskonCode();
+      return await DraftOrderProvider().orderCreate(createOrder);
+    }
     if (_checkout.discountApplications != null &&
         _checkout.discountApplications!.isNotEmpty &&
         (_checkout.discountApplications![0].code != null ||
@@ -616,13 +635,16 @@ class CheckoutController extends GetxController {
 
     for (final x in _checkout.lineItems!) {
       totalWeight += x.variants!.weight ?? 0;
-      if (x.discountAllocations != null && x.discountAllocations!.isNotEmpty) {
+      if (x.discountAllocations != null &&
+          x.discountAllocations!.isNotEmpty &&
+          double.parse(x.discountAllocations![0].allocatedAmount!) > 0) {
         _lineItems.add({
           "variant_id":
               x.variants!.id!.replaceAll("gid://shopify/ProductVariant/", ""),
           "quantity": x.quantity,
-          "grams": x.variants!.weight! *
-              (x.variants!.weightUnit == "KILOGRAMS" ? 1000 : 1),
+          "grams": (x.variants!.weight! *
+                  (x.variants!.weightUnit == "KILOGRAMS" ? 1000 : 1))
+              .round(),
           "applied_discount": {
             "description":
                 (x.discountAllocations![0].discountApplication!.typename ==
@@ -643,7 +665,8 @@ class CheckoutController extends GetxController {
                         "0.0")
                 ? x.discountAllocations![0].allocatedAmount
                 : x.discountAllocations![0].discountApplication!.percentage,
-            "title": "Group 2: Buy 2 @90k "
+            "title": _checkout.discountApplications![0].title ??
+                _checkout.discountApplications![0].code
           }
         });
       } else {
@@ -651,8 +674,9 @@ class CheckoutController extends GetxController {
           "variant_id":
               x.variants!.id!.replaceAll("gid://shopify/ProductVariant/", ""),
           "quantity": x.quantity,
-          "grams": x.variants!.weight! *
-              (x.variants!.weightUnit == "KILOGRAMS" ? 1000 : 1)
+          "grams": (x.variants!.weight! *
+                  (x.variants!.weightUnit == "KILOGRAMS" ? 1000 : 1))
+              .round()
         });
       }
     }

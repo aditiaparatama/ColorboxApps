@@ -16,6 +16,7 @@ import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/helper/item_creator_analytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_smartlook/flutter_smartlook.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:colorbox/constance.dart';
@@ -32,6 +33,7 @@ class ProductView2 extends StatelessWidget {
   final DiscountController discountController = Get.put(DiscountController());
 
   final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
   final List<String> _idCollection = [Get.arguments["idCollection"]];
   dynamic collection =
       Get.arguments["idCollection"].replaceAll('gid://shopify/Collection/', '');
@@ -46,11 +48,6 @@ class ProductView2 extends StatelessWidget {
   }
 
   Future<void> callWishlist(ProductController control) async {
-    // controller.wishlistAdded = false;
-    // if (control.wishlistController.wishlist.items == null ||
-    //     control.wishlistController.wishlist.items.isEmpty) {
-
-    // }
     await control.wishlistController.fetchWishlist();
     if (control.wishlistController.wishlist.items != null &&
         control.wishlistController.wishlist.items.isNotEmpty) {
@@ -67,9 +64,7 @@ class ProductView2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // controller.product = Get.arguments["product"];
-    // controller.variant = controller.product.variants[0];
-
+    Smartlook.instance.trackEvent('PDP');
     // ignore: avoid_print
     return FutureBuilder(
         future: initializeSettings(),
@@ -86,11 +81,6 @@ class ProductView2 extends StatelessWidget {
           return GetBuilder<ProductController>(
               init: Get.put(ProductController()),
               builder: (control) {
-                // var calcu1 = int.parse(
-                //         controller.variant!.price!.replaceAll(".00", "")) /
-                //     int.parse(controller.variant!.compareAtPrice!
-                //         .replaceAll(".00", ""));
-
                 var compareAtPrice = control.product.variants[0].compareAtPrice;
                 var price = control.product.variants[0].price;
 
@@ -146,6 +136,8 @@ class ProductView2 extends StatelessWidget {
                                                             colorTextBlack,
                                                         color: Colors.white,
                                                         onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
                                                           Get.toNamed(
                                                               Routes.PROFILE);
                                                         },

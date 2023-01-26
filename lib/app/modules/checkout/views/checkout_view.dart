@@ -31,7 +31,7 @@ class CheckoutView extends GetView<CheckoutController> {
               content: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
-                height: 240,
+                height: 245,
                 child: GetBuilder<CheckoutController>(builder: (_) {
                   return Stack(
                     children: [
@@ -43,8 +43,8 @@ class CheckoutView extends GetView<CheckoutController> {
                                         .contains("COD"))
                                 ? 'Konfirmasi Pesanan'
                                 : 'Lakukan pembayaran?',
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 8),
@@ -65,26 +65,36 @@ class CheckoutView extends GetView<CheckoutController> {
                             onPressed: (controller.checkoutTap)
                                 ? null
                                 : () async {
-                                    String? urlString =
-                                        await controller.createOrder();
-                                    if (urlString == "" || urlString == null) {
-                                      return;
-                                    }
-                                    if (urlString == "stok-habis") {
-                                      alertStock(context);
-                                      return;
-                                    }
+                                    try {
+                                      String? urlString = await controller
+                                          .createOrder()
+                                          .timeout(const Duration(minutes: 2));
+                                      if (urlString == "" ||
+                                          urlString == null) {
+                                        return;
+                                      }
+                                      if (urlString == "stok-habis") {
+                                        alertStock(context);
+                                        return;
+                                      }
 
-                                    if (urlString == "COD") {
-                                      Get.until((route) =>
-                                          Get.currentRoute == "/controlv2");
-                                      Get.toNamed(Routes.ORDERS);
-                                      return;
-                                    }
+                                      if (urlString == "COD") {
+                                        Get.until((route) =>
+                                            Get.currentRoute == "/controlv2");
+                                        Get.toNamed(Routes.ORDERS);
+                                        return;
+                                      }
 
-                                    Navigator.of(context).pop(true);
-                                    Get.off(WebPaymentView(
-                                        title: "Pembayaran", url: urlString));
+                                      Navigator.of(context).pop(true);
+                                      Get.off(WebPaymentView(
+                                          title: "Pembayaran", url: urlString));
+                                    } catch (e) {
+                                      controller.loading.value = false;
+                                      controller.update();
+                                      Get.back();
+                                      alertGagal(
+                                          "Halaman pembayaran gagal dibuat, silahkan coba kembali");
+                                    }
                                   },
                             //return true when click on "Yes"
                             text: (controller.checkout.shippingLine!.title!

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:colorbox/app/modules/home/views/sections/category_home.dart';
 import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
@@ -26,6 +28,7 @@ class HomeView extends GetView<HomeController> {
   final TextEditingController emailController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool emailAlert = false;
+  Timer? _debounce;
 
   Future<bool> _showPopUp(context) async {
     return await showDialog(
@@ -65,7 +68,7 @@ class HomeView extends GetView<HomeController> {
                               CustomText(
                                 text: (!controller.subscribe)
                                     ? controller.newsletter.title
-                                    : "Terimakasih Telah Berlangganan Colorbox",
+                                    : "Terima Kasih Telah Berlangganan Colorbox",
                                 fontSize: 20,
                                 fontWeight: FontWeight.w800,
                                 textOverflow: TextOverflow.fade,
@@ -97,6 +100,21 @@ class HomeView extends GetView<HomeController> {
                                   child: CustomTextFormField(
                                     hint: "Email",
                                     textEditingController: emailController,
+                                    onChange: (value) async {
+                                      if (EmailValidator(value)
+                                          .isValidEmail()) {
+                                        if (_debounce?.isActive ?? false) {
+                                          _debounce?.cancel();
+                                        }
+                                        _debounce = Timer(
+                                            const Duration(milliseconds: 300),
+                                            () async {
+                                          // do something with query
+                                          await _profileController
+                                              .checkEmail(value);
+                                        });
+                                      }
+                                    },
                                     onSave: (value) {},
                                     validator: (value) {
                                       if (EmailValidator(value)
@@ -118,6 +136,11 @@ class HomeView extends GetView<HomeController> {
                                   onPressed: () async {
                                     await _profileController
                                         .checkEmail(emailController.text);
+                                    if (EmailValidator(emailController.text)
+                                        .isValidEmail()) {
+                                      await _profileController
+                                          .checkEmail(emailController.text);
+                                    }
 
                                     _formKey.currentState!.save();
                                     if (_formKey.currentState!.validate()) {
@@ -229,12 +252,9 @@ class HomeView extends GetView<HomeController> {
                           children: [
                             const HomeSearch(),
                             const SizedBox(height: 24),
-                            // ignore: sized_box_for_whitespace
                             CarouselWithIndicator(controller: controller),
-
                             if (controller.announcementHome.isNotEmpty)
                               AnnouncementHome(controller: controller),
-
                             Container(color: colorDiver, height: 4),
                             const SizedBox(height: 24),
                             SizedBox(
@@ -251,9 +271,7 @@ class HomeView extends GetView<HomeController> {
                                 ],
                               ),
                             ),
-
                             Container(color: colorDiver, height: 4),
-
                             const HomeSectionWidget()
                           ],
                         ),

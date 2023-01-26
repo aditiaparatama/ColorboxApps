@@ -66,9 +66,10 @@ void bottomSheet(handle) {
           TextButton(
             style: TextButton.styleFrom(alignment: Alignment.centerLeft),
             onPressed: () async {
-              var url = 'https://twitter.com/intent/tweet?text=' +
-                  urlprod +
-                  '%3Futm_source%3DTwitter&amp;text=Check+out+this+product%21+Product+ini+mungkin+menarik+buat+kamu%3A%0D%0A%0D%0A';
+              var url =
+                  'https://twitter.com/intent/tweet?text=Check+out+this+product%21+Product+ini+mungkin+menarik+buat+kamu%3A%0D%0A%0D%0A' +
+                      urlprod +
+                      '%3Futm_source%3DTwitter';
               await launchUrlString(url, mode: LaunchMode.externalApplication);
             },
             child: Row(
@@ -122,7 +123,7 @@ void bottomSheet(handle) {
             style: TextButton.styleFrom(alignment: Alignment.centerLeft),
             onPressed: () async {
               var url =
-                  'tg://msg_url?text=%0D%0A%0D%0ACheck out this product! produk ini mungkin menarik buat kamu:&url=' +
+                  'tg://msg_url?text=Check+out+this+product%21+Product+ini+mungkin+menarik+buat+kamu%3A%0D%0A%0D%0A' +
                       urlprod +
                       '%3Futm_source%3DTelegram';
               await launchUrlString(url, mode: LaunchMode.externalApplication);

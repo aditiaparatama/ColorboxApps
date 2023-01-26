@@ -59,9 +59,9 @@ class CollectionHome1 extends GetView<HomeController> {
                                 calcu1: calcu1,
                                 collection: homeCollectionController.collection,
                                 homeCollection: {
-                                  "title": controller.collections[0].title,
+                                  "title": controller.collections[index].title,
                                   "subjectid":
-                                      controller.collections[0].subjectid
+                                      controller.collections[index].subjectid
                                 },
                                 i: i,
                               )

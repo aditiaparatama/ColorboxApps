@@ -51,6 +51,7 @@ class CartController extends GetxController {
 
   Future<void> reCreateCart() async {
     await localStorageData.deleteCart();
+    _cart = Cart.empty();
     _idCart = await CartProvider().createCart();
     setCart(_idCart!);
     // await getCart();
@@ -67,12 +68,16 @@ class CartController extends GetxController {
   }
 
   Future<Cart> getCart2() async {
+    int reload = 0;
     appliedDiscount = false;
     await getCartId();
     if (_idCart != null) {
       var result = await CartProvider().getCart(_idCart!);
       while (result == null || result["cart"] == null) {
-        await reCreateCart();
+        reload += 1;
+        if (reload >= 5) {
+          await reCreateCart();
+        }
         Future.delayed(const Duration(seconds: 1));
         result = await CartProvider().getCart(_idCart!);
       }
@@ -177,6 +182,14 @@ class CartController extends GetxController {
     update();
   }
 
+  Future<void> removeDiscountCode(String code) async {
+    var variables = {
+      "cartId": idCart,
+      "discountCodes": [code]
+    };
+    await CartProvider().cartDiscountCodesUpdate(variables);
+  }
+
   Future<void> updateDiscountCode(String code) async {
     _loading.value = true;
     update();
@@ -211,6 +224,7 @@ class CartController extends GetxController {
         result['cartDiscountCodesUpdate']['cart']['discountCodes'][0]
                 ['applicable'] ==
             false) {
+      await removeDiscountCode("");
       Get.snackbar("", "Kode Voucher tidak dapat digunakan",
           titleText: Row(
             children: [

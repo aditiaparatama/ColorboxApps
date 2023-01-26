@@ -38,6 +38,9 @@ class ControlV2Controller extends GetxController {
           DateTime.parse(Get.find<SettingsController>().token!.expiresAt!);
       if (now.isAfter(expired)) Get.find<SettingsController>().logout();
     }
+    if (_user.displayName == null) {
+      // Get.find<SettingsController>().logout();
+    }
     update();
     super.onInit();
   }

@@ -1,4 +1,3 @@
-import 'package:colorbox/app/modules/cart/controllers/cart_controller.dart';
 import 'package:colorbox/app/modules/orders/controllers/orders_controller.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
@@ -57,7 +56,7 @@ class SettingsController extends GetxController {
     localStorageData.deleteUser();
     localStorageData.deleteToken();
     _userModel = UserModel.isEmpty();
-    await Get.find<CartController>().reCreateCart();
+    // await Get.find<CartController>().reCreateCart();
     _loading.value = false;
     update();
   }

@@ -4,13 +4,16 @@ import 'package:colorbox/app/modules/product/views/widget/select_variant_bottoms
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smartlook/flutter_smartlook.dart';
 import 'package:get/get.dart';
 
 class FooterWidget extends GetView<ProductController> {
   final String handle;
   // ignore: annotate_overrides, overridden_fields
   final String? tag;
-  const FooterWidget(this.handle, {Key? key, this.tag}) : super(key: key);
+  final bool? openModal;
+  const FooterWidget(this.handle, {Key? key, this.tag, this.openModal = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +44,11 @@ class FooterWidget extends GetView<ProductController> {
                           controller.product.totalInventory! > 0) ||
                       controller.variant!.inventoryQuantity! > 0
                   ? () {
-                      if (controller.ukuran == "") {
+                      if (controller.ukuran == "" && openModal!) {
                         selectVariantBottomSheet(handle);
                         return;
                       }
+                      Smartlook.instance.trackEvent('BTN_KERANJANG');
                       Get.find<CartController>().addCart(
                           controller.variant!.id!, context, controller.ukuran,
                           variants: controller.variant);

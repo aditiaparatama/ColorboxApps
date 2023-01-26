@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
@@ -24,6 +25,7 @@ class ProfileView extends GetView<ProfileController> {
   bool emailAlert = false;
   AutovalidateMode emailValidate = AutovalidateMode.disabled;
   AutovalidateMode passwordValidate = AutovalidateMode.disabled;
+  Timer? _debounce;
 
   void _triggerValidator(String name) {
     switch (name) {
@@ -44,10 +46,11 @@ class ProfileView extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: const PreferredSize(
-            preferredSize: Size.fromHeight(56),
+        appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(56),
             child: AppBarDefault(
               text: "Masuk Akun",
+              leadingActive: (globalKey is LabeledGlobalKey) ? false : true,
             )),
         backgroundColor: Colors.white,
         body: GetBuilder(
@@ -89,8 +92,18 @@ class ProfileView extends GetView<ProfileController> {
                                           onChange: (value) async {
                                             if (EmailValidator(value)
                                                 .isValidEmail()) {
-                                              await controller
-                                                  .checkEmail(value);
+                                              if (_debounce?.isActive ??
+                                                  false) {
+                                                _debounce?.cancel();
+                                              }
+                                              _debounce = Timer(
+                                                  const Duration(
+                                                      milliseconds: 600),
+                                                  () async {
+                                                // do something with query
+                                                await controller
+                                                    .checkEmail(value);
+                                              });
                                             }
                                             controller.update();
                                           },

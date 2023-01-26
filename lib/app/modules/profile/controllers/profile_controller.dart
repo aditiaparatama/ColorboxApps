@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:colorbox/app/data/models/countries_model.dart';
 import 'package:colorbox/app/data/models/mailing_address.dart';
 import 'package:colorbox/app/modules/home/providers/home_provider.dart';
+import 'package:colorbox/app/modules/product/controllers/product_controller.dart';
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
@@ -21,6 +22,7 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class ProfileController extends GetxController {
   final LocalStorageData localStorageData = Get.find();
+  final ProductController productController = Get.put(ProductController());
   final ValueNotifier _loading = ValueNotifier(false);
   ValueNotifier get loading => _loading;
   UserModel _userModel = UserModel.isEmpty();
@@ -88,6 +90,7 @@ class ProfileController extends GetxController {
       //     result["customerAccessToken"]['accessToken'], _userModel);
 
       Get.find<SettingsController>().getTotalOrders();
+      productController.getUser();
       _loading.value = false;
       update();
     }

@@ -395,8 +395,7 @@ class AddressForm extends GetView<ProfileController> {
                               await controller.getAddress();
                               if (checkout) {
                                 Get.find<CartController>().update();
-                                Get.back();
-                                Get.toNamed(Routes.CHECKOUT);
+                                Get.offAndToNamed(Routes.CHECKOUT);
                               } else {
                                 Get.back();
                               }

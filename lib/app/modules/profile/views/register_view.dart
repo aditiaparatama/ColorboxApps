@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:colorbox/app/modules/profile/views/profile_view.dart';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
-import 'package:colorbox/app/widgets/custom_checkout.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/widgets/custom_text_form_field.dart';
 import 'package:colorbox/constance.dart';
@@ -19,7 +20,7 @@ class RegisterView extends GetView<ProfileController> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController birthday = TextEditingController();
   final TextEditingController _telpon = TextEditingController();
-
+  Timer? _debounce;
   AutovalidateMode emailValidate = AutovalidateMode.disabled;
   AutovalidateMode passwordValidate = AutovalidateMode.disabled;
   AutovalidateMode namaValidate = AutovalidateMode.disabled;
@@ -166,8 +167,18 @@ class RegisterView extends GetView<ProfileController> {
                                           onChange: (value) async {
                                             if (EmailValidator(value)
                                                 .isValidEmail()) {
-                                              await controller
-                                                  .checkEmail(value);
+                                              if (_debounce?.isActive ??
+                                                  false) {
+                                                _debounce?.cancel();
+                                              }
+                                              _debounce = Timer(
+                                                  const Duration(
+                                                      milliseconds: 600),
+                                                  () async {
+                                                // do something with query
+                                                await controller
+                                                    .checkEmail(value);
+                                              });
                                             }
                                           },
                                           validator: (value) {

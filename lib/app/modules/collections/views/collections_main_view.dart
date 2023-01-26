@@ -7,6 +7,7 @@ import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/app/widgets/empty_page.dart';
 import 'package:colorbox/app/widgets/widget.dart';
 import 'package:colorbox/constance.dart';
+import 'package:flutter_smartlook/flutter_smartlook.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -52,6 +53,8 @@ class CollectionsMainView extends GetView<CollectionsController> {
     var sortBy = Get.arguments["sortBy"];
     var indexMenu = Get.arguments["indexMenu"];
     var _menu = Get.arguments["menu"];
+
+    Smartlook.instance.trackEvent('PCP');
 
     controller.setTabBar(_menu,
         parent: (indexMenu == null) ? true : false, index: indexMenu ?? 0);
@@ -150,7 +153,7 @@ class CollectionsMainView extends GetView<CollectionsController> {
                                   if (control.listTabs.length == 1) ...[
                                     const SizedBox(width: 8),
                                     const CustomText(
-                                      text: "Filter",
+                                      text: "Sortir",
                                       color: colorNeutral100,
                                       fontWeight: FontWeight.w400,
                                     )
@@ -176,7 +179,7 @@ class CollectionsMainView extends GetView<CollectionsController> {
                                   if (control.listTabs.length == 1) ...[
                                     const SizedBox(width: 8),
                                     const CustomText(
-                                      text: "Sortir",
+                                      text: "Filter",
                                       color: colorNeutral100,
                                       fontWeight: FontWeight.w400,
                                     )

@@ -14,6 +14,7 @@ import 'package:colorbox/app/widgets/item_card_cart.dart';
 import 'package:colorbox/app/widgets/widget.dart';
 import 'package:colorbox/constance.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smartlook/flutter_smartlook.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:colorbox/app/modules/cart/views/widget/item_cart_widget.dart';
@@ -26,6 +27,8 @@ import '../controllers/cart_controller.dart';
 class CartView extends GetView<CartController> {
   final CollectionsController collectionsController =
       Get.put(CollectionsController(), tag: "cart");
+  final CollectionsController collectionsBxGyController =
+      Get.put(CollectionsController(), tag: "BxGy");
   int index = 0;
   int indexDiscount = 0, indexBxGy = -1;
   int indexCollection = 0;
@@ -71,6 +74,13 @@ class CartView extends GetView<CartController> {
               .replaceAll('gid://shopify/Collection/', '')),
           2);
 
+      if (indexBxGy >= 0) {
+        await collectionsBxGyController.fetchCollectionProduct(
+            int.parse(controller.discountController.discountAutomatic[indexBxGy]
+                .collections![0].id!
+                .replaceAll('gid://shopify/Collection/', '')),
+            2);
+      }
       for (final x in controller.cart.lines ?? []) {
         if (double.parse(x.merchandise!.price!.replaceAll(".00", "")).ceil() -
                 double.parse(x.discountAllocations!.amount ?? "0.0").ceil() ==
@@ -87,6 +97,7 @@ class CartView extends GetView<CartController> {
 
   @override
   Widget build(BuildContext context) {
+    Smartlook.instance.trackEvent('CART');
     return FutureBuilder(
         future: initializeSettings(),
         builder: (context, snapshot) {
@@ -291,6 +302,7 @@ class CartView extends GetView<CartController> {
                                   if (controller.discountController
                                           .discountAutomatic.isNotEmpty &&
                                       indexBxGy >= 0 &&
+                                      controller.cart.estimatedCost != null &&
                                       double.parse(controller
                                                   .cart
                                                   .estimatedCost!
@@ -304,20 +316,9 @@ class CartView extends GetView<CartController> {
                                               "0") &&
                                       !freeGift)
                                     GetBuilder<CollectionsController>(
-                                        init: Get.put(CollectionsController(),
-                                            tag: "BxGy"),
+                                        init: collectionsBxGyController,
                                         tag: "BxGy",
-                                        builder: (controllerBxgy) {
-                                          controllerBxgy.fetchCollectionProduct(
-                                              int.parse(controller
-                                                  .discountController
-                                                  .discountAutomatic[indexBxGy]
-                                                  .collections![0]
-                                                  .id!
-                                                  .replaceAll(
-                                                      'gid://shopify/Collection/',
-                                                      '')),
-                                              2);
+                                        builder: (_) {
                                           return Column(
                                             children: [
                                               Container(
@@ -343,7 +344,7 @@ class CartView extends GetView<CartController> {
                                                                   .discountAutomatic[
                                                                       indexBxGy]
                                                                   .title ??
-                                                              "",
+                                                              "Free Gift",
                                                           fontSize: 14,
                                                           fontWeight:
                                                               FontWeight.w600,
@@ -365,7 +366,7 @@ class CartView extends GetView<CartController> {
                                                 padding: const EdgeInsets.only(
                                                     left: 16),
                                                 height: 200,
-                                                child: (controllerBxgy
+                                                child: (collectionsBxGyController
                                                         .collection
                                                         .products
                                                         .isEmpty)
@@ -375,7 +376,7 @@ class CartView extends GetView<CartController> {
                                                       )
                                                     : GridView.builder(
                                                         itemCount:
-                                                            controllerBxgy
+                                                            collectionsBxGyController
                                                                 .collection
                                                                 .products
                                                                 .length,
@@ -391,7 +392,7 @@ class CartView extends GetView<CartController> {
                                                         ),
                                                         itemBuilder: (_, i) {
                                                           var calcu1 = int.parse(
-                                                                  controllerBxgy
+                                                                  collectionsBxGyController
                                                                       .collection
                                                                       .products[
                                                                           i]
@@ -401,7 +402,7 @@ class CartView extends GetView<CartController> {
                                                                       .replaceAll(
                                                                           ".00",
                                                                           "")) /
-                                                              int.parse(controllerBxgy
+                                                              int.parse(collectionsBxGyController
                                                                   .collection
                                                                   .products[i]
                                                                   .variants[0]
@@ -410,7 +411,7 @@ class CartView extends GetView<CartController> {
                                                                       ".00",
                                                                       ""));
                                                           return (i ==
-                                                                      (controllerBxgy
+                                                                      (collectionsBxGyController
                                                                               .collection
                                                                               .products
                                                                               .length -
@@ -420,13 +421,13 @@ class CartView extends GetView<CartController> {
                                                                   calcu1:
                                                                       calcu1,
                                                                   collection:
-                                                                      controllerBxgy
+                                                                      collectionsBxGyController
                                                                           .collection,
                                                                   homeCollection: {
-                                                                    "title": controllerBxgy
+                                                                    "title": collectionsBxGyController
                                                                         .collection
                                                                         .title,
-                                                                    "subjectid": int.parse(controllerBxgy
+                                                                    "subjectid": int.parse(collectionsBxGyController
                                                                         .collection
                                                                         .id!
                                                                         .replaceAll(
@@ -440,7 +441,7 @@ class CartView extends GetView<CartController> {
                                                                   calcu1:
                                                                       calcu1,
                                                                   collection:
-                                                                      controllerBxgy
+                                                                      collectionsBxGyController
                                                                           .collection,
                                                                   i: i,
                                                                 );
@@ -458,7 +459,8 @@ class CartView extends GetView<CartController> {
                                               .typename !=
                                           "DiscountAutomaticBxgy")
                                     GetBuilder<CollectionsController>(
-                                        init: Get.put(CollectionsController()),
+                                        init: Get.put(CollectionsController(),
+                                            tag: "cart"),
                                         tag: "cart",
                                         builder: (_) {
                                           return Column(
@@ -588,11 +590,7 @@ class CartView extends GetView<CartController> {
       final _cartItems = controller.cart.lines;
       // double? totalPotongan;
       double? totalHarga = 0;
-      // double? totalHarga = (c.cart.estimatedCost == null ||
-      //         c.cart.estimatedCost!.totalAmount! == "0.0")
-      //     ? 0
-      //     : double.parse(
-      //         c.cart.estimatedCost!.totalAmount!.replaceAll(".0", ""));
+
       for (Line y in _cartItems ?? []) {
         if (y.merchandise!.inventoryQuantity! > 0) {
           totalHarga = totalHarga! +
@@ -605,15 +603,8 @@ class CartView extends GetView<CartController> {
 
         for (Line x in _cartItems ?? []) {
           totalPotongan = totalPotongan +
-              double.parse(x.discountAllocations!.amount ?? "0");
+              double.parse(x.discountAllocations!.amount ?? "0").round();
         }
-        // for (Line y in controller.listHabis ?? []) {
-        //   // if (y.merchandise!.inventoryQuantity! > 0) {
-        //   totalHarga = totalHarga! -
-        //       (double.parse(y.merchandise!.price!) * y.quantity!.toDouble());
-        //   // }
-        // }
-        // totalHarga = totalHarga! - totalPotongan!;
       }
       if (controller.cart.discountCodes != null &&
           controller.cart.discountCodes!.isNotEmpty &&
@@ -626,29 +617,16 @@ class CartView extends GetView<CartController> {
             totalPotongan = totalPotongan +
                 double.parse(x.discountAllocations!.amount ?? "0");
           }
-          // totalHarga = totalHarga! - totalPotongan!;
         } else {
           for (final x in controller.cart.discountAllocations ?? []) {
             totalPotongan = totalPotongan + double.parse(x.amount!);
           }
         }
-
-        // for (Line y in _cartItems ?? []) {
-        //   if (y.merchandise!.inventoryQuantity! > 0) {
-        //     totalHarga = totalHarga! +
-        //         (double.parse(y.merchandise!.price!) * y.quantity!.toDouble());
-        //   }
-        // }
       }
 
       if (controller.cart.discountAllocations != null &&
           controller.cart.discountAllocations!.isNotEmpty &&
           controller.discountController.discountAutomaticTotalOrder.isEmpty) {
-        // totalHarga = (c.cart.estimatedCost == null ||
-        //         c.cart.estimatedCost!.subtotalAmount! == "0.0")
-        //     ? 0
-        //     : double.parse(
-        //         c.cart.estimatedCost!.subtotalAmount!.replaceAll(".0", ""));
         totalPotongan =
             double.parse(controller.cart.discountAllocations![0].amount!);
       }
@@ -660,20 +638,8 @@ class CartView extends GetView<CartController> {
           (controller.cart.discountCodes == null ||
               controller.cart.discountCodes!.isEmpty ||
               controller.cart.discountCodes![0].code == "")) {
-        // totalHarga = (c.cart.estimatedCost == null ||
-        //         c.cart.estimatedCost!.subtotalAmount! == "0.0")
-        //     ? 0
-        //     : double.parse(
-        //         c.cart.estimatedCost!.subtotalAmount!.replaceAll(".0", ""));
         totalPotongan = double.parse(controller.discountController
             .discountAutomaticTotalOrder[0].customerGets!.value!.amount!);
-
-        // if (controller.listHabis.length > 0) {
-        //   for (final x in controller.listHabis) {
-        //     totalHarga = totalHarga! -
-        //         (double.parse(x.merchandise!.price!) * x.quantity!.toDouble());
-        //   }
-        // }
       }
 
       totalHarga = totalHarga! - totalPotongan;
@@ -731,7 +697,7 @@ class CartView extends GetView<CartController> {
                                   fontSize: 12,
                                 )
                               : const CustomText(
-                                  text: "-Rp 0",
+                                  text: "Rp 0",
                                   fontSize: 12,
                                 )
                         ],
@@ -851,6 +817,7 @@ class CartView extends GetView<CartController> {
                   backgroundColor: colorTextBlack,
                   color: Colors.white,
                   onPressed: () {
+                    Get.back();
                     Get.toNamed(Routes.CHECKOUT);
                     controller.checkoutTap = false;
                     controller.update();

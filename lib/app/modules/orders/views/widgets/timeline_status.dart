@@ -137,17 +137,17 @@ class TimelineStatus extends GetView<OrdersController> {
                   fontSize: 12)
             ],
           ),
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const CustomText(
-                text: "No Resi",
-                fontSize: 12,
-                color: Color(0xFF777777),
-              ),
-              const SizedBox(width: 33),
-              if (order.fulfillments != null)
+          if (order.fulfillments != null) ...[
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const CustomText(
+                  text: "No Resi",
+                  fontSize: 12,
+                  color: Color(0xFF777777),
+                ),
+                const SizedBox(width: 33),
                 Row(
                   children: [
                     CustomText(
@@ -174,8 +174,9 @@ class TimelineStatus extends GetView<OrdersController> {
                     )
                   ],
                 )
-            ],
-          ),
+              ],
+            ),
+          ],
           if (controller.history.isNotEmpty)
             GestureDetector(
               onTap: () => Get.to(

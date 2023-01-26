@@ -193,9 +193,15 @@ class Variants {
   Variants.fromJson(var json) {
     id = json["id"];
     title = json["title"];
-    price = json['price'];
-    compareAtPrice = json['compareAtPrice'];
-    compareAtPrice ??= "0";
+    price = (json['price'] is String)
+        ? json['price']
+        : json['price']["amount"].replaceAll(".0", "");
+
+    compareAtPrice = (json['compareAtPrice'] == null)
+        ? "0"
+        : (json['compareAtPrice'] is String)
+            ? json['compareAtPrice']
+            : (json['compareAtPrice']["amount"] ?? "0").replaceAll(".0", "");
     inventoryQuantity = (json.containsKey("inventoryQuantity"))
         ? json['inventoryQuantity']
         : json['quantityAvailable'];
@@ -213,8 +219,12 @@ class Variants {
         (json["product"].containsKey("id")) ? json["product"]["id"] : null;
     title = json["title"];
     titleProduct = json["product"]["title"];
-    price = json["price"];
-    compareAtPrice = json["compareAtPrice"] ??= "0";
+    price = json["price"]["amount"].replaceAll(".0", "");
+    compareAtPrice = (json['compareAtPrice'] == null)
+        ? "0"
+        : (json['compareAtPrice'] is String)
+            ? json['compareAtPrice']
+            : (json['compareAtPrice']["amount"] ?? "0").replaceAll(".0", "");
     weight = json["weight"];
     weightUnit = json["weightUnit"];
     inventoryQuantity = (json.containsKey("inventoryQuantity"))
@@ -236,8 +246,15 @@ class Variants {
 
   Variants.fromWishlist(var json) {
     id = json["id"].replaceAll("gid://shopify/ProductVariant/", "");
-    price = json['price'];
-    compareAtPrice = json['compareAtPrice'];
+    price = (json['price'] is String)
+        ? json['price']
+        : json['price']["amount"].replaceAll(".0", "");
+
+    compareAtPrice = (json['compareAtPrice'] == null)
+        ? "0"
+        : (json['compareAtPrice'] is String)
+            ? json['compareAtPrice']
+            : (json['compareAtPrice']["amount"] ?? "0").replaceAll(".0", "");
     compareAtPrice ??= "0.00";
     inventoryQuantity = json['quantityAvailable'];
     sku = json['sku'];

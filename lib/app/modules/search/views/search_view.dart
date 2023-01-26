@@ -20,7 +20,7 @@ class SearchView extends GetView<SearchController> {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {
       // do something with query
-      controller.fetchSearchProduct(search.text);
+      // controller.fetchSearchProduct(search.text);
     });
   }
 

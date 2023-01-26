@@ -52,9 +52,13 @@ class CollectionProvider extends GetConnect {
                       edges {
                           node {
                               id
-                              price
+                              price {
+                                  amount
+                              }
+                              compareAtPrice{
+                                  amount
+                              }
                               barcode
-                              compareAtPrice
                               inventoryQuantity
                               sku
                               selectedOptions{
@@ -130,9 +134,13 @@ class CollectionProvider extends GetConnect {
                       edges {
                           node {
                               id
-                              price
+                              price {
+                                  amount
+                              }
+                              compareAtPrice{
+                                  amount
+                              }
                               barcode
-                              compareAtPrice
                               inventoryQuantity
                               sku
                               selectedOptions{
@@ -211,9 +219,13 @@ class CollectionProvider extends GetConnect {
                       edges {
                           node {
                               id
-                              price
+                              price {
+                                  amount
+                              }
+                              compareAtPrice{
+                                  amount
+                              }
                               barcode
-                              compareAtPrice
                               quantityAvailable
                               sku
                               selectedOptions{

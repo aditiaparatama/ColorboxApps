@@ -83,7 +83,7 @@ class ItemCartWidget extends StatelessWidget {
                   ),
                   CustomText(
                     text:
-                        "-Rp ${formatter.format(double.parse(_cart.discountAllocations!.amount!).ceil())}]",
+                        "-Rp ${formatter.format(double.parse(_cart.discountAllocations!.amount!).round())}]",
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
                   )
@@ -112,7 +112,7 @@ class ItemCartWidget extends StatelessWidget {
                     const SizedBox(width: 4),
                     CustomText(
                       text:
-                          "Rp ${formatter.format(double.parse(_cart.merchandise!.price!.replaceAll(".00", "")).ceil() - (double.parse(_cart.discountAllocations!.amount!) / _cart.quantity!).ceil())}",
+                          "Rp ${formatter.format(double.parse(_cart.merchandise!.price!.replaceAll(".00", "")).round() - (double.parse(_cart.discountAllocations!.amount!) / _cart.quantity!).round())}",
                       fontSize: 14,
                       color: colorSaleRed,
                       fontWeight: FontWeight.bold,

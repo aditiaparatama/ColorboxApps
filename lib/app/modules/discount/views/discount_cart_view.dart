@@ -168,9 +168,9 @@ class DiscountCartView extends GetView<DiscountController> {
                                                           controller
                                                               .discount[index]
                                                               .title!);
-                                                  // controller.loading.value =
-                                                  //     false;
-                                                  // controller.update();
+                                                  controller.loading.value =
+                                                      false;
+                                                  controller.update();
                                                 },
                                           child: Container(
                                             padding: const EdgeInsets.symmetric(
@@ -418,14 +418,14 @@ class DiscountCartView extends GetView<DiscountController> {
           builder: (context) => AlertDialog(
             title: const CustomText(
               text: 'Ganti Dengan Voucher?',
-              fontSize: 14,
+              fontSize: 16,
               textAlign: TextAlign.center,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w700,
             ),
             content: const CustomText(
               text:
                   'Saat ini kamu menggunakan promo yang sedang berjalan, menggunakan voucher berarti menghapus promo. Lanjut gunakan voucher?',
-              fontSize: 12,
+              fontSize: 14,
               textOverflow: TextOverflow.fade,
               textAlign: TextAlign.center,
             ),

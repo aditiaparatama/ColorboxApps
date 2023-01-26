@@ -131,8 +131,7 @@ class ShippingWidget extends GetView<CheckoutController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomText(
-                    text:
-                        controller.checkout.shippingLine!.title!.split("(")[0],
+                    text: controller.checkout.shippingLine!.title!,
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
                   ),

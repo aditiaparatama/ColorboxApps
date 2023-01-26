@@ -1,5 +1,6 @@
 import 'package:colorbox/app/data/models/mailing_address.dart';
 import 'package:colorbox/app/services/shopify_graphql.dart';
+import 'package:colorbox/app/widgets/widget.dart';
 import 'package:colorbox/constance.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:flutter/material.dart';
@@ -115,6 +116,11 @@ class ProfileProvider extends GetConnect {
     );
 
     final QueryResult result = await _client.query(options);
+
+    if (result.data == null && result.exception!.graphqlErrors.isNotEmpty) {
+      alertGagal(result.exception!.graphqlErrors[0].message);
+      return "1";
+    }
 
     if (result.data!['customerRecover']['customerUserErrors'].length > 0) {
       Get.snackbar("Warning",
@@ -269,7 +275,7 @@ class ProfileProvider extends GetConnect {
       document: gql(
         '''
         {
-          customers(first: 1, query: "email:$email") {
+          customers(first: 5, query: "email:$email") {
             # CustomerConnection fields
             edges{
                 node{
@@ -618,7 +624,7 @@ class ProfileProvider extends GetConnect {
     var response = await delete(
         url_shopify + "customers/$id/addresses/$addressId.json",
         headers: {"X-Shopify-Access-Token": token});
-    if (response.body.contains("errors") &&
+    if (response.body.containsKey("errors") &&
         response.body["errors"]["base"][0] ==
             "Cannot delete the customer’s default address") {
       Get.snackbar("Error", "Alamat utama tidak dapat dihapus",

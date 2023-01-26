@@ -95,8 +95,12 @@ class CheckoutProvider extends GetConnect {
                               }
                               title
                               sku
-                              price
-                              compareAtPrice
+                              price {
+                                  amount
+                              }
+                              compareAtPrice{
+                                  amount
+                              }
                               weight
                               weightUnit
                               selectedOptions {
@@ -293,9 +297,13 @@ class CheckoutProvider extends GetConnect {
                               }
                               title
                               sku
-                              price
+                              price {
+                                  amount
+                              }
+                              compareAtPrice{
+                                  amount
+                              }
                               quantityAvailable
-                              compareAtPrice
                               weight
                               weightUnit
                               selectedOptions {
@@ -486,8 +494,12 @@ class CheckoutProvider extends GetConnect {
                               }
                               title
                               sku
-                              price
-                              compareAtPrice
+                              price {
+                                  amount
+                              }
+                              compareAtPrice{
+                                  amount
+                              }
                               weight
                               weightUnit
                               selectedOptions {
@@ -683,8 +695,12 @@ class CheckoutProvider extends GetConnect {
                               }
                               title
                               sku
-                              price
-                              compareAtPrice
+                              price {
+                                  amount
+                              }
+                              compareAtPrice{
+                                  amount
+                              }
                               weight
                               weightUnit
                               selectedOptions {
@@ -894,8 +910,12 @@ class CheckoutProvider extends GetConnect {
                               }
                               title
                               sku
-                              price
-                              compareAtPrice
+                              price {
+                                  amount
+                              }
+                              compareAtPrice{
+                                  amount
+                              }
                               weight
                               weightUnit
                               selectedOptions {
@@ -1090,8 +1110,12 @@ class CheckoutProvider extends GetConnect {
                               }
                               title
                               sku
-                              price
-                              compareAtPrice
+                              price {
+                                  amount
+                              }
+                              compareAtPrice{
+                                  amount
+                              }
                               weight
                               weightUnit
                               selectedOptions {

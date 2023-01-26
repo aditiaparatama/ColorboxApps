@@ -39,10 +39,12 @@ class CustomRadioColorState extends State<CustomRadioColor> {
           //highlightColor: Colors.red,
           splashColor: Colors.blueAccent,
           onTap: () {
-            widget.controller.getSelectedValue(
-                widget.controller.variant!.options[0].value!,
-                radioData[index].buttonText,
-                fromColor: true);
+            if (widget.listData!.length > 1) {
+              widget.controller.getSelectedValue(
+                  widget.controller.variant!.options[0].value!,
+                  radioData[index].buttonText,
+                  fromColor: true);
+            }
             setState(() {
               // ignore: avoid_function_literals_in_foreach_calls
               radioData.forEach((element) => element.isSelected = false);

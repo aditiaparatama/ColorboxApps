@@ -115,8 +115,12 @@ class CartProvider extends GetConnect {
                             }
                         }
                         title
-                        price
-                        compareAtPrice
+                        price {
+                            amount
+                        }
+                        compareAtPrice{
+                            amount
+                        }
                         weight
                         weightUnit
                         quantityAvailable

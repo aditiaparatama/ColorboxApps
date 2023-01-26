@@ -150,7 +150,7 @@ class ItemCheckoutWidget extends StatelessWidget {
                                 ),
                                 CustomText(
                                   text:
-                                      "-Rp ${formatter.format(double.parse(_checkout.discountAllocations![0].allocatedAmount!).ceil())}]",
+                                      "-Rp ${formatter.format(double.parse(_checkout.discountAllocations![0].allocatedAmount!).round())}]",
                                   fontSize: 10,
                                   fontWeight: FontWeight.w600,
                                 )
@@ -183,7 +183,7 @@ class ItemCheckoutWidget extends StatelessWidget {
                                     const SizedBox(width: 4),
                                     CustomText(
                                       text:
-                                          "Rp ${formatter.format(double.parse(_checkout.variants!.price!.replaceAll(".00", "")).ceil() - double.parse(_checkout.discountAllocations![0].allocatedAmount!).ceil())}",
+                                          "Rp ${formatter.format(double.parse(_checkout.variants!.price!.replaceAll(".00", "")).round() - double.parse(_checkout.discountAllocations![0].allocatedAmount!).round())}",
                                       fontSize: 12,
                                       color: colorSaleRed,
                                       fontWeight: FontWeight.bold,
