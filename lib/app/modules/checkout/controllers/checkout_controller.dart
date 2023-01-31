@@ -507,12 +507,9 @@ class CheckoutController extends GetxController {
         "mobile_number": phone
       },
       'customer_notification_preference': {
-        'invoice_created':
-            (_user.phone == null) ? ['email'] : ['whatsapp', 'email'],
-        'invoice_reminder':
-            (_user.phone == null) ? ['email'] : ['whatsapp', 'email'],
-        'invoice_paid':
-            (_user.phone == null) ? ['email'] : ['whatsapp', 'email']
+        'invoice_created': ['email'],
+        'invoice_reminder': ['email'],
+        'invoice_paid': ['email']
       }
     };
 

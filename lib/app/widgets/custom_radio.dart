@@ -29,7 +29,11 @@ class CustomRadioState extends State<CustomRadio> {
     radioData = [];
     for (int i = 0; i < widget.listData!.length; i++) {
       radioData.add(RadioModel(
-          (lastIndex != null && lastIndex == i) ? true : false,
+          (lastIndex != null &&
+                  lastIndex == i &&
+                  widget.controller.ukuran != '')
+              ? true
+              : false,
           widget.listData![i],
           widget.controller.getStock(
               widget.listData![i],

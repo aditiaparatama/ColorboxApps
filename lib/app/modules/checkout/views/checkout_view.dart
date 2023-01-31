@@ -26,6 +26,7 @@ class CheckoutView extends GetView<CheckoutController> {
             //show confirm dialogue
             //the return value will be from "Yes" or "No" options
             context: context,
+            barrierDismissible: false,
             builder: (context) => AlertDialog(
               contentPadding: const EdgeInsets.all(0),
               content: Container(
@@ -68,7 +69,7 @@ class CheckoutView extends GetView<CheckoutController> {
                                     try {
                                       String? urlString = await controller
                                           .createOrder()
-                                          .timeout(const Duration(minutes: 2));
+                                          .timeout(const Duration(seconds: 90));
                                       if (urlString == "" ||
                                           urlString == null) {
                                         return;
@@ -86,10 +87,11 @@ class CheckoutView extends GetView<CheckoutController> {
                                       }
 
                                       Navigator.of(context).pop(true);
-                                      Get.off(WebPaymentView(
+                                      Get.to(WebPaymentView(
                                           title: "Pembayaran", url: urlString));
                                     } catch (e) {
                                       controller.loading.value = false;
+                                      controller.checkoutTap = false;
                                       controller.update();
                                       Get.back();
                                       alertGagal(
@@ -411,6 +413,16 @@ class CheckoutView extends GetView<CheckoutController> {
                                               null)
                                       ? null
                                       : () async {
+                                          if (controller.checkout
+                                                      .shippingAddress!.phone ==
+                                                  null ||
+                                              controller.checkout
+                                                      .shippingAddress!.phone ==
+                                                  "") {
+                                            alertGagal(
+                                                "Nomor telpon tidak boleh kosong");
+                                            return;
+                                          }
                                           showAlert();
                                         },
                                   text: (controller.checkout.shippingLine !=

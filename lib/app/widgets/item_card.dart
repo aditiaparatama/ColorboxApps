@@ -106,7 +106,7 @@ class ItemCard extends StatelessWidget {
               ),
           ],
         ),
-        if (indexLabel > 0) ...[
+        if (indexLabel >= 0) ...[
           const SizedBox(height: 4),
           Container(
             decoration: const BoxDecoration(

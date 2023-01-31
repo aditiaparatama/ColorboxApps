@@ -36,7 +36,7 @@ class CollectionsController extends GetxController {
   String filterColor = "";
   String filterSize = "";
   String filterPrice = "";
-  String _tempColor = "";
+  String _tempColor = "", _firstColor = "";
   String _tempHandle = "";
   List<dynamic> filterList = [
     {"available": true}
@@ -219,18 +219,19 @@ class CollectionsController extends GetxController {
     }
 
     if (filterColor != "") {
-      filterList
-          .add('{variantOption: { name: "color", value: "$filterColor" }}');
+      filterList.add(
+          '{variantOption: { name: "color", value: "${filterColor.toUpperCase()}" }}');
     }
     if (filterSize != "") {
-      filterList.add('{variantOption: { name: "size", value: "$filterSize" }}');
+      filterList.add(
+          '{variantOption: { name: "size", value: "${filterSize.toUpperCase()}" }}');
     }
 
     if (filterPrice != "") {
       var parseValue =
           filterPrice.replaceAll("Rp ", "").replaceAll(".", "").split("-");
-      filterList
-          .add('{ price: { min: ${parseValue[0]}, max: ${parseValue[1]} }}');
+      filterList.add(
+          '{ price: { min: ${(parseValue[0] == "0 ") ? "10" : parseValue[0]}, max: ${parseValue[1]} }}');
     }
 
     // if (filterColor != "" || filterSize != "" || filterPrice != "") {
@@ -278,8 +279,20 @@ class CollectionsController extends GetxController {
             ? _tempColor
             : temp.options[1].values[0];
 
-    String handle = (temp.handle!)
-        .replaceAll(colorBefore.toLowerCase().replaceAll(" ", "-"), "");
+    //update handle
+    String handle = "";
+    if (_tempHandle != "" &&
+        _tempHandle.substring(0, 10) == curHandle.substring(0, 10) &&
+        _firstColor != temp.options[1].values[0]) {
+      handle = _tempHandle
+          .replaceAll(
+              temp.options[1].values[0].toLowerCase().replaceAll(" ", "-"), "")
+          .replaceAll(colorBefore.toLowerCase().replaceAll(" ", "-"), "");
+    } else {
+      handle = (temp.handle!)
+          .replaceAll(colorBefore.toLowerCase().replaceAll(" ", "-"), "");
+    }
+
     var check = handle.split("-");
     handle = (check[check.length - 1] == "")
         ? (handle + color.toLowerCase())
@@ -288,8 +301,9 @@ class CollectionsController extends GetxController {
 
     var result = await ProductProvider().getProductByHandle(handle);
     Product _product = Product.fromJson(result["product"]);
-    _tempHandle = curHandle;
+    _tempHandle = _product.handle!;
     _tempColor = color;
+    _firstColor = temp.options[1].values[0];
     _collection.products[index].handle = _product.handle;
     _collection.products[index].totalInventory = _product.totalInventory;
     _collection.products[index].image[0] = _product.image[0];

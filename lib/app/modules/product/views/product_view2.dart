@@ -209,26 +209,36 @@ class ProductView2 extends StatelessWidget {
                                       children: [
                                         const SizedBox(height: 16),
                                         Row(
+                                          mainAxisSize: MainAxisSize.max,
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            CustomText(
-                                              text: control.product.title!,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400,
-                                              color: colorNeutral100,
+                                            Flexible(
+                                              flex: 3,
+                                              child: CustomText(
+                                                text: control.product.title!,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                                color: colorNeutral100,
+                                                textOverflow: TextOverflow.fade,
+                                              ),
                                             ),
-                                            CustomText(
-                                              text: "Rp " +
-                                                  formatter.format(int.parse(
-                                                      price!.replaceAll(
-                                                          ".00", ""))),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w800,
-                                              color: (compareAtPrice == "0" ||
-                                                      compareAtPrice == price)
-                                                  ? colorNeutral100
-                                                  : colorDangerMain,
+                                            Flexible(
+                                              flex: 1,
+                                              child: CustomText(
+                                                text: "Rp " +
+                                                    formatter.format(int.parse(
+                                                        price!.replaceAll(
+                                                            ".00", ""))),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w800,
+                                                color: (compareAtPrice == "0" ||
+                                                        compareAtPrice == price)
+                                                    ? colorNeutral100
+                                                    : colorDangerMain,
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -464,13 +474,12 @@ class ProductView2 extends StatelessWidget {
                                           fontWeight: FontWeight.w600,
                                         ),
                                         const SizedBox(height: 16),
-                                        if (control.variant!
-                                                    .inventoryQuantity! <=
-                                                5 &&
+                                        if (control.variant!.inventoryQuantity! <= 5 &&
                                             control.sizeTemp != null &&
                                             control.variant!
                                                     .inventoryQuantity! !=
-                                                0)
+                                                0 &&
+                                            control.ukuran != '')
                                           CustomText(
                                             text: 'Tersisa ' +
                                                 control

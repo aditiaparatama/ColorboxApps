@@ -88,7 +88,8 @@ void selectVariantBottomSheet(String handle) async {
                         const SizedBox(height: 16),
                         if (controller.variant!.inventoryQuantity! <= 5 &&
                             controller.sizeTemp != null &&
-                            controller.variant!.inventoryQuantity! != 0)
+                            controller.variant!.inventoryQuantity! != 0 &&
+                            controller.ukuran != '')
                           CustomText(
                             text: 'Tersisa ' +
                                 controller.variant!.inventoryQuantity

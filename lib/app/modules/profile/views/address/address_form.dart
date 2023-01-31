@@ -40,11 +40,11 @@ class AddressForm extends GetView<ProfileController> {
         // controller.update();
       }
 
-      if (x.phone!.substring(0, 2) == "08") {
+      if (x.phone != null && x.phone!.substring(0, 2) == "08") {
         x.phone = x.phone!.substring(1, x.phone!.length);
       }
       _namaLengkap.text = x.firstName! + " " + x.lastName!;
-      _telpon.text = x.phone!.replaceAll("+62", "");
+      _telpon.text = (x.phone ?? "").replaceAll("+62", "");
       _address1.text = x.address1 ?? "";
       _province.text = x.province ?? "";
       _city.text = x.city ?? "";

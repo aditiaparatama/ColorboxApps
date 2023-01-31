@@ -17,7 +17,7 @@ class SearchProvider extends GetConnect {
     final QueryOptions options = QueryOptions(
         document: gql(
           """query {
-      products(first: $limit, sortKey: CREATED_AT, reverse: true, query: "(title:$value*) OR (sku:$value) OR (article:$value) OR (barcode:$value)") {
+      products(first: $limit, sortKey: CREATED_AT, reverse: true, query: "title:$value* OR sku:$value OR article:$value OR barcode:$value") {
         pageInfo {
           hasNextPage
           hasPreviousPage
@@ -85,7 +85,7 @@ class SearchProvider extends GetConnect {
     final GraphQLClient _client = getShopifyGraphQLClient(admin: true);
 
     final QueryOptions options = QueryOptions(document: gql("""query {
-      products(first: $limit, sortKey: CREATED_AT, reverse: true, query: "(title:$value*) OR (sku:$value) OR (article:$value) OR (barcode:$value)", after: "$cursor") {
+      products(first: $limit, sortKey: CREATED_AT, reverse: true, query: "title:$value* OR sku:$value OR article:$value OR barcode:$value", after: "$cursor") {
         pageInfo {
           hasNextPage
           hasPreviousPage

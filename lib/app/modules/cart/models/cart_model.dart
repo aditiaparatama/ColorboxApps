@@ -47,6 +47,7 @@ class Cart {
   }
 
   Cart.empty() {
+    estimatedCost = EstimatedCost.isEmpty();
     lines = [];
   }
 }
@@ -75,6 +76,10 @@ class EstimatedCost {
   EstimatedCost.fromJson(var json) {
     subtotalAmount = json["subtotalAmount"]["amount"] ??= "0.0";
     totalAmount = json["totalAmount"]["amount"] ??= "0.0";
+  }
+
+  EstimatedCost.isEmpty() {
+    totalAmount = "0.0";
   }
 }
 

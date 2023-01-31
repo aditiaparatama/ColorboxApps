@@ -21,7 +21,7 @@ class SearchController extends GetxController {
 
   final int _limit = 10;
   bool firstView = true;
-  String _tempColor = "";
+  String _tempColor = "", _firstColor = "";
   String _tempHandle = "";
 
   void fetchSearchProduct(String search) async {
@@ -81,8 +81,20 @@ class SearchController extends GetxController {
             ? _tempColor
             : temp.options[1].values[0];
 
-    String handle = (temp.handle!)
-        .replaceAll(colorBefore.toLowerCase().replaceAll(" ", "-"), "");
+    //update handle
+    String handle = "";
+    if (_tempHandle != "" &&
+        _tempHandle.substring(0, 10) == curHandle.substring(0, 10) &&
+        _firstColor != temp.options[1].values[0]) {
+      handle = _tempHandle
+          .replaceAll(
+              temp.options[1].values[0].toLowerCase().replaceAll(" ", "-"), "")
+          .replaceAll(colorBefore.toLowerCase().replaceAll(" ", "-"), "");
+    } else {
+      handle = (temp.handle!)
+          .replaceAll(colorBefore.toLowerCase().replaceAll(" ", "-"), "");
+    }
+
     var check = handle.split("-");
     handle = (check[check.length - 1] == "")
         ? (handle + color.toLowerCase())
@@ -91,8 +103,9 @@ class SearchController extends GetxController {
 
     var result = await ProductProvider().getProductByHandle(handle);
     Product _product = Product.fromJson(result["product"]);
-    _tempHandle = curHandle;
+    _tempHandle = _product.handle!;
     _tempColor = color;
+    _firstColor = temp.options[1].values[0];
     product[index].handle = _product.handle;
     product[index].totalInventory = _product.totalInventory;
     product[index].image[0] = _product.image[0];

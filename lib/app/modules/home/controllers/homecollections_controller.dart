@@ -44,7 +44,7 @@ class HomeCollectionsController extends GetxController {
   int selectedIndex = 0;
   int subjectID = 0;
   int orderBy = 2;
-  String _tempColor = "";
+  String _tempColor = "", _firstColor = "";
   String _tempHandle = "";
   String _filtersDefault = "";
   List<dynamic> filterList = [
@@ -278,8 +278,20 @@ class HomeCollectionsController extends GetxController {
             ? _tempColor
             : temp.options[1].values[0];
 
-    String handle = (temp.handle!)
-        .replaceAll(colorBefore.toLowerCase().replaceAll(" ", "-"), "");
+    //update handle
+    String handle = "";
+    if (_tempHandle != "" &&
+        _tempHandle.substring(0, 10) == curHandle.substring(0, 10) &&
+        _firstColor != temp.options[1].values[0]) {
+      handle = _tempHandle
+          .replaceAll(
+              temp.options[1].values[0].toLowerCase().replaceAll(" ", "-"), "")
+          .replaceAll(colorBefore.toLowerCase().replaceAll(" ", "-"), "");
+    } else {
+      handle = (temp.handle!)
+          .replaceAll(colorBefore.toLowerCase().replaceAll(" ", "-"), "");
+    }
+
     var check = handle.split("-");
     handle = (check[check.length - 1] == "")
         ? (handle + color.toLowerCase())
@@ -288,8 +300,9 @@ class HomeCollectionsController extends GetxController {
 
     var result = await ProductProvider().getProductByHandle(handle);
     Product _product = Product.fromJson(result["product"]);
-    _tempHandle = curHandle;
+    _tempHandle = _product.handle!;
     _tempColor = color;
+    _firstColor = temp.options[1].values[0];
     _collection.products[index].handle = _product.handle;
     _collection.products[index].totalInventory = _product.totalInventory;
     _collection.products[index].image[0] = _product.image[0];

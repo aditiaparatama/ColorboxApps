@@ -197,11 +197,15 @@ class SearchView extends GetView<SearchController> {
     return SizedBox(
       height: 36,
       child: TextField(
+        textInputAction: TextInputAction.search,
         autocorrect: false,
         cursorColor: colorTextBlack,
         autofocus: true,
         controller: search,
         onChanged: _onSearchChanged,
+        onSubmitted: (value) {
+          controller.fetchSearchProduct(value);
+        },
         decoration: InputDecoration(
           filled: true,
           fillColor: const Color(0xFFFAFAFA),

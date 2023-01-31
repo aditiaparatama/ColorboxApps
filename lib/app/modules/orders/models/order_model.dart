@@ -91,6 +91,13 @@ class Order {
           "Mohon maaf, pesanan kamu dibatalkan karena ada kesalahan pada sistem. Silahkan menghubungi customer service.";
     }
 
+    if (json['displayFinancialStatus'] == "PENDING" &&
+        json["cancelReason"] == "OTHER") {
+      status = "Dibatalkan";
+      cancelReason =
+          "Mohon maaf, pesanan kamu dibatalkan karena ada kesalahan pada sistem. Silahkan menghubungi customer service.";
+    }
+
     if (tags!.contains("sudah_proses")) {
       status = "Diproses";
     }

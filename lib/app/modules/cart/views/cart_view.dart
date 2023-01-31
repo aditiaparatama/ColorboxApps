@@ -33,11 +33,12 @@ class CartView extends GetView<CartController> {
   int indexDiscount = 0, indexBxGy = -1;
   int indexCollection = 0;
   int selisihOrder = 0;
-  double totalPotongan = 0;
-  bool freeGift = false;
+  double totalPotongan = 0, selisihBuyXgetY = 0;
+  bool freeGift = false, appliedFreeGift = false;
 
   Future<void> initializeSettings() async {
     totalPotongan = 0;
+    selisihBuyXgetY = 0;
     freeGift = false;
     await controller.getCart2();
     // await controller.discountController.getDiscountAutomatic();
@@ -53,10 +54,14 @@ class CartView extends GetView<CartController> {
               .nextInt(controller.discountController.discountAutomatic.length)
           : 0;
 
+      int looping = 0;
       while (controller.discountController.discountAutomatic.isNotEmpty &&
+          controller.discountController.discountAutomatic.length > 1 &&
           indexDiscount == indexBxGy) {
+        if (looping > 10) break;
         indexDiscount = indexRandom
             .nextInt(controller.discountController.discountAutomatic.length);
+        looping += 1;
       }
 
       indexCollection = (controller.discountController
@@ -82,6 +87,14 @@ class CartView extends GetView<CartController> {
             2);
       }
       for (final x in controller.cart.lines ?? []) {
+        int i = controller.discountController.discountAutomatic[indexBxGy]
+            .customerBuys!.collections!
+            .indexWhere((e) => x.merchandise!.idCollection!.contains(e.id));
+        if (i >= 0) {
+          selisihBuyXgetY = selisihBuyXgetY +
+              (double.parse(x.merchandise!.price!) * x.quantity!.toDouble());
+        }
+
         if (double.parse(x.merchandise!.price!.replaceAll(".00", "")).ceil() -
                 double.parse(x.discountAllocations!.amount ?? "0.0").ceil() ==
             0) {
@@ -108,6 +121,7 @@ class CartView extends GetView<CartController> {
           return GetBuilder<CartController>(
               init: Get.put(CartController()),
               builder: (c) {
+                selisihBuyXgetY = 0;
                 selisihOrder = (controller.discountController
                         .discountAutomaticTotalOrder.isNotEmpty)
                     ? int.parse(controller
@@ -125,8 +139,18 @@ class CartView extends GetView<CartController> {
                         int.parse(x.merchandise!.price!.replaceAll(".00", ""));
                   }
                 }
+
                 for (final x in controller.cart.lines ?? []) {
-                  freeGift = false;
+                  int i = controller.discountController
+                      .discountAutomatic[indexBxGy].customerBuys!.collections!
+                      .indexWhere(
+                          (e) => x.merchandise!.idCollection!.contains(e.id));
+                  if (i >= 0) {
+                    selisihBuyXgetY = selisihBuyXgetY +
+                        (double.parse(x.merchandise!.price!) *
+                            x.quantity!.toDouble());
+                  }
+
                   if (double.parse(x.merchandise!.price!.replaceAll(".00", ""))
                               .ceil() -
                           double.parse(x.discountAllocations!.amount ?? "0.0")
@@ -152,6 +176,7 @@ class CartView extends GetView<CartController> {
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
                                   if (controller.homeController.maintenance)
                                     AnnouncementHome(
@@ -302,12 +327,7 @@ class CartView extends GetView<CartController> {
                                   if (controller.discountController
                                           .discountAutomatic.isNotEmpty &&
                                       indexBxGy >= 0 &&
-                                      controller.cart.estimatedCost != null &&
-                                      double.parse(controller
-                                                  .cart
-                                                  .estimatedCost!
-                                                  .subtotalAmount ??
-                                              "0") >=
+                                      selisihBuyXgetY >=
                                           double.parse(controller
                                                   .discountController
                                                   .discountAutomatic[indexBxGy]
@@ -320,6 +340,10 @@ class CartView extends GetView<CartController> {
                                         tag: "BxGy",
                                         builder: (_) {
                                           return Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Container(
                                                 color: colorDiver,
@@ -331,6 +355,10 @@ class CartView extends GetView<CartController> {
                                                     top: 24,
                                                     bottom: 16),
                                                 child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Row(
                                                       children: [
@@ -354,18 +382,18 @@ class CartView extends GetView<CartController> {
                                                     const SizedBox(height: 8),
                                                     CustomText(
                                                       text:
-                                                          "Selamat ! Setiap pembelanjaan min. Rp ${formatter.format(int.parse(controller.discountController.discountAutomatic[indexBxGy].minimumRequirement!.greaterThanOrEqualToSubtotal!.replaceAll(".0", "")))} berhak mendapatkan Free Collection dibawah ini:",
+                                                          "Selamat ! Setiap pembelanjaan min. Rp ${formatter.format(int.parse(controller.discountController.discountAutomatic[indexBxGy].minimumRequirement!.greaterThanOrEqualToSubtotal!.replaceAll(".0", "")))} berhak mendapatkan hadiah (Pilih produk dibawah) :",
                                                       fontSize: 12,
                                                       textOverflow:
                                                           TextOverflow.fade,
-                                                    )
+                                                    ),
                                                   ],
                                                 ),
                                               ),
                                               Container(
+                                                height: 250,
                                                 padding: const EdgeInsets.only(
                                                     left: 16),
-                                                height: 200,
                                                 child: (collectionsBxGyController
                                                         .collection
                                                         .products
@@ -375,6 +403,7 @@ class CartView extends GetView<CartController> {
                                                             CircularProgressIndicator(),
                                                       )
                                                     : GridView.builder(
+                                                        shrinkWrap: true,
                                                         itemCount:
                                                             collectionsBxGyController
                                                                 .collection
@@ -388,7 +417,7 @@ class CartView extends GetView<CartController> {
                                                           mainAxisSpacing: 12,
                                                           crossAxisSpacing: 12,
                                                           childAspectRatio:
-                                                              3 / 1.3,
+                                                              5 / 2.61,
                                                         ),
                                                         itemBuilder: (_, i) {
                                                           var calcu1 = int.parse(
@@ -486,7 +515,7 @@ class CartView extends GetView<CartController> {
                                               Container(
                                                 padding: const EdgeInsets.only(
                                                     left: 16),
-                                                height: 200,
+                                                height: 250,
                                                 child: (collectionsController
                                                         .collection
                                                         .products
@@ -509,7 +538,7 @@ class CartView extends GetView<CartController> {
                                                           mainAxisSpacing: 12,
                                                           crossAxisSpacing: 12,
                                                           childAspectRatio:
-                                                              3 / 1.3,
+                                                              5 / 2.61,
                                                         ),
                                                         itemBuilder: (_, i) {
                                                           var calcu1 = int.parse(
