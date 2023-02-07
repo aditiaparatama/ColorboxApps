@@ -6,9 +6,9 @@ untuk membuat produk pakaian yang berkualitas.
 
 ## Relase Started
 
-###### Version 1.1.0 (31 Januari 2023)
+### Version 1.1.0 (31 Januari 2023)
 
-###### Version 1.2.0
+### Version 1.2.0
 
 New Feature :
 
