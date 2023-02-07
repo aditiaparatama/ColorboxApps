@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:colorbox/app/widgets/my_input_theme.dart';
 import 'package:colorbox/constance.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -71,8 +74,6 @@ Future<void> setupFlutterNotifications() async {
 
   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
     // print('User granted permission');
-    // String? token = await (messaging.getToken());
-    // print("The token is" + token!);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       showFlutterNotification(message);
     });
@@ -107,42 +108,51 @@ void showFlutterNotification(RemoteMessage message) {
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  final Smartlook smartlook = Smartlook.instance;
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+    // Elsewhere in your code
+    // FirebaseCrashlytics.instance.crash();
 
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    final Smartlook smartlook = Smartlook.instance;
 
-  if (!kIsWeb) {
-    await setupFlutterNotifications();
-  }
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  smartlook.start();
-  smartlook.preferences
-      .setProjectKey('b22baee998480e0a1de9e82a5f6dce2ae61ce762');
+    if (!kIsWeb) {
+      await setupFlutterNotifications();
+    }
 
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    smartlook.start();
+    smartlook.preferences
+        .setProjectKey('b22baee998480e0a1de9e82a5f6dce2ae61ce762');
 
-  runApp(
-    GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "Colorbox",
-      initialRoute: AppPages.INITIAL,
-      getPages: AppPages.routes,
-      theme: ThemeData(
-        primarySwatch: primaryWhite,
-        fontFamily: "Inter",
-        backgroundColor: Colors.grey.shade200,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        inputDecorationTheme: MyInputTheme().theme(),
-        textSelectionTheme: TextSelectionThemeData(
-          selectionColor: Colors.blue.shade300,
-          cursorColor: Colors.blue.shade300,
-          selectionHandleColor: Colors.blue.shade300,
+    WidgetsFlutterBinding.ensureInitialized();
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
+    runApp(
+      GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: "Colorbox",
+        initialRoute: AppPages.INITIAL,
+        getPages: AppPages.routes,
+        theme: ThemeData(
+          primarySwatch: primaryWhite,
+          fontFamily: "Inter",
+          backgroundColor: Colors.grey.shade200,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          inputDecorationTheme: MyInputTheme().theme(),
+          textSelectionTheme: TextSelectionThemeData(
+            selectionColor: Colors.blue.shade300,
+            cursorColor: Colors.blue.shade300,
+            selectionHandleColor: Colors.blue.shade300,
+          ),
         ),
       ),
-    ),
-  );
+    );
+  },
+      ((error, stack) =>
+          FirebaseCrashlytics.instance.recordError(error, stack)));
 }

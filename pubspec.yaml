@@ -10,15 +10,17 @@ environment:
 dependencies:
   cached_network_image: ^3.2.0
   carousel_slider: ^4.0.0
+  cloud_firestore: ^4.3.1
   connectivity_plus: ^3.0.2
   crypto: ^3.0.2
   cupertino_icons: ^1.0.2
   dotted_line: ^3.1.0
   double_back_to_close_app: ^2.1.0
-  firebase_analytics: ^10.0.6
-  firebase_auth: ^4.0.2
-  firebase_core: ^2.1.0
-  firebase_messaging: ^14.0.2
+  firebase_analytics: ^10.1.0
+  firebase_auth: ^4.2.5
+  firebase_core: ^2.4.1
+  firebase_crashlytics: ^3.0.11
+  firebase_messaging: ^14.2.1
   flutter:
     sdk: flutter
   flutter_html: ^2.2.1
@@ -33,7 +35,9 @@ dependencies:
   graphql: ^5.0.1
   intl: ^0.17.0
   introduction_screen: ^2.1.0
+  location: ^4.4.0
   lottie: ^1.4.1
+  map_launcher: ^2.4.0
   new_version: ^0.3.1
   pull_to_refresh: ^2.0.0
   shared_preferences: ^2.0.13

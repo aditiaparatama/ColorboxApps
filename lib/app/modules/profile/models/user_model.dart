@@ -12,6 +12,7 @@ class UserModel {
   Address? defaultAddress;
   List<MailingAddress>? addresses;
   String? expiresAt;
+  String? tokenDevice;
 
   UserModel(
       this.id,
@@ -24,7 +25,8 @@ class UserModel {
       this.emailMarketing,
       this.defaultAddress,
       this.addresses,
-      this.expiresAt);
+      this.expiresAt,
+      this.tokenDevice);
 
   UserModel.fromJson(var json) {
     id = json['id']; //.replaceAll("gid://shopify/Customer/", "");
@@ -85,6 +87,16 @@ class UserModel {
       'expiresAt': expiresAt,
       // 'defaultAddress': defaultAddress,
       // 'addresses': addresses,
+    };
+  }
+
+  toFireStore() {
+    return {
+      "id": id,
+      "firstName": firstName,
+      "lastName": lastName,
+      "email": email,
+      "tokenDevice": tokenDevice
     };
   }
 }

@@ -101,7 +101,7 @@ class HomeView extends GetView<HomeController> {
                                     hint: "Email",
                                     textEditingController: emailController,
                                     onChange: (value) async {
-                                      if (EmailValidator(value)
+                                      if (StringExtention(value)
                                           .isValidEmail()) {
                                         if (_debounce?.isActive ?? false) {
                                           _debounce?.cancel();
@@ -117,7 +117,7 @@ class HomeView extends GetView<HomeController> {
                                     },
                                     onSave: (value) {},
                                     validator: (value) {
-                                      if (EmailValidator(value)
+                                      if (StringExtention(value)
                                           .isValidEmail()) {
                                         if (!_profileController.emailExist!) {
                                           emailAlert = true;
@@ -136,7 +136,7 @@ class HomeView extends GetView<HomeController> {
                                   onPressed: () async {
                                     await _profileController
                                         .checkEmail(emailController.text);
-                                    if (EmailValidator(emailController.text)
+                                    if (StringExtention(emailController.text)
                                         .isValidEmail()) {
                                       await _profileController
                                           .checkEmail(emailController.text);

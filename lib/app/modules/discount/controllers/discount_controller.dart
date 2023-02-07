@@ -41,7 +41,7 @@ class DiscountController extends GetxController {
     if (result != null) {
       for (final x in result['discountNodes']['edges']) {
         if (x['node']['discount']['__typename'] == 'DiscountCodeBasic') {
-          if (EmailValidator(x['node']['discount']['title']).lastChars(2) ==
+          if (StringExtention(x['node']['discount']['title']).lastChars(2) ==
               "10") {
             continue;
           }

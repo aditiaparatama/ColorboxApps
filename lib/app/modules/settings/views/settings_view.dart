@@ -2,6 +2,7 @@ import 'package:colorbox/app/modules/orders/views/orders_view.dart';
 import 'package:colorbox/app/modules/profile/views/address/address_view.dart';
 import 'package:colorbox/app/modules/profile/views/infoaccount_view.dart';
 import 'package:colorbox/app/modules/settings/views/hapus_akun_view.dart';
+import 'package:colorbox/app/modules/settings/views/location_store_view.dart';
 import 'package:colorbox/app/modules/settings/views/web_view.dart';
 import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
@@ -142,6 +143,11 @@ class SettingsView extends GetView<SettingsController> {
                                 title: "Tentang Colorbox",
                                 url: "https://colorbox.co.id/pages/about-us")),
                             SvgPicture.asset("assets/icon/info-circle.svg")),
+                        Items(
+                            "Lokasi Toko",
+                            () => Get.to(LocationStoreView()),
+                            SvgPicture.asset(
+                                "assets/icon/settings_location.svg")),
                         Items(
                             "Kontak",
                             () => Get.to(WebViewPage(

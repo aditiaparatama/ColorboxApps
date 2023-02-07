@@ -7,12 +7,14 @@ import 'package:colorbox/app/modules/product/controllers/product_controller.dart
 import 'package:colorbox/app/modules/profile/models/user_model.dart';
 import 'package:colorbox/app/modules/profile/providers/profile_provider.dart';
 import 'package:colorbox/app/modules/settings/controllers/settings_controller.dart';
+import 'package:colorbox/app/services/firebase_services.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
 import 'package:colorbox/constance.dart';
 import 'package:colorbox/globalvar.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:crypto/crypto.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -47,8 +49,9 @@ class ProfileController extends GetxController {
   List<Province>? _province;
   List<Province>? get province => _province;
   dynamic _wilayah = [];
-  dynamic _wilayahTemp = [];
   dynamic get wilayah => _wilayah;
+  dynamic kota = [];
+  dynamic _kotaTemp = [];
   dynamic _kecamatan = [];
   dynamic _kecamatanTemp = [];
   dynamic get kecamatan => _kecamatan;
@@ -60,7 +63,21 @@ class ProfileController extends GetxController {
   void onInit() async {
     await fetchingUser();
     await fetchingProvince();
+    await fetchingWilayah();
+
+    if (userModel.email != null) {
+      updateTokenDevice();
+    }
     super.onInit();
+  }
+
+  void updateTokenDevice() async {
+    String? _tokenDevice = await (FirebaseMessaging.instance.getToken());
+    userModel.tokenDevice = _tokenDevice;
+    // FirebaseService().retriveData(userModel.email!).then((value) {
+    //   print(value);
+    // });
+    FirebaseService().addUserToFireStore(userModel);
   }
 
   Future<String> login() async {
@@ -581,61 +598,39 @@ class ProfileController extends GetxController {
   }
 
   Future<void> fetchingCity(String province) async {
-    var result = await ProfileProvider().getCity(province);
-    _wilayah = [];
-    String? kota = "";
-    for (final x in result ?? []) {
-      if (x['kota'] != kota) {
-        _wilayah.add({"kota": x['kota'], "kecamatan": []});
+    if (_wilayah.isEmpty) await fetchingWilayah();
 
-        final index =
-            _wilayah.indexWhere((element) => element["kota"] == x["kota"]);
+    kota = Set.of(_wilayah
+            .where((e) => e["provinsi"] == province)
+            .toList()
+            .map((e) => e["kota"])
+            .toList())
+        .toList();
+    _kotaTemp = kota;
+    update();
+  }
 
-        if (index != -1) {
-          _wilayah[index]['kecamatan'].add({
-            "nama": x['kecamatan'],
-            'kode_pos': [x['kode_pos']]
-          });
-        }
-      } else {
-        final index =
-            _wilayah.indexWhere((element) => element["kota"] == x["kota"]);
+  Future<void> fetchingWilayah() async {
+    var result = await ProfileProvider().getWilayah();
+    _wilayah = result;
 
-        final index1 = _wilayah[index]['kecamatan']
-            .indexWhere((element) => element["nama"] == x["kecamatan"]);
-
-        if (index1 == -1) {
-          _wilayah[index]['kecamatan'].add({
-            "nama": x['kecamatan'],
-            'kode_pos': [x['kode_pos']]
-          });
-        } else {
-          _wilayah[index]['kecamatan'][index1]['kode_pos'].add(x['kode_pos']);
-        }
-      }
-      kota = x['kota'];
-    }
-    _wilayahTemp = _wilayah;
     update();
   }
 
   searchWilayah(String value, String key) {
     if (key == "kota") {
-      _wilayah = _wilayahTemp
-          .where((e) =>
-              e['kota'].toString().toLowerCase().contains(value.toLowerCase()))
+      kota = Set.of(_kotaTemp
+              .where((e) =>
+                  e.toString().toLowerCase().contains(value.toLowerCase()))
+              .toList())
           .toList();
     }
 
     if (key == "kecamatan") {
-      _kecamatan = {
-        "kecamatan": _kecamatanTemp['kecamatan']
-            .where((e) => e['nama']
-                .toString()
-                .toLowerCase()
-                .contains(value.toLowerCase()))
-            .toList()
-      };
+      _kecamatan = Set.of(_kecamatanTemp
+          .where(
+              (e) => e.toString().toLowerCase().contains(value.toLowerCase()))
+          .toList());
     }
     if (key == "kode_pos") {
       _kodePos =
@@ -645,14 +640,21 @@ class ProfileController extends GetxController {
   }
 
   Future<void> fetchingKecamatan(String kota) async {
-    _kecamatan = _wilayahTemp.firstWhere((e) => e['kota'] == kota);
+    _kecamatan = Set.of(_wilayah
+        .where((e) => e['kota'] == kota)
+        .toList()
+        .map((e) => e["kecamatan"]));
     _kecamatanTemp = _kecamatan;
     update();
   }
 
   Future<void> fetchingKodePos(String kec) async {
-    _kodePos = _kecamatan['kecamatan'].firstWhere((e) => e['nama'] == kec);
-    _kodePos = Set.of(_kodePos['kode_pos']).toList();
+    _kodePos = _wilayah
+        .where((e) => e['kecamatan'] == kec)
+        .toList()
+        .map((e) => e["kode_pos"])
+        .toList();
+    _kodePos = Set.of(_kodePos).toList();
     _kodePosTemp = _kodePos;
     update();
   }

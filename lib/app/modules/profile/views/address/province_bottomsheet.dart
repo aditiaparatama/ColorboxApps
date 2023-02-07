@@ -23,102 +23,105 @@ void bottomSheetProvince(_province, _city) {
   }
 
   Get.bottomSheet(
-    Container(
-      height: Get.height * .75,
-      padding: const EdgeInsets.only(top: 27, right: 24, bottom: 0, left: 24),
-      decoration: const BoxDecoration(
-        color: primaryColor,
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-      ),
-      child: GetBuilder<ProfileController>(
-          init: Get.put(ProfileController()),
-          builder: (_) {
-            return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      InkWell(
-                          onTap: () => Get.back(),
-                          child: const Icon(
-                            Icons.close,
-                            size: 16,
-                          )),
-                      const SizedBox(width: 8),
-                      const CustomText(
-                        text: "Pilih Provinsi",
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  CustomSearchTextForm(
-                    textHint: "Cari Provinsi",
-                    onChanged: _onSearchChanged,
-                    onSaved: (value) {},
-                    validator: (value) {
-                      if (value != null || value != "") {
-                        return "tidak boleh kosong";
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  (controller.province == null)
-                      ? SizedBox(child: loadingCircular())
-                      : Expanded(
-                          child: SizedBox(
-                            width: Get.width,
-                            child: SingleChildScrollView(
-                              child: Column(
-                                children: [
-                                  for (final x in controller.province!) ...[
-                                    InkWell(
-                                        onTap: () {
-                                          _province.text = x.name!;
-                                          _city.text = "";
-                                          Get.back();
-                                          controller.update();
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 8.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              CustomText(
-                                                text: x.name!,
-                                                fontSize: 14,
-                                                fontWeight:
-                                                    (_province.text == x.name)
-                                                        ? FontWeight.bold
-                                                        : FontWeight.normal,
-                                              ),
-                                              (_province.text == x.name)
-                                                  ? const Icon(
-                                                      Icons.check,
-                                                      color: colorTextBlack,
-                                                    )
-                                                  : const SizedBox()
-                                            ],
-                                          ),
-                                        )),
-                                    const Divider(),
+    SafeArea(
+      child: Container(
+        height: Get.height * .75,
+        padding: const EdgeInsets.only(top: 27, right: 24, bottom: 0, left: 24),
+        decoration: const BoxDecoration(
+          color: primaryColor,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+        ),
+        child: GetBuilder<ProfileController>(
+            init: Get.put(ProfileController()),
+            builder: (_) {
+              return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        InkWell(
+                            onTap: () => Get.back(),
+                            child: const Icon(
+                              Icons.close,
+                              size: 16,
+                            )),
+                        const SizedBox(width: 8),
+                        const CustomText(
+                          text: "Pilih Provinsi",
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    CustomSearchTextForm(
+                      textHint: "Cari Provinsi",
+                      onChanged: _onSearchChanged,
+                      onSaved: (value) {},
+                      validator: (value) {
+                        if (value != null || value != "") {
+                          return "tidak boleh kosong";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    (controller.province == null)
+                        ? SizedBox(child: loadingCircular())
+                        : Expanded(
+                            child: SizedBox(
+                              width: Get.width,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    for (final x in controller.province!) ...[
+                                      InkWell(
+                                          onTap: () {
+                                            _province.text = x.name!;
+                                            _city.text = "";
+                                            Get.back();
+                                            controller.update();
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 8.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                CustomText(
+                                                  text: x.name!,
+                                                  fontSize: 14,
+                                                  fontWeight:
+                                                      (_province.text == x.name)
+                                                          ? FontWeight.bold
+                                                          : FontWeight.normal,
+                                                ),
+                                                (_province.text == x.name)
+                                                    ? const Icon(
+                                                        Icons.check,
+                                                        color: colorTextBlack,
+                                                      )
+                                                    : const SizedBox()
+                                              ],
+                                            ),
+                                          )),
+                                      const Divider(),
+                                    ],
                                   ],
-                                ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                ]);
-          }),
+                  ]);
+            }),
+      ),
     ),
     isDismissible: true,
     enableDrag: false,

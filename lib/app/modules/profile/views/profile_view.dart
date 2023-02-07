@@ -90,7 +90,7 @@ class ProfileView extends GetView<ProfileController> {
                                             controller.email = value;
                                           },
                                           onChange: (value) async {
-                                            if (EmailValidator(value)
+                                            if (StringExtention(value)
                                                 .isValidEmail()) {
                                               if (_debounce?.isActive ??
                                                   false) {
@@ -108,7 +108,7 @@ class ProfileView extends GetView<ProfileController> {
                                             controller.update();
                                           },
                                           validator: (value) {
-                                            if (EmailValidator(value)
+                                            if (StringExtention(value)
                                                 .isValidEmail()) {
                                               if (!controller.emailExist!) {
                                                 emailAlert = true;

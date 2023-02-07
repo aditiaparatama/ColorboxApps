@@ -165,7 +165,7 @@ class RegisterView extends GetView<ProfileController> {
                                             _triggerValidator("email");
                                           },
                                           onChange: (value) async {
-                                            if (EmailValidator(value)
+                                            if (StringExtention(value)
                                                 .isValidEmail()) {
                                               if (_debounce?.isActive ??
                                                   false) {

@@ -682,4 +682,12 @@ class ProfileProvider extends GetConnect {
 
     return data;
   }
+
+  Future<dynamic> getWilayah() async {
+    var response = await get("$urlColorboxApi/shipping/api/api_province_merge");
+
+    var data = response.body;
+
+    return data;
+  }
 }
