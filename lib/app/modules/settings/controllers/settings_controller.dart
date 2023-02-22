@@ -92,6 +92,9 @@ class SettingsController extends GetxController {
   Future<void> logout() async {
     _loading.value = true;
     update();
+    if (FirebaseAuth.instance.currentUser!.isAnonymous) {
+      FirebaseAuth.instance.currentUser!.delete();
+    }
     FirebaseAuth.instance.signOut();
     localStorageData.deleteUser();
     localStorageData.deleteToken();

@@ -105,7 +105,7 @@ class ProfileController extends GetxController {
 
       // CartProvider().cartBuyerIdentityupdate(_cartController.idCart!,
       //     result["customerAccessToken"]['accessToken'], _userModel);
-
+      await FirebaseAuth.instance.signInAnonymously();
       Get.find<SettingsController>().getTotalOrders();
       productController.getUser();
       _loading.value = false;

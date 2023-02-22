@@ -17,3 +17,8 @@ New Feature :
 Bug Fixing:
 
 - Fixing bottomsheet overflow
+
+Others :
+
+- Adding Sdk Crashlytics
+- change algoritma retrieve data wilayah

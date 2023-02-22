@@ -7,6 +7,7 @@ import 'package:colorbox/app/modules/profile/views/profile_view.dart';
 import 'package:colorbox/app/modules/cart/models/cart_model.dart';
 import 'package:colorbox/app/modules/settings/views/settings_view.dart';
 import 'package:colorbox/app/modules/wishlist/views/wishlist_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -30,9 +31,13 @@ class ControlV2Controller extends GetxController {
     // var connectivityResult = await (Connectivity().checkConnectivity());
 
     _cart = await Get.find<CartController>().getCart2();
-
+    await Get.find<SettingsController>().getUser();
     _user = Get.find<SettingsController>().userModel;
     if (_user.displayName != null) {
+      if (FirebaseAuth.instance.currentUser == null &&
+          Get.find<SettingsController>().token!.accessToken != null) {
+        await FirebaseAuth.instance.signInAnonymously();
+      }
       var now = DateTime.now();
       var expired =
           DateTime.parse(Get.find<SettingsController>().token!.expiresAt!);

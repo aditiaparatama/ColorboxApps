@@ -181,6 +181,8 @@ Color customColors(String color) {
       return const Color(0xFFECE3D6);
     case "acru":
       return const Color(0xFFFFE0C7);
+    case "ecru":
+      return const Color(0xFFFFE0C7);
     case "natural":
       return const Color(0xFFB18F7A);
     case "snow":

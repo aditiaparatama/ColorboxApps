@@ -81,7 +81,7 @@ class CollectionsMainView extends GetView<CollectionsController> {
             length: control.listTabs.length,
             child: Builder(builder: (context) {
               final TabController tabController =
-                  DefaultTabController.of(context)!;
+                  DefaultTabController.of(context);
               if (indexMenu != null) {
                 tabController.index = controller.selectedIndex;
               }
