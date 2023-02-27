@@ -139,10 +139,7 @@ class CartController extends GetxController {
 
         await FirebaseAnalytics.instance.logEvent(
           name: "PDP",
-          parameters: {
-            "value": double.parse(variants.price!),
-            'items': [setAnalyticsEventItem(variants)]
-          },
+          parameters: {"value": double.parse(variants.price!)},
         );
 
         Future.delayed(const Duration(seconds: 1), () {

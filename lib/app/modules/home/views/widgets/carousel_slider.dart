@@ -54,14 +54,14 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicator> {
             ))
         .toList();
 
-    return (widget.controller.sliders.length > 2)
+    return (widget.controller.sliders.length >= 2)
         ? Column(
             children: [
               CarouselSlider(
                 items: imageSliders,
                 options: CarouselOptions(
                     autoPlay:
-                        (widget.controller.sliders.length > 2) ? true : false,
+                        (widget.controller.sliders.length >= 2) ? true : false,
                     autoPlayInterval: const Duration(seconds: 5),
                     aspectRatio: 1 / 1,
                     viewportFraction: 1,
@@ -73,7 +73,7 @@ class _CarouselWithIndicatorState extends State<CarouselWithIndicator> {
                     }),
                 carouselController: _controller,
               ),
-              (widget.controller.sliders.length > 2)
+              (widget.controller.sliders.length >= 2)
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: widget.controller.sliders

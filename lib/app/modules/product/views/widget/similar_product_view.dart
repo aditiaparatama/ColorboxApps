@@ -15,56 +15,62 @@ class CollectionsProductView extends StatelessWidget {
   Widget build(BuildContext context) {
     var controller = Get.put(CollectionsController(), tag: "similiar");
 
-    controller.fetchCollectionProduct(int.parse(id!), 4);
+    if (id != null) {
+      controller.fetchCollectionProduct(int.parse(id!), 4);
+    }
     return GetBuilder<CollectionsController>(
         tag: "similiar",
         init: controller,
         builder: (_) {
-          return (controller.collection.products.isEmpty)
+          return (controller.loading.value)
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
-              : GridView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: controller.collection.products.length,
-                  // scrollDirection: Axis.horizontal,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 0,
-                    crossAxisSpacing: 16,
-                    childAspectRatio: 4.1 / 9,
-                  ),
-                  itemBuilder: (_, i) {
-                    return GestureDetector(
-                      onTap: () {
-                        // Get.back();
-                        Get.offNamed(Routes.PRODUCT,
-                            arguments: {
-                              "product": controller.collection.products[i],
-                              "idCollection": controller.collection.id,
-                              "handle": controller.collection.products[i].handle
-                            },
-                            preventDuplicates: false);
-                      },
-                      child: ItemCard(
-                          onPress: () {},
-                          controller: controller,
-                          product: controller.collection.products[i],
-                          compareAtPrice: controller.collection.products[i]
-                              .variants[0].compareAtPrice!
-                              .replaceAll(".00", ""),
-                          price: controller
-                              .collection.products[i].variants[0].price!
-                              .replaceAll(".00", ""),
-                          image: controller.collection.products[i].image[0],
-                          title: controller.collection.products[i].title,
-                          totalInventory:
-                              controller.collection.products[i].totalInventory,
-                          index: i),
-                    );
-                  });
+              : (controller.collection.products.isEmpty)
+                  ? const SizedBox()
+                  : GridView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: controller.collection.products.length,
+                      // scrollDirection: Axis.horizontal,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 0,
+                        crossAxisSpacing: 16,
+                        childAspectRatio: 4.1 / 9,
+                      ),
+                      itemBuilder: (_, i) {
+                        return GestureDetector(
+                          onTap: () {
+                            // Get.back();
+                            Get.offNamed(Routes.PRODUCT,
+                                arguments: {
+                                  "product": controller.collection.products[i],
+                                  "idCollection": controller.collection.id,
+                                  "handle":
+                                      controller.collection.products[i].handle
+                                },
+                                preventDuplicates: false);
+                          },
+                          child: ItemCard(
+                              onPress: () {},
+                              controller: controller,
+                              product: controller.collection.products[i],
+                              compareAtPrice: controller.collection.products[i]
+                                  .variants[0].compareAtPrice!
+                                  .replaceAll(".00", ""),
+                              price: controller
+                                  .collection.products[i].variants[0].price!
+                                  .replaceAll(".00", ""),
+                              image: controller.collection.products[i].image[0],
+                              title: controller.collection.products[i].title,
+                              totalInventory: controller
+                                  .collection.products[i].totalInventory,
+                              index: i),
+                        );
+                      });
         });
   }
 }

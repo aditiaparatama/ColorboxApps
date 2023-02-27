@@ -103,7 +103,9 @@ class Product {
 
   Product.fromWishlist(var json, String variantId) {
     id = json['id'];
-    idCollection = json['collections']['edges'][0]['node']['id'];
+    if (json['collections']['edges'].length > 0) {
+      idCollection = json['collections']['edges'][0]['node']['id'];
+    }
     title = json['title'];
     description = json['description'];
     handle = json['handle'];

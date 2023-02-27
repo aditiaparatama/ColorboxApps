@@ -17,7 +17,9 @@ class Collection {
     productsCount = json['productsCount'];
     products = [];
     for (int i = 0; i < json['products']['edges'].length; i++) {
-      products.add(Product.fromJson(json['products']['edges'][i]['node']));
+      if (json['products']['edges'][i]['node']['totalInventory'] > 0) {
+        products.add(Product.fromJson(json['products']['edges'][i]['node']));
+      }
     }
     hasNextPage = json['products']['pageInfo']['hasNextPage'];
     var index = json['products']['edges'].length - 1;

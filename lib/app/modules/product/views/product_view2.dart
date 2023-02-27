@@ -34,9 +34,11 @@ class ProductView2 extends StatelessWidget {
 
   final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
-  final List<String> _idCollection = [Get.arguments["idCollection"]];
-  dynamic collection =
-      Get.arguments["idCollection"].replaceAll('gid://shopify/Collection/', '');
+  final List<String> _idCollection = (Get.arguments["idCollection"] != null)
+      ? [Get.arguments["idCollection"]]
+      : [];
+  dynamic collection = Get.arguments["idCollection"]
+      ?.replaceAll('gid://shopify/Collection/', '');
   final String _handle = Get.arguments["handle"];
 
   Future<void> initializeSettings() async {
@@ -59,7 +61,9 @@ class ProductView2 extends StatelessWidget {
       control.wishlistAdded = (control.existWishlist >= 0) ? true : false;
     }
 
-    await discountController.groupingDiscountAutomatic(_idCollection);
+    if (_idCollection.isNotEmpty) {
+      await discountController.groupingDiscountAutomatic(_idCollection);
+    }
   }
 
   @override

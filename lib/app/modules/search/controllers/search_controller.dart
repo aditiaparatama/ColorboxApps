@@ -36,7 +36,9 @@ class SearchController extends GetxController {
     _product = [];
 
     for (var i = 0; i < data['edges'].length; i++) {
-      _product.add(Product.fromSearch(data, i));
+      if (data['edges'][i]['node']['totalInventory'] > 0) {
+        _product.add(Product.fromSearch(data, i));
+      }
     }
 
     _loading.value = false;
@@ -58,7 +60,9 @@ class SearchController extends GetxController {
     }
     _productTemp = [];
     for (var i = 0; i < data['edges'].length; i++) {
-      _productTemp.add(Product.fromSearch(data, i));
+      if (data['edges'][i]['node']['totalInventory'] > 0) {
+        _productTemp.add(Product.fromSearch(data, i));
+      }
     }
 
     _product[_product.length - 1].hasNextPage =

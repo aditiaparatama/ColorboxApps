@@ -81,6 +81,18 @@ class SettingsController extends GetxController {
     update();
   }
 
+  Future<UserModel> fetchUser() async {
+    _token = await localStorageData.getTokenUser;
+    if (_token!.accessToken != null) {
+      _token = _token;
+      var result = await ProfileProvider().getUserFromAdmin(token!.id!);
+      _userModel = UserModel.fromAdmin(result);
+    }
+    getTotalOrders();
+
+    return _userModel;
+  }
+
   getTotalOrders() async {
     // await getUser();
     if (_userModel.displayName != null) {

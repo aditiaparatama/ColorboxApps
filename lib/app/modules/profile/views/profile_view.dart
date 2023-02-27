@@ -98,7 +98,7 @@ class ProfileView extends GetView<ProfileController> {
                                               }
                                               _debounce = Timer(
                                                   const Duration(
-                                                      milliseconds: 600),
+                                                      milliseconds: 300),
                                                   () async {
                                                 // do something with query
                                                 await controller

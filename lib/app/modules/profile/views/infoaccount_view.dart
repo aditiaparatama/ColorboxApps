@@ -172,6 +172,8 @@ class InformationAccount extends StatelessWidget {
                                     cancelText: "Batal",
                                     context: context,
                                     initialDate: _initialDate,
+                                    initialEntryMode:
+                                        DatePickerEntryMode.calendarOnly,
                                     firstDate: DateTime(1900),
                                     lastDate: DateTime(2025),
                                     builder: (context, child) {

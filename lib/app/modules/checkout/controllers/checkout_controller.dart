@@ -194,7 +194,7 @@ class CheckoutController extends GetxController {
           snackPosition: SnackPosition.BOTTOM);
       return;
     }
-    update();
+    // update();
   }
 
   Future<List<CheckoutItems>> getItems() async {

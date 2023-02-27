@@ -331,6 +331,9 @@ class RegisterView extends GetView<ProfileController> {
                                               context: context,
                                               initialDate:
                                                   controller.showDateBirth!,
+                                              initialEntryMode:
+                                                  DatePickerEntryMode
+                                                      .calendarOnly,
                                               firstDate: DateTime(1900),
                                               lastDate: DateTime(2025),
                                               builder: (context, child) {

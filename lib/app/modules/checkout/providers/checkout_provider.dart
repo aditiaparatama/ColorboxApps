@@ -400,7 +400,6 @@ class CheckoutProvider extends GetConnect {
         }
       ''',
       ),
-      variables: {},
     );
 
     final QueryResult result = await _client.query(options);

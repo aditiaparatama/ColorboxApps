@@ -31,8 +31,8 @@ class ControlV2Controller extends GetxController {
     // var connectivityResult = await (Connectivity().checkConnectivity());
 
     _cart = await Get.find<CartController>().getCart2();
-    await Get.find<SettingsController>().getUser();
-    _user = Get.find<SettingsController>().userModel;
+    // await Get.find<SettingsController>().getUser();
+    _user = await Get.find<SettingsController>().fetchUser();
     if (_user.displayName != null) {
       if (FirebaseAuth.instance.currentUser == null &&
           Get.find<SettingsController>().token!.accessToken != null) {

@@ -16,7 +16,7 @@ class SearchProvider extends GetConnect {
 
     final QueryOptions options = QueryOptions(
         document: gql(
-          """query {
+      """query {
       products(first: $limit, sortKey: CREATED_AT, reverse: true, query: "title:$value* OR sku:$value OR article:$value OR barcode:$value") {
         pageInfo {
           hasNextPage
@@ -70,8 +70,7 @@ class SearchProvider extends GetConnect {
         }
       }
     }""",
-        ),
-        variables: {});
+    ));
 
     try {
       final QueryResult result = await _client.query(options);
@@ -137,7 +136,7 @@ class SearchProvider extends GetConnect {
           }
         }
       }
-    }"""), variables: {});
+    }"""));
 
     try {
       final QueryResult result = await _client.query(options);

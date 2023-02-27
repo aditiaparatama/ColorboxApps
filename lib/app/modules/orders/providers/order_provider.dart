@@ -223,7 +223,6 @@ class OrderProvider extends GetConnect {
         }
       ''',
       ),
-      variables: {},
     );
 
     final QueryResult result = await _client.query(options);
@@ -451,7 +450,6 @@ class OrderProvider extends GetConnect {
         }
       ''',
       ),
-      variables: {},
     );
 
     final QueryResult result = await _client.query(options);
@@ -504,7 +502,6 @@ class OrderProvider extends GetConnect {
       document: gql(
         query,
       ),
-      variables: {},
     );
 
     final QueryResult result = await _client.query(options);

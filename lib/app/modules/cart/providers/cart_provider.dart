@@ -23,7 +23,6 @@ class CartProvider extends GetConnect {
         }
       ''',
       ),
-      variables: {},
     );
 
     final QueryResult result = await _client.query(options);
@@ -140,7 +139,6 @@ class CartProvider extends GetConnect {
         }
       ''',
       ),
-      variables: {},
     );
 
     final QueryResult result = await _client.query(options);
@@ -291,7 +289,6 @@ class CartProvider extends GetConnect {
         }
       ''',
       ),
-      variables: {},
     );
 
     var result = await _client.query(options);
