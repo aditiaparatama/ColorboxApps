@@ -341,6 +341,8 @@ class Value {
       amount = json["amount"]["amount"].replaceAll(".0", "");
     } else if (typename == "DiscountPercentage") {
       percentage = json["percentage"];
+    } else if (typename == "DiscountQuantity") {
+      quantity = json["quantity"];
     } else {
       quantity = (json["quantity"].containsKey("quantity"))
           ? json["quantity"]["quantity"]

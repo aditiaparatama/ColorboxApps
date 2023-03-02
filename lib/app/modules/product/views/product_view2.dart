@@ -262,7 +262,8 @@ class ProductView2 extends StatelessWidget {
                                               color: colorNeutral70,
                                             ),
                                             if (compareAtPrice != "0" &&
-                                                compareAtPrice != "")
+                                                compareAtPrice != "" &&
+                                                compareAtPrice != price)
                                               CustomText(
                                                 text: "Rp " +
                                                     formatter.format(int.parse(

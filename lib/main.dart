@@ -122,9 +122,9 @@ Future<void> main() async {
       await setupFlutterNotifications();
     }
 
-    // smartlook.start();
-    // smartlook.preferences
-    //     .setProjectKey('b22baee998480e0a1de9e82a5f6dce2ae61ce762');
+    smartlook.start();
+    smartlook.preferences
+        .setProjectKey('b22baee998480e0a1de9e82a5f6dce2ae61ce762');
 
     WidgetsFlutterBinding.ensureInitialized();
     SystemChrome.setPreferredOrientations(

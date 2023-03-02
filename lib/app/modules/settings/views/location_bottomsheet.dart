@@ -90,15 +90,28 @@ void bottomSheetProvinceStore(_city) {
                                                   .length;
                                           i++) ...[
                                         if (i == 0)
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 14),
-                                            child: CustomText(
-                                              text: controller
+                                          InkWell(
+                                            onTap: () {
+                                              _city.text = controller
                                                   .searchLocationProvince[i]
-                                                  .province,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700,
+                                                  .province;
+                                              controller.searchLocationStore(
+                                                  controller
+                                                      .searchLocationProvince[i]
+                                                      .province!);
+                                              Get.back();
+                                              controller.update();
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 14),
+                                              child: CustomText(
+                                                text: controller
+                                                    .searchLocationProvince[i]
+                                                    .province,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w700,
+                                              ),
                                             ),
                                           ),
                                         if (i > 0 &&
@@ -108,15 +121,28 @@ void bottomSheetProvinceStore(_city) {
                                                     .searchLocationProvince[
                                                         i - 1]
                                                     .province)
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 14),
-                                            child: CustomText(
-                                              text: controller
+                                          InkWell(
+                                            onTap: () {
+                                              _city.text = controller
                                                   .searchLocationProvince[i]
-                                                  .province,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700,
+                                                  .province;
+                                              controller.searchLocationStore(
+                                                  controller
+                                                      .searchLocationProvince[i]
+                                                      .province!);
+                                              Get.back();
+                                              controller.update();
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 14),
+                                              child: CustomText(
+                                                text: controller
+                                                    .searchLocationProvince[i]
+                                                    .province,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w700,
+                                              ),
                                             ),
                                           ),
                                         InkWell(

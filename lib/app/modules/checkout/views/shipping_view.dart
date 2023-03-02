@@ -41,11 +41,14 @@ class ShippingView extends GetView<CheckoutController> {
                               child: Container(
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: (x.handle ==
-                                              controller.checkout.shippingLine!
-                                                  .handle)
-                                          ? colorTextBlack
-                                          : colorBorderGrey),
+                                      color:
+                                          (controller.checkout.shippingLine !=
+                                                      null &&
+                                                  x.handle ==
+                                                      controller.checkout
+                                                          .shippingLine!.handle)
+                                              ? colorTextBlack
+                                              : colorBorderGrey),
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(6)),
                                 ),
@@ -82,9 +85,11 @@ class ShippingView extends GetView<CheckoutController> {
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                         ),
-                                        if (x.handle ==
-                                            controller
-                                                .checkout.shippingLine!.handle)
+                                        if (controller.checkout.shippingLine !=
+                                                null &&
+                                            x.handle ==
+                                                controller.checkout
+                                                    .shippingLine!.handle)
                                           Container(
                                             padding:
                                                 const EdgeInsets.only(left: 8),

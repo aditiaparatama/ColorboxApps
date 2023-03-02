@@ -10,6 +10,7 @@ import 'package:colorbox/app/modules/profile/views/address/address_form.dart';
 import 'package:colorbox/app/widgets/appbar_default.dart';
 import 'package:colorbox/app/widgets/custom_button.dart';
 import 'package:colorbox/app/widgets/empty_page.dart';
+import 'package:colorbox/app/widgets/item_card_bxgy.dart';
 import 'package:colorbox/app/widgets/item_card_cart.dart';
 import 'package:colorbox/app/widgets/widget.dart';
 import 'package:colorbox/constance.dart';
@@ -141,23 +142,28 @@ class CartView extends GetView<CartController> {
                 }
 
                 for (final x in controller.cart.lines ?? []) {
-                  int i = controller.discountController
-                      .discountAutomatic[indexBxGy].customerBuys!.collections!
-                      .indexWhere(
-                          (e) => x.merchandise!.idCollection!.contains(e.id));
-                  if (i >= 0) {
-                    selisihBuyXgetY = selisihBuyXgetY +
-                        (double.parse(x.merchandise!.price!) *
-                            x.quantity!.toDouble());
-                  }
+                  if (indexBxGy >= 0) {
+                    int i = controller.discountController
+                        .discountAutomatic[indexBxGy].customerBuys!.collections!
+                        .indexWhere(
+                            (e) => x.merchandise!.idCollection!.contains(e.id));
+                    if (i >= 0) {
+                      selisihBuyXgetY = selisihBuyXgetY +
+                          (double.parse(x.merchandise!.price!) *
+                              x.quantity!.toDouble());
+                    }
 
-                  if (double.parse(x.merchandise!.price!.replaceAll(".00", ""))
-                              .ceil() -
-                          double.parse(x.discountAllocations!.amount ?? "0.0")
-                              .ceil() ==
-                      0) {
-                    freeGift = true;
-                    break;
+                    if (double.parse(
+                                    x.merchandise!.price!.replaceAll(".00", ""))
+                                .ceil() -
+                            double.parse(x.discountAllocations!.amount ?? "0.0")
+                                .ceil() ==
+                        0) {
+                      freeGift = true;
+                      break;
+                    } else {
+                      freeGift = false;
+                    }
                   }
                 }
                 return Scaffold(
@@ -417,7 +423,7 @@ class CartView extends GetView<CartController> {
                                                           mainAxisSpacing: 12,
                                                           crossAxisSpacing: 12,
                                                           childAspectRatio:
-                                                              5 / 2.61,
+                                                              4.18 / 2,
                                                         ),
                                                         itemBuilder: (_, i) {
                                                           var calcu1 = int.parse(
@@ -466,7 +472,7 @@ class CartView extends GetView<CartController> {
                                                                   i: i,
                                                                   isCart: true,
                                                                 )
-                                                              : ItemCardCart(
+                                                              : ItemCardBxGy(
                                                                   calcu1:
                                                                       calcu1,
                                                                   collection:
@@ -481,7 +487,7 @@ class CartView extends GetView<CartController> {
                                           );
                                         }),
                                   if (controller.discountController
-                                          .discountAutomatic.isEmpty ||
+                                          .discountAutomatic.isNotEmpty &&
                                       controller
                                               .discountController
                                               .discountAutomatic[indexDiscount]

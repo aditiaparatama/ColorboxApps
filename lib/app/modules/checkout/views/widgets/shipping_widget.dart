@@ -21,16 +21,13 @@ class ShippingWidget extends GetView<CheckoutController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
-                onTap: (controller.checkout.availableShippingRates!
-                            .shippingRates!.isEmpty &&
-                        controller.checkout.shippingLine == null)
+                onTap: (controller.outCoverageArea)
                     ? null
                     : () async {
                         if (controller.checkout.availableShippingRates!.ready ==
                             false) {
-                          await controller.getCheckout();
+                          controller.getCheckout();
                         }
-                        await controller.getETDShipping();
                         Get.to(const ShippingView());
                       },
                 child: (controller.checkout.shippingLine == null)
@@ -47,8 +44,7 @@ class ShippingWidget extends GetView<CheckoutController> {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
           border: Border.all(
-              color: (controller
-                      .checkout.availableShippingRates!.shippingRates!.isEmpty)
+              color: (controller.outCoverageArea)
                   ? colorBorderGrey
                   : colorTextBlack),
           borderRadius: const BorderRadius.all(Radius.circular(6))),
@@ -75,8 +71,8 @@ class ShippingWidget extends GetView<CheckoutController> {
               ),
             ],
           ),
-          if (controller
-              .checkout.availableShippingRates!.shippingRates!.isEmpty)
+          if ((controller.checkout.availableShippingRates!.shippingRates ?? [])
+              .isEmpty)
             Padding(
               padding: const EdgeInsets.only(top: 12),
               child: Container(
@@ -94,10 +90,11 @@ class ShippingWidget extends GetView<CheckoutController> {
                       height: 16,
                     ),
                     const SizedBox(width: 8),
-                    const Flexible(
+                    Flexible(
                       child: CustomText(
-                        text:
-                            "Metode pengiriman yang dipilih tidak tersedia di wilayahmu",
+                        text: controller.outCoverageArea
+                            ? "Metode pengiriman yang dipilih tidak tersedia di wilayahmu"
+                            : "Silahkan pilih metode pengiriman",
                         fontSize: 12,
                         textOverflow: TextOverflow.fade,
                       ),

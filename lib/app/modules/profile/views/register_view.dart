@@ -161,6 +161,8 @@ class RegisterView extends GetView<ProfileController> {
                                           onFieldSubmitted: (value) {
                                             if (controller.emailExist!) {
                                               emailAlert = true;
+                                            } else {
+                                              emailAlert = false;
                                             }
                                             _triggerValidator("email");
                                           },
@@ -240,6 +242,8 @@ class RegisterView extends GetView<ProfileController> {
                                           onTap: () {
                                             if (controller.emailExist!) {
                                               emailAlert = true;
+                                            } else {
+                                              emailAlert = false;
                                             }
                                             _triggerValidator("email");
                                           },

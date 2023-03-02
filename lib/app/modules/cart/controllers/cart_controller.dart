@@ -3,6 +3,7 @@ import 'package:colorbox/app/modules/cart/models/cart_model.dart';
 import 'package:colorbox/app/modules/collections/models/product_model.dart';
 import 'package:colorbox/app/modules/discount/controllers/discount_controller.dart';
 import 'package:colorbox/app/modules/home/controllers/home_controller.dart';
+import 'package:colorbox/app/routes/app_pages.dart';
 import 'package:colorbox/constance.dart';
 import 'package:colorbox/helper/local_storage_data.dart';
 import 'package:colorbox/app/widgets/custom_text.dart';
@@ -125,12 +126,34 @@ class CartController extends GetxController {
     } else {
       var result = await CartProvider().cartAdd(_idCart!, variantId);
       if (result["cartLinesAdd"]["userErrors"].length == 0) {
-        showDialog<String>(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            content: SvgPicture.asset("assets/icon/bx-addproduct.svg"),
+        Get.showSnackbar(GetSnackBar(
+          borderRadius: 4.0,
+          backgroundColor: colorNeutral100.withOpacity(0.75),
+          margin: const EdgeInsets.only(bottom: 104, left: 16, right: 16),
+          messageText: Row(
+            children: [
+              SvgPicture.asset("assets/icon/bag-add.svg"),
+              const SizedBox(width: 4),
+              const CustomText(
+                text: "Produk ditambahkan ke keranjang",
+                fontSize: 12,
+                color: Color(0xFFF1F1F1),
+              ),
+            ],
           ),
-        );
+          mainButton: TextButton(
+              child: const CustomText(
+                text: "Lihat",
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: colorNeutral10,
+              ),
+              onPressed: () {
+                Get.closeCurrentSnackbar();
+                Get.offAndToNamed(Routes.CART);
+              }),
+          duration: const Duration(milliseconds: 1500),
+        ));
 
         await analytics.logAddToCart(
             currency: 'IDR',
@@ -141,10 +164,6 @@ class CartController extends GetxController {
           name: "PDP",
           parameters: {"value": double.parse(variants.price!)},
         );
-
-        Future.delayed(const Duration(seconds: 1), () {
-          Get.back();
-        });
       } else {
         Get.snackbar(
           "Peringatan",

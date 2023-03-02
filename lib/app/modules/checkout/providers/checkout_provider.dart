@@ -40,9 +40,9 @@ class CheckoutProvider extends GetConnect {
                         __typename 
                         ... on DiscountCodeApplication{
                             code
+                            allocationMethod
                             targetSelection
                             targetType
-                            allocationMethod
                             value{
                                  __typename 
                                 ... on MoneyV2{
@@ -54,7 +54,6 @@ class CheckoutProvider extends GetConnect {
                                 }
                             }
                         }
-                        __typename 
                         ... on AutomaticDiscountApplication{
                             title
                             targetSelection
@@ -73,7 +72,7 @@ class CheckoutProvider extends GetConnect {
                         }
                     }
                 }
-              }
+            }
               email
               lineItemsSubtotalPrice{
                   amount
@@ -198,7 +197,6 @@ class CheckoutProvider extends GetConnect {
               code
               message
             }
-            queueToken
           }
         }
       ''',
@@ -395,6 +393,40 @@ class CheckoutProvider extends GetConnect {
                   amount
               }
               webUrl
+            }
+          }
+        }
+      ''',
+      ),
+    );
+
+    final QueryResult result = await _client.query(options);
+
+    return result.data;
+  }
+
+  Future<dynamic> checkoutGetReadyShippingRates(String id) async {
+    final GraphQLClient _client = getShopifyGraphQLClient();
+
+    final QueryOptions options = QueryOptions(
+      document: gql(
+        '''
+        {
+          node(id: "$id") 
+          {
+            ... on Checkout {
+              # Checkout fields
+              id
+              availableShippingRates {
+                ready
+                shippingRates {
+                  handle
+                  priceV2 {
+                    amount
+                  }
+                  title
+                }
+              }
             }
           }
         }

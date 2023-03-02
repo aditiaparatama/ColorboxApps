@@ -33,6 +33,7 @@ class CheckoutController extends GetxController {
   CheckoutModel get checkout => _checkout;
   dynamic _listShipping;
   dynamic get listShipping => _listShipping;
+  bool outCoverageArea = false;
 
   final Cart _cart = Get.find<CartController>().cart;
   double? discountAmount;
@@ -44,10 +45,10 @@ class CheckoutController extends GetxController {
 
   @override
   void onInit() async {
-    initConnectivity();
+    // initConnectivity();
 
-    _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    // _connectivitySubscription =
+    //     _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
 
     await getAddress();
 
@@ -56,8 +57,7 @@ class CheckoutController extends GetxController {
 
     // _idCheckout =
     //     "gid://shopify/Checkout/00205c3b14749fcfc655535d3a9178c6?key=dea4c8ee79d214634c9bbab79e6ad0b6";
-    // await getCheckout();
-    await getETDShipping();
+    // getCheckout();
 
     super.onInit();
   }
@@ -94,24 +94,18 @@ class CheckoutController extends GetxController {
     var result = await ProfileProvider().getUserFromAdmin(_token!.id!);
     _user = UserModel.fromAdmin(result);
 
-    // _user = Get.find<SettingsController>().userModel;
     _loading.value = false;
     update();
   }
 
   createCheckout() async {
-    while (_user.addresses!.isEmpty) {
-      await getAddress();
-    }
     List<CheckoutItems>? items = await getItems();
-
-    int looping = 0;
 
     //buat varibles input checkout
     dynamic variable = {
       "input": {
-        "allowPartialAddresses": true,
-        "buyerIdentity": {"countryCode": _user.defaultAddress!.countryCodeV2},
+        // "allowPartialAddresses": true,
+        // "buyerIdentity": {"countryCode": _user.defaultAddress!.countryCodeV2},
         "email": _user.email,
         "lineItems": [
           for (final x in items) ...[
@@ -137,44 +131,7 @@ class CheckoutController extends GetxController {
     var result = await CheckoutProvider().checkoutCreate(items, variable);
     if (result != null) {
       _idCheckout = result['checkoutCreate']['checkout']['id'];
-
-      var result2 = await CheckoutProvider()
-          .checkoutGetData(result['checkoutCreate']['checkout']['id']);
-
-      //check kalo shipping rates nya masih null akan looping
-      while (result2['node']['availableShippingRates']['ready'] == false ||
-          result2['node']['availableShippingRates']['shippingRates'] == null) {
-        result2 = await Future.delayed(
-            const Duration(milliseconds: 800),
-            () => CheckoutProvider()
-                .checkoutGetData(result['checkoutCreate']['checkout']['id']));
-        if (looping >= 5) {
-          Get.snackbar(
-              "Peringatan", "Terjadi kesalahan server, mohon coba kembali",
-              backgroundColor: colorTextBlack,
-              colorText: Colors.white,
-              snackPosition: SnackPosition.BOTTOM);
-          break;
-        }
-        looping += 1;
-      }
-
-      if (result2['node']['availableShippingRates']['ready'] == true &&
-          result2['node']['availableShippingRates']['shippingRates'] != null &&
-          result2['node']['availableShippingRates']['shippingRates'].length >
-              0) {
-        int i = 0;
-        if (result2['node']['availableShippingRates']['shippingRates'][0]
-                ['handle']
-            .contains("COD")) {
-          i = 1;
-        }
-        //update shipping rates
-        await updateShippingRates(
-            result['checkoutCreate']['checkout']['id'],
-            result2['node']['availableShippingRates']['shippingRates'][i]
-                ['handle']);
-      }
+      _checkout = CheckoutModel.fromJson(result['checkoutCreate']['checkout']);
 
       //update voucher dicheckout kalo sudah digunakan di cart
       if (_cart.discountCodes!.isNotEmpty &&
@@ -182,8 +139,7 @@ class CheckoutController extends GetxController {
           _cart.discountCodes![0].applicable!) {
         await applyVoucher(_cart.discountCodes![0].code!, back: false);
       }
-      getCheckout();
-      // calculateLineItem();
+      calculateLineItem();
     }
 
     if (result == null) {
@@ -194,7 +150,7 @@ class CheckoutController extends GetxController {
           snackPosition: SnackPosition.BOTTOM);
       return;
     }
-    // update();
+    update();
   }
 
   Future<List<CheckoutItems>> getItems() async {
@@ -209,15 +165,20 @@ class CheckoutController extends GetxController {
   }
 
   Future<void> getCheckout() async {
+    loading.value = true;
+    update();
     int looping = 0;
     var result = await CheckoutProvider().checkoutGetData(_idCheckout!);
     if (result != null) {
-      //check kalo shipping rates nya masih null akan looping
+      // check kalo shipping rates nya masih null akan looping
       while (result['node']['availableShippingRates']['ready'] == false ||
           result['node']['availableShippingRates']['shippingRates'] == null) {
-        result = await Future.delayed(const Duration(milliseconds: 1000),
+        result = await Future.delayed(const Duration(milliseconds: 300),
             () => CheckoutProvider().checkoutGetData(_idCheckout!));
-        if (looping >= 5) break;
+        if (looping >= 5) {
+          outCoverageArea = false;
+          break;
+        }
         looping += 1;
       }
       _checkout = CheckoutModel.fromJson(result['node']);
@@ -227,12 +188,14 @@ class CheckoutController extends GetxController {
     if (_etd == null) {
       await getETDShipping();
     }
+    loading.value = false;
     update();
   }
 
   Future<void> getETDShipping() async {
     if (_user.defaultAddress!.address1 != null &&
-        _checkout.shippingLine != null) {
+        _checkout.availableShippingRates != null &&
+        _checkout.availableShippingRates!.shippingRates != null) {
       var x = _checkout.toJson();
       _listShipping = await CheckoutProvider().getShippingRates(x);
 
@@ -305,8 +268,7 @@ class CheckoutController extends GetxController {
 
     for (int x = 0; x < 3; x++) {
       if (result2['node']['availableShippingRates']['ready'] == false ||
-          result2['node']['availableShippingRates']['shippingRates'].length ==
-              0) {
+          result2['node']['availableShippingRates']['shippingRates'] == null) {
         result2 = await Future.delayed(const Duration(milliseconds: 300),
             () => CheckoutProvider().checkoutGetData(id));
       }
@@ -330,8 +292,9 @@ class CheckoutController extends GetxController {
               ['handle']);
 
       if (resultShipping != null) {
-        _checkout = CheckoutModel.fromJson(
-            resultShipping['checkoutShippingLineUpdate']['checkout']);
+        // _checkout = CheckoutModel.fromJson(
+        //     resultShipping['checkoutShippingLineUpdate']['checkout']);
+        getCheckout();
       }
 
       update();

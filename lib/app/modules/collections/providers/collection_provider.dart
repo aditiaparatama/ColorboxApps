@@ -247,7 +247,10 @@ class CollectionProvider extends GetConnect {
 
     final QueryResult result = await _client.query(options);
 
-    if (result.data == null) return null;
+    if (result.data == null ||
+        result.data!['collections']['edges'].length == 0) {
+      return null;
+    }
 
     return result.data!['collections']['edges'][0]['node'];
   }

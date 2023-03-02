@@ -13,8 +13,10 @@ class CustomButton extends StatelessWidget {
   final double? height;
   final double? width;
   final double? fontSize;
+  final FontWeight? fontWeight;
   final double? radius;
   final Widget? child;
+  final EdgeInsets? padding;
 
   const CustomButton(
       {Key? key,
@@ -25,8 +27,10 @@ class CustomButton extends StatelessWidget {
       this.height,
       this.width,
       this.fontSize = 14,
+      this.fontWeight = FontWeight.bold,
       this.radius = 6,
       this.borderColor = colorTextBlack,
+      this.padding = const EdgeInsets.symmetric(vertical: 14),
       this.child})
       : super(key: key);
 
@@ -35,7 +39,7 @@ class CustomButton extends StatelessWidget {
     return ElevatedButton(
         onPressed: onPressed,
         style: TextButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 14),
+            padding: padding,
             elevation: 0.0,
             fixedSize: Size(width ?? Get.width, height ?? 50),
             backgroundColor: backgroundColor,
@@ -51,7 +55,7 @@ class CustomButton extends StatelessWidget {
             : CustomText(
                 text: text!,
                 color: color,
-                fontWeight: FontWeight.bold,
+                fontWeight: fontWeight,
                 fontSize: fontSize,
               ));
   }

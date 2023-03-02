@@ -142,7 +142,7 @@ class CheckoutView extends GetView<CheckoutController> {
           )),
       backgroundColor: Colors.white,
       body: GetBuilder(
-          init: Get.put(CheckoutController()),
+          init: controller,
           builder: (c) {
             return SafeArea(
                 child: (controller.checkout.id == null)

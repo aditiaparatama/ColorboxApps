@@ -29,6 +29,7 @@ const Color colorIconWarning = Color(0xFFFDA61B);
 const Color colorDangerSurface = Color(0xFFFFF4F2);
 const Color colorDangerHover = Color(0xFFBD251C);
 const Color colorDangerMain = Color(0xFFCB3A31);
+const Color colorNeutral10 = Color(0xFFFFFFFF);
 const Color colorNeutral60 = Color(0xFFC2C2C2);
 const Color colorNeutral70 = Color(0xFFA5A5A5);
 const Color colorNeutral90 = Color(0xFF565656);

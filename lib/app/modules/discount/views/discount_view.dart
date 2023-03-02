@@ -130,12 +130,17 @@ class DiscountView extends GetView<DiscountController> {
                                               .minimumRequirement ==
                                           null)
                                       ? 0
-                                      : int.parse(controller
-                                          .discount[index]
-                                          .minimumRequirement[
-                                              'greaterThanOrEqualToSubtotal']
-                                              ['amount']
-                                          .replaceAll(".0", ""));
+                                      : (controller.discount[index]
+                                              .minimumRequirement
+                                              .containsKey(
+                                                  'greaterThanOrEqualToQuantity'))
+                                          ? 0
+                                          : int.parse(controller
+                                              .discount[index]
+                                              .minimumRequirement[
+                                                  'greaterThanOrEqualToSubtotal']
+                                                  ['amount']
+                                              .replaceAll(".0", ""));
                                   var expired = (controller
                                               .discount[index].endsAt ==
                                           null)

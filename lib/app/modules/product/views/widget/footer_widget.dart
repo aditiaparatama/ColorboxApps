@@ -11,8 +11,9 @@ class FooterWidget extends GetView<ProductController> {
   final String handle;
   // ignore: annotate_overrides, overridden_fields
   final String? tag;
-  final bool? openModal;
-  const FooterWidget(this.handle, {Key? key, this.tag, this.openModal = true})
+  final bool? openModal, claim;
+  const FooterWidget(this.handle,
+      {Key? key, this.tag, this.openModal = true, this.claim = false})
       : super(key: key);
 
   @override
@@ -52,6 +53,9 @@ class FooterWidget extends GetView<ProductController> {
                       Get.find<CartController>().addCart(
                           controller.variant!.id!, context, controller.ukuran,
                           variants: controller.variant);
+                      if (claim! || !openModal!) {
+                        Get.back();
+                      }
                     }
                   : null,
               child: (controller.ukuran == '' &&
