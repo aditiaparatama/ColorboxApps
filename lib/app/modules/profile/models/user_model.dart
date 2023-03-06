@@ -55,7 +55,18 @@ class UserModel {
     emailMarketing = json.containsKey("emailMarketingConsent")
         ? EmailMarketingaconsent.fromJson(json["emailMarketingConsent"])
         : null;
-    defaultAddress = Address.fromJson(json['defaultAddress']);
+    if (json['defaultAddress']['firstName'] == null ||
+        json['defaultAddress']['address1'] == null) {
+      for (int i = 0; i < json['addresses'].length; i++) {
+        if (json['addresses'][i]['firstName'] != null &&
+            json['addresses'][i]['address1'] != null) {
+          defaultAddress = Address.fromJson(json['addresses'][i]);
+          break;
+        }
+      }
+    } else {
+      defaultAddress = Address.fromJson(json['defaultAddress']);
+    }
     addresses = [];
     for (int i = 0; i < json['addresses'].length; i++) {
       addresses!.add(MailingAddress.fromJson(json['addresses'][i]));

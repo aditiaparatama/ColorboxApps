@@ -99,6 +99,13 @@ class CheckoutController extends GetxController {
   }
 
   createCheckout() async {
+    int looping = 0;
+    while (_user.addresses!.isEmpty) {
+      if (looping == 7) break;
+      await getAddress();
+      looping++;
+    }
+
     List<CheckoutItems>? items = await getItems();
 
     //buat varibles input checkout
@@ -119,7 +126,10 @@ class CheckoutController extends GetxController {
           "company": _user.defaultAddress!.company,
           "country": _user.defaultAddress!.country,
           "firstName": _user.defaultAddress!.firstName,
-          "lastName": _user.defaultAddress!.lastName,
+          "lastName": (_user.defaultAddress!.lastName != null ||
+                  _user.defaultAddress!.lastName == "")
+              ? _user.defaultAddress!.firstName
+              : _user.defaultAddress!.lastName,
           "phone": _user.defaultAddress!.phone,
           "province": _user.defaultAddress!.province,
           "zip": _user.defaultAddress!.zip
@@ -129,6 +139,22 @@ class CheckoutController extends GetxController {
 
     //create checkout
     var result = await CheckoutProvider().checkoutCreate(items, variable);
+
+    if (result['checkoutCreate']['checkoutUserErrors'].isNotEmpty) {
+      Get.back();
+      Get.showSnackbar(GetSnackBar(
+        borderRadius: 4.0,
+        backgroundColor: colorNeutral100.withOpacity(0.75),
+        margin: const EdgeInsets.only(bottom: 104, left: 16, right: 16),
+        messageText: const CustomText(
+          text: "Terjadi kesalahan, mohon periksa data kembali",
+          fontSize: 12,
+          color: Color(0xFFF1F1F1),
+        ),
+        duration: const Duration(milliseconds: 1500),
+      ));
+      return;
+    }
     if (result != null) {
       _idCheckout = result['checkoutCreate']['checkout']['id'];
       _checkout = CheckoutModel.fromJson(result['checkoutCreate']['checkout']);
@@ -263,8 +289,7 @@ class CheckoutController extends GetxController {
   }
 
   Future<void> reloadShippingRates(String id) async {
-    var result2 = await Future.delayed(const Duration(milliseconds: 300),
-        () => CheckoutProvider().checkoutGetData(id));
+    var result2 = await CheckoutProvider().checkoutGetData(id);
 
     for (int x = 0; x < 3; x++) {
       if (result2['node']['availableShippingRates']['ready'] == false ||
@@ -278,13 +303,17 @@ class CheckoutController extends GetxController {
         result2['node']['availableShippingRates']['shippingRates'].length ==
             0) {
       _checkout = CheckoutModel.fromJson(result2['node']);
-      Get.snackbar(
-        "Info",
-        "Kode Pos tidak ditemukan",
-        backgroundColor: colorTextBlack,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      Get.showSnackbar(GetSnackBar(
+        borderRadius: 4.0,
+        backgroundColor: colorNeutral100.withOpacity(0.75),
+        margin: const EdgeInsets.only(bottom: 104, left: 16, right: 16),
+        messageText: const CustomText(
+          text: "Kode Pos tidak ditemukan",
+          fontSize: 12,
+          color: Color(0xFFF1F1F1),
+        ),
+        duration: const Duration(milliseconds: 1000),
+      ));
     } else {
       var resultShipping = await updateShippingRates(
           id,
@@ -292,9 +321,10 @@ class CheckoutController extends GetxController {
               ['handle']);
 
       if (resultShipping != null) {
-        // _checkout = CheckoutModel.fromJson(
-        //     resultShipping['checkoutShippingLineUpdate']['checkout']);
-        getCheckout();
+        _checkout = CheckoutModel.fromJson(
+            resultShipping['checkoutShippingLineUpdate']['checkout']);
+        // getCheckout();
+        calculateLineItem();
       }
 
       update();

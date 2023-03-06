@@ -30,26 +30,20 @@ class InformationAccount extends StatelessWidget {
     emailTextController.text = _settingController.userModel.email!;
     _telpon.text =
         (_settingController.userModel.phone ?? "").replaceAll("+62", "");
-    birthdayTextController.text = (_settingController.userModel.note != null &&
-            _settingController.userModel.note!
-                    .replaceAll("Birthday: ", "")
-                    .trim() !=
-                "")
-        ? DateFormat('dd/MM/yyyy').format(DateTime.parse(_settingController
-            .userModel.note!
-            .replaceAll("Birthday: ", "")
-            .trim()))
-        : "";
 
-    DateTime _initialDate = (_settingController.userModel.note != null &&
-            _settingController.userModel.note!
-                    .replaceAll("Birthday: ", "")
-                    .trim() !=
-                "")
-        ? DateTime.parse(_settingController.userModel.note!
-            .replaceAll("Birthday: ", "")
-            .trim())
-        : controller.showDateBirth!;
+    DateTime _initialDate = controller.showDateBirth!;
+    if (_settingController.userModel.note != null) {
+      dynamic birthday = _settingController.userModel.note!.split("\n");
+      for (int i = 0; i < birthday.length; i++) {
+        if (birthday[i].toString().toLowerCase().contains("birthday")) {
+          dynamic dt = DateTime.parse(
+              birthday[i].toLowerCase().replaceAll("birthday: ", "").trim());
+          birthdayTextController.text = DateFormat('dd/MM/yyyy').format(dt);
+
+          _initialDate = dt;
+        }
+      }
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

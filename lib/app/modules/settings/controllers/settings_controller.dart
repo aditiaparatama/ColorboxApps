@@ -37,7 +37,7 @@ class SettingsController extends GetxController {
   void onInit() async {
     await getUser();
     fetchingLocationStore();
-    await requestPermission();
+    // await requestPermission();
 
     super.onInit();
   }

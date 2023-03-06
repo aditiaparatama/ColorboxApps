@@ -24,11 +24,11 @@ class _ControlV2ViewState extends State<ControlV2View> {
 
     final status = await newVersion.getVersionStatus();
     if (status != null) {
-      debugPrint(status.releaseNotes);
-      debugPrint(status.appStoreLink);
-      debugPrint(status.localVersion);
-      debugPrint(status.storeVersion);
-      debugPrint(status.canUpdate.toString());
+      // debugPrint(status.releaseNotes);
+      // debugPrint(status.appStoreLink);
+      // debugPrint(status.localVersion);
+      // debugPrint(status.storeVersion);
+      // debugPrint(status.canUpdate.toString());
 
       if (status.canUpdate) {
         newVersion.showUpdateDialog(

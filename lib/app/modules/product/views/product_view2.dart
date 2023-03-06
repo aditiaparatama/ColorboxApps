@@ -307,10 +307,6 @@ class ProductView2 extends StatelessWidget {
                                           itemCount: discountController
                                               .listingDiscountAutomatic.length,
                                           itemBuilder: (_, i) {
-                                            // String desc = discountController
-                                            //     .listingDiscountAutomatic[i]
-                                            //     .deskripsi
-                                            //     .replaceAll(" •", ",");
                                             Color colorBorder = (discountController
                                                         .listingDiscountAutomatic[
                                                             i]

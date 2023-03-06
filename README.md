@@ -8,7 +8,7 @@ untuk membuat produk pakaian yang berkualitas.
 
 ### Version 1.1.0 (31 Januari 2023)
 
-### Version 1.2.0
+### Version 1.2.0 (02 Maret 2023)
 
 New Feature :
 
@@ -22,3 +22,7 @@ Others :
 
 - Adding Sdk Crashlytics
 - change algoritma retrieve data wilayah
+
+### Version 1.2.1
+
+- Bug Fixies

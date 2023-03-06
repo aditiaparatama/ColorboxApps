@@ -52,7 +52,7 @@ class ProfileView extends GetView<ProfileController> {
         }
       },
       child: Scaffold(
-          resizeToAvoidBottomInset: false,
+          // resizeToAvoidBottomInset: false,
           appBar: PreferredSize(
               preferredSize: const Size.fromHeight(56),
               child: AppBarDefault(

@@ -1,5 +1,5 @@
 name: colorbox
-version: 1.2.0+5
+version: 1.2.1+1
 publish_to: none
 description: COLORBOX adalah salah satu brand busana yang bagian dari grup ritel
   Indonesia, Delamibrands. Didirikan pada tahun 1979. Delamibrands berkomitmen
@@ -56,7 +56,7 @@ dev_dependencies:
 
 flutter_icons:
   android: true
-  ios: true
+  ios: false
   image_path: "assets/icon/icon_256x256.png"
 
 flutter:

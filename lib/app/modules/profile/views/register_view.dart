@@ -118,7 +118,7 @@ class RegisterView extends GetView<ProfileController> {
         }
       },
       child: Scaffold(
-          resizeToAvoidBottomInset: false,
+          // resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
           appBar: const PreferredSize(
               preferredSize: Size.fromHeight(56),
